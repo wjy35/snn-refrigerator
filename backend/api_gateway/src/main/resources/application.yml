@@ -8,15 +8,3 @@ spring:
             - Path=/member-example/**
           filters:
             - RewritePath=/member-example/(?<path>.*),/$\{path}
-        - id: member-example
-          uri: lb://MEMBER-EXAMPLE/
-          predicates:
-            - Path=/member-example/**
-          filters:
-            - RewritePath=/member-example/(?<path>.*),/$\{path}
-        - id: member-example
-          uri: lb://MEMBER-EXAMPLE/
-          predicates:
-            - Path=/member-example/**
-          filters:
-            - RewritePath=/member-example/(?<path>.*),/$\{path}
