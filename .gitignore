@@ -1,7 +1,3 @@
-# env
-.env.properties
-.idea/*
-
 # Created by https://www.toptal.com/developers/gitignore/api/gradle,intellij,java,jetbrains,macos,windows,webstorm
 # Edit at https://www.toptal.com/developers/gitignore?templates=gradle,intellij,java,jetbrains,macos,windows,webstorm
 
@@ -381,3 +377,8 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle,intellij,java,jetbrains,macos,windows,webstorm
+
+# env
+.env.properties
+.idea/*
+
