@@ -1,4 +1,4 @@
-package com.ssafy.membermanage.person.db;
+package com.ssafy.membermanage.member.db;
 
 import com.ssafy.membermanage.house.db.House;
 import lombok.Getter;
@@ -16,7 +16,7 @@ public class Member {
     @Id
     @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long personId;
+    private Long memberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "house_seq")

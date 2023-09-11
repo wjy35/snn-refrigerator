@@ -1,6 +1,6 @@
 package com.ssafy.membermanage.followPerson.db;
 
-import com.ssafy.membermanage.person.db.Member;
+import com.ssafy.membermanage.member.db.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
