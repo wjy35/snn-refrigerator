@@ -17,5 +17,3 @@ ENTRYPOINT ["java","-jar","/app/app.jar"]
 
 
 
-
-
