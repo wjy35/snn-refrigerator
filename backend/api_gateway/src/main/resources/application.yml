@@ -14,4 +14,11 @@ spring:
             - Path=/recipe/**
           filters:
             - RewritePath=/recipe/(?<path>.*),/$\{path}
+        - id: member-manage
+          uri: lb://MEMBER-MANAGE/
+          predicates:
+            - Path=/member-manage/**
+          filters:
+            - RewritePath=/member-manage/(?<path>.*),/$\{path}
+
 
