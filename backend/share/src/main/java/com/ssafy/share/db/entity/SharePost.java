@@ -46,4 +46,16 @@ public class SharePost extends BaseTimeEntity{
 
     @Column(name="thumbnail",length = 255)
     private String thumbnail;
+
+    public SharePost(Member member, LocationInfo locationInfo,
+                     String title, String content, List<ShareImage> shareImages,
+                     List<ShareIngredient> shareIngredients, String thumbnail) {
+        this.member = member;
+        this.locationInfo = locationInfo;
+        this.title = title;
+        this.content = content;
+        this.shareImages = shareImages;
+        this.shareIngredients = shareIngredients;
+        this.thumbnail = thumbnail;
+    }
 }
