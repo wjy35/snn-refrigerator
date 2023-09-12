@@ -9,5 +9,7 @@ public interface HouseRepository extends JpaRepository<House, Integer> {
 
     Optional<House> findByHouseCode(String houseCode);
 
+    Boolean existsByHouseCode(String houseCode);
+
     House save(House house);
 }
