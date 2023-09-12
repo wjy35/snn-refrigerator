@@ -16,7 +16,11 @@ module.exports = {
           '.js',
           '.json',
         ],
+        alias: {
+          '@': './app',
+        },
       },
+      'nativewind/babel',
     ],
   ],
 };

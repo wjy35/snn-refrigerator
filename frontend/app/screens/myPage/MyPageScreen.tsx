@@ -1,16 +1,13 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
+import MyPageLayout from "./MyPageLayout";
 
 
 const MyPageScreen = ({navigation}:any) => {
   return (
-    <View>
+    <MyPageLayout>
       <Text>MyPageScreen</Text>
-      <Button
-        title="Go to Details"
-        onPress={ () => navigation.navigate('Details')}
-      />
-    </View>
+    </MyPageLayout>
   )
 }
 
