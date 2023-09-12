@@ -31,4 +31,13 @@ public class RecipeController {
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
+    @PutMapping("/{recipeId}")
+    public ResponseEntity<?> updateRecipe (@PathVariable int recipeId, @RequestBody RecipeRequest recipeRequest){
+        Map<String, Object> resultMap = new HashMap<>();
+        recipeService.updateRecipe(recipeId, recipeRequest);
+        resultMap.put("message", "OK");
+
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
 }
