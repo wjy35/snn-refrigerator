@@ -10,7 +10,7 @@ const LogInScreen = ({navigation}:any) => {
         title="Go to Details"
         onPress={ () => navigation.navigate('Details')}
       />
-      <BottomNavigator/>
+      <BottomNavigator now='login'/>
     </View>
   );
 };
