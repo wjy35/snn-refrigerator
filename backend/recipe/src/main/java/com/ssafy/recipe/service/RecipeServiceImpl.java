@@ -39,4 +39,24 @@ public class RecipeServiceImpl implements RecipeService{
         recipeDetailRepository.saveAll(recipeDetails);
     }
 
+    public void updateRecipe(int recipeId, RecipeRequest request){
+        Recipe recipe = recipeMapper.recipeRequestToRecipe(request);
+
+        recipe.setRecipeId(recipeId);
+
+        recipeRepository.save(recipe);
+
+        List<RecipeDetail> recipeDetails = recipeDetailMapper.recipeDetailRequestsToRecipeDetails(request.getContent());
+
+        List<RecipeDetail> originalRecipeDetails = recipeDetailRepository.findByRecipeRecipeId(recipeId);
+
+        recipeDetailRepository.deleteAll(originalRecipeDetails);
+
+        for (RecipeDetail recipeDetail : recipeDetails) {
+            recipeDetail.setRecipe(recipe);
+        }
+
+        recipeDetailRepository.saveAll(recipeDetails);
+    }
+
 }
