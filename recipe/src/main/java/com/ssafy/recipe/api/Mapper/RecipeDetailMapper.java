@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface RecipeDetailMapper {
     RecipeDetailMapper INSTANCE = Mappers.getMapper(RecipeDetailMapper.class);
-    RecipeDetail recipeDetailRequestToRecipeDetail(RecipeDetailRequest recipeDetailRequest);
 
     List<RecipeDetail> recipeDetailRequestsToRecipeDetails(List<RecipeDetail> recipeDetailRequests);
+
 }

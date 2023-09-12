@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### credentials ###
-**/src/main/resources/.properties
+src/main/resources/.properties
