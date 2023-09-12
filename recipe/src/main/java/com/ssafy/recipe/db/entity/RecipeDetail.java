@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 @Entity
 @Builder
-@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,5 +26,7 @@ public class RecipeDetail {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
 }

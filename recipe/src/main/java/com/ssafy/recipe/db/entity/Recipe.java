@@ -39,10 +39,10 @@ public class Recipe {
     @Column(name = "cooking_time", length = 10)
     private String cookingTime;
 
-    @Column(name = "regist_datetime", nullable = false)
+    @Column(name = "regist_datetime")
     private LocalDateTime registDatetime;
 
-    @Column(name = "modify_datetime", nullable = false)
+    @Column(name = "modify_datetime")
     private LocalDateTime modifyDatetime;
 
     @Column(name = "food_name", length = 10)
@@ -60,4 +60,18 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe")
     private List<FavoriteRecipe> favoriteRecipes;
 
+    @PrePersist
+    protected void onCreate() {
+        registDatetime = LocalDateTime.now();
+        modifyDatetime = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        modifyDatetime = LocalDateTime.now();
+    }
+
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
+    }
 }
