@@ -6,6 +6,7 @@ import com.ssafy.membermanage.member.db.Member;
 import com.ssafy.membermanage.member.db.MemberRepository;
 import com.ssafy.membermanage.member.dto.CheckNicknameIsDuplicateDto;
 import com.ssafy.membermanage.member.dto.GetInfoDto;
+import com.ssafy.membermanage.member.dto.SingleNicknameDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -57,10 +58,11 @@ public class MemberController {
         }
     }
 
-//    @PutMapping("/{memberId}")
-//    public ResponseEntity<> modifyMemberInfo(@RequestParam("nickname") String nickname, @PathVariable Long memberId){
-//        Member member = memberRepository.findByMemberId(memberId)
-//                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
-//
-//    }
+    @PutMapping("/{memberId}")
+    public ResponseEntity<SingleNicknameDto> modifyMemberInfo(@RequestParam("nickname") String nickname, @PathVariable Long memberId){
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
+        if(memberRepository.existsByNickname(nickname).equals(true)) throw new CustomException(ErrorCode.Duplicate_Nickname);
+        return ResponseEntity.ok(new SingleNicknameDto(member.getNickname()));
+    }
 }
