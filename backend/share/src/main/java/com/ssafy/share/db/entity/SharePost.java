@@ -32,17 +32,17 @@ public class SharePost extends BaseTimeEntity{
     @JoinColumn(name = "location_id")
     private LocationInfo locationInfo;
 
-    @Column(name="title",nullable = false,length = 32)
-    private String title;
-
-    @Column(name="content",nullable = false,columnDefinition = "text")
-    private String content;
-
     @OneToMany(mappedBy = "sharePost", cascade = CascadeType.REMOVE)
     private List<ShareImage> shareImages=new ArrayList<>(); // 나눔 이미지들
 
     @OneToMany(mappedBy = "sharePost", cascade = CascadeType.REMOVE)
     private List<ShareIngredient> shareIngredients=new ArrayList<>(); // 나눔 식재료들
+
+    @Column(name="title",nullable = false,length = 32)
+    private String title;
+
+    @Column(name="content",nullable = false,columnDefinition = "text")
+    private String content;
 
     @Column(name="thumbnail",length = 255)
     private String thumbnail;

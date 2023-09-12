@@ -2,10 +2,10 @@ server:
   port: 8080
 
 spring:
-  config:
-    import: env.yml
-  application:
-    name=${DOMAIN_NAME}
+#  config:
+#    import: env.yml
+#  application:
+#    name=${DOMAIN_NAME}
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
