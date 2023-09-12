@@ -1,16 +1,12 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
-
+import RecipeLayout from "@/screens/recipe/RecipeLayout";
 
 const RecipeListScreen = ({navigation}:any) => {
   return (
-    <View>
+    <RecipeLayout>
       <Text>RecipeListScreen</Text>
-      <Button
-        title="Go to Details"
-        onPress={ () => navigation.navigate('Details')}
-      />
-    </View>
+    </RecipeLayout>
   )
 }
 
