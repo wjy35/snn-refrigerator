@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### credentials ###
+src/main/resources/env.yml
