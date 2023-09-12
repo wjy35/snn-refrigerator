@@ -8,3 +8,10 @@ spring:
             - Path=/member-example/**
           filters:
             - RewritePath=/member-example/(?<path>.*),/$\{path}
+        - id: recipe
+          uri: lb://RECIPE/
+          predicates:
+            - Path=/recipe/**
+          filters:
+            - RewritePath=/recipe/(?<path>.*),/$\{path}
+
