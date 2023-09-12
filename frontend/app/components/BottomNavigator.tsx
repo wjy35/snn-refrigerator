@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Button, Text, TouchableWithoutFeedback} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import styles from 'styles/styles';
+import {styles} from 'styles/styles';
 import {homeDisactive, homeActive, mypageDisactive, mypageActive, recipeActive, recipeDisactive, shareActive, shareDisactive} from '@/assets/icons/icons';
 import {SvgXml} from 'react-native-svg';
 
