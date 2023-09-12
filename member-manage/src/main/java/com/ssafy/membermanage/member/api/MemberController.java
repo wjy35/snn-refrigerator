@@ -7,9 +7,13 @@ import com.ssafy.membermanage.member.db.MemberRepository;
 import com.ssafy.membermanage.member.dto.CheckNicknameIsDuplicateDto;
 import com.ssafy.membermanage.member.dto.GetInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 import java.util.Optional;
 
@@ -18,6 +22,13 @@ import java.util.Optional;
 public class MemberController {
     @Autowired
     private MemberRepository memberRepository;
+
+    @Value("${spring.datasource.url}")
+    String url;
+    @PostConstruct
+    void init() throws Exception {
+        System.out.println("url = " + url);
+    }
 
     @GetMapping("/{memberId}")
     public ResponseEntity<GetInfoDto> getMemberInfo(@PathVariable Long memberId){
@@ -45,4 +56,11 @@ public class MemberController {
             );
         }
     }
+
+//    @PutMapping("/{memberId}")
+//    public ResponseEntity<> modifyMemberInfo(@RequestParam("nickname") String nickname, @PathVariable Long memberId){
+//        Member member = memberRepository.findByMemberId(memberId)
+//                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
+//
+//    }
 }
