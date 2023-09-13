@@ -1,9 +1,9 @@
 FROM gradle:8.2.1-jdk11 as build
 WORKDIR /app
 
-COPY ./backend/{domain-name}/settings.gradle ./
-COPY ./backend/{domain-name}/build.gradle ./
-COPY ./backend/{domain-name}/src ./src
+COPY ./backend/share/settings.gradle ./
+COPY ./backend/share/build.gradle ./
+COPY ./backend/share/src ./src
 
 RUN gradle build -x test --parallel
 

@@ -1,6 +1,7 @@
 package com.ssafy.share.db.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,4 +29,10 @@ public class ShareIngredient {
 
     @Column(name = "amount",nullable = false)
     private int amount; // 식재료 양
+
+    @Builder
+    public ShareIngredient(Short ingredientInfoId, int amount) {
+        this.ingredientInfoId = ingredientInfoId;
+        this.amount = amount;
+    }
 }

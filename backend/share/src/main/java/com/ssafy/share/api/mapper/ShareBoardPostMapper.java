@@ -11,12 +11,10 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface ShareBoardPostMapper {
-    ShareBoardPostMapper INSTANCE = Mappers.getMapper(ShareBoardPostMapper.class);
-
-    @Mappings({
-            @Mapping(target = "thumbnail", ignore = true),
-            @Mapping(target = "member", ignore = true),
-            @Mapping(target = "locationInfo", ignore = true),
-    })
-    SharePost postWriteRequestToPost(ShareBoardWriteRequest request);
+//    ShareBoardPostMapper INSTANCE = Mappers.getMapper(ShareBoardPostMapper.class);
+//
+//    @Mappings({
+//            @Mapping(target = "thumbnail", ignore = true)
+//    })
+//    SharePost postWriteRequestToPost(ShareBoardWriteRequest request);
 }

@@ -15,10 +15,8 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseTimeEntity {
     @CreatedDate
-    @Column(nullable = false)
     private LocalDateTime createDate; // 생성 시간
 
     @LastModifiedDate
-    @Column(nullable = false)
     private LocalDateTime modifiedDate; // 마지막 수정 시간
 }

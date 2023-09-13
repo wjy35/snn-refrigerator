@@ -1,6 +1,7 @@
 package com.ssafy.share.db.entity;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -21,16 +22,15 @@ public class SharePost extends BaseTimeEntity{
     @Column(name = "share_post_id")
     private Long sharePostId; // 글번호
 
-//    @Column(name = "memberId",nullable = false)
-//    private Long memberId;
+    @Column(name = "member_Id",nullable = false)
+    private Long memberId;
 
-    @ManyToOne
-    @JoinColumn(name="member_id")
-    private Member member;
+    @Column(name = "location_Id",nullable = false)
+    private Short locationId;
+//    @ManyToOne
+//    @JoinColumn(name="member_id")
+//    private Member member;
 
-    @OneToOne
-    @JoinColumn(name = "location_id")
-    private LocationInfo locationInfo;
 
     @OneToMany(mappedBy = "sharePost", cascade = CascadeType.REMOVE)
     private List<ShareImage> shareImages=new ArrayList<>(); // 나눔 이미지들
@@ -47,15 +47,17 @@ public class SharePost extends BaseTimeEntity{
     @Column(name="thumbnail",length = 255)
     private String thumbnail;
 
-    public SharePost(Member member, LocationInfo locationInfo,
-                     String title, String content, List<ShareImage> shareImages,
-                     List<ShareIngredient> shareIngredients, String thumbnail) {
-        this.member = member;
-        this.locationInfo = locationInfo;
-        this.title = title;
-        this.content = content;
+    // 생성자
+    @Builder
+    public SharePost(Long memberId, Short locationId, List<ShareImage> shareImages,
+                     List<ShareIngredient> shareIngredients, String title, String content, String thumbnail) {
+        this.memberId = memberId;
+        this.locationId = locationId;
         this.shareImages = shareImages;
         this.shareIngredients = shareIngredients;
+        this.title = title;
+        this.content = content;
         this.thumbnail = thumbnail;
     }
+
 }
