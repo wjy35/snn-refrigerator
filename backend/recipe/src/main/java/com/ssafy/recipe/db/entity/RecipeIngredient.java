@@ -1,6 +1,7 @@
 package com.ssafy.recipe.db.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class RecipeIngredient {
@@ -14,11 +15,10 @@ public class RecipeIngredient {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    @ManyToOne // IngredientInfo 엔티티와의 관계 설정
+    @ManyToOne
     @JoinColumn(name = "ingredient_info_id", nullable = false)
     private IngredientInfo ingredientInfo;
 
     @Column(name = "amount", length = 10)
     private String amount;
-
 }
