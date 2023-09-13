@@ -1,6 +1,5 @@
-package com.ssafy.recipe.api.Mapper;
+package com.ssafy.recipe.api.mapper;
 
-import com.ssafy.recipe.api.request.RecipeDetailRequest;
 import com.ssafy.recipe.db.entity.RecipeDetail;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

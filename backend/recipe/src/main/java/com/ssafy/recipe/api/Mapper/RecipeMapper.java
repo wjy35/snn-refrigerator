@@ -1,4 +1,4 @@
-package com.ssafy.recipe.api.Mapper;
+package com.ssafy.recipe.api.mapper;
 
 import com.ssafy.recipe.api.request.RecipeRequest;
 import com.ssafy.recipe.db.entity.Recipe;
