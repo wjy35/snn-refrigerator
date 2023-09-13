@@ -59,4 +59,9 @@ public class MemberController {
         if(memberRepository.existsByNickname(nickname).equals(true)) throw new CustomException(ErrorCode.Duplicate_Nickname);
         return ResponseEntity.ok(new SingleNicknameDto(member.getNickname()));
     }
+
+    @PostMapping("/{memberId}/hate-ingredient/{ingredient}")
+    public ResponseEntity<?>addInedibleIngredient(@PathVariable Long memberId, @PathVariable String ingredient){
+        return ResponseEntity.ok("");
+    }
 }

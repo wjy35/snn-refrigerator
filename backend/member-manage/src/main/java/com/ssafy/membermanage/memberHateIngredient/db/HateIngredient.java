@@ -19,7 +19,7 @@ public class HateIngredient{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member memberId;
+    private Member member;
 
     @Column(name = "hate_ingredient_id", nullable = false)
     private Short ingredientId;
