@@ -16,7 +16,8 @@ public class Member {
     @Id
     @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId; // 카카오톡에서 만들어주는 unique id를 쓸 예정. 지금은 임시로 identity
+    // TODO : 카카오톡에서 만들어주는 unique id로 바꾸기. 지금은 임시로 identity 사용 중
+    private Long memberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "house_seq")
