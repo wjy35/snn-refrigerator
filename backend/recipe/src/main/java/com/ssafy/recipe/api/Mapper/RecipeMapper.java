@@ -13,8 +13,6 @@ public interface RecipeMapper {
     @Mapping(target = "recipeId", ignore = true)
     @Mapping(target = "registDatetime", ignore = true)
     @Mapping(target = "modifyDatetime", ignore = true)
-
-    // memberId를 명확하게 지정해줍니다.
     @Mapping(source = "memberId", target = "memberId")
     Recipe recipeRequestToRecipe(RecipeRequest request);
 }

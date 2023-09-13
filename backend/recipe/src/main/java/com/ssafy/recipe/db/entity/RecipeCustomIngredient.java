@@ -1,8 +1,17 @@
 package com.ssafy.recipe.db.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecipeCustomIngredient {
 
     @Id
@@ -21,4 +30,7 @@ public class RecipeCustomIngredient {
     @Column(name = "ingredient_name", length = 15)
     private String ingredientName;
 
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
 }

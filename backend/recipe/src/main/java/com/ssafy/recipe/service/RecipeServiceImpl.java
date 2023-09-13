@@ -1,20 +1,22 @@
 package com.ssafy.recipe.service;
 
 import com.ssafy.recipe.api.feign.MemberFeign;
+import com.ssafy.recipe.api.mapper.RecipeCustomIngredientMapper;
 import com.ssafy.recipe.api.mapper.RecipeDetailMapper;
+import com.ssafy.recipe.api.mapper.RecipeIngredientMapper;
 import com.ssafy.recipe.api.mapper.RecipeMapper;
+import com.ssafy.recipe.api.request.RecipeIngredientRequest;
 import com.ssafy.recipe.api.request.RecipeRequest;
 import com.ssafy.recipe.api.response.MemberResponse;
 import com.ssafy.recipe.api.response.RecipeDetailResponse;
-import com.ssafy.recipe.db.entity.Recipe;
-import com.ssafy.recipe.db.entity.RecipeDetail;
-import com.ssafy.recipe.db.resository.RecipeDetailRepository;
-import com.ssafy.recipe.db.resository.RecipeRepository;
+import com.ssafy.recipe.db.entity.*;
+import com.ssafy.recipe.db.resository.*;
 import com.ssafy.recipe.exception.CustomException;
 import com.ssafy.recipe.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,11 +28,22 @@ public class RecipeServiceImpl implements RecipeService{
 
     private final RecipeDetailMapper recipeDetailMapper;
 
+    private final RecipeIngredientMapper recipeIngredientMapper;
+
+    private final RecipeCustomIngredientMapper recipeCustomIngredientMapper;
+
+    private final IngredientInfoRepository ingredientInfoRepository;
+
     private final RecipeRepository recipeRepository;
 
     private final RecipeDetailRepository recipeDetailRepository;
 
+    private final RecipeCustomIngredientRepository recipeCustomIngredientRepository;
+
+    private final RecipeIngredientRepository recipeIngredientRepository;
+
     private final MemberFeign memberFeign;
+
 
     @Override
     public void createRecipe(RecipeRequest request) {
@@ -43,8 +56,23 @@ public class RecipeServiceImpl implements RecipeService{
         for (RecipeDetail recipeDetail : recipeDetails) {
             recipeDetail.setRecipe(recipe);
         }
-
         recipeDetailRepository.saveAll(recipeDetails);
+
+        for(int i=0; i<request.getIngredients().size(); i++){
+            RecipeIngredientRequest recipeIngredientRequest = request.getIngredients().get(i);
+            if(recipeIngredientRequest.getIngredientInfoId()==-1){
+                RecipeCustomIngredient recipeCustomIngredient = recipeCustomIngredientMapper.recipeIngredientRequestsToRecipeCustomIngredient(recipeIngredientRequest);
+                recipeCustomIngredient.setRecipe(recipe);
+                recipeCustomIngredientRepository.save(recipeCustomIngredient);
+
+            }else{
+                RecipeIngredient recipeIngredient = recipeIngredientMapper.recipeIngredientRequestsToRecipeIngredients(recipeIngredientRequest);
+                recipeIngredient.setRecipe(recipe);
+                Optional<IngredientInfo> ingredientInfo = ingredientInfoRepository.findById(recipeIngredientRequest.getIngredientInfoId());
+                recipeIngredient.setIngredientInfo(ingredientInfo.get());
+                recipeIngredientRepository.save(recipeIngredient);
+            }
+        }
     }
 
     public void updateRecipe(int recipeId, RecipeRequest request){

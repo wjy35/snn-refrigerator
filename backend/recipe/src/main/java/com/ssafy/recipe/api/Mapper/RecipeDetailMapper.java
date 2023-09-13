@@ -12,4 +12,5 @@ public interface RecipeDetailMapper {
 
     List<RecipeDetail> recipeDetailRequestsToRecipeDetails(List<RecipeDetail> recipeDetailRequests);
 
+
 }
