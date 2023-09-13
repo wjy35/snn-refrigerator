@@ -1,1 +1,1 @@
-export const baseURL: string = '';
+export const baseURL: string = 'http://a502.store/';
