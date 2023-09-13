@@ -93,4 +93,17 @@ public class MemberController {
         HateIngredientListDto response = new HateIngredientListDto(ingredientNames);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{memberId}/hate-ingredient/{ingredientId}")
+    public ResponseEntity<SimpleResponseDto> deleteInedibleIngredient(@PathVariable Long memberId, @PathVariable Short ingredientId){
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
+        List<HateIngredient> ingredientList = hateIngredientRepository.findByMemberAndIngredientId(member, ingredientId);
+        for(HateIngredient ingredient : ingredientList){
+            Integer id = ingredient.getHateIngredientTblId();
+            hateIngredientRepository.deleteByHateIngredientTblId(id);
+        }
+        SimpleResponseDto response = new SimpleResponseDto("Deleted");
+        return ResponseEntity.ok(response);
+    }
 }

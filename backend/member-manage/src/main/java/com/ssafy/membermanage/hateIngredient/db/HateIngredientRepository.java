@@ -9,4 +9,8 @@ public interface HateIngredientRepository extends JpaRepository<HateIngredient, 
     HateIngredient save(HateIngredient hateIngredient);
 
     List<HateIngredient> findByMember(Member member);
+
+    List<HateIngredient> findByMemberAndIngredientId(Member member, Short ingredientId);
+
+    void deleteByHateIngredientTblId(Integer hateIngredientSeq);
 }
