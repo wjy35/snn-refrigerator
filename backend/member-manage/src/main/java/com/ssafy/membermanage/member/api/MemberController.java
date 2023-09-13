@@ -8,19 +8,16 @@ import com.ssafy.membermanage.hateIngredient.service.HateIngredientService;
 import com.ssafy.membermanage.member.db.Member;
 import com.ssafy.membermanage.member.db.MemberRepository;
 import com.ssafy.membermanage.member.dto.*;
-import com.ssafy.membermanage.requestApi.client.RequestIngredientApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
-import java.util.*;
-
-import java.util.Optional;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 @RestController
 @RequestMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MemberController {
