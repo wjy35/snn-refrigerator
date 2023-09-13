@@ -10,6 +10,7 @@ import com.ssafy.membermanage.member.dto.SingleNicknameDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,17 +20,10 @@ import java.util.Optional;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("")
+@RequestMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MemberController {
     @Autowired
     private MemberRepository memberRepository;
-
-    @Value("${spring.datasource.url}")
-    String url;
-    @PostConstruct
-    void init() throws Exception {
-        System.out.println("url = " + url);
-    }
 
     @GetMapping("/{memberId}")
     public ResponseEntity<GetInfoDto> getMemberInfo(@PathVariable Long memberId){
