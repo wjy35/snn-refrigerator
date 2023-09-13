@@ -1,4 +1,4 @@
-package com.ssafy.membermanage.memberHateIngredient.db;
+package com.ssafy.membermanage.hateIngredient.db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

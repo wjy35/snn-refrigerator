@@ -1,4 +1,4 @@
-package com.ssafy.membermanage.memberHateIngredient.db;
+package com.ssafy.membermanage.hateIngredient.db;
 
 import com.ssafy.membermanage.member.db.Member;
 import lombok.Getter;
