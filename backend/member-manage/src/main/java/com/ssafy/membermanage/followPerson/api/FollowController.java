@@ -9,6 +9,7 @@ import com.ssafy.membermanage.member.db.Member;
 import com.ssafy.membermanage.member.db.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ public class FollowController {
     private MemberRepository memberRepository;
 
 
+    @PostMapping("/follow")
     public ResponseEntity<FollowResponseDto> ResponseFollowOrUnfollow(@RequestBody FollowRequestDto request){
         Member follower = memberRepository.findByMemberId(request.getFollowerId())
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
