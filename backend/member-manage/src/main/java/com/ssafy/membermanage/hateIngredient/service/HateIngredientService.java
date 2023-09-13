@@ -1,4 +1,4 @@
-package com.ssafy.membermanage.memberHateIngredient.service;
+package com.ssafy.membermanage.hateIngredient.service;
 
 import org.springframework.stereotype.Service;
 
