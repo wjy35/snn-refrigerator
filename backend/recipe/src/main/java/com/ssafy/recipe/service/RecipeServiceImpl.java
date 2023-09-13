@@ -67,5 +67,28 @@ public class RecipeServiceImpl implements RecipeService{
         recipeDetailRepository.saveAll(recipeDetails);
     }
 
+    public MemberResponse getMember(Long memberId){
+        Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(memberId);
 
+        if(memberResponse.isPresent()){
+            return memberResponse.get();
+        }else{
+           throw new CustomException(ErrorCode.NOT_FOUND_MEMBER);
+        }
+    }
+
+    public RecipeDetailResponse getRecipeDetail(int recipeId){
+        Optional<Recipe> recipe = recipeRepository.findById(recipeId);
+
+        String memberNickname = "";
+        if(recipe.isPresent()){
+            memberNickname = getMember(recipe.get().getMemberId()).getNickname();
+
+
+
+        }else{
+            throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
+        }
+        return null;
+    }
 }

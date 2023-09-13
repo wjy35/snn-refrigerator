@@ -14,8 +14,9 @@ public class RecipeIngredient {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    @Column(name = "ingredient_info_id", nullable = false)
-    private short ingredientInfoId;
+    @ManyToOne // IngredientInfo 엔티티와의 관계 설정
+    @JoinColumn(name = "ingredient_info_id", nullable = false)
+    private IngredientInfo ingredientInfo;
 
     @Column(name = "amount", length = 10)
     private String amount;
