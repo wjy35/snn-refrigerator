@@ -1,8 +1,7 @@
-package com.ssafy.membermanage.memberHateIngredient.db;
+package com.ssafy.membermanage.hateIngredient.db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface HateIngredientRepository extends JpaRepository<HateIngredient, Integer> {
-
-    //Ingredient로부터
+    HateIngredient save(HateIngredient hateIngredient);
 }
