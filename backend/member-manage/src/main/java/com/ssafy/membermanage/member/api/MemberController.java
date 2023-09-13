@@ -2,27 +2,22 @@ package com.ssafy.membermanage.member.api;
 
 import com.ssafy.membermanage.error.CustomException;
 import com.ssafy.membermanage.error.ErrorCode;
+import com.ssafy.membermanage.hateIngredient.db.HateIngredient;
+import com.ssafy.membermanage.hateIngredient.db.HateIngredientRepository;
+import com.ssafy.membermanage.hateIngredient.service.HateIngredientService;
 import com.ssafy.membermanage.member.db.Member;
 import com.ssafy.membermanage.member.db.MemberRepository;
-import com.ssafy.membermanage.member.dto.CheckNicknameIsDuplicateDto;
-import com.ssafy.membermanage.member.dto.GetInfoDto;
-import com.ssafy.membermanage.member.dto.HateIngredientDto;
-import com.ssafy.membermanage.member.dto.SingleNicknameDto;
-import com.ssafy.membermanage.requestApi.client.RequestIngredientApiClient;
+import com.ssafy.membermanage.member.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-import java.util.Optional;
-
 @RestController
 @RequestMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MemberController {
@@ -30,7 +25,12 @@ public class MemberController {
     private MemberRepository memberRepository;
 
     @Autowired
-    private RequestIngredientApiClient requestIngredientApiClient;
+    private HateIngredientRepository hateIngredientRepository;
+
+    @Autowired
+    private HateIngredientService hateIngredientService;
+
+
 
     @GetMapping("/{memberId}")
     public ResponseEntity<GetInfoDto> getMemberInfo(@PathVariable Long memberId){
@@ -68,19 +68,29 @@ public class MemberController {
     }
 
     @PostMapping("/{memberId}/hate-ingredient/{ingredientId}")
-    public ResponseEntity<HateIngredientDto>addInedibleIngredient(@PathVariable Long memberId, @PathVariable Short ingredientId){
+    public ResponseEntity<HateIngredientDto> addInedibleIngredient(@PathVariable Long memberId, @PathVariable Short ingredientId){
         Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
-        Map<String, Object> apiresponse = new HashMap<String, Object>();
-        try{
-            apiresponse = requestIngredientApiClient.getIngredientName(ingredientId);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new CustomException(ErrorCode.No_Such_Ingredient);
-        }
 
-        String ingredientName = (String) apiresponse.get("ingredientName");
+
+        String ingredientName = hateIngredientService.ingredientName(ingredientId);
         HateIngredientDto response = new HateIngredientDto(ingredientId, ingredientName);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{memberId}/hate-ingredient")
+    public ResponseEntity<HateIngredientListDto> getInedibleIngredientList(@PathVariable Long memberId){
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
+        List<HateIngredient> ingredientList = hateIngredientRepository.findByMember(member);
+        List<String> ingredientNames = new ArrayList<String>();
+        Map<String, Object> apiresponse = new HashMap<String, Object>();
+        for(HateIngredient ingredient : ingredientList){
+            Short id = ingredient.getIngredientId();
+            String name = hateIngredientService.ingredientName(id);
+            ingredientNames.add(name);
+        }
+        HateIngredientListDto response = new HateIngredientListDto(ingredientNames);
         return ResponseEntity.ok(response);
     }
 }
