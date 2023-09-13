@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
-import {styles, recipeStyles} from "@/styles/styles";
+import {recipeStyles} from "@/styles/recipeStyles";
 
 const RecipeItem = ({navigation}:any) => {
   return (
