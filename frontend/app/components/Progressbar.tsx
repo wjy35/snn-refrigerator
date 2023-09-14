@@ -100,47 +100,47 @@ const Progressbar = ({progress, total, textList}: props) => {
             if (i === progress) {
               if (i === total) {
                 return (
-                  <>
+                  <React.Fragment key={`now${i}`}>
                     {now(i-1)}
-                  </>
+                  </React.Fragment>
                 )
               } else {
                 return (
-                  <>
+                  <React.Fragment key={`now${i}`}>
                     {now(i-1)}
                     {now2wait()}
-                  </>
+                  </React.Fragment>
                 )
               }
             } else if (i < progress) {
               if (i+1 === progress) {
                 return (
-                  <>
+                  <React.Fragment key={`done${i}`}>
                     {done(i-1)}
                     {done2now()}
-                  </>
+                  </React.Fragment>
                 )
               } else {
                 return (
-                  <>
+                  <React.Fragment key={`done${i}`}>
                     {done(i-1)}
                     {done2done()}
-                  </>
+                  </React.Fragment>
                 )
               }
             } else if (i > progress) {
               if (i === total) {
                 return (
-                  <>
+                  <React.Fragment key={`wait${i}`}>
                     {wait(i-1)}
-                  </>
+                  </React.Fragment>
                 )
               } else {
                 return (
-                  <>
+                  <React.Fragment key={`wait${i}`}>
                     {wait(i-1)}
                     {now2wait()}
-                  </>
+                  </React.Fragment>
                 )
               }
             }
