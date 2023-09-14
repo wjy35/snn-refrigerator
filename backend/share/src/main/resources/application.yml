@@ -21,6 +21,10 @@ spring:
         show_sql: true
         format_sql: true
 
+logging:
+  level:
+    com.ssafy.share: DEBUG
+
 eureka:
   client:
     service-url:
