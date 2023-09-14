@@ -1,11 +1,7 @@
-server:
-  port: 8080
-
 spring:
   config:
-    import: env.yml
-  application:
-    name=${DOMAIN_NAME}
+    activate:
+      on-profile: local
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/testdb
@@ -16,13 +12,3 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-
-eureka:
-  client:
-    service-url:
-      defaultZone:${EUREKA_URL}
-
