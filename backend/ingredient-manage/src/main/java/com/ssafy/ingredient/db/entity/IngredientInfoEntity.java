@@ -1,11 +1,9 @@
 package com.ssafy.ingredient.db.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "ingredient_info")
 public class IngredientInfoEntity {
     @Id
     @Column(name = "ingredient_info_id")
@@ -14,6 +12,10 @@ public class IngredientInfoEntity {
 
     @Column(name = "ingredient_info_name")
     private String ingredientInfoName;
+
+    public Short getIngredientInfoId() {
+        return ingredientInfoId;
+    }
 
     public String getIngredientInfoName() {
         return ingredientInfoName;
