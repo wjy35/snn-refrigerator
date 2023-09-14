@@ -7,6 +7,7 @@ export const progressbarStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 30,
   },
   textContainer: {
     flex: 1,
