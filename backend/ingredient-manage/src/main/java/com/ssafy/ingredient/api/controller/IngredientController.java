@@ -1,8 +1,9 @@
 package com.ssafy.ingredient.api.controller;
 
+import com.ssafy.ingredient.api.response.IngredientInfo;
 import com.ssafy.ingredient.api.exception.NoIngredientInfoException;
 import com.ssafy.ingredient.api.mapper.IngredientInfoMapper;
-import com.ssafy.ingredient.api.response.IngredientInfoResponse;
+import com.ssafy.ingredient.api.response.Response;
 import com.ssafy.ingredient.db.entity.IngredientInfoEntity;
 import com.ssafy.ingredient.service.IngredientInfoSearchService;
 import lombok.RequiredArgsConstructor;
@@ -22,17 +23,20 @@ public class IngredientController {
     private final IngredientInfoSearchService ingredientInfoSearchService;
 
     @GetMapping("/{ingredientInfoId}")
-    ResponseEntity<IngredientInfoResponse> search(@PathVariable Short ingredientInfoId){
+    ResponseEntity<Response> search(@PathVariable Short ingredientInfoId){
         IngredientInfoEntity ingredientInfoEntity = ingredientInfoSearchService.searchByIngredientInfoId(ingredientInfoId)
                 .orElseThrow(()->new NoIngredientInfoException());
 
-        IngredientInfoResponse ingredientInfoResponse = IngredientInfoMapper.INSTANCE.entityToResponse(ingredientInfoEntity);
+        IngredientInfo ingredientInfo = IngredientInfoMapper.INSTANCE.entityToResponse(ingredientInfoEntity);
+        Response response = new Response();
+        response.setMessage("success");
+        response.addData(ingredientInfo);
 
-        return new ResponseEntity<>(ingredientInfoResponse, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @ExceptionHandler(value = NoIngredientInfoException.class)
-    ResponseEntity<IngredientInfoResponse> handleNoIngredientInfoException(){
+    ResponseEntity<IngredientInfo> handleNoIngredientInfoException(){
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
