@@ -23,7 +23,6 @@ public class FollowController {
     @Autowired
     private MemberRepository memberRepository;
 
-
     @PostMapping("/follow")
     public ResponseEntity<FollowResponseDto> ResponseFollowOrUnfollow(@RequestBody FollowRequestDto request){
         Member follower = memberRepository.findByMemberId(request.getFollowerId())
@@ -32,8 +31,7 @@ public class FollowController {
         Member followee = memberRepository.findByMemberId(request.getFolloweeId())
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
-        Boolean flag = followService.followOrUnfollow(follower, followee);
-        String message = (flag.equals(true)) ? "Follow" : "UnFollow";
+        String message = (followService.followOrUnfollow(follower, followee)) ? "Follow" : "UnFollow";
 
         return ResponseEntity.ok(new FollowResponseDto(
                 request.getFollowerId(),

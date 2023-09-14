@@ -15,16 +15,16 @@ public class FollowService {
     @Autowired
     private MemberRepository memberRepository;
 
-    public Boolean followOrUnfollow(Member follower, Member followee){
+    public boolean followOrUnfollow(Member follower, Member followee){
 
         Integer followCount = followee.getFollowCount();
-        Boolean flag;
+        boolean flag;
 
         if(followMemberRepository.existsByFollowerAndFollowee(follower, followee).equals(true)){
             FollowMember followMember = followMemberRepository.findByFollowerAndFollowee(follower, followee).get(0);
             followee.setFollowCount(followCount - 1);
             followMemberRepository.deleteByFollowId(followMember.getFollowId()); //followMember 삭제
-            flag = Boolean.TRUE;
+            flag = true;
         }
         else{
             followee.setFollowCount(followCount + 1);
@@ -33,7 +33,7 @@ public class FollowService {
             followMember.setFollowee(followee);
 
             followMemberRepository.save(followMember); //followMember 생성
-            flag = Boolean.FALSE;
+            flag = false;
         }
         memberRepository.save(followee); //followee 업데이트
         return flag;
