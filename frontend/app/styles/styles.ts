@@ -13,6 +13,17 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     margin: 10,
+    borderWidth: 1,
+    width: '96%'
+  },
+  marginRowContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+    borderWidth: 1,
+    width: '100%'
   },
   mainColor: {
     color: '#3093EF',
@@ -23,17 +34,17 @@ export const styles = StyleSheet.create({
   font: {
     fontFamily: 'BM-HANNA',
   },
-  dummy: {
-
-    // backgroundColor: '#3093EF',
-    borderWidth: 1,
-  },
-  dummyPage: {
+  flex: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    backgroundColor: '#ffffff',
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+  },
+  image: {
+    width: 100,
+    height: 100,
   }
 });

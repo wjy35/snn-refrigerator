@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {styles} from "@/styles/styles";
 import BottomNavigator from "@/components/BottomNavigator";
 
@@ -7,7 +7,9 @@ import BottomNavigator from "@/components/BottomNavigator";
 const MyPageLayout = ({children}:any) => {
   return (
     <View style={styles.container}>
-      {children}
+      <ScrollView>
+        {children}
+      </ScrollView>
       <BottomNavigator now='mypage'/>
     </View>
   )
