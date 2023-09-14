@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,5 +29,10 @@ public class IngredientController {
         IngredientInfoResponse ingredientInfoResponse = IngredientInfoMapper.INSTANCE.entityToResponse(ingredientInfoEntity);
 
         return new ResponseEntity<>(ingredientInfoResponse, HttpStatus.OK);
+    }
+
+    @ExceptionHandler(value = NoIngredientInfoException.class)
+    ResponseEntity<IngredientInfoResponse> handleNoIngredientInfoException(){
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
