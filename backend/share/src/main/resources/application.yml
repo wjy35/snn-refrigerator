@@ -16,14 +16,14 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
 
 
-eureka:
-  client:
-    service-url:
-      defaultZone:${EUREKA_URL}
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone:${EUREKA_URL}
 

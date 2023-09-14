@@ -15,6 +15,7 @@ import java.util.List;
 public class ShareBoardWriteRequest {
     private Long memberId;
     private Short locationId;
+    private LocationInfo locationInfo; // 받아온 ID로 변환할거임
     private String title;
     private String content;
     private List<ShareIngredient> shareIngredients;
@@ -29,7 +30,7 @@ public class ShareBoardWriteRequest {
     }
 
     public SharePost toEntity(){
-        return SharePost.builder().memberId(memberId).locationId(locationId).title(title).content(content)
+        return SharePost.builder().memberId(memberId).locationInfo(locationInfo).title(title).content(content)
                 .shareIngredients(shareIngredients).shareImages(shareImages).build();
     }
 }

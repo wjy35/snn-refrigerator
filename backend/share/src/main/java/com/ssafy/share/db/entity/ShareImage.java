@@ -9,9 +9,6 @@ import org.yaml.snakeyaml.events.Event;
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.AUTO;
-import static javax.persistence.GenerationType.IDENTITY;
-
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
