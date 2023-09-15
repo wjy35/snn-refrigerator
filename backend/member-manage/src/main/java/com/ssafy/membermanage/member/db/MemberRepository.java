@@ -9,4 +9,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Boolean existsByNickname(String nickname);
 
+    Member save(Member member);
 }
