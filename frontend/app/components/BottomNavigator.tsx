@@ -1,35 +1,84 @@
 import React from 'react';
-import {View, Button} from 'react-native';
+import {View, Button, Text, TouchableWithoutFeedback} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {styled} from 'nativewind';
+import {styles} from 'styles/styles';
+import {bottomTabStyles} from "@/styles/bottomTabStyles";
+import {homeDisactive, homeActive, mypageDisactive, mypageActive, recipeActive, recipeDisactive, shareActive, shareDisactive} from '@/assets/icons/icons';
+import {SvgXml} from 'react-native-svg';
 
-const StyledView = styled(View);
-
-const BottomNavigator = () => {
+interface props {
+  now: string,
+}
+const BottomNavigator = ({now}: props) => {
   const navigation: any = useNavigation();
+
   return (
-    <StyledView className="fixed">
-      <Button
-        title="Go to Home"
-        onPress={ () => navigation.push('Home')}
-      />
-      <Button
-        title="Go to Recipe"
-        onPress={ () => navigation.navigate('RecipeList')}
-      />
-      <Button
-        title="Go to Details"
-        onPress={ () => navigation.navigate('Details')}
-      />
-      <Button
-        title="Go to Share"
-        onPress={ () => navigation.navigate('ShareList')}
-      />
-      <Button
-        title="Go to Mypage"
-        onPress={ () => navigation.navigate('MyPage')}
-      />
-    </StyledView>
+    <View style={bottomTabStyles.tabContainer}>
+      <View style={bottomTabStyles.tabItemContainer}>
+        <View style={bottomTabStyles.singleTab}>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.push('Home')}>
+            <View style={bottomTabStyles.singleTab}>
+              <SvgXml
+                xml={now==='home'?homeActive:homeDisactive}
+                width={24}
+                height={24}
+              />
+              <Text style={[now==='home'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]}>홈</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+        <View style={bottomTabStyles.singleTab}>
+          <TouchableWithoutFeedback
+            onPress={ () => navigation.navigate('RecipeList')}
+          >
+            <View style={bottomTabStyles.singleTab}>
+              <SvgXml
+                xml={now==='recipe'?recipeActive:recipeDisactive}
+                width={24}
+                height={24}
+              />
+              <Text style={[now==='recipe'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]}>레시피</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+        <View style={bottomTabStyles.singleTab}>
+          <TouchableWithoutFeedback
+            onPress={ () => navigation.navigate('Home')}
+          >
+            <Text>냉장고</Text>
+          </TouchableWithoutFeedback>
+        </View>
+        <View style={bottomTabStyles.singleTab}>
+          <TouchableWithoutFeedback
+            onPress={ () => navigation.navigate('ShareList')}
+          >
+            <View style={bottomTabStyles.singleTab}>
+              <SvgXml
+                xml={now==='share'?shareActive:shareDisactive}
+                width={24}
+                height={24}
+              />
+              <Text style={[now==='share'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]}>나눔</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+        <View style={bottomTabStyles.singleTab}>
+          <TouchableWithoutFeedback
+            onPress={ () => navigation.navigate('MyPage')}
+          >
+            <View style={bottomTabStyles.singleTab}>
+              <SvgXml
+                xml={now==='mypage'?mypageActive:mypageDisactive}
+                width={24}
+                height={24}
+              />
+              <Text style={[now==='mypage'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]}>마이페이지</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
+    </View>
   );
 };
 

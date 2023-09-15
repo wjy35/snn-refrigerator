@@ -1,16 +1,12 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
-
+import ShareLayout from "@/screens/share/ShareLayout";
 
 const ShareDetailScreen = ({navigation}:any) => {
   return (
-    <View>
+    <ShareLayout>
       <Text>ShareDetailScreen</Text>
-      <Button
-        title="Go to Details"
-        onPress={ () => navigation.navigate('Details')}
-      />
-    </View>
+    </ShareLayout>
   )
 }
 
