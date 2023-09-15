@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+spring:
+  config:
+    import: env.yml
+
+  application:
+    name: ${DOMAIN_NAME}
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_ADDRESS}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+logging:
+  level:
+    com.ssafy.share: DEBUG
+
+eureka:
+  client:
+    service-url:
+      defaultZone:${EUREKA_URL}
+
