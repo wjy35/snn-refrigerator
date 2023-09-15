@@ -37,6 +37,7 @@ dependencies {
 //    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'io.netty:netty-all:4.1.24.Final'
+    implementation 'org.apache.commons:commons-lang3:3.0'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 //    runtimeOnly 'com.h2database:h2'
@@ -52,14 +53,14 @@ dependencies {
 }
 
 
-test { // (6)
+test {
     outputs.dir snippetsDir
 }
 
-asciidoctor { // (7)
-    inputs.dir snippetsDir // (8)
-    configurations 'asciidoctorExt' // (9)
-    dependsOn test // (10)
+asciidoctor {
+    inputs.dir snippetsDir
+    configurations 'asciidoctorExt'
+    dependsOn test
 }
 
 dependencyManagement {

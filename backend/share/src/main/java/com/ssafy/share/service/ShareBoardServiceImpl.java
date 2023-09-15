@@ -11,6 +11,8 @@ import com.ssafy.share.db.repository.MemberRepository;
 import com.ssafy.share.db.repository.ShareBoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +35,11 @@ public class ShareBoardServiceImpl implements ShareBoardService {
     public SharePost findBySharePostId(Long sharePostId) { // id로 나눔글 단건 조회
         return shareBoardRepository.findBySharePostId(sharePostId)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 게시글을 찾을 수 없습니다. ID: " + sharePostId));
+    }
+
+    @Override
+    public Page<SharePost> getPostList(Pageable pageable, String keyword) { // 나눔글 리스트 조회
+        return shareBoardRepository.findAll(pageable);
     }
 
     @Override

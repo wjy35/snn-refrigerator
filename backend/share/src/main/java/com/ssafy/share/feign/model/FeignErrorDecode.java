@@ -1,8 +1,10 @@
 package com.ssafy.share.feign.model;
 
+import feign.Request;
 import feign.Response;
 import feign.RetryableException;
 import feign.codec.ErrorDecoder;
+import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpStatusClass;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +32,8 @@ public class FeignErrorDecode implements ErrorDecoder {
                 response.status(), methodKey, response.request().url(), FeignResponseUtils.getRequestBody(response), FeignResponseUtils.getResponseBody(response));
 
         if (isRetry(response)) {
-//            return new RetryableException(format("%s 요청이 성공하지 못했습니다. Retry 합니다. - status: %s, headers: %s", methodKey, response.status(), response.headers()), null);
+            return new RetryableException(response.status(),format("%s 요청이 성공하지 못했습니다. Retry 합니다. - status: %s, headers: %s", methodKey, response.status(), response.headers()),
+                    Request.HttpMethod.valueOf(methodKey),null,response.request());
         }
         // int status, String message, HttpMethod httpMethod, Date retryAfter, Request request
         return new IllegalStateException(format("%s 요청이 성공하지 못했습니다. - cause: %s, headers: %s", methodKey, response.status(), response.headers()));

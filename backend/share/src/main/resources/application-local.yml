@@ -3,6 +3,10 @@ spring:
     activate:
       on-profile: local
   datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://3.38.181.77:3308/share
+#    username: a502
+#    password: ssafyA502
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/testdb
     username: root
