@@ -1,0 +1,36 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: member-example
+          uri: lb://MEMBER-EXAMPLE/
+          predicates:
+            - Path=/member-example/**
+          filters:
+            - RewritePath=/member-example/(?<path>.*),/$\{path}
+        - id: recipe
+          uri: lb://RECIPE/
+          predicates:
+            - Path=/recipe/**
+          filters:
+            - RewritePath=/recipe/(?<path>.*),/$\{path}
+        - id: member-manage
+          uri: lb://MEMBER-MANAGE/
+          predicates:
+            - Path=/member-manage/**
+          filters:
+            - RewritePath=/member-manage/(?<path>.*),/$\{path}
+        - id: house-ingredient
+          uri: lb://HOUSE-INGREDIENT/
+          predicates:
+            - Path=/house-ingredient/**
+          filters:
+            - RewritePath=/house-ingredient/(?<path>.*),/$\{path}
+        - id: ingredient-manage
+          uri: lb://INGREDIENT-MANAGE/
+          predicates:
+            - Path=/ingredient-manage/**
+          filters:
+            - RewritePath=/ingredient-manage/(?<path>.*),/$\{path}
+
+
