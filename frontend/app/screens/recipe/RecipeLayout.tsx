@@ -7,9 +7,9 @@ import BottomNavigator from "@/components/BottomNavigator";
 const RecipeLayout = ({children}:any) => {
   return (
     <View style={styles.container}>
-      <ScrollView>
+      {/*<ScrollView overScrollMode="never">*/}
         {children}
-      </ScrollView>
+      {/*</ScrollView>*/}
       <BottomNavigator now='recipe'/>
     </View>
   )

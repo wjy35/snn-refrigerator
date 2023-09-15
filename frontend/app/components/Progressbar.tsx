@@ -94,7 +94,7 @@ const Progressbar = ({progress, total, textList}: props) => {
 
   return (
     <>
-      <View>
+      <View style={progressbarStyles.container}>
         <View style={progressbarStyles.progressContainer}>
           {totalList.map((i: number) => {
             if (i === progress) {
