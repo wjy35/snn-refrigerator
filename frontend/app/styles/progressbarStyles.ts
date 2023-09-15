@@ -1,6 +1,9 @@
 import {StyleSheet} from "react-native";
 
 export const progressbarStyles = StyleSheet.create({
+  container: {
+    height: 60,
+  },
   progressContainer: {
     flex: 1,
     width: 350,
