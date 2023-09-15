@@ -1,8 +1,18 @@
 package com.ssafy.recipe.db.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecipeIngredient {
 
     @Id
@@ -14,10 +24,18 @@ public class RecipeIngredient {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-    @Column(name = "ingredient_info_id", nullable = false)
-    private short ingredientInfoId;
+    @ManyToOne
+    @JoinColumn(name = "ingredient_info_id", nullable = false)
+    private IngredientInfo ingredientInfo;
 
     @Column(name = "amount", length = 10)
     private String amount;
 
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+
+    public void setIngredientInfo(IngredientInfo ingredientInfo) {
+        this.ingredientInfo = ingredientInfo;
+    }
 }
