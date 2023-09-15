@@ -26,5 +26,11 @@ spring:
             - Path=/house-ingredient/**
           filters:
             - RewritePath=/house-ingredient/(?<path>.*),/$\{path}
+        - id: ingredient-manage
+          uri: lb://INGREDIENT-MANAGE/
+          predicates:
+            - Path=/ingredient-manage/**
+          filters:
+            - RewritePath=/ingredient-manage/(?<path>.*),/$\{path}
 
 
