@@ -25,12 +25,12 @@ public class SharePost extends BaseTimeEntity{
     @Column(name = "member_Id",nullable = false)
     private Long memberId;
 
-    @Column(name = "location_Id",nullable = false)
-    private Short locationId;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name="location_id")
+    private LocationInfo locationInfo; // 글 번호
 //    @ManyToOne
 //    @JoinColumn(name="member_id")
 //    private Member member;
-
 
     @OneToMany(mappedBy = "sharePost", cascade = CascadeType.REMOVE)
     private List<ShareImage> shareImages=new ArrayList<>(); // 나눔 이미지들
@@ -49,10 +49,9 @@ public class SharePost extends BaseTimeEntity{
 
     // 생성자
     @Builder
-    public SharePost(Long memberId, Short locationId, List<ShareImage> shareImages,
+    public SharePost(Long memberId,LocationInfo locationInfo,List<ShareImage> shareImages,
                      List<ShareIngredient> shareIngredients, String title, String content, String thumbnail) {
         this.memberId = memberId;
-        this.locationId = locationId;
         this.shareImages = shareImages;
         this.shareIngredients = shareIngredients;
         this.title = title;
