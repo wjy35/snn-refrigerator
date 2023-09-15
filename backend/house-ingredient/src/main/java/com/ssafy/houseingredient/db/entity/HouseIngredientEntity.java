@@ -24,8 +24,8 @@ public class HouseIngredientEntity {
     @Column(name="ingredient_info_id")
     private Short ingredientInfoId;
 
-    @Column(name="ingredient_info_name", length = 15)
-    private String ingredientInfoName;
+    @Column(name="ingredient_name", length = 15)
+    private String ingredientName;
 
     @Column(name="storage_type")
     private Byte storageType;
@@ -47,7 +47,7 @@ public class HouseIngredientEntity {
                 "houseIngredientId=" + houseIngredientId +
                 ", houseSeq=" + houseSeq +
                 ", ingredientInfoId=" + ingredientInfoId +
-                ", ingredientInfoName='" + ingredientInfoName + '\'' +
+                ", ingredientName='" + ingredientName + '\'' +
                 ", storageType=" + storageType +
                 ", lastDate=" + lastDate +
                 ", storageDate=" + storageDate +

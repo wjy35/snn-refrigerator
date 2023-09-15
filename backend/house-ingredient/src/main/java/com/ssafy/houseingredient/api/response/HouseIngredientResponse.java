@@ -6,10 +6,10 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Data
-public class HouseIngredient {
+public class HouseIngredientResponse {
     private Integer houseSeq;
     private Short ingredientInfoId;
-    private String ingredientName;
+    private String ingredientInfoName;
     private Byte storageType;
     private Date lastDate;
     private LocalDateTime storageDate;

@@ -5,9 +5,9 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class HouseIngredientDetailRequest {
-    private int ingredientInfoId;
+public class HouseIngredientDetailParam {
+    private Integer ingredientInfoId;
     private String ingredientName;
-    private byte storageType;
+    private Byte storageType;
     private LocalDate lastDate;
 }

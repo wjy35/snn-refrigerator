@@ -4,9 +4,10 @@ import java.util.HashMap;
 
 public class Response {
     private String message;
-    private HashMap<String,Object> data;
+    private HashMap<String,Object> request, data;
 
     public Response() {
+        this.request = new HashMap<>();
         this.data = new HashMap<>();
     }
 
@@ -18,16 +19,27 @@ public class Response {
         return message;
     }
 
+    public HashMap<String, Object> getRequest() {
+        return request;
+    }
+
+    public void addRequest(String key, Object data) {
+        this.request.put(key,data);
+    }
+
     public HashMap<String, Object> getData() {
         return data;
     }
 
-    public void addData(Object data) {
-        this.data.put(toResponseString(data),data);
+    public void addData(String key, Object data) {
+        this.data.put(key,data);
     }
 
-    private String toResponseString(Object data){
-        String dataName = data.getClass().getSimpleName();
-        return dataName.substring(0,1).toLowerCase()+dataName.substring(1);
+    @Override
+    public String toString() {
+        return "Response{" +
+                "message='" + message + '\'' +
+                ", data=" + data +
+                '}';
     }
 }
