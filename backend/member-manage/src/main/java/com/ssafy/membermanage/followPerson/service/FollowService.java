@@ -4,8 +4,12 @@ import com.ssafy.membermanage.followPerson.db.FollowMember;
 import com.ssafy.membermanage.followPerson.db.FollowMemberRepository;
 import com.ssafy.membermanage.member.db.Member;
 import com.ssafy.membermanage.member.db.MemberRepository;
+import com.ssafy.membermanage.member.dto.GetInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class FollowService {
@@ -37,5 +41,21 @@ public class FollowService {
         }
         memberRepository.save(followee); //followee 업데이트
         return flag;
+    }
+
+    public List<GetInfoDto> getFolloweeList(Member follower){
+        List<FollowMember> queryList = followMemberRepository.findByFollower(follower);
+        List<GetInfoDto> followees = new ArrayList<GetInfoDto>();
+        for(FollowMember followMember : queryList){
+            Member followee = followMember.getFollowee();
+            GetInfoDto infoDto = GetInfoDto
+                    .builder()
+                    .nickname(followee.getNickname())
+                    .profileImageUrl(followee.getProfileImageUrl())
+                    .followCount(followee.getFollowCount())
+                    .build();
+            followees.add(infoDto);
+        }
+        return followees;
     }
 }
