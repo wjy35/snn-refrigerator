@@ -16,4 +16,5 @@ public class RecipeRequest {
     private byte serving;
     private String youtubeUrl;
     private List<RecipeDetail> content;
+    private List<RecipeIngredientRequest> ingredients;
 }
