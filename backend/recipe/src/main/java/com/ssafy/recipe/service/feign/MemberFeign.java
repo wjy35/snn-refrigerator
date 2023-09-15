@@ -1,4 +1,4 @@
-package com.ssafy.recipe.api.feign;
+package com.ssafy.recipe.service.feign;
 
 import com.ssafy.recipe.api.response.MemberResponse;
 import org.springframework.cloud.openfeign.FeignClient;

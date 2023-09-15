@@ -1,6 +1,6 @@
 package com.ssafy.recipe.service;
 
-import com.ssafy.recipe.api.feign.MemberFeign;
+import com.ssafy.recipe.service.feign.MemberFeign;
 import com.ssafy.recipe.api.mapper.RecipeCustomIngredientMapper;
 import com.ssafy.recipe.api.mapper.RecipeDetailMapper;
 import com.ssafy.recipe.api.mapper.RecipeIngredientMapper;
@@ -10,13 +10,12 @@ import com.ssafy.recipe.api.request.RecipeRequest;
 import com.ssafy.recipe.api.response.MemberResponse;
 import com.ssafy.recipe.api.response.RecipeDetailResponse;
 import com.ssafy.recipe.db.entity.*;
-import com.ssafy.recipe.db.resository.*;
+import com.ssafy.recipe.db.repository.*;
 import com.ssafy.recipe.exception.CustomException;
 import com.ssafy.recipe.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

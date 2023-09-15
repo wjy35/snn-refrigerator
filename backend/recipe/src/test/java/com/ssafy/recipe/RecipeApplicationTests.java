@@ -1,7 +1,6 @@
 package com.ssafy.recipe;
 
-import com.netflix.discovery.converters.Auto;
-import com.ssafy.recipe.api.feign.MemberFeign;
+import com.ssafy.recipe.service.feign.MemberFeign;
 import com.ssafy.recipe.api.response.MemberResponse;
 //import com.ssafy.recipe.service.RecipeServiceImpl;
 import org.junit.jupiter.api.Test;
