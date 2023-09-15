@@ -49,7 +49,7 @@ class IngredientManageApplicationTests {
     @Transactional
     void insertIngredientInfoEntityTest(){
         // given
-        String ingredientInfoName = "뜨거운곽민규";
+        String ingredientInfoName = "테스트 식재료 이름";
         IngredientInfoEntity insertedEntity = IngredientInfoEntity
                 .builder()
                 .ingredientInfoName(ingredientInfoName)
