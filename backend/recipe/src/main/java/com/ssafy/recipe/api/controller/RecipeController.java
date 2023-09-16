@@ -20,11 +20,6 @@ public class RecipeController {
 
     private final RecipeServiceImpl recipeService;
 
-    @GetMapping("")
-    public String welcome(){
-        return "recipe service.";
-    }
-
     @PostMapping("/")
     public ResponseEntity<?> createRecipe (@RequestBody RecipeRequest recipeRequest) {
         Response response = new Response();

@@ -3,6 +3,7 @@ package com.ssafy.recipe;
 import com.ssafy.recipe.api.request.RecipeDetailParam;
 import com.ssafy.recipe.api.request.RecipeIngredientParam;
 import com.ssafy.recipe.api.request.RecipeRequest;
+import com.ssafy.recipe.api.response.ContentParam;
 import com.ssafy.recipe.db.entity.Recipe;
 import com.ssafy.recipe.db.entity.RecipeDetail;
 import com.ssafy.recipe.db.repository.RecipeRepository;
@@ -81,6 +82,18 @@ class RecipeApplicationTests {
 		}
 	}
 
+	@Test
+	void getRecipeDetailTest(){
+		// given
+		int recipeId = 37;
+
+		// when
+		List<ContentParam> list = recipeService.getRecipeDetail(recipeId);
+
+		// then
+		assertEquals(list.size(), 3);
+	}
+
 	private static RecipeRequest getRequest(){
 		List<RecipeDetailParam> recipeDetailParams = new ArrayList<>();
 		for(int i=1; i<4; i++){
@@ -93,6 +106,5 @@ class RecipeApplicationTests {
 
 		return new RecipeRequest("왕준영찜", 1234L,"123분","김치찌개","imageUrl",(byte) 2, "youtubeUrl", recipeDetailParams, recipeIngredientParams);
 	}
-
 
 }

@@ -1,5 +1,7 @@
 package com.ssafy.recipe.service;
 
+import com.ssafy.recipe.api.response.ContentParam;
+import com.ssafy.recipe.api.response.IngredientParam;
 import com.ssafy.recipe.service.feign.MemberFeign;
 import com.ssafy.recipe.api.mapper.RecipeCustomIngredientMapper;
 import com.ssafy.recipe.api.mapper.RecipeDetailMapper;
@@ -16,6 +18,7 @@ import com.ssafy.recipe.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -125,18 +128,41 @@ public class RecipeServiceImpl implements RecipeService{
         }
     }
 
-    public RecipeDetailResponse getRecipeDetail(int recipeId){
+    public RecipeDetailResponse getRecipe(int recipeId){
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
 
-        String memberNickname = "";
-        if(recipe.isPresent()){
-            memberNickname = getMember(recipe.get().getMemberId()).getNickname();
+        String nickname = "";
+        int followCount = 1400;
+        if(recipe.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
+
+//            nickname = getMember(recipe.get().getMemberId()).getNickname();
+        nickname = "TestNickName";
 
 
+        List<IngredientParam> ingredientParams = this.getIngredientList();
 
-        }else{
-            throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
-        }
+        List<ContentParam> recipeDetails = this.getRecipeDetail(recipeId);
+
+        return null;
+    }
+
+    public List<ContentParam> getRecipeDetail(int recipeId){
+        List<RecipeDetail> recipeDetails = recipeDetailRepository.findByRecipeRecipeId(recipeId);
+
+        return recipeDetailMapper.recipeDetailsToContentParam(recipeDetails);
+    }
+
+    public List<IngredientParam> getIngredientList(){
+
+        // ingredientParam 리스트 생성
+        List<IngredientParam> ingredientParams = new ArrayList<>();
+
+        // 커스텀 식재료 -> 레시피 id로 여기 있는 식재료 다 검색, 양, 이름 추가
+
+        // 등록된 식재료 -> 레시피 id로 여기 있는 식재료 id 다 긁어옴, 양 추가, id로 ingredient-info 테이블에서 이름 검색,
+        // id로 house_ingredient테이블에서 검색
+        //  => 있으면 소비기한 저장
+
         return null;
     }
 }
