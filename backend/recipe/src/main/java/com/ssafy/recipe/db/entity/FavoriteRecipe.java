@@ -20,9 +20,8 @@ public class FavoriteRecipe {
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
-
     @ManyToOne
-    @JoinColumn(name = "recipe_id", nullable = false)
+    @JoinColumn(name = "recipe_id", referencedColumnName = "recipe_id", nullable = false)
     private Recipe recipe;
 
     @Builder

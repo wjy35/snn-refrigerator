@@ -27,4 +27,15 @@ public class FavoriteRecipeController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{recipeId}")
+    public ResponseEntity<?> deleteFavoriteRecipe (@PathVariable int recipeId, @RequestBody MemberIdRequest memberId){
+        Response response = new Response();
+        favoriteRecipeService.deleteFavoriteRecipe(recipeId, memberId.getMemberId());
+        response.setMessage("OK");
+        response.addRequest("recipeId",recipeId);
+        response.addRequest("memberId",memberId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

@@ -20,6 +20,7 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
     private final RecipeRepository recipeRepository;
     @Override
     public void addFavoriteRecipe(int recipeId, long memberId) {
+
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
 
         if(recipe.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
@@ -31,4 +32,15 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
 
         favoriteRecipeRepository.save(favoriteRecipe);
     }
+
+    @Override
+    public void deleteFavoriteRecipe(int recipeId, long memberId) {
+        Optional<FavoriteRecipe> favoriteRecipe = favoriteRecipeRepository.findByRecipeRecipeIdAndMemberId(recipeId, memberId);
+
+        if(favoriteRecipe.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
+
+        favoriteRecipeRepository.delete(favoriteRecipe.get());
+    }
+
+
 }

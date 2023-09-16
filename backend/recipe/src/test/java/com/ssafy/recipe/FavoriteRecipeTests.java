@@ -29,19 +29,27 @@ public class FavoriteRecipeTests {
     @Test
     void addFavoriteRecipeTest(){
         // given
-        int recipId = 1;
+        int recipId = 41;
         long memberId = 123;
-        Optional<Recipe> recipe =  recipeRepository.findById(41);
+        Optional<Recipe> recipe =  recipeRepository.findById(recipId);
 
         FavoriteRecipe favoriteRecipe = FavoriteRecipe.builder()
-                .memberId(123)
+                .memberId(12322)
                 .recipe(recipe.get())
                 .build();
 
-        // when
-        FavoriteRecipe favoriteRecipe1= favoriteRecipeRepository.save(favoriteRecipe);
+        // when & then
+        favoriteRecipeService.addFavoriteRecipe(recipId, memberId);
 
-        // then
-        assertNotNull(favoriteRecipe1);
+    }
+
+    @Test
+    void deleteFavoriteRecipe(){
+        // given
+        long memberId = 123;
+        int recipeId = 41;
+
+        // when
+        favoriteRecipeService.deleteFavoriteRecipe(recipeId,memberId);
     }
 }
