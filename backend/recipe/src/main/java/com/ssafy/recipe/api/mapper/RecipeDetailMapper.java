@@ -12,7 +12,7 @@ import java.util.List;
 public interface RecipeDetailMapper {
     RecipeDetailMapper INSTANCE = Mappers.getMapper(RecipeDetailMapper.class);
 
-    List<RecipeDetail>contentsToRecipeDetails(List<RecipeDetailParam> contents);
+    List<RecipeDetail>recipeDetailParamsToRecipeDetails(List<RecipeDetailParam> recipeDetailParams);
 
     ContentParam map(RecipeDetail value);
 

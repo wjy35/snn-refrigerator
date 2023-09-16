@@ -10,9 +10,5 @@ import org.mapstruct.factory.Mappers;
 public interface RecipeMapper {
     RecipeMapper INSTANCE = Mappers.getMapper(RecipeMapper.class);
 
-    @Mapping(target = "recipeId", ignore = true)
-    @Mapping(target = "registDatetime", ignore = true)
-    @Mapping(target = "modifyDatetime", ignore = true)
-//    @Mapping(source = "memberId", target = "memberId")
     Recipe recipeRequestToRecipe(RecipeRequest request);
 }

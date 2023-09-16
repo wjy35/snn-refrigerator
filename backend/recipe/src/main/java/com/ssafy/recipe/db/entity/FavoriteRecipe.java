@@ -1,8 +1,15 @@
 package com.ssafy.recipe.db.entity;
 
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class FavoriteRecipe {
 
     @Id
@@ -18,5 +25,9 @@ public class FavoriteRecipe {
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
 
-
+    @Builder
+    public FavoriteRecipe(Recipe recipe, long memberId){
+        this.recipe = recipe;
+        this.memberId = memberId;
+    }
 }

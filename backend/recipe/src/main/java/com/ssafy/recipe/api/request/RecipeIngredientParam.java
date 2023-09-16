@@ -1,6 +1,6 @@
 package com.ssafy.recipe.api.request;
 
-import lombok.Getter;
+import lombok.*;
 
 @Getter
 public class RecipeIngredientParam {
@@ -9,6 +9,7 @@ public class RecipeIngredientParam {
     private String recipeId;
     private short ingredientInfoId;
 
+    @Builder
     public RecipeIngredientParam(String ingredientName, String amount, short ingredientInfoId) {
         this.ingredientName = ingredientName;
         this.amount = amount;
