@@ -13,6 +13,6 @@ public interface RecipeMapper {
     @Mapping(target = "recipeId", ignore = true)
     @Mapping(target = "registDatetime", ignore = true)
     @Mapping(target = "modifyDatetime", ignore = true)
-    @Mapping(source = "memberId", target = "memberId")
+//    @Mapping(source = "memberId", target = "memberId")
     Recipe recipeRequestToRecipe(RecipeRequest request);
 }
