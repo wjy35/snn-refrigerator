@@ -38,5 +38,13 @@ public class RecipeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{recipeId}")
+    public ResponseEntity<?> deleteRecipe (@PathVariable int recipeId){
+        Response response = new Response();
+        recipeService.deleteRecipe((recipeId));
+        response.setMessage("OK");
+        response.addRequest("recipeId", recipeId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
     
 }
