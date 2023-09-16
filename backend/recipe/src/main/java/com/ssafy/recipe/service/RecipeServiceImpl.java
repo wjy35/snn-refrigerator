@@ -66,7 +66,7 @@ public class RecipeServiceImpl implements RecipeService{
 
         recipeRepository.save(recipe);
 
-        List<RecipeDetail> recipeDetails = recipeDetailMapper.contentsToRecipeDetails(request.getContent());
+        List<RecipeDetail> recipeDetails = recipeDetailMapper.recipeDetailParamsToRecipeDetails(request.getContent());
 
         List<RecipeDetail> originalRecipeDetails = recipeDetailRepository.findByRecipeRecipeId(recipeId);
 
@@ -88,7 +88,7 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     public void saveRecipeDetails(Recipe recipe, RecipeRequest request){
-        List<RecipeDetail> recipeDetails = recipeDetailMapper.contentsToRecipeDetails(request.getContent());
+        List<RecipeDetail> recipeDetails = recipeDetailMapper.recipeDetailParamsToRecipeDetails(request.getContent());
         System.out.println(request.getContent().size());
         System.out.println(recipeDetails.get(0).getContent());
         for (RecipeDetail recipeDetail : recipeDetails) {
@@ -116,6 +116,7 @@ public class RecipeServiceImpl implements RecipeService{
 
     public void saveRecipeIngredient(Recipe recipe, RecipeIngredientParam recipeIngredientParam){
         RecipeIngredient recipeIngredient = recipeIngredientMapper.recipeIngredientParamToRecipeIngredients(recipeIngredientParam);
+        System.out.println(recipeIngredient.getAmount());
         recipeIngredient.setRecipe(recipe);
         Optional<IngredientInfo> ingredientInfo = ingredientInfoRepository.findById(recipeIngredientParam.getIngredientInfoId());
         recipeIngredient.setIngredientInfo(ingredientInfo.get());

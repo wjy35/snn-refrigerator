@@ -8,9 +8,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Recipe {
 
     @Id
@@ -73,5 +71,16 @@ public class Recipe {
 
     public void setRecipeId(int recipeId) {
         this.recipeId = recipeId;
+    }
+
+    @Builder
+    public Recipe(Long memberId, String title, String imageUrl, String youtubeUrl, byte serving, String cookingTime, String foodName) {
+        this.memberId = memberId;
+        this.title = title;
+        this.imageUrl = imageUrl;
+        this.youtubeUrl = youtubeUrl;
+        this.serving = serving;
+        this.cookingTime = cookingTime;
+        this.foodName = foodName;
     }
 }
