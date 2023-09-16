@@ -14,6 +14,7 @@ import com.ssafy.recipe.api.response.MemberResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +94,23 @@ class RecipeApplicationTests {
 		// then
 		assertEquals(list.size(), 3);
 	}
+
+	@Test
+	void deleteRecipeTest(){
+		// given
+		int recipeId = 37;
+
+		// when
+		recipeService.deleteRecipe(recipeId);
+
+		Optional<Recipe> recipeOptional = recipeRepository.findById(37);
+		// then
+		assertFalse(recipeOptional.isPresent());
+	}
+
+
+
+
 
 	private static RecipeRequest getRequest(){
 		List<RecipeDetailParam> recipeDetailParams = new ArrayList<>();

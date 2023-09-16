@@ -79,6 +79,10 @@ public class RecipeServiceImpl implements RecipeService{
         recipeDetailRepository.saveAll(recipeDetails);
     }
 
+    public void deleteRecipe(int recipeId){
+        recipeRepository.deleteById(recipeId);
+    }
+
     public void saveRecipe(Recipe recipe){
         recipeRepository.save(recipe);
     }
