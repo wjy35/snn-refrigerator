@@ -3,6 +3,7 @@ package com.ssafy.houseingredient.api.controller;
 import com.ssafy.houseingredient.api.exception.NoHouseIngredientException;
 import com.ssafy.houseingredient.api.mapper.HouseIngredientMapper;
 import com.ssafy.houseingredient.api.request.HouseIngredientSaveAllRequest;
+import com.ssafy.houseingredient.api.request.HouseIngredientSaveRequest;
 import com.ssafy.houseingredient.api.response.HouseIngredientResponse;
 import com.ssafy.houseingredient.api.response.Response;
 import com.ssafy.houseingredient.db.entity.HouseIngredientEntity;
@@ -44,7 +45,7 @@ public class HouseIngredientController {
         for(HouseIngredientEntity houseIngredientEntity : houseIngredientEntities){
             houseIngredientEntity.setHouseSeq(houseIngredientSaveAllRequest.getHouseSeq());
         }
-        System.out.println(houseIngredientEntities);
+//        System.out.println(houseIngredientEntities);
 
         houseIngredientService.saveAll(houseIngredientEntities);
 
@@ -53,7 +54,27 @@ public class HouseIngredientController {
 
         response.addRequest("houseSeq", houseIngredientSaveAllRequest.getHouseSeq());
         response.addRequest("count",houseIngredientEntities.size());
-        System.out.println(new ResponseEntity<>(response, HttpStatus.OK));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<Response> save(@RequestBody HouseIngredientSaveRequest houseIngredientSaveRequest){
+
+//        HouseIngredientEntity houseIngredientEntity = HouseIngredientMapper.INSTANCE.saveRequestToEntity(houseIngredientSaveRequest);
+        HouseIngredientEntity houseIngredientEntity = houseIngredientService.searchByHouseIngredientId(houseIngredientSaveRequest.getHouseIngredientId())
+                .orElseThrow(NoHouseIngredientException::new);
+
+        if(houseIngredientSaveRequest.getLastDate()!=null)  houseIngredientEntity.setLastDate(houseIngredientSaveRequest.getLastDate());
+        if(houseIngredientSaveRequest.getStorageType()!=null) houseIngredientEntity.setStorageType(houseIngredientSaveRequest.getStorageType());
+
+        houseIngredientService.save(houseIngredientEntity);
+
+        Response response = new Response();
+        response.setMessage("OK");
+
+        response.addRequest("houseIngredientId", houseIngredientSaveRequest.getHouseIngredientId());
+        response.addRequest("storageType",houseIngredientSaveRequest.getStorageType());
+        response.addRequest("lastDate",houseIngredientSaveRequest.getLastDate());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
