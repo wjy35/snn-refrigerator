@@ -1,9 +1,9 @@
 FROM gradle:8.2.1-jdk11 as build
 WORKDIR /app
 
-COPY ./backend/member-manage/settings.gradle ./
-COPY ./backend/member-manage/build.gradle ./
-COPY ./backend/member-manage/src ./src
+COPY ./backend/chatroom/settings.gradle ./
+COPY ./backend/chatroom/build.gradle ./
+COPY ./backend/chatroom/src ./src
 
 RUN gradle build -x test --parallel
 
