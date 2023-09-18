@@ -12,8 +12,8 @@ public class ChatRoomCreateServiceImpl implements ChatRoomCreateService {
     private final ChatRoomRepository chatRoomRepository;
 
     @Override
-    public void createChatRoom(ChatRoomEntity chatRoomEntity) {
-        chatRoomRepository.save(chatRoomEntity);
+    public Integer createChatRoom(ChatRoomEntity chatRoomEntity) {
+        return chatRoomRepository.save(chatRoomEntity).getChatRoomId();
     }
 
 }
