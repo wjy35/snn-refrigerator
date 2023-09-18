@@ -183,27 +183,19 @@ public class RecipeServiceImpl implements RecipeService{
 
         if(recipe.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
 
-//        Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(recipe.get().getMemberId());
-
-//        System.out.println(memberResponse.get().getNickname());
-//        System.out.println(memberResponse.get().getFollowCount());
-
-        MemberResponse memberResponse = MemberResponse.builder()
-                .nickname("김석주")
-                .followCount(1)
-                .build();
+        Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(recipe.get().getMemberId());
 
         List<IngredientParam> ingredientParams = this.getIngredientList();
 
         List<ContentParam> recipeDetails = this.getRecipeDetail(recipeId);
 
         return RecipeDetailResponse.builder()
-                .nickname(memberResponse.getNickname())
+                .nickname(memberResponse.get().getNickname())
                 .title(recipe.get().getTitle())
                 .image(recipe.get().getImageUrl())
                 .youtubeUrl(recipe.get().getYoutubeUrl())
                 .favoriteCount(recipe.get().getFavoriteCount())
-                .followCount((memberResponse.getFollowCount()))
+                .followCount((memberResponse.get().getFollowCount()))
                 .contentResponseList(recipeDetails)
                 .build();
     }
@@ -211,8 +203,6 @@ public class RecipeServiceImpl implements RecipeService{
     @Override
     public List<ContentParam> getRecipeDetail(int recipeId){
         List<RecipeDetail> recipeDetails = recipeDetailRepository.findByRecipeRecipeId(recipeId);
-        System.out.println(recipeDetails.get(0).getOrder());
-        System.out.println(recipeDetails.get(0).getContent());
         return recipeDetailMapper.recipeDetailsToContentParam(recipeDetails);
     }
 

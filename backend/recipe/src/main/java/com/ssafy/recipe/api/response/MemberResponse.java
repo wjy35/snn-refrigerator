@@ -8,4 +8,5 @@ import lombok.Getter;
 public class MemberResponse {
     private String nickname;
     private long followCount;
+
 }

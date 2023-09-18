@@ -35,8 +35,5 @@ class RecipeApplicationTests {
 		Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(1);
 
 		assertNotNull(memberResponse);
-		System.out.println(memberResponse.get().getNickname());
 	}
-
-
 }
