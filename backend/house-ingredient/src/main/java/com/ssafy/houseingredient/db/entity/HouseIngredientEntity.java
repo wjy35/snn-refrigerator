@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class HouseIngredientEntity {
     @Id
     @Column(name="house_ingredient_id")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer houseIngredientId;
 
     @Column(name="house_seq")

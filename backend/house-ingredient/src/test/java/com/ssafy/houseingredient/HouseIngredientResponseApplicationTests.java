@@ -42,7 +42,7 @@ class HouseIngredientResponseApplicationTests {
 		HouseIngredientEntity selectedHouseIngredientEntity = houseIngredientRepository.findByHouseIngredientId(houseIngredientId).get();
 
 		//then
-		System.out.println("selectedHouseIngredientInfo = " + selectedHouseIngredientEntity);
+//		System.out.println("selectedHouseIngredientInfo = " + selectedHouseIngredientEntity);
 		Assertions.assertEquals("테스트 커스텀 식재료", selectedHouseIngredientEntity.getIngredientName());
 	}
 
