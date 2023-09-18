@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class HouseIngredientResponse {
+    private Integer houseIngredientId;
     private Integer houseSeq;
     private Short ingredientInfoId;
     private String ingredientName;

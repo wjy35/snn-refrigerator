@@ -74,6 +74,20 @@ class HouseIngredientResponseApplicationTests {
 	}
 
 	@Test
+	void searchAllHouseIngredientTest(){
+		//given
+		Integer houseSeq = 1;
+
+		//when
+		ResponseEntity<Response> response = houseIngredientController.searchAll(houseSeq);
+
+		//then
+		System.out.println("response = " + response);
+//		System.out.println(response.getBody().getData().get("houseIngredient"));
+//		Assertions.assertNotNull(response.getBody().getData());
+	}
+
+	@Test
 	@Transactional
 	void insertHouseIngredientTest(){
 		//given

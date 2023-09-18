@@ -31,4 +31,9 @@ public class HouseIngredientServiceImpl implements HouseIngredientService {
     public void save(HouseIngredientEntity houseIngredientEntity) {
         houseIngredientRepository.save(houseIngredientEntity);
     }
+
+    @Override
+    public List<HouseIngredientEntity> searchAllByHouseSeq(Integer houseSeq) {
+        return houseIngredientRepository.findAllByHouseSeq(houseSeq);
+    }
 }
