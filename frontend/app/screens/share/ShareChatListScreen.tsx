@@ -4,7 +4,7 @@ import ShareLayout from "@/screens/share/ShareLayout";
 
 const ShareChatListScreen = ({navigation}:any) => {
   return (
-    <ShareLayout>
+    <ShareLayout title="나눔 채팅">
       <Text>ShareChatListScreen</Text>
     </ShareLayout>
   )

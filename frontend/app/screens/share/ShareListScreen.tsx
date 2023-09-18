@@ -5,7 +5,7 @@ import ShareLayout from "@/screens/share/ShareLayout";
 
 const ShareListScreen = ({navigation}:any) => {
   return (
-    <ShareLayout>
+    <ShareLayout title="나눔">
       <Text>ShareListScreen</Text>
       <Button
         title="나눔글 생성"

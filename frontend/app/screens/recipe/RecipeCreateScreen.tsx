@@ -9,7 +9,7 @@ import RecipeCreateBasicInfo from "@/pages/recipeCreate/RecipeCreateBasicInfo";
 const RecipeCreateScreen = ({navigation}:any) => {
   const textList = ['기본 정보', '필요한 재료', '조리 과정']
   return (
-    <RecipeLayout>
+    <RecipeLayout title="레시피" optionTitle="다음">
       <ProgressPage>
         <RecipeCreateBasicInfo
           textList={textList}

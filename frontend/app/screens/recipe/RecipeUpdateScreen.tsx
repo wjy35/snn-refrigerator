@@ -4,7 +4,7 @@ import RecipeLayout from "@/screens/recipe/RecipeLayout";
 
 const RecipeUpdateScreen = ({navigation}:any) => {
   return (
-    <RecipeLayout>
+    <RecipeLayout title="레시피" optionTitle="완료">
       <Text>RecipeUpdateScreen</Text>
     </RecipeLayout>
   )

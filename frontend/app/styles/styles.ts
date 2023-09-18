@@ -3,10 +3,11 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     backgroundColor: '#ffffff',
     borderWidth: 1,
+    width: '100%',
   },
   marginContainer: {
     flex: 1,
@@ -28,6 +29,10 @@ export const styles = StyleSheet.create({
   smallContainer: {
     height: 80,
     width: '100%'
+  },
+  centerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   mainColor: {
     color: '#3093EF',
