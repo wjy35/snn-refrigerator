@@ -19,7 +19,9 @@ public class ChatRoomController {
     @PostMapping("/")
     ResponseEntity<Response> create(@RequestBody ChatRoomCreateRequest chatRoomCreateRequest){
 
-        Integer chatRoomId = chatRoomCreateService.createChatRoom(ChatRoomMapper.INSTANCE.requestToEntity(chatRoomCreateRequest));
+        Integer chatRoomId = chatRoomCreateService
+                .createAndGetChatRoomEntity(ChatRoomMapper.INSTANCE.requestToEntity(chatRoomCreateRequest))
+                .getChatRoomId();
 
         Response response = Response
                 .builder()
