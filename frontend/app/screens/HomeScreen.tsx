@@ -9,10 +9,7 @@ import sampleApi from '@/apis/sampleApi';
 const HomeScreen = ({navigation}:any) => {
   const test = async () => {
     try {
-      let res = await sampleApi.test2();
-
-      console.log(res);
-
+      let res = await sampleApi.test();
       if (res.status === 200) {
         console.log(res)
       } else {

@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'stretch',
     backgroundColor: '#ffffff',
+    borderWidth: 1,
   },
   marginContainer: {
     flex: 1,
