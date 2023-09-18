@@ -34,4 +34,12 @@ public interface RecipeService {
     List<ContentParam> getRecipeDetail(int recipeId);
 
     List<IngredientParam> getIngredientList();
+
+    void updateRecipeIngredient(Recipe recipe, RecipeRequest request);
+
+    void updateRecipeDetails(Recipe recipe, RecipeRequest request);
+
+    void deleteRecipeCustomIngredient(Recipe recipe);
+
+    void deleteRecipeIngredient(Recipe recipe);
 }
