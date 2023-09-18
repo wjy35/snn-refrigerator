@@ -1,19 +1,22 @@
 import {StyleSheet} from "react-native";
 
 export const recipeStyles = StyleSheet.create({
-  recipeItemContainer: {
+  recipeListContainer: {
     flex: 1,
+  },
+  recipeItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 130,
-    width: 300,
-    borderColor: '#000000',
+    height: 180,
+    width: 350,
+    borderColor: '#da3c3c',
     borderWidth: 1,
     borderRadius: 10,
     margin: 10,
   },
   recipeItemImage: {
+    flex: 1,
     height: 120,
     width: 120,
     borderWidth: 1,

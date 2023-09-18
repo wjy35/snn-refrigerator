@@ -4,7 +4,7 @@ import MyPageLayout from "@/screens/myPage/MyPageLayout";
 
 const AccountSettingScreen = ({navigation}:any) => {
   return (
-    <MyPageLayout>
+    <MyPageLayout title="계정 설정">
       <Text>AccountSettingScreen</Text>
     </MyPageLayout>
   )

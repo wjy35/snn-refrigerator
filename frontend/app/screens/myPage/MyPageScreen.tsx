@@ -5,7 +5,7 @@ import MyPageLayout from "./MyPageLayout";
 
 const MyPageScreen = ({navigation}:any) => {
   return (
-    <MyPageLayout>
+    <MyPageLayout title="마이 페이지">
       <Text>MyPageScreen</Text>
       <Button
         title="수정"
