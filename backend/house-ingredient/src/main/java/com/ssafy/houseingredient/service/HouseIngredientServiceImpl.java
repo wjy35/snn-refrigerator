@@ -26,4 +26,9 @@ public class HouseIngredientServiceImpl implements HouseIngredientService {
     public void saveAll(List<HouseIngredientEntity> houseIngredientEntities) {
         houseIngredientRepository.saveAll(houseIngredientEntities);
     }
+
+    @Override
+    public void save(HouseIngredientEntity houseIngredientEntity) {
+        houseIngredientRepository.save(houseIngredientEntity);
+    }
 }

@@ -1,6 +1,7 @@
 package com.ssafy.houseingredient.api.response;
 
 import lombok.Data;
+import lombok.Setter;
 
 import java.sql.Date;
 import java.time.LocalDateTime;

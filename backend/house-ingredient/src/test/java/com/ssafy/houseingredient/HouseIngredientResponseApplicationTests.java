@@ -3,6 +3,8 @@ package com.ssafy.houseingredient;
 import com.ssafy.houseingredient.api.controller.HouseIngredientController;
 import com.ssafy.houseingredient.api.request.HouseIngredientDetailParam;
 import com.ssafy.houseingredient.api.request.HouseIngredientSaveAllRequest;
+import com.ssafy.houseingredient.api.request.HouseIngredientSaveRequest;
+import com.ssafy.houseingredient.api.response.HouseIngredientResponse;
 import com.ssafy.houseingredient.api.response.Response;
 import com.ssafy.houseingredient.db.entity.HouseIngredientEntity;
 import com.ssafy.houseingredient.db.repository.HouseIngredientRepository;
@@ -66,8 +68,8 @@ class HouseIngredientResponseApplicationTests {
 		ResponseEntity<Response> response = houseIngredientController.search(houseIngredientId);
 
 		//then
-		System.out.println("response = " + response);
-		System.out.println(response.getBody().getData().get("houseIngredient"));
+//		System.out.println("response = " + response);
+//		System.out.println(response.getBody().getData().get("houseIngredient"));
 		Assertions.assertNotNull(response.getBody().getData());
 	}
 
@@ -85,6 +87,27 @@ class HouseIngredientResponseApplicationTests {
 		System.out.println("response = " + response);
 //		System.out.println(response.getBody().getData().get("houseIngredient"));
 //		Assertions.assertNotNull(response.getBody().getData());
+	}
+
+	@Test
+	@Transactional
+	void updateHouseIngredientTest(){
+		//given
+		int houseIngredientId = 1;
+		HouseIngredientSaveRequest houseIngredientSaveRequest = HouseIngredientSaveRequest.builder().houseIngredientId(houseIngredientId).storageType((byte)2).lastDate(LocalDate.of(2023,10,10)).build();
+		System.out.println(houseIngredientController.search(houseIngredientId));
+		System.out.println(houseIngredientSaveRequest);
+
+
+		//when
+		ResponseEntity<Response> response = houseIngredientController.save(houseIngredientSaveRequest);
+
+		//then
+//		System.out.println(response);
+
+		HouseIngredientResponse data = ((HouseIngredientResponse)houseIngredientController.search(houseIngredientId).getBody().getData().get("houseIngredient"));
+//		System.out.println(data.getLastDate());
+		Assertions.assertEquals(data.getLastDate().toString(),"2023-10-10");
 	}
 
 
