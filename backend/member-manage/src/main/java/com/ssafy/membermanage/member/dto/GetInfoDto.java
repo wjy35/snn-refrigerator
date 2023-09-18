@@ -10,18 +10,22 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor
 public class GetInfoDto {
+    @JsonView(MemberViews.Public.class)
     private final String nickname;
 
+    @JsonView(MemberViews.Public.class)
     private final String profileImageUrl;
 
+    @JsonView(MemberViews.Public.class)
     private final String birthday;
 
-    @JsonView(MemberViews.Priv.class)
+    @JsonView(MemberViews.Private.class)
     private final String email;
 
-    @JsonView(MemberViews.Priv.class)
+    @JsonView(MemberViews.Private.class)
     private final String houseCode;
 
+    @JsonView(MemberViews.Public.class)
     private final Integer followCount;
 
 }
