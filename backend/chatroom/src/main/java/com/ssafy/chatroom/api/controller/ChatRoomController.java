@@ -7,9 +7,12 @@ import com.ssafy.chatroom.service.ChatRoomCreateService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestController
 @AllArgsConstructor
@@ -31,5 +34,15 @@ public class ChatRoomController {
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+    @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+    ResponseEntity<Response> handleChatRoomAlreadyExist(){
+        Response response = Response
+                .builder()
+                .message("ChatRoom Already Exist")
+                .build();
+        return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+    }
+
 
 }
