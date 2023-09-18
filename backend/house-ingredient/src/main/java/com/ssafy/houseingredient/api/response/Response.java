@@ -1,7 +1,12 @@
 package com.ssafy.houseingredient.api.response;
 
+import lombok.Getter;
+import lombok.ToString;
+
 import java.util.HashMap;
 
+@Getter
+@ToString
 public class Response {
     private String message;
     private HashMap<String,Object> request, data;
@@ -13,10 +18,6 @@ public class Response {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     public HashMap<String, Object> getRequest() {
@@ -35,11 +36,4 @@ public class Response {
         this.data.put(key,data);
     }
 
-    @Override
-    public String toString() {
-        return "Response{" +
-                "message='" + message + '\'' +
-                ", data=" + data +
-                '}';
-    }
 }
