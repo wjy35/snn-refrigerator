@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface HouseIngredientRepository extends CrudRepository<HouseIngredientEntity, Integer> {
     Optional<HouseIngredientEntity> findByHouseIngredientId(Integer houseIngredientId);
-    List<HouseIngredientEntity> saveAll(List<HouseIngredientEntity> houseIngredientEntities);
 }

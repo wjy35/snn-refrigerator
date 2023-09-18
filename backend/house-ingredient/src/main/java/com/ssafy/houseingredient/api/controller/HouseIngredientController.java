@@ -39,7 +39,12 @@ public class HouseIngredientController {
     @PostMapping("/")
     public ResponseEntity<Response> saveAll(@RequestBody HouseIngredientSaveAllRequest houseIngredientSaveAllRequest){
 
-        List<HouseIngredientEntity> houseIngredientEntities = HouseIngredientMapper.INSTANCE.saveAllRequestToEntity(houseIngredientSaveAllRequest);
+        List<HouseIngredientEntity> houseIngredientEntities = HouseIngredientMapper.INSTANCE.saveAllRequestToEntity(houseIngredientSaveAllRequest.getIngredients());
+
+        for(HouseIngredientEntity houseIngredientEntity : houseIngredientEntities){
+            houseIngredientEntity.setHouseSeq(houseIngredientSaveAllRequest.getHouseSeq());
+        }
+        System.out.println(houseIngredientEntities);
 
         houseIngredientService.saveAll(houseIngredientEntities);
 
