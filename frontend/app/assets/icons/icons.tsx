@@ -56,3 +56,9 @@ export const progressCheck: string = `
     <path d="M4.16669 10.8333L7.50002 14.1666L15.8334 5.83325" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 `
+
+export const backButton: string = `
+  <svg width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M6.91669 12.8333L1.08335 6.99999L6.91669 1.16666" stroke="#002055" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+`

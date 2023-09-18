@@ -6,7 +6,7 @@ const ProgressPage = ({children}: any) => {
 
   return (
     <>
-      <Swiper loop={false}>
+      <Swiper loop={false} showsPagination={false}>
         {children}
       </Swiper>
     </>

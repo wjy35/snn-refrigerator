@@ -15,7 +15,7 @@ const RecipeCreateBasicInfo = ({textList}: props) => {
       <View>
         <Progressbar progress={1} total={3} textList={textList}/>
       </View>
-      <ScrollView overScrollMode="never">
+      <ScrollView overScrollMode="never" style={{width: '100%'}}>
         <View style={styles.smallContainer}>
           <View style={[{width: '100%'}]}>
             <Text>요리 제목</Text>

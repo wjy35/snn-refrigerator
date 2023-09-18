@@ -1,38 +1,40 @@
 import { StyleSheet } from 'react-native';
 
-export const bottomTabStyles = StyleSheet.create({
+export const topNavStyles = StyleSheet.create({
   tabContainer: {
     height: 80,
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ffffff',
     shadowColor: '#000000',
+    borderWidth: 1,
+    width: '100%',
   },
   tabItemContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  singleTab: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 10,
-  },
-  activeSingleTab: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 10,
-    color: '#3093EF'
+    justifyContent: 'space-between',
+    width: '100%',
   },
   tabFontSize: {
-    paddingTop: 5,
-    fontSize: 10,
+    fontSize: 25,
   },
+  backButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    height: 45,
+    width: 45,
+    marginLeft: 10,
+    borderRadius: 999,
+    borderColor: '#E9F1FF',
+  },
+  optionalRightButton: {
+    marginRight: 10,
+    width: 45,
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });

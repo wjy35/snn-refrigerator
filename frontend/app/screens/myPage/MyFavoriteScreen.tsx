@@ -4,7 +4,7 @@ import MyPageLayout from "@/screens/myPage/MyPageLayout";
 
 const MyFavoriteScreen = ({navigation}:any) => {
   return (
-    <MyPageLayout>
+    <MyPageLayout title="즐겨찾기 레시피">
       <Text>MyFavoriteScreen</Text>
     </MyPageLayout>
   )
