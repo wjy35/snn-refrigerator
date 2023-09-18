@@ -1,5 +1,6 @@
 package com.ssafy.share.service;
 
+import com.ssafy.share.api.request.ShareBoardUpdateRequest;
 import com.ssafy.share.api.request.ShareBoardWriteRequest;
 import com.ssafy.share.api.request.ShareIngredientRequest;
 import com.ssafy.share.db.entity.SharePost;
@@ -18,6 +19,11 @@ public interface ShareBoardService {
 
     SharePost save(List<MultipartFile> imageFiles, List<ShareIngredientRequest> shareIngredientRequests
             , ShareBoardWriteRequest shareBoardWriteRequest);
+
+    SharePost update(Long shareBoardId, List<MultipartFile> imageFiles, List<ShareIngredientRequest> shareIngredientRequests
+            ,ShareBoardUpdateRequest shareBoardUpdateRequest);
+
+    void delete(Long shareBoardId);
 
     SharePost findBySharePostId(Long sharePostId);
 }

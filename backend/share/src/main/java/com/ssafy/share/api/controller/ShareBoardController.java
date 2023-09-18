@@ -1,5 +1,6 @@
 package com.ssafy.share.api.controller;
 
+import com.ssafy.share.api.request.ShareBoardUpdateRequest;
 import com.ssafy.share.api.request.ShareBoardWriteRequest;
 import com.ssafy.share.api.request.ShareIngredientRequest;
 import com.ssafy.share.api.response.ShareBoardPostResponse;
@@ -40,11 +41,28 @@ public class ShareBoardController {
 //    }
 
     @PostMapping("")
-    public SharePost writePost(@RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles,
+    public String writePost(@RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles,
                                @RequestPart(value = "shareIngredients") List<ShareIngredientRequest> shareIngredientRequests,
                                @RequestPart(value = "shareBoardWriteRequest") ShareBoardWriteRequest shareBoardWriteRequest, HttpServletRequest request) {
         log.info("shareIngredientRequests = {}",shareIngredientRequests);
         log.info("shareBoardWriteRequest = {}",shareBoardWriteRequest);
-        return shareBoardService.save(imageFiles,shareIngredientRequests,shareBoardWriteRequest);
+        return "나눔글 작성 성공";
     }
+
+    @PatchMapping("/{shareboardId}")
+    public String updatePost(@PathVariable Long shareboardId,@RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles,
+                                @RequestPart(value = "shareIngredients") List<ShareIngredientRequest> shareIngredientRequests,
+                                @RequestPart(value = "shareBoardUpdateRequest") ShareBoardUpdateRequest shareBoardUpdateRequest, HttpServletRequest request) {
+        log.info("shareIngredientRequests = {}",shareIngredientRequests);
+        shareBoardService.update(shareboardId,imageFiles,shareIngredientRequests,shareBoardUpdateRequest);
+        return "나눔글 수정 성공";
+    }
+
+    @DeleteMapping("/{shareboardId}")
+    public String updatePost(@PathVariable Long shareboardId,HttpServletRequest request){
+        shareBoardService.delete(shareboardId);
+        return "나눔글 삭제 성공";
+    }
+
+
 }
