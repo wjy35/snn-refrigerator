@@ -11,5 +11,6 @@ public class Response {
     private String request;
     private String message;
     @Singular("response")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String,Object> data;
 }
