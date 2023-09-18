@@ -25,13 +25,12 @@ public class HouseIngredientController {
 
     @GetMapping("/{houseIngredientId}")
     public ResponseEntity<Response> search(@PathVariable Integer houseIngredientId){
-        HouseIngredientEntity houseIngredientEntity = houseIngredientService.searchByHouseIngredientId(houseIngredientId)
+        HouseIngredientEntity houseIngredientEntity = houseIngredientService.searchById(houseIngredientId)
                 .orElseThrow(NoHouseIngredientException::new);
         HouseIngredientResponse houseIngredientResponse = HouseIngredientMapper.INSTANCE.entityToResponse(houseIngredientEntity);
         Response response = new Response();
         response.setMessage("OK");
 
-        // TODO : find better way
         response.addData("houseIngredient",houseIngredientResponse);
 //        System.out.println(new ResponseEntity<>(response, HttpStatus.OK));
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -59,9 +58,8 @@ public class HouseIngredientController {
 
     @PutMapping("/")
     public ResponseEntity<Response> save(@RequestBody HouseIngredientSaveRequest houseIngredientSaveRequest){
-
 //        HouseIngredientEntity houseIngredientEntity = HouseIngredientMapper.INSTANCE.saveRequestToEntity(houseIngredientSaveRequest);
-        HouseIngredientEntity houseIngredientEntity = houseIngredientService.searchByHouseIngredientId(houseIngredientSaveRequest.getHouseIngredientId())
+        HouseIngredientEntity houseIngredientEntity = houseIngredientService.searchById(houseIngredientSaveRequest.getHouseIngredientId())
                 .orElseThrow(NoHouseIngredientException::new);
 
         if(houseIngredientSaveRequest.getLastDate()!=null)  houseIngredientEntity.setLastDate(houseIngredientSaveRequest.getLastDate());
@@ -75,6 +73,43 @@ public class HouseIngredientController {
         response.addRequest("houseIngredientId", houseIngredientSaveRequest.getHouseIngredientId());
         response.addRequest("storageType",houseIngredientSaveRequest.getStorageType());
         response.addRequest("lastDate",houseIngredientSaveRequest.getLastDate());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/house/{houseSeq}")
+    public ResponseEntity<Response> searchAll(@PathVariable Integer houseSeq){
+
+//        HouseIngredientResponse houseIngredientResponse = HouseIngredientMapper.INSTANCE.entityToResponse(houseIngredientEntity);
+        List<HouseIngredientResponse> houseIngredientResponses = HouseIngredientMapper.INSTANCE.entityToResponse(houseIngredientService.searchAllByHouseSeq(houseSeq));
+        Response response = new Response();
+        response.setMessage("OK");
+
+        response.addRequest("houseSeq",houseSeq);
+        response.addData("count",houseIngredientResponses.size());
+        response.addData("ingredients",houseIngredientResponses);
+//        System.out.println(new ResponseEntity<>(response, HttpStatus.OK));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{houseIngredientId}")
+    public ResponseEntity<Response> delete(@PathVariable Integer houseIngredientId){
+        houseIngredientService.deleteById(houseIngredientId);
+
+        Response response = new Response();
+        response.setMessage("OK");
+
+        response.addRequest("houseIngredientId",houseIngredientId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/house/{houseSeq}")
+    public ResponseEntity<Response> deleteAll(@PathVariable Integer houseSeq){
+        houseIngredientService.deleteAllByHouseSeq(houseSeq);
+
+        Response response = new Response();
+        response.setMessage("OK");
+
+        response.addRequest("houseSeq",houseSeq);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

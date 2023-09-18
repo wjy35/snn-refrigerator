@@ -18,6 +18,8 @@ public interface HouseIngredientMapper {
 
     HouseIngredientResponse entityToResponse(HouseIngredientEntity houseIngredientEntity);
 
+    List<HouseIngredientResponse> entityToResponse(List<HouseIngredientEntity> houseIngredientEntity);
+
 //    HouseIngredientEntity saveRequestToEntity(HouseIngredientSaveRequest houseIngredientSaveRequest);
 
     List<HouseIngredientEntity> saveAllRequestToEntity(List<HouseIngredientDetailParam> houseIngredientDetailParams);
