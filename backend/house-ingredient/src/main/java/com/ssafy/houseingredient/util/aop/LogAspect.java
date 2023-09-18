@@ -16,13 +16,12 @@ import java.lang.reflect.Method;
 @Aspect
 public class LogAspect {
 
-    @Pointcut("execution(* com.ssafy.houseingredient.*.*(..))")
+    @Pointcut("execution(* com.ssafy.houseingredient..*.*(..))")
     private void cut(){}
 
     @Before("cut()")
     public void beforeParameterLog(JoinPoint joinPoint) {
         Method method = getMethod(joinPoint);
-        System.out.println("a@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         log.debug("------> method name = {} 진입", method.getName());
         Object[] args = joinPoint.getArgs();
         if (args.length <= 0) log.debug("no parameter");
