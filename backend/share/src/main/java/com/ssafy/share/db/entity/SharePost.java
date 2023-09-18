@@ -1,5 +1,6 @@
 package com.ssafy.share.db.entity;
 
+import com.ssafy.share.api.request.ShareBoardUpdateRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,4 +60,10 @@ public class SharePost extends BaseTimeEntity{
         this.thumbnail = thumbnail;
     }
 
+    public void update(ShareBoardUpdateRequest request){
+        this.title=request.getTitle();
+        this.locationInfo=request.getLocationInfo();
+        this.content=request.getContent();
+        this.shareImages=request.getShareImages();
+    }
 }
