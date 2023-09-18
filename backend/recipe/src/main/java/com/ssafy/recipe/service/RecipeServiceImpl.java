@@ -17,6 +17,7 @@ import com.ssafy.recipe.exception.CustomException;
 import com.ssafy.recipe.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,7 @@ public class RecipeServiceImpl implements RecipeService{
     public void createRecipe(RecipeRequest request) {
         Recipe recipe = recipeMapper.recipeRequestToRecipe(request);
 
+        System.out.println(request.getContents().size());
         this.saveRecipe(recipe);
 
         this.saveRecipeDetails(recipe, request);
@@ -64,19 +66,11 @@ public class RecipeServiceImpl implements RecipeService{
 
         recipe.setRecipeId(recipeId);
 
-        recipeRepository.save(recipe);
+        this.saveRecipe(recipe);
 
-        List<RecipeDetail> recipeDetails = recipeDetailMapper.recipeDetailParamsToRecipeDetails(request.getContent());
+        this.updateRecipeDetails(recipe, request);
 
-        List<RecipeDetail> originalRecipeDetails = recipeDetailRepository.findByRecipeRecipeId(recipeId);
-
-        recipeDetailRepository.deleteAll(originalRecipeDetails);
-
-        for (RecipeDetail recipeDetail : recipeDetails) {
-            recipeDetail.setRecipe(recipe);
-        }
-
-        recipeDetailRepository.saveAll(recipeDetails);
+        this.updateRecipeIngredient(recipe, request);
     }
 
     public void deleteRecipe(int recipeId){
@@ -87,13 +81,37 @@ public class RecipeServiceImpl implements RecipeService{
         recipeRepository.save(recipe);
     }
 
+    public void updateRecipeIngredient(Recipe recipe, RecipeRequest request){
+        this.deleteRecipeCustomIngredient(recipe);
+        this.deleteRecipeIngredient(recipe);
+        for(int i=0; i<request.getIngredients().size(); i++){
+            RecipeIngredientParam recipeIngredientParam = request.getIngredients().get(i);
+            if(recipeIngredientParam.getIngredientInfoId()==-1){
+                this.saveRecipeCustomIngredient(recipe, recipeIngredientParam);
+            }else{
+                this.saveRecipeIngredient(recipe, recipeIngredientParam);
+            }
+        }
+
+    }
+
+
     public void saveRecipeDetails(Recipe recipe, RecipeRequest request){
-        List<RecipeDetail> recipeDetails = recipeDetailMapper.recipeDetailParamsToRecipeDetails(request.getContent());
-        System.out.println(request.getContent().size());
-        System.out.println(recipeDetails.get(0).getContent());
+        List<RecipeDetail> recipeDetails = recipeDetailMapper.recipeDetailParamsToRecipeDetails(request.getContents());
         for (RecipeDetail recipeDetail : recipeDetails) {
             recipeDetail.setRecipe(recipe);
         }
+        recipeDetailRepository.saveAll(recipeDetails);
+    }
+
+    public void updateRecipeDetails(Recipe recipe, RecipeRequest request){
+        List<RecipeDetail> recipeDetails = recipeDetailMapper.recipeDetailParamsToRecipeDetails(request.getContents());
+        List<RecipeDetail> originalRecipeDetails = recipeDetailRepository.findByRecipeRecipeId(recipe.getRecipeId());
+        recipeDetailRepository.deleteAll(originalRecipeDetails);
+        for (RecipeDetail recipeDetail : recipeDetails) {
+            recipeDetail.setRecipe(recipe);
+        }
+
         recipeDetailRepository.saveAll(recipeDetails);
     }
 
@@ -114,13 +132,22 @@ public class RecipeServiceImpl implements RecipeService{
         recipeCustomIngredientRepository.save(recipeCustomIngredient);
     }
 
+    public void deleteRecipeCustomIngredient(Recipe recipe){
+        List<RecipeCustomIngredient> recipeCustomIngredientList = recipeCustomIngredientRepository.findAllByRecipe(recipe);
+        recipeCustomIngredientRepository.deleteAll(recipeCustomIngredientList);
+    }
+
     public void saveRecipeIngredient(Recipe recipe, RecipeIngredientParam recipeIngredientParam){
         RecipeIngredient recipeIngredient = recipeIngredientMapper.recipeIngredientParamToRecipeIngredients(recipeIngredientParam);
-        System.out.println(recipeIngredient.getAmount());
         recipeIngredient.setRecipe(recipe);
         Optional<IngredientInfo> ingredientInfo = ingredientInfoRepository.findById(recipeIngredientParam.getIngredientInfoId());
         recipeIngredient.setIngredientInfo(ingredientInfo.get());
         recipeIngredientRepository.save(recipeIngredient);
+    }
+
+    public void deleteRecipeIngredient(Recipe recipe){
+        List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findAllByRecipe(recipe);
+        recipeIngredientRepository.deleteAll(recipeIngredientList);
     }
 
     public MemberResponse getMember(Long memberId){
