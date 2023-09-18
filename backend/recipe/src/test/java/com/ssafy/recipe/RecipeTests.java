@@ -4,6 +4,7 @@ import com.ssafy.recipe.api.request.RecipeDetailParam;
 import com.ssafy.recipe.api.request.RecipeIngredientParam;
 import com.ssafy.recipe.api.request.RecipeRequest;
 import com.ssafy.recipe.api.response.ContentParam;
+import com.ssafy.recipe.api.response.RecipeDetailResponse;
 import com.ssafy.recipe.db.entity.Recipe;
 import com.ssafy.recipe.db.repository.RecipeRepository;
 import com.ssafy.recipe.service.RecipeServiceImpl;
@@ -73,7 +74,7 @@ public class RecipeTests {
     @Test
     void getRecipeDetailTest(){
         // when
-        List<ContentParam> list = recipeService.getRecipeDetail(recipeId);
+        List<ContentParam> list = recipeService.getRecipeDetail(45);
 
         // then
         assertEquals(list.size(), 3);
@@ -104,6 +105,17 @@ public class RecipeTests {
                 .build();
     }
 
+    @Test
+    void getMemberInfo(){
+        // given
+        int recipeId = 45;
+
+        // when
+        RecipeDetailResponse recipeDetailResponse = recipeService.getRecipe(recipeId);
+
+        // then
+        System.out.println(recipeDetailResponse.toString());
+    }
 
 
     private static RecipeRequest getRequest(){

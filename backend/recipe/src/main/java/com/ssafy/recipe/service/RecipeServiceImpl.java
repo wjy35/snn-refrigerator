@@ -61,6 +61,7 @@ public class RecipeServiceImpl implements RecipeService{
 
     }
 
+    @Override
     public void updateRecipe(int recipeId, RecipeRequest request){
         Recipe recipe = recipeMapper.recipeRequestToRecipe(request);
 
@@ -73,14 +74,22 @@ public class RecipeServiceImpl implements RecipeService{
         this.updateRecipeIngredient(recipe, request);
     }
 
+    @Override
     public void deleteRecipe(int recipeId){
         recipeRepository.deleteById(recipeId);
     }
 
+
+
+
+
+
+    @Override
     public void saveRecipe(Recipe recipe){
         recipeRepository.save(recipe);
     }
 
+    @Override
     public void updateRecipeIngredient(Recipe recipe, RecipeRequest request){
         this.deleteRecipeCustomIngredient(recipe);
         this.deleteRecipeIngredient(recipe);
@@ -96,6 +105,7 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
 
+    @Override
     public void saveRecipeDetails(Recipe recipe, RecipeRequest request){
         List<RecipeDetail> recipeDetails = recipeDetailMapper.recipeDetailParamsToRecipeDetails(request.getContents());
         for (RecipeDetail recipeDetail : recipeDetails) {
@@ -104,6 +114,7 @@ public class RecipeServiceImpl implements RecipeService{
         recipeDetailRepository.saveAll(recipeDetails);
     }
 
+    @Override
     public void updateRecipeDetails(Recipe recipe, RecipeRequest request){
         List<RecipeDetail> recipeDetails = recipeDetailMapper.recipeDetailParamsToRecipeDetails(request.getContents());
         List<RecipeDetail> originalRecipeDetails = recipeDetailRepository.findByRecipeRecipeId(recipe.getRecipeId());
@@ -115,6 +126,7 @@ public class RecipeServiceImpl implements RecipeService{
         recipeDetailRepository.saveAll(recipeDetails);
     }
 
+    @Override
     public void isCustomIngredient(Recipe recipe, RecipeRequest request){
         for(int i=0; i<request.getIngredients().size(); i++){
             RecipeIngredientParam recipeIngredientParam = request.getIngredients().get(i);
@@ -126,17 +138,20 @@ public class RecipeServiceImpl implements RecipeService{
         }
     }
 
+    @Override
     public void saveRecipeCustomIngredient(Recipe recipe, RecipeIngredientParam recipeIngredientParam){
         RecipeCustomIngredient recipeCustomIngredient = recipeCustomIngredientMapper.recipeIngredientParamToRecipeCustomIngredient(recipeIngredientParam);
         recipeCustomIngredient.setRecipe(recipe);
         recipeCustomIngredientRepository.save(recipeCustomIngredient);
     }
 
+    @Override
     public void deleteRecipeCustomIngredient(Recipe recipe){
         List<RecipeCustomIngredient> recipeCustomIngredientList = recipeCustomIngredientRepository.findAllByRecipe(recipe);
         recipeCustomIngredientRepository.deleteAll(recipeCustomIngredientList);
     }
 
+    @Override
     public void saveRecipeIngredient(Recipe recipe, RecipeIngredientParam recipeIngredientParam){
         RecipeIngredient recipeIngredient = recipeIngredientMapper.recipeIngredientParamToRecipeIngredients(recipeIngredientParam);
         recipeIngredient.setRecipe(recipe);
@@ -145,11 +160,13 @@ public class RecipeServiceImpl implements RecipeService{
         recipeIngredientRepository.save(recipeIngredient);
     }
 
+    @Override
     public void deleteRecipeIngredient(Recipe recipe){
         List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findAllByRecipe(recipe);
         recipeIngredientRepository.deleteAll(recipeIngredientList);
     }
 
+    @Override
     public MemberResponse getMember(Long memberId){
         Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(memberId);
 
@@ -160,30 +177,46 @@ public class RecipeServiceImpl implements RecipeService{
         }
     }
 
+    @Override
     public RecipeDetailResponse getRecipe(int recipeId){
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
 
-        String nickname = "";
-        int followCount = 1400;
         if(recipe.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
 
-//            nickname = getMember(recipe.get().getMemberId()).getNickname();
-        nickname = "TestNickName";
+//        Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(recipe.get().getMemberId());
 
+//        System.out.println(memberResponse.get().getNickname());
+//        System.out.println(memberResponse.get().getFollowCount());
+
+        MemberResponse memberResponse = MemberResponse.builder()
+                .nickname("김석주")
+                .followCount(1)
+                .build();
 
         List<IngredientParam> ingredientParams = this.getIngredientList();
 
         List<ContentParam> recipeDetails = this.getRecipeDetail(recipeId);
 
-        return null;
+        return RecipeDetailResponse.builder()
+                .nickname(memberResponse.getNickname())
+                .title(recipe.get().getTitle())
+                .image(recipe.get().getImageUrl())
+                .youtubeUrl(recipe.get().getYoutubeUrl())
+                .favoriteCount(recipe.get().getFavoriteCount())
+                .followCount((memberResponse.getFollowCount()))
+                .contentResponseList(recipeDetails)
+                .build();
     }
 
+    @Override
     public List<ContentParam> getRecipeDetail(int recipeId){
         List<RecipeDetail> recipeDetails = recipeDetailRepository.findByRecipeRecipeId(recipeId);
-
+        System.out.println(recipeDetails.get(0).getOrder());
+        System.out.println(recipeDetails.get(0).getContent());
         return recipeDetailMapper.recipeDetailsToContentParam(recipeDetails);
     }
 
+    @Override
     public List<IngredientParam> getIngredientList(){
 
         // ingredientParam 리스트 생성

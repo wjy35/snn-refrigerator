@@ -46,5 +46,14 @@ public class RecipeController {
         response.addRequest("recipeId", recipeId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
+    @GetMapping("/{recipeId}")
+    public ResponseEntity<?> getRecipeDetail(@PathVariable int recipeId){
+        Response response = new Response();
+        RecipeDetailResponse recipeDetailResponse = recipeService.getRecipe(recipeId);
+        response.addRequest("recipeId", recipeId);
+        response.setMessage("OK");
+        response.addData("recipeInfo", recipeDetailResponse);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
