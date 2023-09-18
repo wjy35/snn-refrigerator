@@ -13,7 +13,7 @@ public class Trie {
         Node root = new Node(
                 new HashMap<Character, Integer>(),
                 ' ',
-                null
+                new HashSet<Integer>()
         );
         trie.add(root);
         System.out.println("Trie successfully created");
@@ -29,7 +29,7 @@ public class Trie {
                 cur = trie.get(idx);
             }
             else{
-                Node newNode = new Node(new HashMap<Character, Integer>(), c, null);
+                Node newNode = new Node(new HashMap<Character, Integer>(), c, new HashSet<Integer>());
                 trie.add(newNode);
                 cur.child.put(c, leng++);
                 cur = newNode;
