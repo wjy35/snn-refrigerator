@@ -1,5 +1,6 @@
 package com.ssafy.houseingredient.api.mapper;
 
+import com.ssafy.houseingredient.api.request.HouseIngredientDetailParam;
 import com.ssafy.houseingredient.api.request.HouseIngredientSaveAllRequest;
 import com.ssafy.houseingredient.api.response.HouseIngredientResponse;
 import com.ssafy.houseingredient.db.entity.HouseIngredientEntity;
@@ -14,5 +15,5 @@ public interface HouseIngredientMapper {
 
     HouseIngredientResponse entityToResponse(HouseIngredientEntity houseIngredientEntity);
 
-    List<HouseIngredientEntity> saveAllRequestToEntity(HouseIngredientSaveAllRequest houseIngredientSaveAllRequest);
+    List<HouseIngredientEntity> saveAllRequestToEntity(List<HouseIngredientDetailParam> houseIngredientDetailParams);
 }
