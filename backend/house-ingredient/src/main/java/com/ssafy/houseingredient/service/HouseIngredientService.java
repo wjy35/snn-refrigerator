@@ -9,4 +9,5 @@ public interface HouseIngredientService {
     Optional<HouseIngredientEntity> searchByHouseIngredientId(Integer houseIngredientId);
     void saveAll(List<HouseIngredientEntity> houseIngredientEntities);
     void save(HouseIngredientEntity houseIngredientEntity);
+    List<HouseIngredientEntity> searchAllByHouseSeq(Integer houseSeq);
 }
