@@ -89,6 +89,23 @@ public class RecipeTests {
         assertFalse(recipeOptional.isPresent());
     }
 
+
+    @Test
+    void updeateRecipeTest(){
+        // given
+        Recipe recipe = Recipe.builder()
+                .memberId(1234l)
+                .title("왕준영찜")
+                .imageUrl("imageURL")
+                .youtubeUrl("youtubeURL")
+                .serving((byte) 6)
+                .cookingTime("120분")
+                .foodName("김치찌개")
+                .build();
+    }
+
+
+
     private static RecipeRequest getRequest(){
         List<RecipeDetailParam> recipeDetailParams = new ArrayList<>();
         for(int i=1; i<4; i++){
