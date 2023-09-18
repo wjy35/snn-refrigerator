@@ -18,8 +18,8 @@ public class HouseIngredientServiceImpl implements HouseIngredientService {
     private final HouseIngredientRepository houseIngredientRepository;
 
     @Override
-    public Optional<HouseIngredientEntity> searchByHouseIngredientId(Integer houseIngredientId) {
-        return houseIngredientRepository.findByHouseIngredientId(houseIngredientId);
+    public Optional<HouseIngredientEntity> searchById(Integer houseIngredientId) {
+        return houseIngredientRepository.findById(houseIngredientId);
     }
 
     @Override
@@ -35,5 +35,15 @@ public class HouseIngredientServiceImpl implements HouseIngredientService {
     @Override
     public List<HouseIngredientEntity> searchAllByHouseSeq(Integer houseSeq) {
         return houseIngredientRepository.findAllByHouseSeq(houseSeq);
+    }
+
+    @Override
+    public void deleteById(Integer houseIngredientId) {
+        houseIngredientRepository.deleteById(houseIngredientId);
+    }
+
+    @Override
+    public void deleteAllByHouseSeq(Integer houseSeq) {
+        houseIngredientRepository.deleteAllByHouseSeq(houseSeq);
     }
 }

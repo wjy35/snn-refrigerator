@@ -1,6 +1,7 @@
 package com.ssafy.houseingredient;
 
 import com.ssafy.houseingredient.api.controller.HouseIngredientController;
+import com.ssafy.houseingredient.api.exception.NoHouseIngredientException;
 import com.ssafy.houseingredient.api.request.HouseIngredientDetailParam;
 import com.ssafy.houseingredient.api.request.HouseIngredientSaveAllRequest;
 import com.ssafy.houseingredient.api.request.HouseIngredientSaveRequest;
@@ -41,7 +42,7 @@ class HouseIngredientResponseApplicationTests {
 		Integer houseIngredientId = 1;
 
 		//when
-		HouseIngredientEntity selectedHouseIngredientEntity = houseIngredientRepository.findByHouseIngredientId(houseIngredientId).get();
+		HouseIngredientEntity selectedHouseIngredientEntity = houseIngredientRepository.findById(houseIngredientId).get();
 
 		//then
 //		System.out.println("selectedHouseIngredientInfo = " + selectedHouseIngredientEntity);
@@ -55,7 +56,7 @@ class HouseIngredientResponseApplicationTests {
 
 		//when-then
 		Assertions.assertThrows(NoSuchElementException.class,()->{
-			HouseIngredientEntity selectedHouseIngredientEntity = houseIngredientRepository.findByHouseIngredientId(houseIngredientId).get();
+			HouseIngredientEntity selectedHouseIngredientEntity = houseIngredientRepository.findById(houseIngredientId).get();
 		});
 	}
 
@@ -68,7 +69,7 @@ class HouseIngredientResponseApplicationTests {
 		ResponseEntity<Response> response = houseIngredientController.search(houseIngredientId);
 
 		//then
-//		System.out.println("response = " + response);
+		System.out.println("response = " + response);
 //		System.out.println(response.getBody().getData().get("houseIngredient"));
 		Assertions.assertNotNull(response.getBody().getData());
 	}
@@ -122,6 +123,36 @@ class HouseIngredientResponseApplicationTests {
 		HouseIngredientResponse data = ((HouseIngredientResponse)houseIngredientController.search(houseIngredientId).getBody().getData().get("houseIngredient"));
 //		System.out.println(data.getLastDate());
 		Assertions.assertEquals(data.getLastDate().toString(),"2023-10-10");
+	}
+
+	@Test
+	@Transactional
+	void deleteTest(){
+		//given
+		int houseIngredientId = 1;
+
+		//when
+		ResponseEntity<Response> response = houseIngredientController.delete(houseIngredientId);
+
+		//then
+//		System.out.println(response);
+		Assertions.assertThrows(NoHouseIngredientException.class,()->houseIngredientController.search(1));
+//		System.out.println(houseIngredientController.search(1));
+	}
+
+	@Test
+	@Transactional
+	void deleteAllTest(){
+		//given
+		int houseSeq = 1;
+
+		//when
+		ResponseEntity<Response> response = houseIngredientController.deleteAll(houseSeq);
+
+		//then
+//		System.out.println(response);
+		Assertions.assertThrows(NoHouseIngredientException.class,()->houseIngredientController.search(1));
+		Assertions.assertEquals(0,houseIngredientController.searchAll(1).getBody().getData().get("count"));
 	}
 
 
