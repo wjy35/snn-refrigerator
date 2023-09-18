@@ -40,7 +40,7 @@ public class MemberController {
 
 
     @GetMapping("/{memberId}")
-    @JsonView(MemberViews.Priv.class)
+    @JsonView(MemberViews.Private.class)
     public ResponseEntity<GetInfoDto> getMemberInfo(@PathVariable Long memberId){
         Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
@@ -68,7 +68,7 @@ public class MemberController {
     }
 
     @PutMapping("/{memberId}")
-    @JsonView(MemberViews.Priv.class)
+    @JsonView(MemberViews.Private.class)
     public ResponseEntity<SingleNicknameDto> modifyMemberInfo(@RequestParam("nickname") String nickname, @PathVariable Long memberId){
         Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
