@@ -17,6 +17,7 @@ import com.ssafy.membermanage.member.db.MemberRepository;
 import com.ssafy.membermanage.member.dto.*;
 import com.ssafy.membermanage.member.request.AuthorizationRequest;
 import com.ssafy.membermanage.member.request.SignupRequest;
+import com.ssafy.membermanage.member.request.SingleMemberRequest;
 import com.ssafy.membermanage.member.util.Helper;
 import com.ssafy.membermanage.response.ResponseDto;
 import com.ssafy.membermanage.response.ResponseViews;
@@ -29,6 +30,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -268,4 +270,47 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/logout")
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<ResponseDto> kakaoLogout(HttpServletRequest request, @RequestBody SingleMemberRequest requestBody) throws JsonProcessingException {
+
+        Long memberId = requestBody.getMemberId();
+
+        String authorizationHeader = request.getHeader("Authorization");
+        if(!authorizationHeader.startsWith("Bearer ")){
+            throw new CustomException(ErrorCode.No_Valid_Token);
+        }
+
+        String accessToken = authorizationHeader.substring(7);
+        String kakaoLogoutUrl = "https://kapi.kakao.com/v2/user/me";
+
+        RestTemplate restTemplate=new RestTemplate();
+        //set header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.add("Accept", "application/json");
+        headers.add("Authorization", accessToken);
+
+        HttpEntity<String> kakaoRequest = new HttpEntity<>(headers);
+        ResponseEntity<String> stringResponseEntity = restTemplate.exchange(
+                kakaoLogoutUrl,
+                HttpMethod.POST,
+                kakaoRequest,
+                String.class
+        );
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> kakaoResponse = mapper.readValue(stringResponseEntity.getBody(), Map.class);
+        Long kakaoId = (Long) kakaoResponse.getOrDefault("id", -1);
+        if(Long.compare(kakaoId, memberId) != 0) throw new CustomException(ErrorCode.Logout_Failure);
+
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("status", true);
+        ResponseDto response = ResponseDto
+                .builder()
+                .message("OK")
+                .data(data)
+                .build();
+        return ResponseEntity.ok(response);
+    }
 }
