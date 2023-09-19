@@ -6,7 +6,7 @@ import {styles} from "@/styles/styles";
 
 const HouseAddScreen = ({navigation}:any) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.layout}>
       <Text>HouseAddScreen</Text>
       <BottomNavigator now=''/>
     </View>

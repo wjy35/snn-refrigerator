@@ -12,7 +12,7 @@ interface props {
 
 const UserScreen = ({title, optionTitle, optionFunction}: props) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.layout}>
       <TopNavigator title={title} optionTitle={optionTitle} optionFunction={optionFunction}/>
       <Text>UserScreen</Text>
       <BottomNavigator now=''/>
