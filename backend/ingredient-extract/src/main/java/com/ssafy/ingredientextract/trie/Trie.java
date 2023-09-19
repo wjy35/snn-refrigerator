@@ -7,7 +7,7 @@ import java.util.*;
 @Component
 public class Trie {
     private List<Node> trie = new ArrayList<Node>();
-    List<String> dict = new ArrayList<String>();
+    private List<String> dict = new ArrayList<String>();
 
     Trie(){
         Node root = new Node(
@@ -17,6 +17,10 @@ public class Trie {
         );
         trie.add(root);
         System.out.println("Trie successfully created");
+    }
+
+    public String getIngredient(int idx){
+        return dict.get(idx);
     }
 
     public void addWord(String word){
