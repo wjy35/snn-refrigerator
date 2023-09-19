@@ -43,7 +43,6 @@ export const recipeStyles = StyleSheet.create({
     width: 50,
     height: 50,
     margin: 3,
-    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
   },
