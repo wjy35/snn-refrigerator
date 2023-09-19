@@ -42,6 +42,7 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
     private final RecipeCustomIngredientRepository recipeCustomIngredientRepository;
 
     @Override
+// TODO : 쿼리 검증 및 최적화 방안 모색
     public  List<RecipeSearchResponse> getSearchRecipe(RecipeSearchRequest recipeSearchRequest) {
         TypedQuery<Recipe> query = entityManager.createQuery(
                 "SELECT DISTINCT r " +
