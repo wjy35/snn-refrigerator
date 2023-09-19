@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class SharePostDto {
-    private String locationName;
+    private String locationName="defaultLocationName";
 }

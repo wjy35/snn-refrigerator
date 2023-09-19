@@ -1,9 +1,13 @@
 package com.ssafy.chatroom.cloud.dto;
 
+import lombok.Builder;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 
 @Data
+@Builder
 public class MemberDto {
-    private String nickname;
-    private String profileImageUrl;
+    @Builder.Default
+    private String nickname="defaultNickname";
+    private String profileImageUrl="defaultImage";
 }
