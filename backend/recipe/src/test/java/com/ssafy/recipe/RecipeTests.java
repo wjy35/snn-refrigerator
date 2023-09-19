@@ -6,6 +6,7 @@ import com.ssafy.recipe.api.request.RecipeRequest;
 import com.ssafy.recipe.api.response.ContentParam;
 import com.ssafy.recipe.api.response.RecipeDetailResponse;
 import com.ssafy.recipe.db.entity.Recipe;
+import com.ssafy.recipe.db.entity.RecipeIngredient;
 import com.ssafy.recipe.db.repository.RecipeRepository;
 import com.ssafy.recipe.service.RecipeServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -29,18 +30,18 @@ public class RecipeTests {
     RecipeRepository recipeRepository;
 
 
-    int recipeId = 41;
+    int recipeId = 48;
     @Test
     void saveRecipeTest(){
         // given
         Recipe recipe = Recipe.builder()
                 .memberId(1234l)
-                .title("왕준영찜")
+                .title("왕준영찌찌찜")
                 .imageUrl("imageURL")
                 .youtubeUrl("youtubeURL")
                 .serving((byte) 6)
                 .cookingTime("120분")
-                .foodName("김치찌개")
+                .foodName("김치찜")
                 .build();
 
         // when & then
@@ -117,7 +118,6 @@ public class RecipeTests {
         System.out.println(recipeDetailResponse.toString());
     }
 
-
     private static RecipeRequest getRequest(){
         List<RecipeDetailParam> recipeDetailParams = new ArrayList<>();
         for(int i=1; i<4; i++){
@@ -126,8 +126,9 @@ public class RecipeTests {
 
         List<RecipeIngredientParam> recipeIngredientParams = new ArrayList<>();
         recipeIngredientParams.add(new RecipeIngredientParam("양파", "600g", (short) 1));
-        recipeIngredientParams.add(new RecipeIngredientParam("곽민규", "500g", (short) -1));
+        recipeIngredientParams.add(new RecipeIngredientParam("참치", "500g", (short) 2));
+        recipeIngredientParams.add(new RecipeIngredientParam("감자", "500g", (short) -1));
 
-        return new RecipeRequest("왕준영찜", 1234L,"123분","김치찌개","imageUrl",(byte) 2, "youtubeUrl", recipeDetailParams, recipeIngredientParams);
+        return new RecipeRequest("왕준영찜", 1234L,"125분","이거나오냐","imageUrl",(byte) 2, "youtubeUrl", recipeDetailParams, recipeIngredientParams);
     }
 }

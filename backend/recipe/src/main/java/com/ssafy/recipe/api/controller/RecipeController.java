@@ -15,7 +15,6 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class RecipeController {
 
     private final RecipeServiceImpl recipeService;

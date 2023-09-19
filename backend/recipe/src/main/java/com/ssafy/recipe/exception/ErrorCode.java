@@ -15,6 +15,7 @@ public enum ErrorCode {
     // favorite_recipe
     NOT_FOUND_FAVORITE_RECIPE("검색된 즐겨찾기 레시피가 없습니다.", HttpStatus.NOT_FOUND);
 
+
     private final String message;
     private final HttpStatus errorCode;
 
