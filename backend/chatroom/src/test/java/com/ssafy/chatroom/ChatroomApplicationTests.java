@@ -1,12 +1,15 @@
 package com.ssafy.chatroom;
 
 import com.ssafy.chatroom.db.entity.ChatRoomEntity;
+import com.ssafy.chatroom.db.entity.ChatRoomEntityPK;
 import com.ssafy.chatroom.db.repository.ChatRoomRepository;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @SpringBootTest
 class ChatroomApplicationTests {
@@ -39,4 +42,26 @@ class ChatroomApplicationTests {
         assertEquals(selectedChatRoomEntity.getChatRoomId(),insertedChatRoomEntity.getChatRoomId());
 
     }
+
+    @Test
+    @Transactional
+    void findChatRoom(){
+        // given
+        Integer sharePostId = 1;
+        Long senderMemberId = 1l;
+        System.out.println("sharePostId = " + sharePostId);
+        System.out.println("senderMemberId = " + senderMemberId);
+
+        // when
+        ChatRoomEntity chatRoomEntity = chatRoomRepository
+                .findChatRoomEntityBySharePostIdAndAndSenderMemberId(
+                        sharePostId,
+                        senderMemberId)
+                .get();
+
+        // then
+        System.out.println("chatRoomEntity.getChatRoomId() = " + chatRoomEntity.getChatRoomId());
+        assertNotNull(chatRoomEntity.getChatRoomId());
+    }
+
 }
