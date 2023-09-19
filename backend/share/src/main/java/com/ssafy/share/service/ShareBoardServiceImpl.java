@@ -11,6 +11,7 @@ import com.ssafy.share.db.entity.SharePost;
 import com.ssafy.share.db.repository.LocationInfoRepository;
 import com.ssafy.share.db.repository.MemberRepository;
 import com.ssafy.share.db.repository.ShareBoardRepository;
+import com.ssafy.share.db.repository.ShareIngredientRepository;
 import com.ssafy.share.feign.MemberFeign;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ import java.util.Optional;
 public class ShareBoardServiceImpl implements ShareBoardService {
 
     private final ShareBoardRepository shareBoardRepository;
+    private final ShareIngredientRepository shareIngredientRepository;
     private final LocationInfoRepository locationInfoRepository;
     private final MemberFeign memberFeign;
     @Override
@@ -100,6 +102,10 @@ public class ShareBoardServiceImpl implements ShareBoardService {
         LocationInfo locationInfo=locationInfoRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new IllegalArgumentException("장소를 찾을 수 없습니다. ID: " + locationId));
         shareBoardUpdateRequest.setLocationInfo(locationInfo);
+
+
+        // 기존의 나눔식재료는 삭제
+        shareIngredientRepository.deleteBySharePost(post);
 
         for(ShareIngredientRequest s:shareIngredientRequests){ // 나눔식재료 하나하나 post 등록
             s.setSharePost(post);
