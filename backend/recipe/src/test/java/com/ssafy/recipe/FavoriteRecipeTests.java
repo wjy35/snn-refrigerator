@@ -29,18 +29,17 @@ public class FavoriteRecipeTests {
     @Test
     void addFavoriteRecipeTest(){
         // given
-        int recipId = 41;
-        long memberId = 123;
+        int recipId = 45;
+        long memberId = 1;
         Optional<Recipe> recipe =  recipeRepository.findById(recipId);
 
         FavoriteRecipe favoriteRecipe = FavoriteRecipe.builder()
-                .memberId(12322)
+                .memberId(1)
                 .recipe(recipe.get())
                 .build();
 
         // when & then
         favoriteRecipeService.addFavoriteRecipe(recipId, memberId);
-
     }
 
     @Test
