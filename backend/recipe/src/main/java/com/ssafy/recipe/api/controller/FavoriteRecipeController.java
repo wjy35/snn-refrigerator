@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/favorite")
-@Slf4j
 public class FavoriteRecipeController {
 
     private final FavoriteRecipeServiceImpl favoriteRecipeService;
