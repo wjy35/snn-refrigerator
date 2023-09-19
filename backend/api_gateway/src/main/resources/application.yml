@@ -38,6 +38,19 @@ spring:
             - Path=/address-autocomplete/**
           filters:
             - RewritePath=/address-autocomplete/(?<path>.*),/$\{path}
+        - id: ingredient-extract
+          uri: lb://INGREDIENT-EXTRACT/
+          predicates:
+            - Path=/ingredient-extract/**
+          filters:
+            - RewritePath=/ingredient-extract/(?<path>.*),/$\{path}
+        - id: share
+          uri: lb://SHARE/
+          predicates:
+            - Path=/share/**
+          filters:
+            - RewritePath=/share/(?<path>.*),/$\{path}
+
         
 
 
