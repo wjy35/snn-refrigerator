@@ -9,11 +9,14 @@ import com.ssafy.membermanage.followPerson.service.FollowService;
 import com.ssafy.membermanage.hateIngredient.db.HateIngredient;
 import com.ssafy.membermanage.hateIngredient.db.HateIngredientRepository;
 import com.ssafy.membermanage.hateIngredient.service.HateIngredientService;
+import com.ssafy.membermanage.house.db.House;
+import com.ssafy.membermanage.house.db.HouseRepository;
 import com.ssafy.membermanage.member.MemberViews;
 import com.ssafy.membermanage.member.db.Member;
 import com.ssafy.membermanage.member.db.MemberRepository;
 import com.ssafy.membermanage.member.dto.*;
 import com.ssafy.membermanage.member.request.AuthorizationRequest;
+import com.ssafy.membermanage.member.request.SignupRequest;
 import com.ssafy.membermanage.member.util.Helper;
 import com.ssafy.membermanage.response.ResponseDto;
 import com.ssafy.membermanage.response.ResponseViews;
@@ -39,6 +42,9 @@ public class MemberController {
 
     @Autowired
     private HateIngredientRepository hateIngredientRepository;
+
+    @Autowired
+    private HouseRepository houseRepository;
 
     @Autowired
     private HateIngredientService hateIngredientService;
@@ -177,7 +183,7 @@ public class MemberController {
 
     @PostMapping("/login")
     @JsonView(ResponseViews.NoRequest.class)
-    public ResponseEntity<ResponseDto> kakaoLoginToken(@RequestBody AuthorizationRequest request) throws JsonProcessingException {
+    public ResponseEntity<ResponseDto> kakaoLoginAndGetUserInfo(@RequestBody AuthorizationRequest request) throws JsonProcessingException {
 
         String authorizationCode = request.getAuthorizationCode();
 
@@ -221,6 +227,8 @@ public class MemberController {
         data.put("id",  memberId);
         data.put("email", userInfo.getOrDefault("email", "No Email"));
         data.put("birthday", userInfo.getOrDefault("birthday", "9999"));
+        data.put("accessToken", access_token);
+        data.put("refreshToken", refresh_token);
 
         ResponseDto response = ResponseDto.
                 builder().
@@ -229,4 +237,34 @@ public class MemberController {
                 build();
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/signup")
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<ResponseDto> signup(@RequestBody SignupRequest request){
+        Long memberId = request.getMemberId();
+        String nickname = request.getNickname();
+        String houseCode = request.getHouseCode();
+        String birthday = request.getBirthday();
+        String email = request.getEmail();
+
+        House house = houseRepository.findByHouseCode(houseCode).orElseThrow(
+                () -> new CustomException(ErrorCode.No_Such_House)
+        );
+        Member member = Member
+                .builder()
+                .memberId(memberId)
+                .nickname(nickname)
+                .house(house)
+                .birthday(birthday)
+                .email(email)
+                .build();
+        member = memberRepository.save(member);
+
+        ResponseDto response = ResponseDto
+                .builder()
+                .message("OK")
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
 }
