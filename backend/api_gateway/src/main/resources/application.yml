@@ -32,5 +32,12 @@ spring:
             - Path=/ingredient-manage/**
           filters:
             - RewritePath=/ingredient-manage/(?<path>.*),/$\{path}
+        - id: address-autocomplete
+          uri: lb://ADDRESS-AUTOCOMPLETE/
+          predicates:
+            - Path=/address-autocomplete/**
+          filters:
+            - RewritePath=/address-autocomplete/(?<path>.*),/$\{path}
+        
 
 
