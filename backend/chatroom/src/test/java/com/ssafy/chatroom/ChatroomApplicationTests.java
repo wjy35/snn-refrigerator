@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -62,6 +63,24 @@ class ChatroomApplicationTests {
         // then
         System.out.println("chatRoomEntity.getChatRoomId() = " + chatRoomEntity.getChatRoomId());
         assertNotNull(chatRoomEntity.getChatRoomId());
+    }
+
+    @Test
+    @Transactional
+    void testFindChatRoomsBySenderMemberId(){
+        // given
+        Long senderMemberId = 1l;
+        System.out.println("senderMemberId = " + senderMemberId);
+
+        // when
+        List<ChatRoomEntity> chatRoomEntityList = chatRoomRepository
+                .findAllBySenderMemberId(senderMemberId);
+
+        // then
+        for(ChatRoomEntity chatRoomEntity : chatRoomEntityList){
+            System.out.println("chatRoomEntity.getChatRoomId() = " + chatRoomEntity.getChatRoomId());
+        }
+        assertFalse(chatRoomEntityList.isEmpty());
     }
 
 }
