@@ -259,6 +259,7 @@ public class MemberController {
                 .email(email)
                 .build();
         member = memberRepository.save(member);
+        //TODO: save 서비스 단에 넣기
 
         ResponseDto response = ResponseDto
                 .builder()
