@@ -53,6 +53,7 @@ public class SharePost extends BaseTimeEntity{
     public SharePost(Long memberId,LocationInfo locationInfo,List<ShareImage> shareImages,
                      List<ShareIngredient> shareIngredients, String title, String content, String thumbnail) {
         this.memberId = memberId;
+        this.locationInfo=locationInfo;
         this.shareImages = shareImages;
         this.shareIngredients = shareIngredients;
         this.title = title;
