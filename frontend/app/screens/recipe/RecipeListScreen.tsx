@@ -68,8 +68,13 @@ const RecipeListScreen = ({navigation}:any) => {
     keyword: '김치찌개'
   })
 
+  function goToCreate(){
+    console.log('gd')
+    navigation.navigate('RecipeCreate')
+  }
+
   return (
-    <RecipeLayout title="레시피">
+    <RecipeLayout title="레시피" optionTitle="등록" optionFunction={goToCreate}>
       <View style={styles.container}>
         <View style={styles.centerContainer}>
           <Text>{settings.contain.map(i => i.name).join(', ')}를 포함</Text>

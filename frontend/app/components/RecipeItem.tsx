@@ -16,7 +16,7 @@ interface props {
 
 const RecipeItem = ({item, navigation, width}:props) => {
   function toDetail() {
-    navigation.navigate('RecipeDetail', {recipeId: item.id})
+    navigation.navigate('RecipeDetail', {recipeId: item.recipeId})
   }
 
   return (

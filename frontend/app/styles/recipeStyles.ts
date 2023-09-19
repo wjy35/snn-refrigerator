@@ -3,6 +3,9 @@ import {StyleSheet} from "react-native";
 export const recipeStyles = StyleSheet.create({
   recipeListContainer: {
     flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   recipeItemContainer: {
     flexDirection: 'row',
@@ -71,7 +74,6 @@ export const recipeStyles = StyleSheet.create({
     marginLeft: 5,
   },
   recipeInfoText: {
-    fontSize: 15,
     marginLeft: 5,
   },
   recipeFavoriteContainer: {
@@ -85,4 +87,70 @@ export const recipeStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent:'center',
   },
+  recipeDetailImage: {
+    width: '100%',
+    height: 200,
+    borderWidth: 1,
+  },
+  recipeDetailInfoContainer: {
+    Width: '100%',
+    height: 150,
+    borderWidth: 1,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  recipeDetailTitleText: {
+    fontSize: 35,
+  },
+  recipeDetailInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderRadius: 10,
+    height: '70%'
+  },
+  recipeDetailUserContainer: {
+    borderWidth: 1,
+    flexDirection: 'row',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  recipeDetailUserImage: {
+    borderWidth: 1,
+    height: '80%',
+    width: 80,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  recipeDetailUserInfo: {
+    borderWidth: 1,
+    height: '80%',
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingLeft: 5,
+  },
+  recipeDetailBodyContainer: {
+    margin: 20,
+    borderWidth: 1,
+  },
+  recipeDetailTabContainer: {
+    flexDirection: 'row',
+
+
+  },
+  recipeDetailBody: {
+    height: 500,
+    borderWidth: 1,
+
+  },
+  recipeDetailSingleTab: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    height: 50,
+  }
 })

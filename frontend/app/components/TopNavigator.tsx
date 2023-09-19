@@ -16,7 +16,12 @@ const TopNavigator = ({title, optionTitle, optionFunction}: props) => {
 
   function goBack() {
     navigation.pop();
-  };
+  }
+
+  function optionFunc(){
+    // TODO: 옵션함수 고쳐야함
+    optionFunction()
+  }
 
   return (
     <View style={topNavStyles.tabContainer}>
@@ -36,7 +41,7 @@ const TopNavigator = ({title, optionTitle, optionFunction}: props) => {
           <Text style={[styles.font, topNavStyles.tabFontSize]}>{title}</Text>
         </View>
         <View style={topNavStyles.optionalRightButton}>
-          <TouchableWithoutFeedback onPress={()=>optionFunction}>
+          <TouchableWithoutFeedback onPress={()=>optionFunc}>
             <Text style={[styles.font, topNavStyles.tabFontSize]}>{optionTitle}</Text>
           </TouchableWithoutFeedback>
         </View>

@@ -6,37 +6,38 @@ import {recipeStyles} from "@/styles/recipeStyles";
 import {styles} from "@/styles/styles";
 
 interface props {
-  foodName: string;
-  cookingTime: string;
-  serving: string;
+  foodName?: string;
+  cookingTime?: string;
+  serving?: string;
+  size?: number;
 }
 
-const RecipeInfo = ({foodName, cookingTime, serving}: props) => {
+const RecipeInfo = ({foodName, cookingTime, serving, size=12}: props) => {
   return (
     <>
       <View style={recipeStyles.singleRecipeInfoContainer}>
         <SvgXml
           xml={dish}
-          width={12}
-          height={12}
+          width={size}
+          height={size}
         />
-        <Text style={[styles.font, recipeStyles.recipeInfoText]}>{foodName}</Text>
+        <Text style={[styles.font, recipeStyles.recipeInfoText, {fontSize: size}]}>{foodName}</Text>
       </View>
       <View style={recipeStyles.singleRecipeInfoContainer}>
         <SvgXml
           xml={user}
-          width={12}
-          height={12}
+          width={size}
+          height={size}
         />
-        <Text style={[styles.font, recipeStyles.recipeInfoText]}>{serving}인분</Text>
+        <Text style={[styles.font, recipeStyles.recipeInfoText, {fontSize: size}]}>{serving}인분</Text>
       </View>
       <View style={recipeStyles.singleRecipeInfoContainer}>
         <SvgXml
           xml={time}
-          width={12}
-          height={12}
+          width={size}
+          height={size}
         />
-        <Text style={[styles.font, recipeStyles.recipeInfoText]}>{cookingTime}</Text>
+        <Text style={[styles.font, recipeStyles.recipeInfoText, {fontSize: size}]}>{cookingTime}</Text>
       </View>
     </>
   );
