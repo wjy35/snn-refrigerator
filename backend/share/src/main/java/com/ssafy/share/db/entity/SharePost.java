@@ -1,6 +1,7 @@
 package com.ssafy.share.db.entity;
 
 import com.ssafy.share.api.request.ShareBoardUpdateRequest;
+import com.ssafy.share.api.request.ShareIngredientRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,10 +34,10 @@ public class SharePost extends BaseTimeEntity{
 //    @JoinColumn(name="member_id")
 //    private Member member;
 
-    @OneToMany(mappedBy = "sharePost", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "sharePost", cascade = CascadeType.ALL)
     private List<ShareImage> shareImages=new ArrayList<>(); // 나눔 이미지들
 
-    @OneToMany(mappedBy = "sharePost", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "sharePost", cascade = CascadeType.ALL)
     private List<ShareIngredient> shareIngredients=new ArrayList<>(); // 나눔 식재료들
 
     @Column(name="title",nullable = false,length = 32)
@@ -60,11 +61,17 @@ public class SharePost extends BaseTimeEntity{
         this.content = content;
         this.thumbnail = thumbnail;
     }
+    public void setShareIngredients(List<ShareIngredientRequest> shareIngredientRequests){
+        for (ShareIngredientRequest s:shareIngredientRequests){
+            this.shareIngredients.add(s.toEntity());
+        }
+    }
 
     public void update(ShareBoardUpdateRequest request){
         this.title=request.getTitle();
         this.locationInfo=request.getLocationInfo();
         this.content=request.getContent();
         this.shareImages=request.getShareImages();
+        this.shareIngredients=request.getShareIngredients();
     }
 }

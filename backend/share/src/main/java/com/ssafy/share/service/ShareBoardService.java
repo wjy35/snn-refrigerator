@@ -19,6 +19,7 @@ public interface ShareBoardService {
 
     public Page<SharePost> getPostList(Pageable pageable, LocationInfo locationInfo, String keyword);
 
+    public SharePost getPostDetail(Long shareBoardId);
 
     SharePost save(List<MultipartFile> imageFiles, List<ShareIngredientRequest> shareIngredientRequests
             , ShareBoardWriteRequest shareBoardWriteRequest);

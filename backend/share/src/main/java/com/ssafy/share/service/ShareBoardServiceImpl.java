@@ -48,8 +48,14 @@ public class ShareBoardServiceImpl implements ShareBoardService {
     @Override
     public Page<SharePost> getPostList(Pageable pageable,LocationInfo locationInfo, String keyword) { // 나눔글 리스트 조회
         log.info("검색 키워드: {}",keyword);
-        if(keyword==null) return shareBoardRepository.findByLocationInfo(pageable,locationInfo); // 초기화면, 검색어 없을 때 전체 조회
+        // todo: 시간을 n분전 형식으로 바꿔야함
+        if(keyword==null) return shareBoardRepository.findByLocationInfo(pageable,locationInfo); // 초기화면 or 검색어 없을 때 전체 조회
         return shareBoardRepository.findByLocationInfoAndTitleContaining(pageable,locationInfo,keyword); // 검색어를 입력했을 때
+    }
+
+    @Override
+    public SharePost getPostDetail(Long shareBoardId) {
+        return null;
     }
 
     @Override
@@ -62,15 +68,18 @@ public class ShareBoardServiceImpl implements ShareBoardService {
             shareBoardWriteRequest.setShareImages(images);
             // todo: 이미지에 url을 뽑아내서 저장해야함
         }
+
         Short locationId=shareBoardWriteRequest.getLocationId();
         LocationInfo locationInfo=locationInfoRepository.findByLocationId(locationId)
                         .orElseThrow(() -> new IllegalArgumentException("장소를 찾을 수 없습니다. ID: " + locationId));
-        shareBoardWriteRequest.setLocationInfo(locationInfo);
-        for(ShareIngredientRequest s:shareIngredientRequests){
-            shareBoardWriteRequest.getShareIngredients().add(s.toEntity());
+        shareBoardWriteRequest.setLocationInfo(locationInfo); // dto에 지역 설정
+        SharePost post=shareBoardWriteRequest.toEntity(); // post 엔티티 생성
+        for(ShareIngredientRequest s:shareIngredientRequests){ // 나눔식재료 하나하나 post 등록
+            s.setSharePost(post);
+            ShareIngredient shareIngredient=s.toEntity();
+            shareBoardWriteRequest.getShareIngredients().add(shareIngredient);
         }
-        log.info("요청 dto: {}",shareBoardWriteRequest);
-        return shareBoardRepository.save(shareBoardWriteRequest.toEntity());
+        return shareBoardRepository.save(post);
     }
 
     @Override
@@ -91,8 +100,11 @@ public class ShareBoardServiceImpl implements ShareBoardService {
         LocationInfo locationInfo=locationInfoRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new IllegalArgumentException("장소를 찾을 수 없습니다. ID: " + locationId));
         shareBoardUpdateRequest.setLocationInfo(locationInfo);
-        for(ShareIngredientRequest s:shareIngredientRequests){
-            shareBoardUpdateRequest.getShareIngredients().add(s.toEntity());
+
+        for(ShareIngredientRequest s:shareIngredientRequests){ // 나눔식재료 하나하나 post 등록
+            s.setSharePost(post);
+            ShareIngredient shareIngredient=s.toEntity();
+            shareBoardUpdateRequest.getShareIngredients().add(shareIngredient);
         }
 
         post.update(shareBoardUpdateRequest);
