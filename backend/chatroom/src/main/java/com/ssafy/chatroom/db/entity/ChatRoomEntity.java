@@ -25,9 +25,14 @@ public class ChatRoomEntity {
     @Column(name = "sender_member_id")
     private Long senderMemberId;
 
+    @Id
+    @Column(name = "receiver_member_id")
+    private Long receiverMemberId;
+
     @Builder
-    public ChatRoomEntity(Integer sharePostId, Long senderMemberId) {
+    public ChatRoomEntity(Integer sharePostId, Long senderMemberId, Long receiverMemberId) {
         this.sharePostId = sharePostId;
         this.senderMemberId = senderMemberId;
+        this.receiverMemberId = receiverMemberId;
     }
 }

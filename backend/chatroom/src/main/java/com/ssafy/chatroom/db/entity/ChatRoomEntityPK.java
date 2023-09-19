@@ -14,4 +14,5 @@ import java.io.Serializable;
 public class ChatRoomEntityPK implements Serializable {
     private Integer sharePostId;
     private Long senderMemberId;
+    private Long receiverMemberId;
 }

@@ -70,14 +70,14 @@ class ChatroomApplicationTests {
 
     @Test
     @Transactional
-    void testFindChatRoomsBySenderMemberId(){
+    void testFindChatRoomsBySenderMemberIdOrReceiverMemberId(){
         // given
-        Long senderMemberId = 1l;
-        System.out.println("senderMemberId = " + senderMemberId);
+        Long memberId = 1l;
+        System.out.println("memberId = " + memberId);
 
         // when
         List<ChatRoomEntity> chatRoomEntityList = chatRoomRepository
-                .findAllBySenderMemberId(senderMemberId);
+                .findAllBySenderMemberIdOrReceiverMemberId(memberId,memberId);
 
         // then
         for(ChatRoomEntity chatRoomEntity : chatRoomEntityList){
