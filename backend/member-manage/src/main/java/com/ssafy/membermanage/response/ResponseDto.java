@@ -11,11 +11,12 @@ import java.util.Map;
 @Builder
 @RequiredArgsConstructor
 public class ResponseDto {
-
+    @JsonView(ResponseViews.NoRequest.class)
     private final String message; //필수
 
-    @JsonView(ResponseViews.Show.class)
+    @JsonView(ResponseViews.Request.class)
     private final Map<String, Object> request; //옵션
 
+    @JsonView(ResponseViews.NoRequest.class)
     private final Map<String, Object> data; //필수
 }

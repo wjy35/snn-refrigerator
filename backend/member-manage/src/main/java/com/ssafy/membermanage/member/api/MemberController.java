@@ -1,6 +1,8 @@
 package com.ssafy.membermanage.member.api;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.membermanage.error.CustomException;
 import com.ssafy.membermanage.error.ErrorCode;
 import com.ssafy.membermanage.followPerson.service.FollowService;
@@ -11,18 +13,24 @@ import com.ssafy.membermanage.member.MemberViews;
 import com.ssafy.membermanage.member.db.Member;
 import com.ssafy.membermanage.member.db.MemberRepository;
 import com.ssafy.membermanage.member.dto.*;
+import com.ssafy.membermanage.member.request.AuthorizationRequest;
+import com.ssafy.membermanage.member.util.Helper;
 import com.ssafy.membermanage.response.ResponseDto;
 import com.ssafy.membermanage.response.ResponseViews;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+@Slf4j
 @RestController
 @RequestMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MemberController {
@@ -37,6 +45,15 @@ public class MemberController {
 
     @Autowired
     private FollowService followService;
+
+    @Autowired
+    private Helper helper;
+
+    @Value("${rest-api-key}") String clientId;
+
+    @Value("${redirect-uri}") String redirectUri;
+
+    @Value("${client-secret}") String clientSecret;
 
 
     @GetMapping("/{memberId}")
@@ -139,7 +156,7 @@ public class MemberController {
     }
 
     @GetMapping("{memberId}/follow")
-    @JsonView(ResponseViews.Show.class)
+    @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<ResponseDto> getFolloweeList(@PathVariable Long memberId){
         Member follower = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
@@ -158,5 +175,58 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-//    @PostMapping("")
+    @PostMapping("/login")
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<ResponseDto> kakaoLoginToken(@RequestBody AuthorizationRequest request) throws JsonProcessingException {
+
+        String authorizationCode = request.getAuthorizationCode();
+
+        log.info("authorization code = {}", authorizationCode);
+        String kakaoGetAuthTokenUrl = "https://kauth.kakao.com/oauth/token";
+        RestTemplate restTemplate=new RestTemplate();
+
+        //Set Header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.add("Accept", "application/json");
+
+        //Set parameters
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("grant_type", "authorization_code");
+        params.add("client_id", clientId);
+        params.add("redirect_uri", redirectUri);
+        params.add("code", authorizationCode);
+        params.add("client_secret", clientSecret);
+
+        //Set http entity
+        HttpEntity<MultiValueMap<String, String>> kakaoRequest = new HttpEntity<>(params, headers);
+        ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(kakaoGetAuthTokenUrl, kakaoRequest, String.class);
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> KakaoAuthResponse = mapper.readValue(stringResponseEntity.getBody(), Map.class);
+
+        //Get tokens from KaKao Server.
+        String access_token = (String) KakaoAuthResponse.get("access_token");
+        String refresh_token = (String) KakaoAuthResponse.get("refresh_token");
+        String id_token = (String) KakaoAuthResponse.get("id_token");
+
+        //
+        String kakaoGetUserInfoUrl = "https://kapi.kakao.com/v2/user/me";
+        Map<String, Object> kakaoUserInfo = helper.getKakaoUserInfo(access_token);
+
+        Long memberId = (Long) kakaoUserInfo.get("id");
+        Map<String, Object> userInfo = (Map<String, Object>) kakaoUserInfo.get("kakao_account");
+
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("id",  memberId);
+        data.put("email", userInfo.getOrDefault("email", "No Email"));
+        data.put("birthday", userInfo.getOrDefault("birthday", "9999"));
+
+        ResponseDto response = ResponseDto.
+                builder().
+                message("OK").
+                data(data).
+                build();
+        return ResponseEntity.ok(response);
+    }
 }
