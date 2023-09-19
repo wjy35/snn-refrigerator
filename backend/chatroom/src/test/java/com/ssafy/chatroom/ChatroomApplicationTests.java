@@ -1,16 +1,15 @@
 package com.ssafy.chatroom;
 
+import com.ssafy.chatroom.cloud.dto.MemberDto;
+import com.ssafy.chatroom.cloud.openfeign.MemberOpenFeign;
 import com.ssafy.chatroom.db.entity.ChatRoomEntity;
-import com.ssafy.chatroom.db.entity.ChatRoomEntityPK;
 import com.ssafy.chatroom.db.repository.ChatRoomRepository;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 class ChatroomApplicationTests {
@@ -18,10 +17,14 @@ class ChatroomApplicationTests {
     @Autowired
     ChatRoomRepository chatRoomRepository;
 
+    @Autowired
+    MemberOpenFeign memberOpenFeign;
+
     @Test
     void contextLoads() {
         // given-when-then
         assertNotNull(chatRoomRepository);
+        assertNotNull(memberOpenFeign);
     }
 
     @Test
@@ -81,6 +84,20 @@ class ChatroomApplicationTests {
             System.out.println("chatRoomEntity.getChatRoomId() = " + chatRoomEntity.getChatRoomId());
         }
         assertFalse(chatRoomEntityList.isEmpty());
+    }
+
+    @Test
+    void testMemberDtoOpenFeign(){
+        // given
+        Long memberId = 1l;
+        System.out.println("memberId = " + memberId);
+
+        // when
+        MemberDto memberDto = memberOpenFeign.getMemberDto(memberId);
+
+        // then
+        System.out.println("memberDto = " + memberDto);
+        assertNotNull(memberDto);
     }
 
 }
