@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 @Builder
 public class ChatEntity implements Serializable {
     private Long memberId;
-    private String message;
+    private String content;
     @Builder.Default
     private Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 }
