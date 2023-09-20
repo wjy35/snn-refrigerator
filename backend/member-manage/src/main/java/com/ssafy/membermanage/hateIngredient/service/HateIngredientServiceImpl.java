@@ -44,6 +44,6 @@ public class HateIngredientServiceImpl {
     }
 
     public void deleteByHateIngredientTblId(Integer hateIngredientSeq){
-        hateIngredientRepository.deleteByHateIngredientTblId(hateIngredientSeq);
+        hateIngredientRepository.deleteById(hateIngredientSeq);
     }
 }

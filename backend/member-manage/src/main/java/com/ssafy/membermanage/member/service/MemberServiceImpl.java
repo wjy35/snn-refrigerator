@@ -49,7 +49,7 @@ public class MemberServiceImpl {
     }
 
     public void deleteByMemberId(Long id){
-        memberRepository.deleteByMemberId(id);
+        memberRepository.deleteById(id);
     }
 
     public String getToken(HttpServletRequest request){

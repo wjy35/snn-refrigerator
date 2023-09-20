@@ -32,7 +32,8 @@ public class FollowServiceImpl {
         if(followMemberRepository.existsByFollowerAndFollowee(follower, followee).equals(true)){
             FollowMember followMember = followMemberRepository.findAllByFollowerAndFollowee(follower, followee).get(0);
             followee.setFollowCount(followCount - 1);
-            followMemberRepository.deleteByFollowId(followMember.getFollowId()); //followMember 삭제
+            Integer followId = followMember.getFollowId();
+            followMemberRepository.deleteById(followId); //followMember 삭제
             flag = false;
         }
         else{

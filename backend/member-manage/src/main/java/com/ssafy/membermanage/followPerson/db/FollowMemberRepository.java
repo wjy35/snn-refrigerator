@@ -6,10 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Transactional
-public interface FollowMemberRepository extends JpaRepository<FollowMember, Integer> {
-    void deleteByFollowId(Integer followId);
 
+public interface FollowMemberRepository extends JpaRepository<FollowMember, Integer> {
     FollowMember save(FollowMember followMember);
 
     List<FollowMember> findByFollowee(Member followee);
