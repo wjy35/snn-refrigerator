@@ -9,6 +9,6 @@ public class ChatRoomSearchResult {
     private String nickname;
     private String profileImageUrl;
     private String placeInfo;
-    private String lastMessage;
-    private Timestamp lastMessageDateTime;
+    private String content;
+    private Timestamp timestamp;
 }
