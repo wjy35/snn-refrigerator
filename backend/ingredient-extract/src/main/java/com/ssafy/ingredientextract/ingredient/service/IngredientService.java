@@ -1,5 +1,7 @@
 package com.ssafy.ingredientextract.ingredient.service;
 
-public interface IngredientService {
+import com.ssafy.ingredientextract.ingredient.db.Ingredient;
 
+public interface IngredientService {
+    Ingredient addIngredient(String ingredientName);
 }
