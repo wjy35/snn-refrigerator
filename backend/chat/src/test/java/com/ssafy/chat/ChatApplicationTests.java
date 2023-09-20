@@ -32,15 +32,16 @@ class ChatApplicationTests {
     void testSaveChat(){
         // given
         int beforeSize = redisTemplate.opsForList().range(1, 0, -1).size();
+        Long memberId = 1l;
 
         ChatEntity firstChatEntity = ChatEntity
                 .builder()
-                .memberId(0l)
+                .memberId(memberId)
                 .message("감자 많이 주세요")
                 .build();
         ChatEntity secondChatEntity = ChatEntity
                 .builder()
-                .memberId(0l)
+                .memberId(memberId)
                 .message("나눠주는데 왜 이렇게 불만이 많죠")
                 .build();
 
