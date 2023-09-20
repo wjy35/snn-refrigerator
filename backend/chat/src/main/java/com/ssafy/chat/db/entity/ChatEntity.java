@@ -9,7 +9,6 @@ import java.sql.Timestamp;
 
 @Data
 @Builder
-@ToString
 public class ChatEntity implements Serializable {
     private Long memberId;
     private String message;
