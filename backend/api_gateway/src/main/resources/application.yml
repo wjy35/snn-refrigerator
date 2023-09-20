@@ -50,6 +50,12 @@ spring:
             - Path=/share/**
           filters:
             - RewritePath=/share/(?<path>.*),/$\{path}
+        - id: ingredient-autocomplete
+          uri: lb://INGREDIENT-AUTOCOMPLETE/
+          predicates:
+            - Path=/ingredient-autocomplete/**
+          filters:
+            - RewritePath=/ingredient-autocomplete/(?<path>.*),/$\{path}
 
         
 
