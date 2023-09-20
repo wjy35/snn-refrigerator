@@ -13,6 +13,7 @@ const ShowYoutube = ({youtubeId}: props) => {
         width={300}
         play={true}
         videoId={youtubeId}
+        webViewStyle={{opacity: 0.99}}
       />
     </>
   );
