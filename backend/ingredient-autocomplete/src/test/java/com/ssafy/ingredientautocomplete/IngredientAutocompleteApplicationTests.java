@@ -24,10 +24,10 @@ class IngredientAutocompleteApplicationTests {
 
 	@Test
 	void startWithTest() {
-		ResponseEntity<Response> response = ingredientAutocompleteController.search("감");
+		ResponseEntity<Response> response = ingredientAutocompleteController.search("가");
 
 		List<IngredientAutocompleteResponse> ingredients = (List<IngredientAutocompleteResponse>) response.getBody().getData().get("ingredients");
-		Assertions.assertEquals(ingredients.size(),6);
+		Assertions.assertEquals(17, ingredients.size());
 //		System.out.println(ingredients);
 	}
 
