@@ -1,24 +1,26 @@
 package com.ssafy.membermanage.house.api;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.ssafy.membermanage.error.CustomException;
 import com.ssafy.membermanage.error.ErrorCode;
 import com.ssafy.membermanage.member.db.Member;
 
 import com.ssafy.membermanage.house.db.House;
 import com.ssafy.membermanage.house.db.HouseRepository;
-import com.ssafy.membermanage.house.dto.CheckHouseDto;
-import com.ssafy.membermanage.house.dto.CreateHouseDto;
 import com.ssafy.membermanage.house.dto.ModifyMemberHouseDto;
-import com.ssafy.membermanage.house.service.HouseService;
+import com.ssafy.membermanage.house.service.HouseServiceImpl;
 import com.ssafy.membermanage.member.db.MemberRepository;
-import com.ssafy.membermanage.member.service.MemberService;
+import com.ssafy.membermanage.member.service.MemberServiceImpl;
+import com.ssafy.membermanage.response.Response;
+import com.ssafy.membermanage.response.ResponseViews;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,40 +31,66 @@ public class HouseController {
     private HouseRepository houseRepository;
 
     @Autowired
-    private HouseService houseService;
+    private HouseServiceImpl houseService;
 
     @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
-    private MemberService memberService;
+    private MemberServiceImpl memberService;
 
 
     @PostMapping("")
-    public ResponseEntity<CreateHouseDto> createHouse(){
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<Response> createHouse(){
         House house = houseService.createHouse();
-        return ResponseEntity.ok(new CreateHouseDto(house.getHouseCode()));
-    }
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("houseCode", house.getHouseCode());
+
+        Response response = Response.
+                builder().
+                message("OK").
+                data(data).
+                build();
+        return ResponseEntity.ok(response);
+    }//OK
 
     @GetMapping("/{houseCode}")
-    public ResponseEntity<CheckHouseDto> checkHouse(@PathVariable String houseCode){
-        Boolean flag = houseRepository.existsByHouseCode(houseCode);
-        if(flag.equals(true)){
-            return ResponseEntity.ok(new CheckHouseDto("YES"));
-        }
-        else{
-            return ResponseEntity.ok(new CheckHouseDto("NO"));
-        }
-    }
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<Response> checkHouse(@PathVariable String houseCode){
+        boolean flag = houseRepository.existsByHouseCode(houseCode);
+        Map<String, Object> data = new HashMap<>();
+        data.put("existance", flag);
+
+        Response response = Response.
+                builder().
+                message("OK").
+                data(data).
+                build();
+        return ResponseEntity.ok(response);
+    }//OK
 
     @PutMapping("")
-    public ResponseEntity<ModifyMemberHouseDto> modifyMemberHouse(@RequestBody ModifyMemberHouseDto request){
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<Response> modifyMemberHouse(@RequestBody ModifyMemberHouseDto request){
         Long memberId = request.getMemberId();
         Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
         String houseCode = request.getHouseCode();
         member = memberService.modifyMemberHouse(member, houseCode);
-        return ResponseEntity.ok(new ModifyMemberHouseDto(member.getMemberId(), member.getHouse().getHouseCode()));
-    }
+        memberService.save(member);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("memberId", memberId);
+        data.put("houseCode", houseCode);
+
+        Response response = Response.
+                builder().
+                message("OK").
+                data(data).
+                build();
+        return ResponseEntity.ok(response);
+    }//OK
 }

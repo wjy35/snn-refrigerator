@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.ssafy.membermanage.error.CustomException;
 import com.ssafy.membermanage.error.ErrorCode;
 import com.ssafy.membermanage.member.db.Member;
-import com.ssafy.membermanage.member.service.MemberService;
+import com.ssafy.membermanage.member.service.MemberServiceImpl;
 import com.ssafy.membermanage.memberLocation.db.MemberLocation;
 import com.ssafy.membermanage.memberLocation.dto.LocationInfo;
 import com.ssafy.membermanage.memberLocation.request.SingleLocationRequest;
 import com.ssafy.membermanage.memberLocation.service.MemberLocationServiceImpl;
-import com.ssafy.membermanage.response.ResponseDto;
+import com.ssafy.membermanage.response.Response;
 import com.ssafy.membermanage.response.ResponseViews;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,32 +28,31 @@ public class MemberLocationController {
 
     private final MemberLocationServiceImpl memberLocationService;
 
-    private final MemberService memberService;
+    private final MemberServiceImpl memberServiceImpl;
 
     @PostMapping("/{memberId}/location")
     @JsonView(ResponseViews.NoRequest.class)
-    public ResponseEntity<ResponseDto> postMemberLocation(@PathVariable Long memberId, @RequestBody SingleLocationRequest request){
-        Member member = memberService.findByMemberId(memberId)
+    public ResponseEntity<Response> postMemberLocation(@PathVariable Long memberId, @RequestBody SingleLocationRequest request){
+        Member member = memberServiceImpl.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
         Short locationId = request.getLocationId();
+        if(locationId == null) throw new CustomException(ErrorCode.Wrong_LocationId);
 
         MemberLocation memberLocation = MemberLocation
                 .builder()
                 .member(member)
                 .locationId(locationId)
                 .build();
+        memberLocation = memberLocationService.save(memberLocation);
+        Map<String, Object> locationInfo = new HashMap<>();
+        locationInfo.put("locationId", locationId);
+        locationInfo.put("locationName", memberLocationService.getLocationName(locationId));
 
-        LocationInfo locationInfo = LocationInfo
-                .builder()
-                .locationId(locationId)
-                .locationName(memberLocationService.getLocationName(locationId))
-                .build();
-
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("location", locationInfo);
 
-        ResponseDto response = ResponseDto
+        Response response = Response
                 .builder()
                 .message("ok")
                 .data(data)
@@ -63,17 +62,17 @@ public class MemberLocationController {
 
     @GetMapping("/{memberId}/location")
     @JsonView(ResponseViews.NoRequest.class)
-    public ResponseEntity<ResponseDto> getMemberLocation(@PathVariable Long memberId){
+    public ResponseEntity<Response> getMemberLocation(@PathVariable Long memberId){
 
-        Member member = memberService.findByMemberId(memberId)
+        Member member = memberServiceImpl.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
         List<LocationInfo> locationInfos = memberLocationService.getLocations(member);
 
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("location", locationInfos);
 
-        ResponseDto response = ResponseDto
+        Response response = Response
                 .builder()
                 .message("ok")
                 .data(data)
@@ -83,17 +82,17 @@ public class MemberLocationController {
 
     @DeleteMapping("/{memberId}/location/{locationId}")
     @JsonView(ResponseViews.NoRequest.class)
-    public ResponseEntity<ResponseDto> deleteMemberLocation(@PathVariable Long memberId, @PathVariable Short locationId){
+    public ResponseEntity<Response> deleteMemberLocation(@PathVariable Long memberId, @PathVariable Short locationId){
 
-        Member member = memberService.findByMemberId(memberId)
+        Member member = memberServiceImpl.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
         memberLocationService.deleteByMemberAndLocationId(member, locationId);
 
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("status", true);
 
-        ResponseDto response = ResponseDto
+        Response response = Response
                 .builder()
                 .message("ok")
                 .data(data)

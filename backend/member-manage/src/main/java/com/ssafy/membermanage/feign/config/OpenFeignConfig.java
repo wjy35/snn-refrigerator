@@ -1,4 +1,4 @@
-package com.ssafy.membermanage.requestApi.config;
+package com.ssafy.membermanage.feign.config;
 
 import feign.Request;
 import feign.RequestInterceptor;
@@ -14,7 +14,6 @@ public class OpenFeignConfig {
     @Bean
     public RequestInterceptor requestInterceptor() {
         return requestTemplate -> {
-//            requestTemplate.header("Accept", "application/json");
             if(ArrayUtils.isEmpty(requestTemplate.body()) && !isGetOrDelete(requestTemplate)) {
                 requestTemplate.body("{}");
             }

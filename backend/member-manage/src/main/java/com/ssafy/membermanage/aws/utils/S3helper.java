@@ -1,4 +1,4 @@
-package com.ssafy.membermanage.S3.utils;
+package com.ssafy.membermanage.aws.utils;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;

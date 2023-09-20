@@ -1,7 +1,7 @@
 package com.ssafy.membermanage.response;
 
 public class ResponseViews {
-    public static class Request{}
+    public static class NoRequest{}
 
-    public static class NoRequest extends Request{}
+    public static class Request extends NoRequest{}
 }

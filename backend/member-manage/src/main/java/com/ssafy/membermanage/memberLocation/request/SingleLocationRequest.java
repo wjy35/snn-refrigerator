@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class SingleLocationRequest {
-    private final Short locationId;
+    private Short locationId;
 }

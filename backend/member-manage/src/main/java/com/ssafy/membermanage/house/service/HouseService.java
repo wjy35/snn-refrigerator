@@ -1,22 +1,13 @@
 package com.ssafy.membermanage.house.service;
 
 import com.ssafy.membermanage.house.db.House;
-import com.ssafy.membermanage.house.db.HouseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.Optional;
 
-@Service
-public class HouseService {
-    @Autowired
-    private HouseRepository houseRepository;
-
-    public House createHouse(){
-        String houseCode = UUID.randomUUID().toString();
-        House house = new House();
-        house.setHouseCode(houseCode);
-        return houseRepository.save(house);
-    }
-
+public interface HouseService {
+    House createHouse();
+    Optional<House> findByHouseId(Integer id);
+    Optional<House> findByHouseCode(String houseCode);
+    boolean existsByHouseCode(String houseCode);
+    House save(House house);
 }
