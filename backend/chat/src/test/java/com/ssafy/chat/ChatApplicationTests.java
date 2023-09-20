@@ -65,7 +65,7 @@ class ChatApplicationTests {
     @Test
     void testViewCurrentChat(){
         // given
-        Integer chatRoomId = 0;
+        Integer chatRoomId = 1;
         Long MemberId = 1l;
         ChatEntity lastChatEntity = ChatEntity
                 .builder()
@@ -80,6 +80,7 @@ class ChatApplicationTests {
         // then
         System.out.println("selectedChatEntity = " + selectedChatEntity);
         Assertions.assertEquals(lastChatEntity.getMemberId(),selectedChatEntity.getMemberId());
+
     }
 
     @Test
