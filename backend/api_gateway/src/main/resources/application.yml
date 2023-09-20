@@ -56,6 +56,12 @@ spring:
             - Path=/ingredient-autocomplete/**
           filters:
             - RewritePath=/ingredient-autocomplete/(?<path>.*),/$\{path}
+        - id: chat
+          uri: lb://CHAT/
+          predicates:
+            - Path=/chat/**
+          filters:
+            - RewritePath=/chat/(?<path>.*),/$\{path}
 
         
 
