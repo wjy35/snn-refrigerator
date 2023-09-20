@@ -188,7 +188,7 @@ public class RecipeServiceImpl implements RecipeService{
 
         List<ContentParam> recipeDetails = this.getRecipeDetail(recipeId);
 
-        boolean isFavorite = this.favoriteCheck(memberId, recipeId);
+        boolean isFavorite = recipeSearchService.favoriteCheck(memberId, recipeId);
 
         return RecipeDetailResponse.builder()
                 .nickname(memberResponse.get().getNickname())
@@ -203,14 +203,7 @@ public class RecipeServiceImpl implements RecipeService{
                 .build();
     }
 
-    @Override
-    public boolean favoriteCheck(long memberId, int recipeId){
-        Optional<FavoriteRecipe> favoriteRecipe = favoriteRecipeRepository.findByRecipeRecipeIdAndMemberId(recipeId, memberId);
 
-        if(favoriteRecipe.isEmpty()) return false;
-
-        return true;
-    }
 
     @Override
     public List<ContentParam> getRecipeDetail(int recipeId){
@@ -238,12 +231,8 @@ public class RecipeServiceImpl implements RecipeService{
             ingredientParams.add(ingredientParam);
         }
 
-        // 등록된 식재료 -> 레시피 id로 여기 있는 식재료 id 다 긁어옴, 양 추가, id로 ingredient-info 테이블에서 이름 검색,
-        // id로 house_ingredient테이블에서 검색
-        //  => 있으면 소비기한 저장
         List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findAllByRecipe(recipe);
 
-        // 내 냉장고 식재료
         Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(memberId);
 
         if(memberResponse.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_MEMBER);

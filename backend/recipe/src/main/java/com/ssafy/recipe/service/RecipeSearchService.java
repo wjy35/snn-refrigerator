@@ -20,5 +20,7 @@ public interface RecipeSearchService {
 
     public MemberResponse getMember(Recipe recipe);
 
+    boolean favoriteCheck(long memberId, int recipeId);
+
     List<HouseIngredientResponse> getHouseIngredientResponse(int houstSeq);
 }
