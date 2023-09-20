@@ -313,12 +313,6 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-//    @PostMapping("/image/{name}")
-//    public ResponseEntity<?> testImagePost(@PathVariable String name, @RequestParam MultipartFile image) throws Exception{
-//        String fileName = s3helper.upload("test", name, image);
-//        return ResponseEntity.ok(fileName);
-//    }
-
     @PutMapping("/{memberId}/profile-image")
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<ResponseDto> modifyProfileImageProfile(@PathVariable Long memberId, @RequestParam MultipartFile profileImage) throws Exception {
