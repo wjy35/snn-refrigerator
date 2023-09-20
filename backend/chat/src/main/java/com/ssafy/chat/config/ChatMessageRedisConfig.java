@@ -8,11 +8,11 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
-public class ChatSessionRedisConfig {
-    @Value("${CHAT_SESSION_REDIS_HOST}")
+public class ChatMessageRedisConfig {
+    @Value("${CHAT_MESSAGE_REDIS_HOST}")
     public String host;
 
-    @Value("${CHAT_SESSION_REDIS_PORT}")
+    @Value("${CHAT_MESSAGE_REDIS_PORT}")
     public int port;
 
     @Value("${REDIS_PASSWORD}")
