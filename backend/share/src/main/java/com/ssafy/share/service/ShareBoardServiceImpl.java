@@ -57,7 +57,9 @@ public class ShareBoardServiceImpl implements ShareBoardService {
 
     @Override
     public SharePost getPostDetail(Long shareBoardId) {
-        return null;
+        return shareBoardRepository.findBySharePostId(shareBoardId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + shareBoardId));
+
     }
 
     @Override

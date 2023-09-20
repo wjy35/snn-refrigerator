@@ -3,14 +3,16 @@ package com.ssafy.share.api.controller;
 import com.ssafy.share.api.request.ShareBoardUpdateRequest;
 import com.ssafy.share.api.request.ShareBoardWriteRequest;
 import com.ssafy.share.api.request.ShareIngredientRequest;
-import com.ssafy.share.api.response.MemberResponse;
-import com.ssafy.share.api.response.SharePostListResponse;
-import com.ssafy.share.api.response.SharePostResponse;
+import com.ssafy.share.api.response.*;
+import com.ssafy.share.db.entity.IngredientInfo;
 import com.ssafy.share.db.entity.LocationInfo;
+import com.ssafy.share.db.entity.ShareIngredient;
 import com.ssafy.share.db.entity.SharePost;
+import com.ssafy.share.db.repository.IngredientInfoRepository;
 import com.ssafy.share.db.repository.LocationInfoRepository;
 import com.ssafy.share.feign.MemberFeign;
 import com.ssafy.share.service.ShareBoardService;
+import com.ssafy.share.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -33,6 +35,9 @@ public class ShareBoardController {
 
     private final ShareBoardService shareBoardService;
     private final LocationInfoRepository locationInfoRepository;
+    private final IngredientInfoRepository ingredientInfoRepository;
+    private final TimeUtil timeUtil;
+
 
     @GetMapping("/{locationId}")
     public SharePostListResponse getPostList(@PathVariable Short locationId,@RequestParam(required = false) String keyword,
@@ -51,9 +56,17 @@ public class ShareBoardController {
         return new SharePostListResponse(locationInfo.getLocationName(),sharePostResponses);
     }
 
-    @GetMapping("/{location}/{shareboardId}")
-    public SharePost getPostDetail(@PathVariable Long shareboardId){
-        return null;
+    @GetMapping("/{location}/{shareBoardId}")
+    public SharePostDetailResponse getPostDetail(@PathVariable Long shareBoardId){
+        SharePost post=shareBoardService.getPostDetail(shareBoardId);
+        String nickname=shareBoardService.getMember(post.getMemberId()).getNickname();
+        SharePostDetailResponse response=new SharePostDetailResponse(post,nickname,timeUtil.dateTypeFormatter(post.getCreateDate()));
+        for (ShareIngredient s:post.getShareIngredients()){
+            String ingredientName=ingredientInfoRepository.findById(s.getIngredientInfoId())
+                    .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 식재료입니다.")).getIngredientName();
+            response.getShareIngredients().add(new ShareIngredientResponse(ingredientName,s.getAmount()));
+        }
+        return response;
     }
 
     @PostMapping("")
@@ -66,18 +79,18 @@ public class ShareBoardController {
         return "나눔글 작성 성공";
     }
 
-    @PatchMapping("/{shareboardId}")
-    public String updatePost(@PathVariable Long shareboardId,@RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles,
+    @PatchMapping("/{shareBoardId}")
+    public String updatePost(@PathVariable Long shareBoardId,@RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles,
                                 @RequestPart(value = "shareIngredients") List<ShareIngredientRequest> shareIngredientRequests,
                                 @RequestPart(value = "shareBoardUpdateRequest") ShareBoardUpdateRequest shareBoardUpdateRequest, HttpServletRequest request) {
         log.info("shareIngredientRequests = {}",shareIngredientRequests);
-        shareBoardService.update(shareboardId,imageFiles,shareIngredientRequests,shareBoardUpdateRequest);
+        shareBoardService.update(shareBoardId,imageFiles,shareIngredientRequests,shareBoardUpdateRequest);
         return "나눔글 수정 성공";
     }
 
-    @DeleteMapping("/{shareboardId}")
-    public String updatePost(@PathVariable Long shareboardId,HttpServletRequest request){
-        shareBoardService.delete(shareboardId);
+    @DeleteMapping("/{shareBoardId}")
+    public String updatePost(@PathVariable Long shareBoardId,HttpServletRequest request){
+        shareBoardService.delete(shareBoardId);
         return "나눔글 삭제 성공";
     }
 
