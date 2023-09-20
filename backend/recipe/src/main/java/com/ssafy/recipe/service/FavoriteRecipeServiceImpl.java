@@ -69,6 +69,8 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
 
             int neededIngredients = recipeSearchService.getNeededIngredientsCnt(recipe);
 
+            boolean isFavorite = recipeSearchService.favoriteCheck(memberId, recipe.getRecipeId());
+
             RecipeSearchResponse recipeSearchResponse = RecipeSearchResponse.builder()
                     .recipeId(recipe.getRecipeId())
                     .title(recipe.getTitle())
@@ -78,6 +80,7 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
                     .serving(recipe.getServing())
                     .favoriteCount(recipe.getFavoriteCount())
                     .foodName(recipe.getFoodName())
+                    .isFavorite(isFavorite)
                     .neededIngredients(neededIngredients)
                     .myIngredients(myIngredients)
                     .build();
@@ -86,10 +89,7 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
         }
         return result;
     }
-    @Override
-    public List<FavoriteRecipe> getFavoriteRecipe(long memberId) {
-        return favoriteRecipeRepository.findAllByMemberId(memberId);
-    }
+
 
 
 }

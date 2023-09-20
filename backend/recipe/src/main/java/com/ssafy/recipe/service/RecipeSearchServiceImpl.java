@@ -38,11 +38,9 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
 
     private final MemberFeign memberFeign;
 
-    private final RecipeService recipeService;
+    private final FavoriteRecipeRepository favoriteRecipeRepository;
 
     private final HouseIngredientFeign houseIngredientFeign;
-
-    private final FavoriteRecipeRepository favoriteRecipeRepository;
 
     private final RecipeIngredientRepository recipeIngredientRepository;
 
@@ -100,7 +98,7 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
 
             int neededIngredients = this.getNeededIngredientsCnt(recipe);
 
-            boolean isFavorite = recipeService.favoriteCheck(recipeSearchRequest.getMemberId(), recipe.getRecipeId());
+            boolean isFavorite = this.favoriteCheck(recipeSearchRequest.getMemberId(), recipe.getRecipeId());
 
             RecipeSearchResponse recipeSearchResponse = RecipeSearchResponse.builder()
                     .recipeId(recipe.getRecipeId())
@@ -119,6 +117,15 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
             result.add(recipeSearchResponse);
         }
         return result;
+    }
+
+    @Override
+    public boolean favoriteCheck(long memberId, int recipeId){
+        Optional<FavoriteRecipe> favoriteRecipe = favoriteRecipeRepository.findByRecipeRecipeIdAndMemberId(recipeId, memberId);
+
+        if(favoriteRecipe.isEmpty()) return false;
+
+        return true;
     }
 
     @Override
