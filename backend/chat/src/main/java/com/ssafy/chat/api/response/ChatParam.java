@@ -6,6 +6,6 @@ import java.sql.Timestamp;
 @Data
 public class ChatParam {
     private Long memberId;
-    private String message;
+    private String content;
     private Timestamp timestamp;
 }
