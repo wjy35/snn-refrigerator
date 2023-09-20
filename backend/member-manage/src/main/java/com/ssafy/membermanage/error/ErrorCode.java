@@ -13,6 +13,7 @@ public enum ErrorCode {
     No_Valid_Token(HttpStatus.BAD_REQUEST, "No valid token"),
     Logout_Failure(HttpStatus.BAD_REQUEST, "Logout failed"),
     Member_Does_Not_Hate_Ingredient(HttpStatus.BAD_REQUEST, "Member can eat ingredient"),
+    S3_Delete_Failure(HttpStatus.BAD_REQUEST, "Image deletion failed"),
     Duplicate_Nickname(HttpStatus.CONFLICT, "Duplicate nickname");
 
     private final HttpStatus httpStatus;

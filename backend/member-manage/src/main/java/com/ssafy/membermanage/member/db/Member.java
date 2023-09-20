@@ -22,8 +22,8 @@ public class Member {
     @Column(name = "nickname", length = 10, unique = true, nullable = false)
     private String nickname;
 
-    @Column(name = "profile_image_url")
-    private String profileImageUrl;
+    @Column(name = "profile_image_filename")
+    private String profileImageFilename;
 
     @Column(name = "birthday", length = 4, nullable = false)
     private String birthday;
@@ -40,7 +40,7 @@ public class Member {
         this.memberId = memberId;
         this.house = house;
         this.nickname = nickname;
-        this.profileImageUrl = "https://s09-a502.s3.ap-northeast-2.amazonaws.com/default/Wang.png";
+        this.profileImageFilename = "${member-default-profile-image}";
         this.birthday = birthday;
         this.email = email;
     }
