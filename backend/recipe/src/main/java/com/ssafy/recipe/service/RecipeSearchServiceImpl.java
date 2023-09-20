@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.lang.reflect.Member;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -168,10 +169,12 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
             JSONObject ingredientObject = ingredientsArray.getJSONObject(i);
             int ingredientInfoId = ingredientObject.getInt("ingredientInfoId");
             String ingredientName = ingredientObject.getString("ingredientName");
+            String lastDate = ingredientObject.getString("lastDate");
 
             HouseIngredientResponse houseIngredientResponse = HouseIngredientResponse.builder()
                     .ingredientInfoId(ingredientInfoId)
-                    .ingredientName(ingredientName).build();
+                    .ingredientName(ingredientName)
+                    .lastDate(LocalDate.parse(lastDate)).build();
 
             resultList.add(houseIngredientResponse);
         }

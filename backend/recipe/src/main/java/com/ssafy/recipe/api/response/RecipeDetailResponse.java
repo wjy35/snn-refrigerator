@@ -17,6 +17,7 @@ public class RecipeDetailResponse {
     private String youtubeUrl;
     private int favoriteCount;
     private long followCount;
+    private boolean isFavorite;
     private List<IngredientParam> ingredientResponseList;
     private List<ContentParam> contentResponseList;
 }

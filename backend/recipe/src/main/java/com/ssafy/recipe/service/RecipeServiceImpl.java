@@ -1,7 +1,7 @@
 package com.ssafy.recipe.service;
 
-import com.ssafy.recipe.api.response.ContentParam;
-import com.ssafy.recipe.api.response.IngredientParam;
+import com.ssafy.recipe.api.request.RecipeDetailRequest;
+import com.ssafy.recipe.api.response.*;
 import com.ssafy.recipe.service.feign.MemberFeign;
 import com.ssafy.recipe.api.mapper.RecipeCustomIngredientMapper;
 import com.ssafy.recipe.api.mapper.RecipeDetailMapper;
@@ -9,8 +9,6 @@ import com.ssafy.recipe.api.mapper.RecipeIngredientMapper;
 import com.ssafy.recipe.api.mapper.RecipeMapper;
 import com.ssafy.recipe.api.request.RecipeIngredientParam;
 import com.ssafy.recipe.api.request.RecipeRequest;
-import com.ssafy.recipe.api.response.MemberResponse;
-import com.ssafy.recipe.api.response.RecipeDetailResponse;
 import com.ssafy.recipe.db.entity.*;
 import com.ssafy.recipe.db.repository.*;
 import com.ssafy.recipe.exception.CustomException;
@@ -45,6 +43,9 @@ public class RecipeServiceImpl implements RecipeService{
 
     private final RecipeIngredientRepository recipeIngredientRepository;
 
+    private final RecipeSearchService recipeSearchService;
+
+    private final FavoriteRecipeRepository favoriteRecipeRepository;
     private final MemberFeign memberFeign;
 
 
@@ -178,26 +179,40 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     @Override
-    public RecipeDetailResponse getRecipe(int recipeId){
+    public RecipeDetailResponse getRecipe(RecipeDetailRequest request){
+        int recipeId = request.getRecipeId();
+        long memberId = request.getMemberId();;
         Optional<Recipe> recipe = recipeRepository.findById(recipeId);
 
         if(recipe.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
 
         Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(recipe.get().getMemberId());
 
-        List<IngredientParam> ingredientParams = this.getIngredientList();
+        List<IngredientParam> ingredientParams = this.getIngredientList(memberId, recipe.get());
 
         List<ContentParam> recipeDetails = this.getRecipeDetail(recipeId);
+
+        boolean isFavorite = favoriteCheck(memberId, recipeId);
 
         return RecipeDetailResponse.builder()
                 .nickname(memberResponse.get().getNickname())
                 .title(recipe.get().getTitle())
                 .image(recipe.get().getImageUrl())
                 .youtubeUrl(recipe.get().getYoutubeUrl())
+                .isFavorite(isFavorite)
                 .favoriteCount(recipe.get().getFavoriteCount())
                 .followCount((memberResponse.get().getFollowCount()))
                 .contentResponseList(recipeDetails)
+                .ingredientResponseList(ingredientParams)
                 .build();
+    }
+
+    public boolean favoriteCheck(long memberId, int recipeId){
+        Optional<FavoriteRecipe> favoriteRecipe = favoriteRecipeRepository.findByRecipeRecipeIdAndMemberId(recipeId, memberId);
+
+        if(favoriteRecipe.isEmpty()) return false;
+
+        return true;
     }
 
     @Override
@@ -207,17 +222,57 @@ public class RecipeServiceImpl implements RecipeService{
     }
 
     @Override
-    public List<IngredientParam> getIngredientList(){
+    public List<IngredientParam> getIngredientList(long memberId, Recipe recipe){
 
         // ingredientParam 리스트 생성
         List<IngredientParam> ingredientParams = new ArrayList<>();
 
         // 커스텀 식재료 -> 레시피 id로 여기 있는 식재료 다 검색, 양, 이름 추가
+        List<RecipeCustomIngredient> recipeCustomIngredientList = recipeCustomIngredientRepository.findAllByRecipe(recipe);
+
+        for(int i=0; i<recipeCustomIngredientList.size(); i++){
+            RecipeCustomIngredient recipeCustomIngredient = recipeCustomIngredientList.get(i);
+
+            IngredientParam ingredientParam = IngredientParam.builder()
+                    .name(recipeCustomIngredient.getIngredientName())
+                    .amount(recipeCustomIngredient.getAmount())
+                    .build();
+
+            ingredientParams.add(ingredientParam);
+        }
 
         // 등록된 식재료 -> 레시피 id로 여기 있는 식재료 id 다 긁어옴, 양 추가, id로 ingredient-info 테이블에서 이름 검색,
         // id로 house_ingredient테이블에서 검색
         //  => 있으면 소비기한 저장
+        List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findAllByRecipe(recipe);
 
-        return null;
+        // 내 냉장고 식재료
+        Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(memberId);
+
+        if(memberResponse.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_MEMBER);
+
+        List<HouseIngredientResponse> houseIngredientResponseList = recipeSearchService.getHouseIngredientResponse(memberResponse.get().getHouseSeq());
+
+        for(int i=0; i<recipeIngredientList.size(); i++){
+            RecipeIngredient recipeIngredient = recipeIngredientList.get(i);
+
+            IngredientParam ingredientParam = IngredientParam.builder()
+                    .name(recipeIngredient.getIngredientInfo().getIngredientName())
+                    .amount(recipeIngredient.getAmount())
+                    .build();
+
+
+            for(int j=0; j<houseIngredientResponseList.size(); j++){
+                HouseIngredientResponse houseIngredientResponse = houseIngredientResponseList.get(j);
+
+                if(houseIngredientResponse.getIngredientInfoId() == recipeIngredient.getIngredientInfo().getIngredientInfoId()){
+                    ingredientParam.setLastDate(houseIngredientResponse.getLastDate());
+                }
+            }
+
+            ingredientParams.add(ingredientParam);
+
+        }
+        return ingredientParams;
     }
 }

@@ -1,5 +1,6 @@
 package com.ssafy.recipe.api.controller;
 
+import com.ssafy.recipe.api.request.RecipeDetailRequest;
 import com.ssafy.recipe.api.request.RecipeRequest;
 import com.ssafy.recipe.api.response.RecipeDetailResponse;
 import com.ssafy.recipe.api.response.Response;
@@ -46,11 +47,11 @@ public class RecipeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{recipeId}")
-    public ResponseEntity<?> getRecipeDetail(@PathVariable int recipeId){
+    @PostMapping("/recipe")
+    public ResponseEntity<?> getRecipeDetail(@RequestBody RecipeDetailRequest request){
         Response response = new Response();
-        RecipeDetailResponse recipeDetailResponse = recipeService.getRecipe(recipeId);
-        response.addRequest("recipeId", recipeId);
+        RecipeDetailResponse recipeDetailResponse = recipeService.getRecipe(request);
+        response.addRequest("recipeId", request.getRecipeId());
         response.setMessage("OK");
         response.addData("recipeInfo", recipeDetailResponse);
         return new ResponseEntity<>(response, HttpStatus.OK);
