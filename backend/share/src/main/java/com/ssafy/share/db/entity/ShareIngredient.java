@@ -1,5 +1,6 @@
 package com.ssafy.share.db.entity;
 
+import com.ssafy.share.api.request.ShareIngredientRequest;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,8 +32,14 @@ public class ShareIngredient {
     private int amount; // 식재료 양
 
     @Builder
-    public ShareIngredient(Short ingredientInfoId, int amount) {
+    public ShareIngredient(SharePost sharePost,Short ingredientInfoId, int amount) {
+        this.sharePost=sharePost;
         this.ingredientInfoId = ingredientInfoId;
         this.amount = amount;
+    }
+
+    public void update(ShareIngredientRequest request) {
+        this.ingredientInfoId = request.getIngredientInfoId();
+        this.amount = request.getAmount();
     }
 }

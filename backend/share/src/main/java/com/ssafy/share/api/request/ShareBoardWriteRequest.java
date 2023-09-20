@@ -15,7 +15,7 @@ import java.util.List;
 public class ShareBoardWriteRequest {
     private Long memberId;
     private Short locationId;
-    private LocationInfo locationInfo; // 받아온 ID로 변환할거임
+    private LocationInfo locationInfo; // 받아온 ID로 변환할것임
     private String title;
     private String content;
     private List<ShareIngredient> shareIngredients;
