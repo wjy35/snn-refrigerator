@@ -1,5 +1,6 @@
 package com.ssafy.recipe.service;
 
+import com.ssafy.recipe.api.request.RecipeDetailRequest;
 import com.ssafy.recipe.api.request.RecipeIngredientParam;
 import com.ssafy.recipe.api.request.RecipeRequest;
 import com.ssafy.recipe.api.response.ContentParam;
@@ -29,11 +30,11 @@ public interface RecipeService {
 
     MemberResponse getMember(Long memberId);
 
-    RecipeDetailResponse getRecipe(int recipeId);
+    RecipeDetailResponse getRecipe(RecipeDetailRequest request);
 
     List<ContentParam> getRecipeDetail(int recipeId);
 
-    List<IngredientParam> getIngredientList();
+    List<IngredientParam> getIngredientList(long memberId, Recipe recipe);
 
     void updateRecipeIngredient(Recipe recipe, RecipeRequest request);
 

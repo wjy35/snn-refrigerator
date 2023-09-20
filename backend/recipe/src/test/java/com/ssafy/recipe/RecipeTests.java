@@ -1,6 +1,7 @@
 package com.ssafy.recipe;
 
 import com.ssafy.recipe.api.request.RecipeDetailParam;
+import com.ssafy.recipe.api.request.RecipeDetailRequest;
 import com.ssafy.recipe.api.request.RecipeIngredientParam;
 import com.ssafy.recipe.api.request.RecipeRequest;
 import com.ssafy.recipe.api.response.ContentParam;
@@ -110,9 +111,15 @@ public class RecipeTests {
     void getMemberInfo(){
         // given
         int recipeId = 45;
+        long memberId = 1;
+
+        RecipeDetailRequest request = RecipeDetailRequest.builder()
+                .recipeId(recipeId)
+                .memberId(memberId)
+                .build();
 
         // when
-        RecipeDetailResponse recipeDetailResponse = recipeService.getRecipe(recipeId);
+        RecipeDetailResponse recipeDetailResponse = recipeService.getRecipe(request);
 
         // then
         System.out.println(recipeDetailResponse.toString());
