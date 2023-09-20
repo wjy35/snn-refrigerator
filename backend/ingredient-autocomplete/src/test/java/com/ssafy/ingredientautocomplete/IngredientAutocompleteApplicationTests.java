@@ -27,7 +27,7 @@ class IngredientAutocompleteApplicationTests {
 		ResponseEntity<Response> response = ingredientAutocompleteController.search("가");
 
 		List<IngredientAutocompleteResponse> ingredients = (List<IngredientAutocompleteResponse>) response.getBody().getData().get("ingredients");
-		Assertions.assertEquals(17, ingredients.size());
+		Assertions.assertEquals(19, ingredients.size());
 //		System.out.println(ingredients);
 	}
 
