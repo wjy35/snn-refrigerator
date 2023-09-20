@@ -54,7 +54,6 @@ const RecipeCreateBasicInfo = ({textList}: props) => {
           </View>
           <View style={styles.marginContainer}>
             <View style={styles.smallContainer}>
-
               <View style={[{width: '100%'}]}>
                 <Text>조리 시간</Text>
               </View>
@@ -68,6 +67,14 @@ const RecipeCreateBasicInfo = ({textList}: props) => {
           </View>
         </View>
         <View style={styles.smallContainer}>
+          <View style={[{width: '100%'}]}>
+            <Text>사진 입력</Text>
+          </View>
+          <View style={[{width: '100%'}]}>
+            <GetImageFrom/>
+          </View>
+        </View>
+        <View style={styles.smallContainer}>
           <View>
             <View style={[{width: '100%'}]}>
               <Text>url 입력</Text>
@@ -78,18 +85,12 @@ const RecipeCreateBasicInfo = ({textList}: props) => {
                 placeholder='url 입력'
               />
             </View>
-            <View>
+            <View style={{alignItems: 'center'}}>
               <ShowYoutube youtubeId={'N44CCnmgv-M'} />
             </View>
           </View>
         </View>
-        <View style={styles.smallContainer}>
-          <View style={[{width: '100%'}]}>
-            <Text>사진 입력</Text>
-          </View>
-          <View style={[{width: '100%'}]}>
-            <GetImageFrom/>
-          </View>
+        <View style={{height: 250}}>
         </View>
       </ScrollView>
     </View>
