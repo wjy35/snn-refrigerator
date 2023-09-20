@@ -8,6 +8,8 @@ import sampleApi from '@/apis/sampleApi';
 import {homeScreenStyles} from "@/styles/homeScreenStyles";
 import MyIngredientList from "@/components/MyIngredientList";
 import MyHouseModal from "@/components/MyHouseModal";
+import {useFocusEffect} from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomeScreen = ({navigation}:any) => {
 
@@ -66,6 +68,17 @@ const HomeScreen = ({navigation}:any) => {
       serving:2
     },
   ];
+
+  const getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem('my-key');
+      if (value !== null) {
+        console.log(value);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
 
   const test = async () => {
     try {

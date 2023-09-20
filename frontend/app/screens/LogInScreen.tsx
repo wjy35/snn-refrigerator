@@ -3,10 +3,16 @@ import {View, Text, Button, ImageBackground} from 'react-native';
 import {styles} from '@/styles/styles';
 import LoginSwiper from "@/components/LoginSwiper";
 import MyHouseModal from "@/components/MyHouseModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const LogInScreen = ({navigation}:any) => {
 
-  function goHome() {
-    navigation.navigate('Home')
+  async function goHome() {
+    try {
+      await AsyncStorage.setItem('my-key', 'testtoken');
+    } catch (e) {
+      console.log(e);
+    }
+    navigation.navigate('Home');
   }
 
   return (

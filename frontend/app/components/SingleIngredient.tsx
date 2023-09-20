@@ -70,7 +70,6 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
                   <Text style={[styles.font, text]}>D{result>0?`-${result}`:`+${-result}`}</Text>
                 )
               }
-
             </View>
           </View>
         </View>

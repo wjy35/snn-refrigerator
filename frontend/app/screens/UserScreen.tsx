@@ -6,7 +6,7 @@ import TopNavigator from "@/components/TopNavigator";
 import MyHouseModal from "@/components/MyHouseModal";
 
 interface props {
-  title: string;
+  title?: string;
   optionTitle?: string;
   optionFunction?: Function;
 }
