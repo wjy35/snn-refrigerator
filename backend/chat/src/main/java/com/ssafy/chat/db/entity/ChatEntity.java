@@ -2,8 +2,6 @@ package com.ssafy.chat.db.entity;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.ToString;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 
