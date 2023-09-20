@@ -19,6 +19,6 @@ public class ChatViewServiceImpl implements ChatViewService {
 
     @Override
     public ChatEntity viewCurrentChat(Integer chatRoomId) {
-        return redisTemplate.opsForList().rightPop(chatRoomId);
+        return redisTemplate.opsForList().range(chatRoomId,-1,-1).get(0);
     }
 }
