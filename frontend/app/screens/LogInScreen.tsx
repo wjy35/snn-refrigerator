@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, Button, ImageBackground} from 'react-native';
 import {styles} from '@/styles/styles';
 import LoginSwiper from "@/components/LoginSwiper";
+import MyHouseModal from "@/components/MyHouseModal";
 const LogInScreen = ({navigation}:any) => {
 
   function goHome() {

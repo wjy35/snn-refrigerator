@@ -7,6 +7,7 @@ import Progressbar from '@/components/Progressbar';
 import sampleApi from '@/apis/sampleApi';
 import {homeScreenStyles} from "@/styles/homeScreenStyles";
 import MyIngredientList from "@/components/MyIngredientList";
+import MyHouseModal from "@/components/MyHouseModal";
 
 const HomeScreen = ({navigation}:any) => {
 
@@ -82,6 +83,7 @@ const HomeScreen = ({navigation}:any) => {
   return (
     <View style={styles.layout}>
       <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
+        <MyHouseModal/>
         <ScrollView style={{width: '100%'}}>
           <View style={styles.container}>
             <View style={homeScreenStyles.homeMention}>
