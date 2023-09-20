@@ -2,6 +2,7 @@ package com.ssafy.chat;
 
 import com.ssafy.chat.db.entity.ChatEntity;
 import com.ssafy.chat.service.ChatSaveService;
+import com.ssafy.chat.service.ChatViewService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,9 @@ import java.util.List;
 class ChatApplicationTests {
     @Autowired
     ChatSaveService chatSaveService;
+
+    @Autowired
+    ChatViewService chatViewService;
 
     @Autowired
     RedisTemplate<Integer,ChatEntity> redisTemplate;
@@ -57,4 +61,46 @@ class ChatApplicationTests {
         Assertions.assertTrue(beforeSize<afterSize);
     }
 
+    @Test
+    void testViewCurrentChat(){
+        // given
+        Integer chatRoomId = 0;
+        Long MemberId = 1l;
+        ChatEntity lastChatEntity = ChatEntity
+                .builder()
+                .memberId(MemberId)
+                .message("Last Chat!")
+                .build();
+        chatSaveService.save(chatRoomId,lastChatEntity);
+
+        // when
+        ChatEntity selectedChatEntity = chatViewService.viewCurrentChat(chatRoomId);
+
+        // then
+        System.out.println("selectedChatEntity = " + selectedChatEntity);
+        Assertions.assertEquals(lastChatEntity.getMemberId(),selectedChatEntity.getMemberId());
+    }
+
+    @Test
+    void testViewAllChat(){
+        // given
+        Integer chatRoomId = 0;
+        Long MemberId = 1l;
+        ChatEntity lastChatEntity = ChatEntity
+                .builder()
+                .memberId(MemberId)
+                .message("Last Chat!")
+                .build();
+        chatSaveService.save(chatRoomId,lastChatEntity);
+
+        // when
+        List<ChatEntity> selectedChatEntityList = chatViewService.viewAllChat(chatRoomId);
+
+        // then
+        System.out.println("selectedChatEntityList = " + selectedChatEntityList);
+        Assertions.assertEquals(
+                selectedChatEntityList.get(selectedChatEntityList.size()-1).getMemberId(),
+                lastChatEntity.getMemberId()
+        );
+    }
 }
