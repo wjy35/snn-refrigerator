@@ -25,4 +25,16 @@ public class MemberService {
         member.setHouse(house);
         return member;
     }
+
+    public Optional<Member> findByMemberId(Long id){
+        return memberRepository.findByMemberId(id);
+    }
+
+    public boolean existsByNickname(String nickname){
+        return memberRepository.existsByNickname(nickname);
+    }
+
+    public Member save(Member member){
+        return memberRepository.save(member);
+    }
 }
