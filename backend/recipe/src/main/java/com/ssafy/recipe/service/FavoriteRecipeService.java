@@ -11,5 +11,4 @@ public interface FavoriteRecipeService {
 
     void deleteFavoriteRecipe(int recipeId, long memberId);
 
-    List<FavoriteRecipe> getFavoriteRecipe(long memberId);
 }
