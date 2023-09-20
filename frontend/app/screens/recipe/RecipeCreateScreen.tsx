@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import RecipeLayout from "@/screens/recipe/RecipeLayout";
 import ProgressPage from "@/components/ProgressPage";
 import RecipeCreateBasicInfo from "@/pages/recipeCreate/RecipeCreateBasicInfo";
@@ -51,6 +51,8 @@ const RecipeCreateScreen = ({navigation}:any) => {
   function editContent(){
 
   }
+
+  const swiper = useRef()
 
 
   return (
