@@ -39,7 +39,10 @@ public class Trie {
     public String toHangulString(String s){
         sb.setLength(0);
         for(char ch:s.toCharArray()){
-            if (ch < 0xAC00 || ch > 0xD7A3) continue;
+            if (ch < 0xAC00 || ch > 0xD7A3){
+                sb.append(ch);
+                continue;
+            }
             sb.append(HANGUL[0][(ch-0xAC00)/588]);
             sb.append(HANGUL[1][((ch-0xAC00)%588)/28]);
             sb.append(HANGUL[2][(ch-0xAC00)%28]);
