@@ -16,6 +16,7 @@ public enum ErrorCode {
     Logout_Failure(HttpStatus.BAD_REQUEST, "Logout failed"),
     Member_Does_Not_Hate_Ingredient(HttpStatus.BAD_REQUEST, "Member can eat ingredient"),
     S3_Delete_Failure(HttpStatus.BAD_REQUEST, "Image deletion failed"),
+    Wrong_LocationId(HttpStatus.BAD_REQUEST, "You requested wrong location"),
     Duplicate_Nickname(HttpStatus.CONFLICT, "Duplicate nickname");
 
     private final HttpStatus httpStatus;
