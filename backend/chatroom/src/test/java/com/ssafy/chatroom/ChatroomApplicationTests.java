@@ -1,10 +1,15 @@
 package com.ssafy.chatroom;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.chatroom.cloud.dto.ChatDto;
 import com.ssafy.chatroom.cloud.dto.MemberDto;
+import com.ssafy.chatroom.cloud.openfeign.ChatOpenFeign;
 import com.ssafy.chatroom.cloud.openfeign.MemberOpenFeign;
 import com.ssafy.chatroom.db.entity.ChatRoomEntity;
 import com.ssafy.chatroom.db.repository.ChatRoomRepository;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +24,12 @@ class ChatroomApplicationTests {
 
     @Autowired
     MemberOpenFeign memberOpenFeign;
+
+    @Autowired
+    ChatOpenFeign chatOpenFeign;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Test
     void contextLoads() {
@@ -98,6 +109,19 @@ class ChatroomApplicationTests {
         // then
         System.out.println("memberDto = " + memberDto);
         assertNotNull(memberDto);
+    }
+
+    @Test
+    void testChatDtoOpenFeign(){
+        // given
+        Integer chatRoomId = 1;
+
+        // when
+        ChatDto chatDto = objectMapper.convertValue(chatOpenFeign.getChatDto(chatRoomId).getData().get("chat"),ChatDto.class);
+
+        // then
+        System.out.println("chatDto = " + chatDto);
+        Assertions.assertNotNull(chatDto);
     }
 
 }

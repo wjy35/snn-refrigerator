@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 
 @Data
 public class ChatDto {
-    private String lastMessage;
-    private Timestamp lastMessageDateTime;
+    private Long memberId;
+    private String content;
+    private Timestamp timestamp;
 }
