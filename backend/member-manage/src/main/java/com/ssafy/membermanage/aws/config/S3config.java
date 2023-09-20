@@ -1,4 +1,4 @@
-package com.ssafy.membermanage.S3.config;
+package com.ssafy.membermanage.aws.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

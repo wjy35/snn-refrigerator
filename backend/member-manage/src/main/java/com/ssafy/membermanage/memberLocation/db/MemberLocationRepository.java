@@ -3,6 +3,7 @@ package com.ssafy.membermanage.memberLocation.db;
 import com.ssafy.membermanage.member.db.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 public interface MemberLocationRepository extends JpaRepository<MemberLocation, Integer> {

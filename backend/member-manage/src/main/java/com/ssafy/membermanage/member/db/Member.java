@@ -36,12 +36,13 @@ public class Member {
     private Integer followCount;
 
     @Builder
-    public Member(Long memberId, House house, String nickname, String birthday, String email){
+    public Member(Long memberId, House house, String nickname, String profileImageFilename, String birthday, String email){
         this.memberId = memberId;
         this.house = house;
         this.nickname = nickname;
-        this.profileImageFilename = "${member-default-profile-image}";
+        this.profileImageFilename = profileImageFilename;
         this.birthday = birthday;
         this.email = email;
+        this.followCount = 0;
     }
 }

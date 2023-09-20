@@ -10,7 +10,7 @@ import java.util.Map;
 @Data
 @Builder
 @RequiredArgsConstructor
-public class ResponseDto {
+public class Response {
     @JsonView(ResponseViews.NoRequest.class)
     private final String message; //필수
 

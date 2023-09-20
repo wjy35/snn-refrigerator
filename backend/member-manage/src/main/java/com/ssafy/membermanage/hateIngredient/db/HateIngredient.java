@@ -1,6 +1,7 @@
 package com.ssafy.membermanage.hateIngredient.db;
 
 import com.ssafy.membermanage.member.db.Member;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,4 +24,10 @@ public class HateIngredient{
 
     @Column(name = "hate_ingredient_id", nullable = false)
     private Short ingredientId;
+
+    @Builder
+    HateIngredient(Member member, Short ingredientId){
+        this.member = member;
+        this.ingredientId = ingredientId;
+    }
 }
