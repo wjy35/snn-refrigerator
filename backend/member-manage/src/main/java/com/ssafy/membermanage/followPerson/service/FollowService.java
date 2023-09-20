@@ -51,7 +51,7 @@ public class FollowService {
             GetInfoDto infoDto = GetInfoDto
                     .builder()
                     .nickname(followee.getNickname())
-                    .profileImageUrl(followee.getProfileImageUrl())
+                    .profileImageUrl(followee.getProfileImageFilename())
                     .followCount(followee.getFollowCount())
                     .build();
             followees.add(infoDto);

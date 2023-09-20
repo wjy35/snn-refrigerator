@@ -3,6 +3,7 @@ package com.ssafy.membermanage.member.api;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.membermanage.S3.utils.S3helper;
 import com.ssafy.membermanage.error.CustomException;
 import com.ssafy.membermanage.error.ErrorCode;
 import com.ssafy.membermanage.followPerson.service.FollowService;
@@ -13,11 +14,11 @@ import com.ssafy.membermanage.house.db.House;
 import com.ssafy.membermanage.house.db.HouseRepository;
 import com.ssafy.membermanage.member.MemberViews;
 import com.ssafy.membermanage.member.db.Member;
-import com.ssafy.membermanage.member.db.MemberRepository;
 import com.ssafy.membermanage.member.dto.*;
 import com.ssafy.membermanage.member.request.AuthorizationRequest;
 import com.ssafy.membermanage.member.request.SignupRequest;
 import com.ssafy.membermanage.member.request.SingleMemberRequest;
+import com.ssafy.membermanage.member.service.MemberService;
 import com.ssafy.membermanage.member.util.Helper;
 import com.ssafy.membermanage.response.ResponseDto;
 import com.ssafy.membermanage.response.ResponseViews;
@@ -29,6 +30,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ import java.util.Map;
 @RequestMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MemberController {
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberService memberService;
 
     @Autowired
     private HateIngredientRepository hateIngredientRepository;
@@ -57,21 +59,26 @@ public class MemberController {
     @Autowired
     private Helper helper;
 
+    @Autowired
+    private S3helper s3helper;
+
     @Value("${rest-api-key}") String clientId;
 
     @Value("${redirect-uri}") String redirectUri;
 
     @Value("${client-secret}") String clientSecret;
 
+    @Value("${member-default-profile-image}") String defaultProfileImage;
+
 
     @GetMapping("/{memberId}")
     @JsonView(MemberViews.Private.class)
     public ResponseEntity<GetInfoDto> getMemberInfo(@PathVariable Long memberId){
-        Member member = memberRepository.findByMemberId(memberId)
+        Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
         return ResponseEntity.ok(new GetInfoDto(
                 member.getNickname(),
-                member.getProfileImageUrl(),
+                s3helper.getS3ImageUrl(member.getProfileImageFilename()),
                 member.getBirthday(),
                 member.getEmail(),
                 member.getHouse().getHouseCode(),
@@ -81,7 +88,7 @@ public class MemberController {
 
     @PostMapping("/check-duplicate")
     public ResponseEntity<CheckNicknameIsDuplicateDto> checkDuplicate(@RequestParam("nickname") String nickname){
-        if(memberRepository.existsByNickname(nickname).equals(false)){
+        if(!memberService.existsByNickname(nickname)){
             return ResponseEntity.ok(new CheckNicknameIsDuplicateDto("Unique nickname.", nickname));
         }
         else{
@@ -95,15 +102,15 @@ public class MemberController {
     @PutMapping("/{memberId}")
     @JsonView(MemberViews.Private.class)
     public ResponseEntity<SingleNicknameDto> modifyMemberInfo(@RequestParam("nickname") String nickname, @PathVariable Long memberId){
-        Member member = memberRepository.findByMemberId(memberId)
+        Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
-        if(memberRepository.existsByNickname(nickname).equals(true)) throw new CustomException(ErrorCode.Duplicate_Nickname);
+        if(memberService.existsByNickname(nickname)) throw new CustomException(ErrorCode.Duplicate_Nickname);
         return ResponseEntity.ok(new SingleNicknameDto(member.getNickname()));
     }
 
     @PostMapping("/{memberId}/hate-ingredient/{ingredientId}")
     public ResponseEntity<HateIngredientDto> addInedibleIngredient(@PathVariable Long memberId, @PathVariable Short ingredientId){
-        Member member = memberRepository.findByMemberId(memberId)
+        Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
 
@@ -114,7 +121,7 @@ public class MemberController {
 
     @GetMapping("/{memberId}/hate-ingredient")
     public ResponseEntity<HateIngredientListDto> getInedibleIngredientList(@PathVariable Long memberId){
-        Member member = memberRepository.findByMemberId(memberId)
+        Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
         List<HateIngredient> ingredientList = hateIngredientRepository.findByMember(member);
         List<String> ingredientNames = new ArrayList<String>();
@@ -130,7 +137,7 @@ public class MemberController {
 
     @DeleteMapping("/{memberId}/hate-ingredient/{ingredientId}")
     public ResponseEntity<SimpleResponseDto> deleteInedibleIngredient(@PathVariable Long memberId, @PathVariable Short ingredientId){
-        Member member = memberRepository.findByMemberId(memberId)
+        Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
         List<HateIngredient> ingredientList = hateIngredientRepository.findByMemberAndIngredientId(member, ingredientId);
         for(HateIngredient ingredient : ingredientList){
@@ -143,10 +150,10 @@ public class MemberController {
 
     @PostMapping("{followerId}/follow/{followeeId}")
     public ResponseEntity<ResponseDto> ResponseFollowOrUnfollow(@PathVariable Long followerId, @PathVariable Long followeeId){
-        Member follower = memberRepository.findByMemberId(followerId)
+        Member follower = memberService.findByMemberId(followerId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
-        Member followee = memberRepository.findByMemberId(followeeId)
+        Member followee = memberService.findByMemberId(followeeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
         boolean flag = followService.followOrUnfollow(follower, followee);
@@ -166,7 +173,7 @@ public class MemberController {
     @GetMapping("{memberId}/follow")
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<ResponseDto> getFolloweeList(@PathVariable Long memberId){
-        Member follower = memberRepository.findByMemberId(memberId)
+        Member follower = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
         List<GetInfoDto> followees = followService.getFolloweeList(follower);
         //data 내용 작성
@@ -260,7 +267,7 @@ public class MemberController {
                 .birthday(birthday)
                 .email(email)
                 .build();
-        member = memberRepository.save(member);
+        member = memberService.save(member);
         //TODO: save 서비스 단에 넣기
 
         ResponseDto response = ResponseDto
@@ -309,6 +316,49 @@ public class MemberController {
         ResponseDto response = ResponseDto
                 .builder()
                 .message("OK")
+                .data(data)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+//    @PostMapping("/image/{name}")
+//    public ResponseEntity<?> testImagePost(@PathVariable String name, @RequestParam MultipartFile image) throws Exception{
+//        String fileName = s3helper.upload("test/", name, image);
+//        return ResponseEntity.ok(fileName);
+//    }
+
+    @PutMapping("/{memberId}/profile-image")
+    public ResponseEntity<ResponseDto> modifyProfileImageProfile(@PathVariable Long memberId, @RequestParam MultipartFile profileImage) throws Exception {
+        Member member = memberService.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
+        String profileImageFilename = member.getProfileImageFilename();
+
+        String newFilename;
+
+        if(profileImageFilename.equals(defaultProfileImage)){
+            newFilename = s3helper.upload(
+                    "member/profile",
+                    member.getNickname(),
+                    profileImage
+            );
+        }
+        else{
+            newFilename = s3helper.modify(
+                    "member/profile",
+                    member.getNickname(),
+                    profileImageFilename,
+                    profileImage
+            );
+        }
+        member.setProfileImageFilename(newFilename);
+        member = memberService.save(member);
+
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("status", true);
+
+        ResponseDto response = ResponseDto
+                .builder()
+                .message("ok")
                 .data(data)
                 .build();
         return ResponseEntity.ok(response);
