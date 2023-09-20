@@ -268,11 +268,29 @@ public class MemberController {
                 .email(email)
                 .build();
         member = memberService.save(member);
-        //TODO: save 서비스 단에 넣기
 
         ResponseDto response = ResponseDto
                 .builder()
                 .message("OK")
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("{memberId}/withdrawal")
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<ResponseDto> withDrawal(@PathVariable Long memberId, HttpServletRequest request) throws JsonProcessingException {
+        Long kakaoId = memberService.validateToken(request);
+        if(Long.compare(kakaoId, memberId) != 0) throw new CustomException(ErrorCode.No_Valid_Token);
+        if(!memberService.kakaoLogout(request, memberId)) throw new CustomException(ErrorCode.Logout_Failure);
+
+        memberService.deleteByMemberId(memberId);
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("status", true);
+
+        ResponseDto response = ResponseDto
+                .builder()
+                .message("OK")
+                .data(data)
                 .build();
         return ResponseEntity.ok(response);
     }
@@ -283,33 +301,7 @@ public class MemberController {
 
         Long memberId = requestBody.getMemberId();
 
-        String authorizationHeader = request.getHeader("Authorization");
-        if(!authorizationHeader.startsWith("Bearer ")){
-            throw new CustomException(ErrorCode.No_Valid_Token);
-        }
-
-        String accessToken = authorizationHeader.substring(7);
-        String kakaoLogoutUrl = "https://kapi.kakao.com/v2/user/me";
-
-        RestTemplate restTemplate=new RestTemplate();
-        //set header
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.add("Accept", "application/json");
-        headers.add("Authorization", accessToken);
-
-        HttpEntity<String> kakaoRequest = new HttpEntity<>(headers);
-        ResponseEntity<String> stringResponseEntity = restTemplate.exchange(
-                kakaoLogoutUrl,
-                HttpMethod.POST,
-                kakaoRequest,
-                String.class
-        );
-
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> kakaoResponse = mapper.readValue(stringResponseEntity.getBody(), Map.class);
-        Long kakaoId = (Long) kakaoResponse.getOrDefault("id", -1);
-        if(Long.compare(kakaoId, memberId) != 0) throw new CustomException(ErrorCode.Logout_Failure);
+        if(!memberService.kakaoLogout(request, memberId)) throw new CustomException(ErrorCode.Logout_Failure);
 
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("status", true);
@@ -323,11 +315,12 @@ public class MemberController {
 
 //    @PostMapping("/image/{name}")
 //    public ResponseEntity<?> testImagePost(@PathVariable String name, @RequestParam MultipartFile image) throws Exception{
-//        String fileName = s3helper.upload("test/", name, image);
+//        String fileName = s3helper.upload("test", name, image);
 //        return ResponseEntity.ok(fileName);
 //    }
 
     @PutMapping("/{memberId}/profile-image")
+    @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<ResponseDto> modifyProfileImageProfile(@PathVariable Long memberId, @RequestParam MultipartFile profileImage) throws Exception {
         Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
