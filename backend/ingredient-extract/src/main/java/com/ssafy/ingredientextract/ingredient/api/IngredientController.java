@@ -25,14 +25,15 @@ public class IngredientController {
     public ResponseEntity<Response> ingredientExtract(@RequestBody TextListRequest request){
         List<String> textList = request.getTextList();
 
-        Set<Integer> s = new HashSet<Integer>();
-
+        StringBuilder sb = new StringBuilder();
         for(String text : textList){
-            s.addAll(trie.ahoCorasick(text));
+            sb.append(text);
         }
+        String concat = sb.toString();
+        Set<Short> s = trie.ahoCorasick(concat);
 
         List<String> ingredients = new ArrayList<String>();
-        for(int idx : s){
+        for(Short idx : s){
             ingredients.add(trie.getIngredient(idx));
         }
 

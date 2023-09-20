@@ -6,100 +6,62 @@ import java.util.*;
 
 @Component
 public class Trie {
-    private List<Node> trie = new ArrayList<Node>();
-    private List<String> dict = new ArrayList<String>();
+    private Map<Short, String> dict = new HashMap<Short, String>();
 
+    Node root = new Node(' ');
     Trie(){
-        Node root = new Node(
-                new HashMap<Character, Integer>(),
-                ' ',
-                new HashSet<Integer>()
-        );
-        trie.add(root);
-        System.out.println("Trie successfully created");
+        root.fail = root;
     }
 
-    public String getIngredient(int idx){
+    public String getIngredient(Short idx){
         return dict.get(idx);
     }
 
-    public void addWord(String word){
-        char[] charArr = word.toCharArray();
-        int leng = trie.size();
-        Node cur = trie.get(0);
-        for(char c : charArr){
-            if(cur.child.containsKey(c)){
-                int idx = cur.child.get(c);
-                cur = trie.get(idx);
+    public void addWord(Short id, String word){
+        Node now = this.root;
+        for(char c : word.toCharArray()){
+            if(now.child.containsKey(c)) {
+                now = now.child.get(c);
             }
             else{
-                Node newNode = new Node(new HashMap<Character, Integer>(), c, new HashSet<Integer>());
-                trie.add(newNode);
-                cur.child.put(c, leng++);
-                cur = newNode;
+                Node next = new Node(c);
+                now.child.put(c,next);
+                now = next;
             }
         }
-        cur.isEnd.add(dict.size());
-        dict.add(word);
-
-        //트라이 제작 끝.
-        //BFS를 통해 Fail 함수 전파
-
-        Node root = trie.get(0);
-        root.fail = 0;
-
-        Queue<Integer> que = new LinkedList<Integer>();
-        que.add(0); //루트 노드 저장
-        while(!que.isEmpty()){
-            Node now = trie.get(que.poll());
-
-            for(Map.Entry<Character, Integer> elem: now.child.entrySet()){
-                Node next = trie.get(elem.getValue());
-                int idx = now.fail;
-                Node prev = trie.get(idx);
-
-                if(now == root){
-                    next.fail = 0;
-                }
-                else{
-                    while(prev != root && !prev.child.containsKey(elem.getKey())){
-                        idx = prev.fail;
-                        prev = trie.get(idx);
-                    }
-                    if(prev.child.containsKey(elem.getKey())){
-                        idx = prev.child.get(elem.getKey());
-                        prev = trie.get(idx);
-                    }
-                    next.fail = idx;
-                }
-
-                if(!prev.isEnd.isEmpty()){
-                    next.isEnd.addAll(prev.isEnd);
-                }
-                que.add(elem.getValue());
-            }
-        }
+        dict.put(id, word);
+        now.isEnd.add(id);
     }
 
-    public Set<Integer> ahoCorasick(String searchWord){
-        Node cur = trie.get(0);
-        Node root = trie.get(0);
-
-        Set<Integer> result = new HashSet<Integer>();
-        for(int i = 0; i < searchWord.length(); i++){
-            char c = searchWord.charAt(i);
-            while(cur != root && !cur.child.containsKey(c)){
-                cur = trie.get(cur.fail);
+    public void bfs(){
+        ArrayDeque<Node> deque = new ArrayDeque<>();
+            deque.add(root);
+            while(!deque.isEmpty()){
+                Node now = root;
+                now = deque.poll();
+                for(Node next:now.child.values()){
+                    Node prev  = now.fail;
+                    if(now==root) next.fail = root;
+                    else{
+                        while(prev!=root&&prev.child.containsKey(next.value)){
+                            prev = prev.fail;
+                        }
+                        next.fail = prev = prev.child.getOrDefault(next.value,prev);
+                    }
+                    next.isEnd.addAll(prev.isEnd);
+                    deque.offerLast(next);
+                }
             }
+    }
 
-            if(cur.child.containsKey(c)){
-                cur = trie.get(cur.child.get(c));
-            }
-
-            if(!cur.isEnd.isEmpty()){
-                result.addAll(cur.isEnd);
-            }
+    public Set<Short> ahoCorasick(String keyword){
+        Node now = root;
+        Set<Short> ret = new HashSet<Short>();
+        for(char c : keyword.toCharArray()){
+            while(now!=root&&!now.child.containsKey(c)) now = now.fail;
+            now = now.child.getOrDefault(c,now);
+            ret.addAll(now.isEnd);
         }
-        return result;
+        return ret;
     }
 }

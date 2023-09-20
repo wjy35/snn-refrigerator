@@ -12,6 +12,10 @@ import javax.annotation.PostConstruct;
 public class IngredientServiceImpl {
     private final IngredientRepository ingredientRepository;
     //TODO: PostConstruct로 식재료 불러와서 Trie에 주입하는 것 추가
+    @PostConstruct
+    public void initSetting(){
+
+    }
     //TODO: 식재료 개별 추가 구현(Trie에 식재료 추가, dict에 추가)
 
 }
