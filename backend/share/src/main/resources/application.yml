@@ -1,9 +1,4 @@
-server:
-  port: 8080
-
 spring:
-  config:
-    import: env.yml
 
   application:
     name: ${DOMAIN_NAME}
@@ -31,5 +26,5 @@ logging:
 eureka:
   client:
     service-url:
-      defaultZone:${EUREKA_URL}
+      defaultZone: ${EUREKA_URL}
 
