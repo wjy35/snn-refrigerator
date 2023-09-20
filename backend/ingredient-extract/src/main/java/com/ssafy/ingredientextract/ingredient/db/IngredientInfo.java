@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Ingredient {
+public class IngredientInfo {
     @Id
     @Column(name = "ingredient_info_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class Ingredient {
     private String ingredientInfoName;
 
     @Builder
-    Ingredient(String ingredientInfoName){
+    IngredientInfo(String ingredientInfoName){
         this.ingredientInfoName = ingredientInfoName;
     }
 

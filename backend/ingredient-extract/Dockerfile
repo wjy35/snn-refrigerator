@@ -1,9 +1,9 @@
 FROM gradle:8.2.1-jdk11 as build
 WORKDIR /app
 
-COPY ./backend/ingredient-extract/settings.gradle ./
-COPY ./backend/ingredient-extract/build.gradle ./
-COPY ./backend/ingredient-extract/src ./src
+COPY ./backend/ingredientInfo-extract/settings.gradle ./
+COPY ./backend/ingredientInfo-extract/build.gradle ./
+COPY ./backend/ingredientInfo-extract/src ./src
 
 RUN gradle build -x test --parallel
 
