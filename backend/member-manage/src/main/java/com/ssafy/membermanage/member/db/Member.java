@@ -1,9 +1,7 @@
 package com.ssafy.membermanage.member.db;
 
 import com.ssafy.membermanage.house.db.House;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -14,9 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Member {
     @Id
-    @Column(name = "member_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // TODO : 카카오톡에서 만들어주는 unique id로 바꾸기. 지금은 임시로 identity 사용 중
+    @Column(name = "member_id", unique = true, nullable = false)
     private Long memberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,8 +22,8 @@ public class Member {
     @Column(name = "nickname", length = 10, unique = true, nullable = false)
     private String nickname;
 
-    @Column(name = "profile_image_url")
-    private String profileImageUrl;
+    @Column(name = "profile_image_filename")
+    private String profileImageFilename;
 
     @Column(name = "birthday", length = 4, nullable = false)
     private String birthday;
@@ -39,5 +35,13 @@ public class Member {
     @ColumnDefault("0")
     private Integer followCount;
 
-
+    @Builder
+    public Member(Long memberId, House house, String nickname, String birthday, String email){
+        this.memberId = memberId;
+        this.house = house;
+        this.nickname = nickname;
+        this.profileImageFilename = "${member-default-profile-image}";
+        this.birthday = birthday;
+        this.email = email;
+    }
 }
