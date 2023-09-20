@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -67,8 +68,10 @@ public class MemberLocationController {
         Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
+        List<LocationInfo> locationInfos = memberLocationService.getLocations(member);
+
         Map<String, Object> data = new HashMap<String, Object>();
-        data.put("status", true);
+        data.put("location", locationInfos);
 
         ResponseDto response = ResponseDto
                 .builder()
@@ -78,12 +81,14 @@ public class MemberLocationController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{memberId}/location")
+    @DeleteMapping("/{memberId}/location/{locationId}")
     @JsonView(ResponseViews.NoRequest.class)
-    public ResponseEntity<ResponseDto> deleteMemberLocation(@PathVariable Long memberId){
+    public ResponseEntity<ResponseDto> deleteMemberLocation(@PathVariable Long memberId, @PathVariable Short locationId){
 
         Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
+
+        memberLocationService.deleteByMemberAndLocationId(member, locationId);
 
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("status", true);
