@@ -3,18 +3,19 @@ package com.ssafy.ingredientextract.trie;
 
 import lombok.Data;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
 public class Node {
-    HashMap<Character, Integer> child;
+    HashMap<Character, Node> child;
     char value;
-    int fail;
-    Set<Integer> isEnd;
+    Node fail;
+    Set<Short> isEnd;
 
-    public Node(HashMap<Character, Integer> child, char value, Set<Integer> isEnd) {
-        this.child = child;
+    public Node(char value) {
+        this.child = new HashMap<Character, Node>();
         this.value = value;
-        this.isEnd = isEnd;
+        this.isEnd = new HashSet<Short>();
     }
 }

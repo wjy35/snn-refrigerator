@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.ssafy.ingredientextract.ingredient.api.Request.TextListRequest;
 import com.ssafy.ingredientextract.ingredient.api.Response.Response;
 import com.ssafy.ingredientextract.ingredient.api.Response.ResponseViews;
+import com.ssafy.ingredientextract.ingredient.db.Ingredient;
+import com.ssafy.ingredientextract.ingredient.dto.IngredientInfoDto;
+import com.ssafy.ingredientextract.ingredient.service.IngredientService;
+import com.ssafy.ingredientextract.ingredient.service.IngredientServiceImpl;
 import com.ssafy.ingredientextract.trie.Trie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -20,24 +21,51 @@ public class IngredientController {
     @Autowired
     private Trie trie;
 
+    @Autowired
+    private IngredientServiceImpl ingredientService;
+
     @JsonView(ResponseViews.NoRequest.class)
-    @PostMapping("")
+    @PostMapping("/ingredient-extract")
     public ResponseEntity<Response> ingredientExtract(@RequestBody TextListRequest request){
         List<String> textList = request.getTextList();
 
-        Set<Integer> s = new HashSet<Integer>();
-
+        StringBuilder sb = new StringBuilder();
         for(String text : textList){
-            s.addAll(trie.ahoCorasick(text));
+            sb.append(text);
         }
+        String concat = sb.toString();
+        Set<Short> s = trie.ahoCorasick(concat);
 
         List<String> ingredients = new ArrayList<String>();
-        for(int idx : s){
+        for(Short idx : s){
             ingredients.add(trie.getIngredient(idx));
         }
 
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("data", ingredients);
+
+        Response response = Response
+                .builder()
+                .message("OK")
+                .data(data)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @JsonView(ResponseViews.NoRequest.class)
+    @PostMapping("/ingredient-extract/{ingredientName}")
+    public ResponseEntity<Response> addIngredient(@PathVariable String ingredientName){
+
+        Ingredient ingredient = ingredientService.addIngredient(ingredientName);
+
+        IngredientInfoDto infos = IngredientInfoDto
+                .builder()
+                .ingredientId(ingredient.getIngredientInfoId())
+                .ingredientName(ingredient.getIngredientInfoName())
+                .build();
+
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("data", infos);
 
         Response response = Response
                 .builder()
