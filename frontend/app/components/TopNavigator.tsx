@@ -16,29 +16,37 @@ const TopNavigator = ({title, optionTitle, optionFunction}: props) => {
 
   function goBack() {
     navigation.pop();
-  };
+  }
+
+  function optionFunc(){
+    optionFunction();
+  }
 
   return (
     <View style={topNavStyles.tabContainer}>
       <View style={topNavStyles.tabItemContainer}>
         <View>
-          <View style={topNavStyles.backButton}>
-            <TouchableWithoutFeedback onPress={goBack}>
+          <TouchableWithoutFeedback onPress={goBack}>
+            <View style={topNavStyles.backButton}>
               <SvgXml
                 xml={backButton}
                 width={19}
                 height={19}
               />
-            </TouchableWithoutFeedback>
-          </View>
+            </View>
+          </TouchableWithoutFeedback>
         </View>
         <View>
           <Text style={[styles.font, topNavStyles.tabFontSize]}>{title}</Text>
         </View>
         <View style={topNavStyles.optionalRightButton}>
-          <TouchableWithoutFeedback onPress={()=>optionFunction}>
-            <Text style={[styles.font, topNavStyles.tabFontSize]}>{optionTitle}</Text>
-          </TouchableWithoutFeedback>
+          {
+            optionTitle && (
+              <TouchableWithoutFeedback onPress={optionFunction&&optionFunc} style={{borderWidth: 1}}>
+                <Text style={[styles.font, topNavStyles.tabFontSize]}>{optionTitle}</Text>
+              </TouchableWithoutFeedback>
+            )
+          }
         </View>
       </View>
     </View>

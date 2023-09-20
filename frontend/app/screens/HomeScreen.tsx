@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, Button, ScrollView, ImageBackground} from 'react-native';
 import BottomNavigator from 'components/BottomNavigator';
 import {styles} from '@/styles/styles';
@@ -6,8 +6,66 @@ import RecipeList from '@/components/RecipeList';
 import Progressbar from '@/components/Progressbar';
 import sampleApi from '@/apis/sampleApi';
 import {homeScreenStyles} from "@/styles/homeScreenStyles";
+import MyIngredientList from "@/components/MyIngredientList";
 
 const HomeScreen = ({navigation}:any) => {
+
+  const [recipeList, setRecipeList] = useState([
+    {title: 'title1', id: 1},
+    {title: 'title2', id: 2},
+    {title: 'title3', id: 3},
+  ]);
+  const recipe = [
+    {
+      recipeId:"123123",
+      nickname:"독버섯 왕준영",
+      title:"곽민규찜",
+      imageUrl:"레시피 이미지",
+      favoriteCount:19,
+      neededIngredients:8,
+      myIngredients:6,
+      foodName:"김치찜",
+      cookingTime:"120분",
+      serving:2
+    },
+    {
+      recipeId:"123124",
+      nickname:"독버섯 왕준영",
+      title:"곽민규찜",
+      imageUrl:"레시피 이미지",
+      favoriteCount:19,
+      neededIngredients:12,
+      myIngredients:6,
+      foodName:"김치찜",
+      cookingTime:"120분",
+      serving:2
+    },
+    {
+      recipeId:"123125",
+      nickname:"독버섯 왕준영",
+      title:"곽민규찜",
+      imageUrl:"레시피 이미지",
+      favoriteCount:19,
+      neededIngredients:10,
+      myIngredients:3,
+      foodName:"김치찜",
+      cookingTime:"120분",
+      serving:2
+    },
+    {
+      recipeId:"123126",
+      nickname:"독버섯 왕준영",
+      title:"곽민규찜",
+      imageUrl:"레시피 이미지",
+      favoriteCount:19,
+      neededIngredients:7,
+      myIngredients:6,
+      foodName:"김치찜",
+      cookingTime:"120분",
+      serving:2
+    },
+  ];
+
   const test = async () => {
     try {
       let res = await sampleApi.test();
@@ -24,7 +82,7 @@ const HomeScreen = ({navigation}:any) => {
   return (
     <View style={styles.layout}>
       <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
-        <ScrollView style={{width: '96%'}}>
+        <ScrollView style={{width: '100%'}}>
           <View style={styles.container}>
             <View style={homeScreenStyles.homeMention}>
               <View style={{width: 230}}>
@@ -32,21 +90,23 @@ const HomeScreen = ({navigation}:any) => {
               </View>
             </View>
             <View style={homeScreenStyles.homeRecipeContainer}>
-              <Text style={styles.font}>추천 레시피</Text>
+              <View style={{margin: 10}}>
+                <Text style={[styles.font, {fontSize: 20}]}>추천 레시피</Text>
+              </View>
               <View style={homeScreenStyles.homeRecipeListContainer}>
-                <RecipeList horizontal={true} recipeList={[]} navigation={navigation}/>
+                <RecipeList horizontal={true} recipeList={recipe} navigation={navigation} width={250}/>
               </View>
             </View>
             <View style={homeScreenStyles.ingredientContainer}>
-              <Text style={styles.font}>빨리 소비해야 해요</Text>
-              <View>
-                <Text>냉장고 재고</Text>
+              <View style={{margin: 10}}>
+                <Text style={[styles.font, {fontSize: 20}]}>빨리 소비해야 해요</Text>
+              </View>
+              <View style={{margin: 10}}>
+                <MyIngredientList/>
               </View>
             </View>
             {/*<Button onPress={test} title={'fdasfdsa'}></Button>*/}
-            <View style={{height: 80, borderWidth: 1,}}>
-              <Text>네비게이션 용</Text>
-            </View>
+            <View style={{height: 80}}></View>
           </View>
         </ScrollView>
         <BottomNavigator now='home'/>

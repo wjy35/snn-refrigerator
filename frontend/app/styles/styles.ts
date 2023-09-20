@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderWidth: 1,
     width: '100%',
+    height: '100%',
   },
   container: {
     flex: 1,
@@ -19,7 +20,6 @@ export const styles = StyleSheet.create({
   bg: {
     flex: 1,
     width: '100%',
-
   },
   marginContainer: {
     flex: 1,
@@ -54,6 +54,7 @@ export const styles = StyleSheet.create({
   },
   font: {
     fontFamily: 'BM-HANNA',
+    color: '#000000'
   },
   flex: {
     flex: 1,

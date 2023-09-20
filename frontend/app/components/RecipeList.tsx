@@ -9,16 +9,16 @@ interface props {
   horizontal: boolean;
   recipeList: any[];
   navigation: any;
+  width?: number;
 }
 
-const RecipeList = ({horizontal, recipeList, navigation}:props) => {
-
+const RecipeList = ({horizontal, recipeList, navigation, width=350}:props) => {
   return (
     <View style={recipeStyles.recipeListContainer}>
       <FlatList
         data={recipeList}
-        renderItem={(item) => <RecipeItem item={item.item} navigation={navigation}/>}
-        keyExtractor={(item) => String(item.id)}
+        renderItem={(item) => <RecipeItem item={item.item} navigation={navigation} width={width}/>}
+        keyExtractor={(item) => String(item.recipeId)}
         horizontal={horizontal}
         scrollEnabled={true}
       />
