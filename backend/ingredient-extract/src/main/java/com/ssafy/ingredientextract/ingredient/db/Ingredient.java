@@ -1,5 +1,6 @@
 package com.ssafy.ingredientextract.ingredient.db;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,5 +19,10 @@ public class Ingredient {
 
     @Column(name = "ingredient_info_name", length = 15)
     private String ingredientInfoName;
+
+    @Builder
+    Ingredient(String ingredientInfoName){
+        this.ingredientInfoName = ingredientInfoName;
+    }
 
 }
