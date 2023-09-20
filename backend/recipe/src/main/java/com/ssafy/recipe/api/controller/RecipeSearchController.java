@@ -1,0 +1,34 @@
+package com.ssafy.recipe.api.controller;
+
+import com.ssafy.recipe.api.request.RecipeRequest;
+import com.ssafy.recipe.api.request.RecipeSearchRequest;
+import com.ssafy.recipe.api.response.RecipeSearchResponse;
+import com.ssafy.recipe.api.response.Response;
+import com.ssafy.recipe.db.entity.IngredientInfo;
+import com.ssafy.recipe.service.RecipeSearchService;
+import com.ssafy.recipe.service.RecipeServiceImpl;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/search")
+public class RecipeSearchController {
+
+    private final RecipeSearchService recipeSearchService;
+
+    @PostMapping("/")
+    public ResponseEntity<?> getAllRecipe (@RequestBody RecipeSearchRequest recipeSearchRequest) {
+        Response response = new Response();
+        List<RecipeSearchResponse> recipeSearchResponseList = recipeSearchService.getSearchRecipe(recipeSearchRequest);
+        response.addData("recipe",recipeSearchResponseList);
+        response.setMessage("OK");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+}
