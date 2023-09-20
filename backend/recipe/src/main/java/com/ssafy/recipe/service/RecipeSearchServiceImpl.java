@@ -4,9 +4,11 @@ import com.ssafy.recipe.api.request.RecipeSearchRequest;
 import com.ssafy.recipe.api.response.HouseIngredientResponse;
 import com.ssafy.recipe.api.response.MemberResponse;
 import com.ssafy.recipe.api.response.RecipeSearchResponse;
+import com.ssafy.recipe.db.entity.FavoriteRecipe;
 import com.ssafy.recipe.db.entity.IngredientInfo;
 import com.ssafy.recipe.db.entity.Recipe;
 import com.ssafy.recipe.db.entity.RecipeIngredient;
+import com.ssafy.recipe.db.repository.FavoriteRecipeRepository;
 import com.ssafy.recipe.db.repository.RecipeCustomIngredientRepository;
 import com.ssafy.recipe.db.repository.RecipeIngredientRepository;
 import com.ssafy.recipe.db.repository.RecipeRepository;
@@ -36,7 +38,11 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
 
     private final MemberFeign memberFeign;
 
+    private final RecipeService recipeService;
+
     private final HouseIngredientFeign houseIngredientFeign;
+
+    private final FavoriteRecipeRepository favoriteRecipeRepository;
 
     private final RecipeIngredientRepository recipeIngredientRepository;
 
@@ -94,6 +100,8 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
 
             int neededIngredients = this.getNeededIngredientsCnt(recipe);
 
+            boolean isFavorite = recipeService.favoriteCheck(recipeSearchRequest.getMemberId(), recipe.getRecipeId());
+
             RecipeSearchResponse recipeSearchResponse = RecipeSearchResponse.builder()
                     .recipeId(recipe.getRecipeId())
                     .title(recipe.getTitle())
@@ -104,6 +112,7 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
                     .favoriteCount(recipe.getFavoriteCount())
                     .foodName(recipe.getFoodName())
                     .neededIngredients(neededIngredients)
+                    .isFavorite(isFavorite)
                     .myIngredients(myIngredients)
                     .build();
 

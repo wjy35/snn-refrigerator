@@ -46,6 +46,7 @@ public class RecipeServiceImpl implements RecipeService{
     private final RecipeSearchService recipeSearchService;
 
     private final FavoriteRecipeRepository favoriteRecipeRepository;
+
     private final MemberFeign memberFeign;
 
 
@@ -79,11 +80,6 @@ public class RecipeServiceImpl implements RecipeService{
     public void deleteRecipe(int recipeId){
         recipeRepository.deleteById(recipeId);
     }
-
-
-
-
-
 
     @Override
     public void saveRecipe(Recipe recipe){
@@ -192,7 +188,7 @@ public class RecipeServiceImpl implements RecipeService{
 
         List<ContentParam> recipeDetails = this.getRecipeDetail(recipeId);
 
-        boolean isFavorite = favoriteCheck(memberId, recipeId);
+        boolean isFavorite = this.favoriteCheck(memberId, recipeId);
 
         return RecipeDetailResponse.builder()
                 .nickname(memberResponse.get().getNickname())
@@ -207,6 +203,7 @@ public class RecipeServiceImpl implements RecipeService{
                 .build();
     }
 
+    @Override
     public boolean favoriteCheck(long memberId, int recipeId){
         Optional<FavoriteRecipe> favoriteRecipe = favoriteRecipeRepository.findByRecipeRecipeIdAndMemberId(recipeId, memberId);
 

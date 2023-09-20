@@ -18,6 +18,7 @@ public class RecipeSearchResponse {
     private int favoriteCount;
     private int neededIngredients;
     private int myIngredients;
+    private boolean isFavorite;
     private String foodName;
     private String cookingTime;
     private short serving;

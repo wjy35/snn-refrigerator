@@ -34,6 +34,7 @@ public interface RecipeService {
 
     List<ContentParam> getRecipeDetail(int recipeId);
 
+    boolean favoriteCheck(long memberId, int recipeId);
     List<IngredientParam> getIngredientList(long memberId, Recipe recipe);
 
     void updateRecipeIngredient(Recipe recipe, RecipeRequest request);
