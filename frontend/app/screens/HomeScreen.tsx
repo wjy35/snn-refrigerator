@@ -101,7 +101,7 @@ const HomeScreen = ({navigation}:any) => {
               <View style={{margin: 10}}>
                 <Text style={[styles.font, {fontSize: 20}]}>빨리 소비해야 해요</Text>
               </View>
-              <View style={{margin: 10}}>
+              <View>
                 <MyIngredientList/>
               </View>
             </View>
