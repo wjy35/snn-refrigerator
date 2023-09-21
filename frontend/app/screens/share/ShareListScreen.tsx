@@ -34,7 +34,6 @@ const ShareListScreen = ({navigation}:any) => {
     setNow(0)
     setText('')
     setTextList([])
-    console.log(now)
   }
 
   return (
