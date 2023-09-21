@@ -9,10 +9,7 @@ import com.ssafy.recipe.db.entity.FavoriteRecipe;
 import com.ssafy.recipe.db.entity.IngredientInfo;
 import com.ssafy.recipe.db.entity.Recipe;
 import com.ssafy.recipe.db.entity.RecipeIngredient;
-import com.ssafy.recipe.db.repository.FavoriteRecipeRepository;
-import com.ssafy.recipe.db.repository.RecipeCustomIngredientRepository;
-import com.ssafy.recipe.db.repository.RecipeIngredientRepository;
-import com.ssafy.recipe.db.repository.RecipeRepository;
+import com.ssafy.recipe.db.repository.*;
 import com.ssafy.recipe.exception.CustomException;
 import com.ssafy.recipe.exception.ErrorCode;
 import com.ssafy.recipe.service.feign.HouseIngredientFeign;
@@ -52,9 +49,17 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
 
     private final ObjectMapper objectMapper;
 
+    private final IngredientInfoRepository ingredientInfoRepository;
+
     @Override
 // TODO : 쿼리 검증 및 최적화 방안 모색
     public  List<RecipeSearchResponse> getSearchRecipe(RecipeSearchRequest recipeSearchRequest) {
+        int size = recipeSearchRequest.getRequiredIngredients().size();
+        if(recipeSearchRequest.getRequiredIngredients().size() == 0){
+            size = 0;
+            recipeSearchRequest.setRequiredIngredients(ingredientInfoRepository.findAll());
+        }
+
         TypedQuery<Recipe> query = entityManager.createQuery(
                 "SELECT DISTINCT r " +
                         "FROM Recipe r " +
@@ -84,8 +89,7 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
         query.setParameter("requiredIngredients", requiredIngredientIds);
         query.setParameter("excludedIngredients", excludedIngredientIds);
         query.setParameter("keyword", "%" + recipeSearchRequest.getKeyword() + "%");
-        query.setParameter("requiredIngredientsSize", (long) requiredIngredientIds.size());
-
+        query.setParameter("requiredIngredientsSize", (long) size);
 
         List<Recipe> recipeList = query.getResultList();
 
@@ -101,6 +105,8 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
             int myIngredients = this.getMyIngredientCnt(recipe, memberResponse.getHouseCode());
 
             int neededIngredients = this.getNeededIngredientsCnt(recipe);
+
+            if(neededIngredients-myIngredients > recipeSearchRequest.getMissingIngredientCount()) continue;
 
             boolean isFavorite = this.favoriteCheck(recipeSearchRequest.getMemberId(), recipe.getRecipeId());
 
@@ -196,8 +202,6 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
     @Override
     public MemberResponse getMember(Long memberId){
         MemberResponse memberResponse = objectMapper.convertValue(memberFeign.getMemberDetail(memberId).getData().get("memberInfo"),MemberResponse.class);
-
-        System.out.println(memberResponse.toString());
 
         if(memberResponse != null){
             return memberResponse;
