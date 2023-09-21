@@ -1,5 +1,6 @@
 package com.ssafy.recipe.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.recipe.api.request.RecipeDetailRequest;
 import com.ssafy.recipe.api.response.*;
 import com.ssafy.recipe.service.feign.MemberFeign;
@@ -45,10 +46,9 @@ public class RecipeServiceImpl implements RecipeService{
 
     private final RecipeSearchService recipeSearchService;
 
-    private final FavoriteRecipeRepository favoriteRecipeRepository;
-
     private final MemberFeign memberFeign;
 
+    private final ObjectMapper objectMapper;
 
     @Override
     public void createRecipe(RecipeRequest request) {
@@ -163,16 +163,6 @@ public class RecipeServiceImpl implements RecipeService{
         recipeIngredientRepository.deleteAll(recipeIngredientList);
     }
 
-    @Override
-    public MemberResponse getMember(Long memberId){
-        Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(memberId);
-
-        if(memberResponse.isPresent()){
-            return memberResponse.get();
-        }else{
-           throw new CustomException(ErrorCode.NOT_FOUND_MEMBER);
-        }
-    }
 
     @Override
     public RecipeDetailResponse getRecipe(RecipeDetailRequest request){
@@ -182,7 +172,7 @@ public class RecipeServiceImpl implements RecipeService{
 
         if(recipe.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
 
-        Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(recipe.get().getMemberId());
+        MemberResponse memberResponse = recipeSearchService.getMember(memberId);
 
         List<IngredientParam> ingredientParams = this.getIngredientList(memberId, recipe.get());
 
@@ -191,13 +181,13 @@ public class RecipeServiceImpl implements RecipeService{
         boolean isFavorite = recipeSearchService.favoriteCheck(memberId, recipeId);
 
         return RecipeDetailResponse.builder()
-                .nickname(memberResponse.get().getNickname())
+                .nickname(memberResponse.getNickname())
                 .title(recipe.get().getTitle())
                 .image(recipe.get().getImageUrl())
                 .youtubeUrl(recipe.get().getYoutubeUrl())
                 .isFavorite(isFavorite)
                 .favoriteCount(recipe.get().getFavoriteCount())
-                .followCount((memberResponse.get().getFollowCount()))
+                .followCount((memberResponse.getFollowCount()))
                 .contentResponseList(recipeDetails)
                 .ingredientResponseList(ingredientParams)
                 .build();
@@ -233,11 +223,9 @@ public class RecipeServiceImpl implements RecipeService{
 
         List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findAllByRecipe(recipe);
 
-        Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(memberId);
+        MemberResponse memberResponse = recipeSearchService.getMember(memberId);
 
-        if(memberResponse.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_MEMBER);
-
-        List<HouseIngredientResponse> houseIngredientResponseList = recipeSearchService.getHouseIngredientResponse(memberResponse.get().getHouseSeq());
+        List<HouseIngredientResponse> houseIngredientResponseList = recipeSearchService.getHouseIngredientResponse(memberResponse.getHouseCode());
 
         for(int i=0; i<recipeIngredientList.size(); i++){
             RecipeIngredient recipeIngredient = recipeIngredientList.get(i);

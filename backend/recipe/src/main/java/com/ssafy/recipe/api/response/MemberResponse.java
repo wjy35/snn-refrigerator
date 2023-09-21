@@ -10,6 +10,6 @@ import lombok.ToString;
 public class MemberResponse {
     private String nickname;
     private long followCount;
-    private int houseSeq;
+    private String houseCode;
 
 }

@@ -1,5 +1,6 @@
 package com.ssafy.recipe.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.recipe.api.request.RecipeSearchRequest;
 import com.ssafy.recipe.api.response.HouseIngredientResponse;
 import com.ssafy.recipe.api.response.MemberResponse;
@@ -46,6 +47,8 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
 
     private final RecipeCustomIngredientRepository recipeCustomIngredientRepository;
 
+    private final ObjectMapper objectMapper;
+
     @Override
 // TODO : 쿼리 검증 및 최적화 방안 모색
     public  List<RecipeSearchResponse> getSearchRecipe(RecipeSearchRequest recipeSearchRequest) {
@@ -85,16 +88,14 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
 
         List<RecipeSearchResponse> result = new ArrayList<>();
 
-        Optional<MemberResponse> memberResponse =  memberFeign.getMemberDetail(recipeSearchRequest.getMemberId());
-
-        if(memberResponse.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_MEMBER);
+        MemberResponse memberResponse = this.getMember(recipeSearchRequest.getMemberId());
 
         for(int i=0; i<recipeList.size(); i++){
             Recipe recipe = recipeList.get(i);
 
-            String nickname = memberResponse.get().getNickname();
+            String nickname = memberResponse.getNickname();
 
-            int myIngredients = this.getMyIngredientCnt(recipe, memberResponse.get().getHouseSeq());
+            int myIngredients = this.getMyIngredientCnt(recipe, memberResponse.getHouseCode());
 
             int neededIngredients = this.getNeededIngredientsCnt(recipe);
 
@@ -139,8 +140,8 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
     }
 
     @Override
-    public int getMyIngredientCnt(Recipe recipe, int houseSeq){
-        List<HouseIngredientResponse> houseIngredientResponses= this.getHouseIngredientResponse(houseSeq);
+    public int getMyIngredientCnt(Recipe recipe, String houseCode){
+        List<HouseIngredientResponse> houseIngredientResponses= this.getHouseIngredientResponse(houseCode);
 
         List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findAllByRecipe(recipe);
 
@@ -155,26 +156,15 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
         return cnt;
     }
 
-    @Override
-    public MemberResponse getMember(Recipe recipe){
-        Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(recipe.getMemberId());
-
-        if(memberResponse.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_MEMBER);
-
-        return memberResponse.get();
-    }
-
-
 
     @Override
-    public List<HouseIngredientResponse> getHouseIngredientResponse(int houseSeq){
-        String st = houseIngredientFeign.getHouseIngredient(houseSeq);
+    public List<HouseIngredientResponse> getHouseIngredientResponse(String houseCode){
 
-        System.out.println(st);
+        String st = houseIngredientFeign.getHouseIngredient(houseCode);
 
         JSONObject jsonObject = new JSONObject(st);
 
-        // "request" 객체에서 "houseSeq" 값을 추출
+        // "request" 객체에서 "houseCode" 값을 추출
         JSONArray ingredientsArray = jsonObject.getJSONObject("data").getJSONArray("ingredients");
 
         // 결과를 저장할 리스트
@@ -196,5 +186,18 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
         }
 
         return resultList;
+    }
+
+    @Override
+    public MemberResponse getMember(Long memberId){
+        MemberResponse memberResponse = objectMapper.convertValue(memberFeign.getMemberDetail(memberId).getData().get("memberInfo"),MemberResponse.class);
+
+        System.out.println(memberResponse.toString());
+
+        if(memberResponse != null){
+            return memberResponse;
+        }else{
+            throw new CustomException(ErrorCode.NOT_FOUND_MEMBER);
+        }
     }
 }
