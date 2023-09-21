@@ -25,3 +25,5 @@ const ingredientAutocompleteApi = {
     return res;
   },
 }
+
+export default ingredientAutocompleteApi;

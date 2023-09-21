@@ -121,3 +121,5 @@ const memberApi = {
   }
 
 }
+
+export default memberApi;

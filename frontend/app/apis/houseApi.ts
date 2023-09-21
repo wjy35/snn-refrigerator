@@ -68,3 +68,5 @@ const houseApi = {
     return res;
   }
 }
+
+export default houseApi;

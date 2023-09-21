@@ -3,6 +3,7 @@ import {Text, TouchableWithoutFeedback, View} from "react-native";
 import {ingredientStyles} from "@/styles/ingredientStyles";
 import {styles} from "@/styles/styles";
 import IngredientIcon from "@/components/IngredientIcon";
+import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
 
 interface props {
   ingredientName: string;
@@ -44,6 +45,18 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
 
   function toDetail(){
     console.log(result)
+    check()
+  }
+
+  const check = async () => {
+    try {
+      const res = await ingredientAutocompleteApi.check({keyword: ingredientName})
+      if (res.status === 200) {
+        console.log(res.data)
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
