@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, Button, TouchableWithoutFeedback} from 'react-native';
+import {View, Text, Button, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import {styles} from "@/styles/styles";
 import ShareLayout from "@/screens/share/ShareLayout";
 import AutoCompleteInput from "@/components/AutoCompleteInput";
@@ -56,16 +56,27 @@ const ShareListScreen = ({navigation}:any) => {
       {/*  title="개별나눔채팅"*/}
       {/*  onPress={ () => navigation.navigate('SingleShareChat')}*/}
       {/*/>*/}
-      {
-        (now===0 || now===1) && (
-          <AutoCompleteInput placeholder={'검색'} onChangeText={onChangeText} onPressIn={onPressIn} now={1} text={text} textList={textList} onBlur={onBlur}/>
-        )
-      }
-      {
-        (now===0 || now===2) && (
-          <AutoCompleteInput placeholder={'검색'} onChangeText={onChangeText} onPressIn={onPressIn} now={2} text={text} textList={textList} onBlur={onBlur}/>
-        )
-      }
+      <ScrollView keyboardShouldPersistTaps='handled'>
+        {
+          (now===0 || now===1) && (
+            <AutoCompleteInput placeholder={'검색'} onChangeText={onChangeText} onPressIn={onPressIn} now={1} text={text} textList={textList} onBlur={onBlur}/>
+          )
+        }
+        {
+          (now===0 || now===2) && (
+            <AutoCompleteInput placeholder={'검색'} onChangeText={onChangeText} onPressIn={onPressIn} now={2} text={text} textList={textList} onBlur={onBlur}/>
+          )
+        }
+        <View style={{height: 200, borderWidth: 1, backgroundColor: 'blue'}}>
+
+        </View>
+        <View style={{height: 200, borderWidth: 1, backgroundColor: 'yellow'}}>
+
+        </View>
+        <View style={{height: 200, borderWidth: 1}}>
+
+        </View>
+      </ScrollView>
     </ShareLayout>
   );
 };
