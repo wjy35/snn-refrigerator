@@ -56,7 +56,7 @@ public class ShareBoardController {
         return new SharePostListResponse(locationInfo.getLocationName(),sharePostResponses);
     }
 
-    @GetMapping("/{locationId}/{shareBoardId}") // getPostList()와 요청 형식이 겹쳐서 이렇게 만들었음
+    @GetMapping("/detail/{shareBoardId}") // getPostList()와 요청 형식이 겹쳐서 이렇게 만들었음
     public SharePostDetailResponse getPostDetail(@PathVariable Long shareBoardId){
         SharePost post=shareBoardService.getPostDetail(shareBoardId);
         String nickname=shareBoardService.getMember(post.getMemberId()).getNickname();
