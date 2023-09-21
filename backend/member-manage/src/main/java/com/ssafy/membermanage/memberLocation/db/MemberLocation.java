@@ -1,6 +1,5 @@
 package com.ssafy.membermanage.memberLocation.db;
 
-import com.ssafy.membermanage.house.db.House;
 import com.ssafy.membermanage.member.db.Member;
 import lombok.Builder;
 import lombok.Getter;

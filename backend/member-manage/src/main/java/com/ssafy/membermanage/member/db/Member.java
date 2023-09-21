@@ -1,6 +1,5 @@
 package com.ssafy.membermanage.member.db;
 
-import com.ssafy.membermanage.house.db.House;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -15,7 +14,7 @@ public class Member {
     @Column(name = "member_id", unique = true, nullable = false)
     private Long memberId;
 
-    @Column(name = "house_code", unique = true, length = 36)
+    @Column(name = "house_code", length = 36)
     private String houseCode;
 
     @Column(name = "nickname", length = 10, unique = true, nullable = false)

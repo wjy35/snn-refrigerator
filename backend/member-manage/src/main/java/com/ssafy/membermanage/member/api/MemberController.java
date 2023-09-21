@@ -416,7 +416,7 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }//OK
 
-        @PostMapping("")
+    @PostMapping("/house")
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<Response> createHouse(){
         String houseCode = memberService.createHouseCode();
@@ -432,7 +432,7 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }//OK
 
-    @GetMapping("/{houseCode}")
+    @GetMapping("/house/{houseCode}")
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<Response> checkHouse(@PathVariable String houseCode){
         boolean flag = memberService.existsByHouseCode(houseCode);
@@ -447,7 +447,7 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }//OK
 
-    @PutMapping("")
+    @PutMapping("/house")
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<Response> modifyMemberHouse(@RequestBody ModifyMemberHouseDto request){
         Long memberId = request.getMemberId();
