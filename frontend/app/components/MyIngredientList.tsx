@@ -3,6 +3,7 @@ import {View} from "react-native";
 import SingleIngredient from "@/components/SingleIngredient";
 import {ingredientStyles} from "@/styles/ingredientStyles";
 import tw from "twrnc";
+import houseApi from "@/apis/houseApi";
 
 const MyIngredientList = ({children}: any) => {
   const [ingredients, setIngredients] = useState<
@@ -16,80 +17,36 @@ const MyIngredientList = ({children}: any) => {
       }>
   >([]);
 
+  //TODO : houseID redux에서 불러오기
+  const houseCode : string = "492f9401-c684-4966-936e-56f0941eaffe";
+
   useEffect(() => {
-    setIngredients([
-      {
-        houseIngredientId: 212355,
-        ingredientInfoId: 123, // 0이면 커스텀 재료
-        ingredientName: "가자미자가자미자",
-        storageType: 0, // 0 냉장, 1 냉동, 2 상온
-        lastDate: "2023-8-20",
-        storageDate: "", // datetime
-      },
-      {
-        houseIngredientId: 21,
-        ingredientInfoId: 123, // 0이면 커스텀 재료
-        ingredientName: "가자미",
-        storageType: 0, // 0 냉장, 1 냉동, 2 상온
-        lastDate: "2023-09-21",
-        storageDate: "", // datetime
-      },
-      {
-        houseIngredientId: 221,
-        ingredientInfoId: 123, // 0이면 커스텀 재료
-        ingredientName: "가자미",
-        storageType: 0, // 0 냉장, 1 냉동, 2 상온
-        lastDate: "2023-09-22",
-        storageDate: "", // datetime
-      },
-      {
-        houseIngredientId: 211,
-        ingredientInfoId: 123, // 0이면 커스텀 재료
-        ingredientName: "가자미",
-        storageType: 0, // 0 냉장, 1 냉동, 2 상온
-        lastDate: "2023-09-24",
-        storageDate: "", // datetime
-      },
-      {
-        houseIngredientId:22,
-        ingredientInfoId:324, // 0이면 커스텀 재료
-        ingredientName:"감자",
-        storageType: 2, // 0 냉장, 1 냉동, 2 상온
-        lastDate:"2023-09-25",
-        storageDate:"", // datetime
-      },
-      {
-        houseIngredientId:23,
-        ingredientInfoId: 0, // 0이면 커스텀 재료
-        ingredientName:"갈비만두",
-        storageType: 1, // 0 냉장, 1 냉동, 2 상온
-        lastDate:"2023-09-24",
-        storageDate:"", // datetime
-      },
-      {
-        houseIngredientId: 24,
-        ingredientInfoId: 123, // 0이면 커스텀 재료
-        ingredientName: "가자미",
-        storageType: 0, // 0 냉장, 1 냉동, 2 상온
-        lastDate: "2023-10-20",
-        storageDate: "", // datetime
-      },
-      {
-        houseIngredientId: 251,
-        ingredientInfoId: 123, // 0이면 커스텀 재료
-        ingredientName: "가자미",
-        storageType: 0, // 0 냉장, 1 냉동, 2 상온
-        lastDate: "2023-10-20",
-        storageDate: "", // datetime
-      },
-    ]);
+
+    const getIngredients = async() => {
+      try{
+        let res = await houseApi.houseIngredientList(houseCode);
+        // console.log(res);
+        if(res.status===200){
+          console.log(res.data.data.ingredients);
+          setIngredients(res.data.data.ingredients);
+        }else{
+          console.log(res.data.message);
+        }
+      }catch (e){
+        // console.log(e);
+      }
+    }
+    getIngredients();
+
   }, []);
 
 
   return (
-    <View style={[ingredientStyles.ingredientContainer, tw`bg-white`]}>
+    <View style={[ingredientStyles.ingredientContainer, tw`w-full bg-white border`]}>
       {ingredients.map((i) => {
         return (
+            // @ts-ignore
+            1+ Math.floor((new Date(i.lastDate).getTime() - new Date()) / (1000 * 60 * 60 * 24))<7&&
             i.storageType!=1&&
           <React.Fragment key={`ingredient ${i.houseIngredientId}`}>
             <SingleIngredient
