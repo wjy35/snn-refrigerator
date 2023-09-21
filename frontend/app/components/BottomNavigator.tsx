@@ -51,7 +51,6 @@ const BottomNavigator = ({now}: props) => {
         <View style={[bottomTabStyles.singleTab]}>
           <TouchableWithoutFeedback
             onPress={ () => {
-              console.log(isVisible);
               dispatch(toggleVisibleAction({}));
             }}
           >
