@@ -27,6 +27,8 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
     private final MemberFeign memberFeign;
 
     private final RecipeSearchService recipeSearchService;
+
+    private final RecipeService recipeService;
     @Override
     public void addFavoriteRecipe(int recipeId, long memberId) {
 
@@ -56,16 +58,14 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
 
         List<RecipeSearchResponse> result = new ArrayList<>();
 
-        Optional<MemberResponse> memberResponse =  memberFeign.getMemberDetail(memberId);
-
-        if(memberResponse.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_MEMBER);
+        MemberResponse memberResponse =  recipeSearchService.getMember(memberId);
 
         for(int i=0; i<favoriteRecipeList.size(); i++){
             Recipe recipe = favoriteRecipeList.get(i).getRecipe();
 
-            String nickname = memberResponse.get().getNickname();
+            String nickname = memberResponse.getNickname();
 
-            int myIngredients = recipeSearchService.getMyIngredientCnt(recipe, memberResponse.get().getHouseSeq());
+            int myIngredients = recipeSearchService.getMyIngredientCnt(recipe, memberResponse.getHouseCode());
 
             int neededIngredients = recipeSearchService.getNeededIngredientsCnt(recipe);
 

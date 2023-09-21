@@ -12,6 +12,6 @@ import java.util.Optional;
 @FeignClient(name = "house-ingredient",url = "http://a502.store/house-ingredient")
 public interface HouseIngredientFeign {
 
-    @GetMapping("/house/{houseSeq}")
-    String getHouseIngredient(@PathVariable long houseSeq);
+    @GetMapping("/house/{houseCode}")
+    String getHouseIngredient(@PathVariable String houseCode);
 }
