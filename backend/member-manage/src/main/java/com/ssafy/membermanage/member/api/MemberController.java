@@ -77,7 +77,7 @@ public class MemberController {
         memberInfo.put("profileImageUrl", s3helper.getS3ImageUrl(member.getProfileImageFilename()));
         memberInfo.put("birthday", member.getBirthday());
         memberInfo.put("email", member.getEmail());
-        memberInfo.put("houseCode", member.getHouse().getHouseCode());
+        memberInfo.put("houseCode", member.getHouseCode());
         memberInfo.put("followCount", member.getFollowCount());
 
         Map<String, Object> data = new HashMap<>();
@@ -330,7 +330,7 @@ public class MemberController {
                 .memberId(memberId)
                 .nickname(nickname)
                 .profileImageFilename(defaultProfileImage)
-                .house(house)
+                .houseCode(houseCode)
                 .birthday(birthday)
                 .email(email)
                 .build();
