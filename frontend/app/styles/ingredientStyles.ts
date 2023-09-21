@@ -1,18 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 export const ingredientStyles = StyleSheet.create({
-  ingredientContainer: {
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'flex-start',
-  },
-  singleContainer: {
-    width: '46%',
-    aspectRatio : 2/1,
-    marginVertical: '1%',
-    marginHorizontal: '0%',
-  },
   singleColumnContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -40,9 +28,6 @@ export const ingredientStyles = StyleSheet.create({
   nameContainer: {
     flex: 2,
     marginTop: 3,
-  },
-  iconContainer: {
-    // flex: 1,
   },
   dDayContainer: {
     flex: 1,
