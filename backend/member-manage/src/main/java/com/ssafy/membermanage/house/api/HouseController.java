@@ -5,10 +5,7 @@ import com.ssafy.membermanage.error.CustomException;
 import com.ssafy.membermanage.error.ErrorCode;
 import com.ssafy.membermanage.member.db.Member;
 
-import com.ssafy.membermanage.house.db.House;
-import com.ssafy.membermanage.house.db.HouseRepository;
 import com.ssafy.membermanage.house.dto.ModifyMemberHouseDto;
-import com.ssafy.membermanage.house.service.HouseServiceImpl;
 import com.ssafy.membermanage.member.db.MemberRepository;
 import com.ssafy.membermanage.member.service.MemberServiceImpl;
 import com.ssafy.membermanage.response.Response;
@@ -26,13 +23,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/house")
 public class HouseController {
-
-    @Autowired
-    private HouseRepository houseRepository;
-
-    @Autowired
-    private HouseServiceImpl houseService;
-
     @Autowired
     private MemberRepository memberRepository;
 
@@ -43,10 +33,10 @@ public class HouseController {
     @PostMapping("")
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<Response> createHouse(){
-        House house = houseService.createHouse();
+        String houseCode = memberService.createHouseCode();
 
         Map<String, Object> data = new HashMap<>();
-        data.put("houseCode", house.getHouseCode());
+        data.put("houseCode", houseCode);
 
         Response response = Response.
                 builder().
@@ -59,7 +49,7 @@ public class HouseController {
     @GetMapping("/{houseCode}")
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<Response> checkHouse(@PathVariable String houseCode){
-        boolean flag = houseRepository.existsByHouseCode(houseCode);
+        boolean flag = memberService.existsByHouseCode(houseCode);
         Map<String, Object> data = new HashMap<>();
         data.put("existance", flag);
 

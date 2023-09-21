@@ -134,4 +134,8 @@ public class MemberServiceImpl {
     public String createHouseCode(){
         return UUID.randomUUID().toString();
     }
+
+    public boolean existsByHouseCode(String houseCode){
+        return memberRepository.existsByHouseCode(houseCode);
+    }
 }
