@@ -22,7 +22,7 @@ public class LocationInfo {
     @OneToMany(mappedBy = "locationInfo", cascade = CascadeType.ALL)
     private List<SharePost> sharePosts=new ArrayList<>(); // 나눔 이미지들
 
-    @Column(name="location_info",nullable = false,length = 20)
+    @Column(name="location_name",nullable = false,length = 20)
     private String locationName;
 
 }
