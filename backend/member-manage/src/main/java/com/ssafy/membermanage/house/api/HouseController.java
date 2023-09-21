@@ -82,9 +82,12 @@ public class HouseController {
         member = memberService.modifyMemberHouse(member, houseCode);
         memberService.save(member);
 
+        Map<String, Object> houseInfo = new HashMap<>();
+        houseInfo.put("memberId", memberId);
+        houseInfo.put("houseCode", houseCode);
+
         Map<String, Object> data = new HashMap<>();
-        data.put("memberId", memberId);
-        data.put("houseCode", houseCode);
+        data.put("houseInfo", houseInfo);
 
         Response response = Response.
                 builder().
