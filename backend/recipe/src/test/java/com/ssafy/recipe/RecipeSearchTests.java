@@ -68,10 +68,10 @@ public class RecipeSearchTests {
     @Test
     void getRecipeSearchResponseTest(){
         // given
-        int houseSeq = 1;
+        String houseCode = "";
 
         // when
-        List<HouseIngredientResponse> list = recipeSearchService.getHouseIngredientResponse(houseSeq);
+        List<HouseIngredientResponse> list = recipeSearchService.getHouseIngredientResponse(houseCode);
 
         // then
         System.out.println(list.size());
