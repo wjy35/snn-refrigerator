@@ -54,7 +54,6 @@ public class RecipeServiceImpl implements RecipeService{
     public void createRecipe(RecipeRequest request) {
         Recipe recipe = recipeMapper.recipeRequestToRecipe(request);
 
-        System.out.println(request.getContents().size());
         this.saveRecipe(recipe);
 
         this.saveRecipeDetails(recipe, request);
@@ -92,7 +91,7 @@ public class RecipeServiceImpl implements RecipeService{
         this.deleteRecipeIngredient(recipe);
         for(int i=0; i<request.getIngredients().size(); i++){
             RecipeIngredientParam recipeIngredientParam = request.getIngredients().get(i);
-            if(recipeIngredientParam.getIngredientInfoId()==0){
+            if(recipeIngredientParam.getIngredientInfoId() == 0){
                 this.saveRecipeCustomIngredient(recipe, recipeIngredientParam);
             }else{
                 this.saveRecipeIngredient(recipe, recipeIngredientParam);
@@ -127,7 +126,7 @@ public class RecipeServiceImpl implements RecipeService{
     public void isCustomIngredient(Recipe recipe, RecipeRequest request){
         for(int i=0; i<request.getIngredients().size(); i++){
             RecipeIngredientParam recipeIngredientParam = request.getIngredients().get(i);
-            if(recipeIngredientParam.getIngredientInfoId()==-1){
+            if(recipeIngredientParam.getIngredientInfoId()==0){
                 this.saveRecipeCustomIngredient(recipe, recipeIngredientParam);
             }else{
                 this.saveRecipeIngredient(recipe, recipeIngredientParam);
