@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface MemberFeign {
 
     @GetMapping("/{memberId}")
-    Response getMemberDetail(@PathVariable long memberId);
+    Response getMemberDetail(@PathVariable Long memberId);
 
 
 }

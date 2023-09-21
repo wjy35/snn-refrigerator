@@ -50,7 +50,8 @@ class RecipeApplicationTests {
 
 	@Test
 	void test(){
-		MemberResponse memberResponse = recipeSearchService.getMember(3029548333L);
+		Long memberId = 3029548333l;
+		MemberResponse memberResponse = recipeSearchService.getMember(memberId);
 		System.out.println(memberResponse.toString());
 		assertNotNull(memberResponse);
 	}
