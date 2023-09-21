@@ -14,7 +14,6 @@ interface props {
 
 const RecipeLayout = ({children, title, optionTitle, optionFunction}: props) => {
 
-
   return (
     <View style={styles.layout}>
       <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
