@@ -3,6 +3,7 @@ import Swiper from 'react-native-swiper';
 import {View} from "react-native";
 import {warm, cool, cold, custom} from "@/assets/icons/icons";
 import {SvgXml} from "react-native-svg";
+import tw from "twrnc";
 
 
 interface props {
@@ -10,45 +11,21 @@ interface props {
   ingredientInfoId: number;
 }
 const IngredientIcon = ({storageType, ingredientInfoId}: props) => {
-  const storageIcon = () => {
-    if (storageType === 0){
-      return (
-        <SvgXml
-          xml={cool}
-          width={15}
-          height={15}
-        />
-      )
-    } else if (storageType === 1){
-      return (
-        <SvgXml
-          xml={cold}
-          width={15}
-          height={15}
-        />
-      )
-    } else {
-      return (
-        <SvgXml
-          xml={warm}
-          width={15}
-          height={15}
-        />
-      )
-    }
-  }
-
   return (
     <>
-      {ingredientInfoId === -1 && (
+      {ingredientInfoId === 0 && (
         <SvgXml
           xml={custom}
           width={15}
           height={15}
-          style={{marginRight: 3}}
         />
       )}
-      {storageIcon()}
+      <SvgXml
+          xml={storageType === 0?cool:(storageType === 1?cold:warm)}
+          width={15}
+          height={15}
+          style={[tw`ml-1`]}
+      />
     </>
   );
 };

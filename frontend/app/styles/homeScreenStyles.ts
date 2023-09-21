@@ -29,7 +29,7 @@ export const homeScreenStyles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    margin: 10,
+    margin: 5,
     borderWidth: 1,
     width: '96%',
   },

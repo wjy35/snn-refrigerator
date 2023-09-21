@@ -22,9 +22,9 @@ interface props {
 }
 
 const houseApi = {
-  houseIngredientList: async ({houseId}: props) => {
+  houseIngredientList: async (houseCode: string) => {
     const res = await PrivateHouseApi.get(
-      `house/${houseId}`,
+      `house/${houseCode}`,
     );
     return res;
   },
