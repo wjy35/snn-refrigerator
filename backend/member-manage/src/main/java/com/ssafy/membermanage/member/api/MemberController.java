@@ -71,17 +71,17 @@ public class MemberController {
         Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
-        Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("memberId", memberId);
-        userInfo.put("nickname", member.getNickname());
-        userInfo.put("profileImageUrl", s3helper.getS3ImageUrl(member.getProfileImageFilename()));
-        userInfo.put("birthday", member.getBirthday());
-        userInfo.put("email", member.getEmail());
-        userInfo.put("houseCode", member.getHouse().getHouseCode());
-        userInfo.put("followCount", member.getFollowCount());
+        Map<String, Object> memberInfo = new HashMap<>();
+        memberInfo.put("memberId", memberId);
+        memberInfo.put("nickname", member.getNickname());
+        memberInfo.put("profileImageUrl", s3helper.getS3ImageUrl(member.getProfileImageFilename()));
+        memberInfo.put("birthday", member.getBirthday());
+        memberInfo.put("email", member.getEmail());
+        memberInfo.put("houseCode", member.getHouse().getHouseCode());
+        memberInfo.put("followCount", member.getFollowCount());
 
         Map<String, Object> data = new HashMap<>();
-        data.put("userInfo", userInfo);
+        data.put("memberInfo", memberInfo);
 
         Response response = Response
                 .builder()
