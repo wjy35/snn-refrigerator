@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.membermanage.error.CustomException;
 import com.ssafy.membermanage.error.ErrorCode;
-import com.ssafy.membermanage.house.db.House;
-import com.ssafy.membermanage.house.db.HouseRepository;
 import com.ssafy.membermanage.member.db.Member;
 import com.ssafy.membermanage.member.db.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -25,13 +24,8 @@ public class MemberServiceImpl {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Autowired
-    private HouseRepository houseRepository;
-
     public Member modifyMemberHouse(Member member, String houseCode) throws CustomException{
-        House house = houseRepository.findByHouseCode(houseCode)
-                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_House));
-        member.setHouse(house);
+        member.setHouseCode(houseCode);
         member = memberRepository.save(member);
         return member;
     }
@@ -132,4 +126,11 @@ public class MemberServiceImpl {
         }
     }
 
+    public String createHouseCode(){
+        return UUID.randomUUID().toString();
+    }
+
+    public boolean existsByHouseCode(String houseCode){
+        return memberRepository.existsByHouseCode(houseCode);
+    }
 }

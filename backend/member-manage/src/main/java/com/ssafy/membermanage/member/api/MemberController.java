@@ -9,8 +9,7 @@ import com.ssafy.membermanage.error.ErrorCode;
 import com.ssafy.membermanage.followPerson.service.FollowServiceImpl;
 import com.ssafy.membermanage.hateIngredient.db.HateIngredient;
 import com.ssafy.membermanage.hateIngredient.service.HateIngredientServiceImpl;
-import com.ssafy.membermanage.house.db.House;
-import com.ssafy.membermanage.house.service.HouseServiceImpl;
+import com.ssafy.membermanage.house.dto.ModifyMemberHouseDto;
 import com.ssafy.membermanage.member.db.Member;
 import com.ssafy.membermanage.member.request.AuthorizationRequest;
 import com.ssafy.membermanage.member.request.SignupRequest;
@@ -40,9 +39,6 @@ import java.util.Map;
 public class MemberController {
     @Autowired
     private MemberServiceImpl memberService;
-
-    @Autowired
-    private HouseServiceImpl houseService;
 
     @Autowired
     private HateIngredientServiceImpl hateIngredientService;
@@ -77,7 +73,7 @@ public class MemberController {
         memberInfo.put("profileImageUrl", s3helper.getS3ImageUrl(member.getProfileImageFilename()));
         memberInfo.put("birthday", member.getBirthday());
         memberInfo.put("email", member.getEmail());
-        memberInfo.put("houseCode", member.getHouse().getHouseCode());
+        memberInfo.put("houseCode", member.getHouseCode());
         memberInfo.put("followCount", member.getFollowCount());
 
         Map<String, Object> data = new HashMap<>();
@@ -321,16 +317,12 @@ public class MemberController {
         String houseCode = request.getHouseCode();
         String birthday = request.getBirthday();
         String email = request.getEmail();
-
-        House house = houseService.findByHouseCode(houseCode).orElseThrow(
-                () -> new CustomException(ErrorCode.No_Such_House)
-        );
         Member member = Member
                 .builder()
                 .memberId(memberId)
                 .nickname(nickname)
                 .profileImageFilename(defaultProfileImage)
-                .house(house)
+                .houseCode(houseCode)
                 .birthday(birthday)
                 .email(email)
                 .build();
@@ -421,6 +413,63 @@ public class MemberController {
                 .message("ok")
                 .data(data)
                 .build();
+        return ResponseEntity.ok(response);
+    }//OK
+
+    @PostMapping("/house")
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<Response> createHouse(){
+        String houseCode = memberService.createHouseCode();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("houseCode", houseCode);
+
+        Response response = Response.
+                builder().
+                message("OK").
+                data(data).
+                build();
+        return ResponseEntity.ok(response);
+    }//OK
+
+    @GetMapping("/house/{houseCode}")
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<Response> checkHouse(@PathVariable String houseCode){
+        boolean flag = memberService.existsByHouseCode(houseCode);
+        Map<String, Object> data = new HashMap<>();
+        data.put("existance", flag);
+
+        Response response = Response.
+                builder().
+                message("OK").
+                data(data).
+                build();
+        return ResponseEntity.ok(response);
+    }//OK
+
+    @PutMapping("/house")
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<Response> modifyMemberHouse(@RequestBody ModifyMemberHouseDto request){
+        Long memberId = request.getMemberId();
+        Member member = memberService.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
+
+        String houseCode = request.getHouseCode();
+        member = memberService.modifyMemberHouse(member, houseCode);
+        memberService.save(member);
+
+        Map<String, Object> houseInfo = new HashMap<>();
+        houseInfo.put("memberId", memberId);
+        houseInfo.put("houseCode", houseCode);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("houseInfo", houseInfo);
+
+        Response response = Response.
+                builder().
+                message("OK").
+                data(data).
+                build();
         return ResponseEntity.ok(response);
     }//OK
 }
