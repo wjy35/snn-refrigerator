@@ -15,9 +15,8 @@ public class Member {
     @Column(name = "member_id", unique = true, nullable = false)
     private Long memberId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "house_seq")
-    private House house;
+    @Column(name = "house_code", unique = true, length = 36)
+    private String houseCode;
 
     @Column(name = "nickname", length = 10, unique = true, nullable = false)
     private String nickname;
@@ -36,9 +35,9 @@ public class Member {
     private Integer followCount;
 
     @Builder
-    public Member(Long memberId, House house, String nickname, String profileImageFilename, String birthday, String email){
+    public Member(Long memberId, String houseCode, String nickname, String profileImageFilename, String birthday, String email){
         this.memberId = memberId;
-        this.house = house;
+        this.houseCode = houseCode;
         this.nickname = nickname;
         this.profileImageFilename = profileImageFilename;
         this.birthday = birthday;
