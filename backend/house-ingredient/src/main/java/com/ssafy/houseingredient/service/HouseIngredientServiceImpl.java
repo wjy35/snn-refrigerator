@@ -2,7 +2,6 @@ package com.ssafy.houseingredient.service;
 
 import com.ssafy.houseingredient.db.entity.HouseIngredientEntity;
 import com.ssafy.houseingredient.db.repository.HouseIngredientRepository;
-import com.ssafy.houseingredient.service.HouseIngredientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,8 +32,8 @@ public class HouseIngredientServiceImpl implements HouseIngredientService {
     }
 
     @Override
-    public List<HouseIngredientEntity> searchAllByHouseSeq(Integer houseSeq) {
-        return houseIngredientRepository.findAllByHouseSeq(houseSeq);
+    public List<HouseIngredientEntity> searchAllByHouseCode(String houseCode) {
+        return houseIngredientRepository.findAllByHouseCode(houseCode);
     }
 
     @Override
@@ -43,7 +42,7 @@ public class HouseIngredientServiceImpl implements HouseIngredientService {
     }
 
     @Override
-    public void deleteAllByHouseSeq(Integer houseSeq) {
-        houseIngredientRepository.deleteAllByHouseSeq(houseSeq);
+    public void deleteAllByHouseCode(String houseCode) {
+        houseIngredientRepository.deleteAllByHouseCode(houseCode);
     }
 }

@@ -7,11 +7,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Table(name = "house_ingredient")
 public class HouseIngredientEntity {
     @Id
@@ -19,8 +18,8 @@ public class HouseIngredientEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer houseIngredientId;
 
-    @Column(name="house_seq")
-    private Integer houseSeq;
+    @Column(name="house_code")
+    private String houseCode;
 
     @Column(name="ingredient_info_id")
     private Short ingredientInfoId;
@@ -42,17 +41,5 @@ public class HouseIngredientEntity {
         storageDate = LocalDateTime.now();
     }
 
-    @Override
-    public String toString() {
-        return "HouseIngredientEntity{" +
-                "houseIngredientId=" + houseIngredientId +
-                ", houseSeq=" + houseSeq +
-                ", ingredientInfoId=" + ingredientInfoId +
-                ", ingredientName='" + ingredientName + '\'' +
-                ", storageType=" + storageType +
-                ", lastDate=" + lastDate +
-                ", storageDate=" + storageDate +
-                '}';
-    }
 
 }

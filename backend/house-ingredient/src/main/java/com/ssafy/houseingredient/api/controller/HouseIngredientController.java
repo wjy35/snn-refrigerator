@@ -42,7 +42,7 @@ public class HouseIngredientController {
         List<HouseIngredientEntity> houseIngredientEntities = HouseIngredientMapper.INSTANCE.saveAllRequestToEntity(houseIngredientSaveAllRequest.getIngredients());
 
         for(HouseIngredientEntity houseIngredientEntity : houseIngredientEntities){
-            houseIngredientEntity.setHouseSeq(houseIngredientSaveAllRequest.getHouseSeq());
+            houseIngredientEntity.setHouseCode(houseIngredientSaveAllRequest.getHouseCode());
         }
 //        System.out.println(houseIngredientEntities);
 
@@ -51,7 +51,7 @@ public class HouseIngredientController {
         Response response = new Response();
         response.setMessage("OK");
 
-        response.addRequest("houseSeq", houseIngredientSaveAllRequest.getHouseSeq());
+        response.addRequest("houseCode", houseIngredientSaveAllRequest.getHouseCode());
         response.addRequest("count",houseIngredientEntities.size());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -76,15 +76,15 @@ public class HouseIngredientController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/house/{houseSeq}")
-    public ResponseEntity<Response> searchAll(@PathVariable Integer houseSeq){
+    @GetMapping("/house/{houseCode}")
+    public ResponseEntity<Response> searchAll(@PathVariable String houseCode){
 
 //        HouseIngredientResponse houseIngredientResponse = HouseIngredientMapper.INSTANCE.entityToResponse(houseIngredientEntity);
-        List<HouseIngredientResponse> houseIngredientResponses = HouseIngredientMapper.INSTANCE.entityToResponse(houseIngredientService.searchAllByHouseSeq(houseSeq));
+        List<HouseIngredientResponse> houseIngredientResponses = HouseIngredientMapper.INSTANCE.entityToResponse(houseIngredientService.searchAllByHouseCode(houseCode));
         Response response = new Response();
         response.setMessage("OK");
 
-        response.addRequest("houseSeq",houseSeq);
+        response.addRequest("houseCode",houseCode);
         response.addData("count",houseIngredientResponses.size());
         response.addData("ingredients",houseIngredientResponses);
 //        System.out.println(new ResponseEntity<>(response, HttpStatus.OK));
@@ -102,14 +102,14 @@ public class HouseIngredientController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/house/{houseSeq}")
-    public ResponseEntity<Response> deleteAll(@PathVariable Integer houseSeq){
-        houseIngredientService.deleteAllByHouseSeq(houseSeq);
+    @DeleteMapping("/house/{houseCode}")
+    public ResponseEntity<Response> deleteAll(@PathVariable String houseCode){
+        houseIngredientService.deleteAllByHouseCode(houseCode);
 
         Response response = new Response();
         response.setMessage("OK");
 
-        response.addRequest("houseSeq",houseSeq);
+        response.addRequest("houseCode",houseCode);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
