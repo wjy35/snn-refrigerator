@@ -77,10 +77,10 @@ class HouseIngredientResponseApplicationTests {
 	@Test
 	void searchAllHouseIngredientTest(){
 		//given
-		Integer houseSeq = 1;
+		String houseCode = "492f9401-c684-4966-936e-56f0941eaffe";
 
 		//when
-		ResponseEntity<Response> response = houseIngredientController.searchAll(houseSeq);
+		ResponseEntity<Response> response = houseIngredientController.searchAll(houseCode);
 
 		//then
 		System.out.println("response = " + response);
@@ -92,7 +92,7 @@ class HouseIngredientResponseApplicationTests {
 	@Transactional
 	void insertHouseIngredientTest(){
 		//given
-		HouseIngredientSaveAllRequest houseIngredientSaveAllRequest = HouseIngredientSaveAllRequest.builder().houseSeq(123).ingredients(new ArrayList<>()).build();
+		HouseIngredientSaveAllRequest houseIngredientSaveAllRequest = HouseIngredientSaveAllRequest.builder().houseCode("492f9401-c684-4966-936e-56f0941eaffe").ingredients(new ArrayList<>()).build();
 		houseIngredientSaveAllRequest.getIngredients().add(HouseIngredientDetailParam.builder().ingredientInfoId((short)14).ingredientName("감자").storageType((byte)2).lastDate(LocalDate.of(2023,10,10)).build());
 //		houseIngredientSaveAllRequest.getIngredients().add(HouseIngredientDetailParam.builder().ingredientInfoId((short)-1).ingredientName("갈비만두").storageType((byte)1).build());
 		//when
@@ -144,15 +144,15 @@ class HouseIngredientResponseApplicationTests {
 	@Transactional
 	void deleteAllTest(){
 		//given
-		int houseSeq = 1;
+		String houseCode = "492f9401-c684-4966-936e-56f0941eaffe";
 
 		//when
-		ResponseEntity<Response> response = houseIngredientController.deleteAll(houseSeq);
+		ResponseEntity<Response> response = houseIngredientController.deleteAll(houseCode);
 
 		//then
 //		System.out.println(response);
 		Assertions.assertThrows(NoHouseIngredientException.class,()->houseIngredientController.search(1));
-		Assertions.assertEquals(0,houseIngredientController.searchAll(1).getBody().getData().get("count"));
+		Assertions.assertEquals(0,houseIngredientController.searchAll(houseCode).getBody().getData().get("count"));
 	}
 
 

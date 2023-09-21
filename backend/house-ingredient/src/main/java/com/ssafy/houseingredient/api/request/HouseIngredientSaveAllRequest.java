@@ -10,6 +10,6 @@ import java.util.List;
 @Getter
 @Builder
 public class HouseIngredientSaveAllRequest {
-    private Integer houseSeq;
+    private String houseCode;
     private List<HouseIngredientDetailParam> ingredients;
 }

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 public class HouseIngredientResponse {
     private Integer houseIngredientId;
-    private Integer houseSeq;
+    private String houseCode;
     private Short ingredientInfoId;
     private String ingredientName;
     private Byte storageType;
