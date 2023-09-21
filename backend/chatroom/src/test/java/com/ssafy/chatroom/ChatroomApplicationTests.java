@@ -100,11 +100,12 @@ class ChatroomApplicationTests {
     @Test
     void testMemberDtoOpenFeign(){
         // given
-        Long memberId = 1l;
+        // Test MemberId 3029548333
+        Long memberId = 3029548333l;
         System.out.println("memberId = " + memberId);
 
         // when
-        MemberDto memberDto = memberOpenFeign.getMemberDto(memberId);
+        MemberDto memberDto = objectMapper.convertValue(memberOpenFeign.getMemberDto(memberId).getData().get("memberInfo"),MemberDto.class);
 
         // then
         System.out.println("memberDto = " + memberDto);
