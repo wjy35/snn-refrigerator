@@ -14,7 +14,7 @@ public class Member {
     @Column(name = "member_id", unique = true, nullable = false)
     private Long memberId;
 
-    @Column(name = "house_code", length = 36)
+    @Column(name = "house_code", columnDefinition = "char(36)", nullable = false)
     private String houseCode;
 
     @Column(name = "nickname", length = 10, unique = true, nullable = false)
