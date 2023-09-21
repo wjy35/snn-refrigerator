@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.membermanage.error.CustomException;
 import com.ssafy.membermanage.error.ErrorCode;
-import com.ssafy.membermanage.house.db.House;
-import com.ssafy.membermanage.house.db.HouseRepository;
 import com.ssafy.membermanage.member.db.Member;
 import com.ssafy.membermanage.member.db.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +23,6 @@ import java.util.UUID;
 public class MemberServiceImpl {
     @Autowired
     private MemberRepository memberRepository;
-
-    @Autowired
-    private HouseRepository houseRepository;
 
     public Member modifyMemberHouse(Member member, String houseCode) throws CustomException{
         member.setHouseCode(houseCode);
