@@ -295,12 +295,15 @@ public class MemberController {
         Long memberId = (Long) kakaoUserInfo.get("id");
         Map<String, Object> userInfo = (Map<String, Object>) kakaoUserInfo.get("kakao_account");
 
+        Map<String, Object> kakaoMemberInfo = new HashMap<>();
+        kakaoMemberInfo.put("id",  memberId);
+        kakaoMemberInfo.put("email", userInfo.getOrDefault("email", "No Email"));
+        kakaoMemberInfo.put("birthday", userInfo.getOrDefault("birthday", "9999"));
+        kakaoMemberInfo.put("accessToken", access_token);
+        kakaoMemberInfo.put("refreshToken", refresh_token);
+
         Map<String, Object> data = new HashMap<>();
-        data.put("id",  memberId);
-        data.put("email", userInfo.getOrDefault("email", "No Email"));
-        data.put("birthday", userInfo.getOrDefault("birthday", "9999"));
-        data.put("accessToken", access_token);
-        data.put("refreshToken", refresh_token);
+        data.put("kakaoMemberInfo", kakaoMemberInfo);
 
         Response response = Response.
                 builder().
