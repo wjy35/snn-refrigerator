@@ -67,15 +67,6 @@ const ShareListScreen = ({navigation}:any) => {
             <AutoCompleteInput placeholder={'검색'} onChangeText={onChangeText} onPressIn={onPressIn} now={2} text={text} textList={textList} onBlur={onBlur}/>
           )
         }
-        <View style={{height: 200, borderWidth: 1, backgroundColor: 'blue'}}>
-
-        </View>
-        <View style={{height: 200, borderWidth: 1, backgroundColor: 'yellow'}}>
-
-        </View>
-        <View style={{height: 200, borderWidth: 1}}>
-
-        </View>
       </ScrollView>
     </ShareLayout>
   );
