@@ -93,7 +93,7 @@ public class MemberLocationController {
         data.put("status", true);
 
         Response response = Response
-                .builder()
+                 .builder()
                 .message("ok")
                 .data(data)
                 .build();

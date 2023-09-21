@@ -71,15 +71,17 @@ public class MemberController {
         Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("memberId", memberId);
-        data.put("nickname", member.getNickname());
-        data.put("profileImageUrl", s3helper.getS3ImageUrl(member.getProfileImageFilename()));
-        data.put("birthday", member.getBirthday());
-        data.put("email", member.getEmail());
-        data.put("houseCode", member.getHouse().getHouseCode());
-        data.put("followCount", member.getFollowCount());
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("memberId", memberId);
+        userInfo.put("nickname", member.getNickname());
+        userInfo.put("profileImageUrl", s3helper.getS3ImageUrl(member.getProfileImageFilename()));
+        userInfo.put("birthday", member.getBirthday());
+        userInfo.put("email", member.getEmail());
+        userInfo.put("houseCode", member.getHouse().getHouseCode());
+        userInfo.put("followCount", member.getFollowCount());
 
+        Map<String, Object> data = new HashMap<>();
+        data.put("userInfo", userInfo);
 
         Response response = Response
                 .builder()
@@ -130,7 +132,7 @@ public class MemberController {
                 data(data).
                 build();
         return ResponseEntity.ok(response);
-    }//OK
+    }
 
     @PostMapping("/{memberId}/hate-ingredient/{ingredientId}")
     @JsonView(ResponseViews.NoRequest.class)
