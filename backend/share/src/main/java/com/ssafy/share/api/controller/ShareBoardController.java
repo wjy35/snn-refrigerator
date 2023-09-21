@@ -57,7 +57,7 @@ public class ShareBoardController {
     }
 
     @GetMapping("/{locationId}/{shareBoardId}") // getPostList()와 요청 형식이 겹쳐서 이렇게 만들었음
-    public SharePostDetailResponse getPostDetail(@PathVariable Long locationId,@PathVariable Long shareBoardId){
+    public SharePostDetailResponse getPostDetail(@PathVariable Long shareBoardId){
         SharePost post=shareBoardService.getPostDetail(shareBoardId);
         String nickname=shareBoardService.getMember(post.getMemberId()).getNickname();
         SharePostDetailResponse response=new SharePostDetailResponse(post,nickname,timeUtil.dateTypeFormatter(post.getCreateDate()));
@@ -93,6 +93,5 @@ public class ShareBoardController {
         shareBoardService.delete(shareBoardId);
         return "나눔글 삭제 성공";
     }
-
 
 }
