@@ -12,6 +12,7 @@ import com.ssafy.recipe.db.entity.Recipe;
 import com.ssafy.recipe.db.entity.RecipeDetail;
 import com.ssafy.recipe.db.repository.RecipeRepository;
 import com.ssafy.recipe.service.FavoriteRecipeServiceImpl;
+import com.ssafy.recipe.service.RecipeSearchService;
 import com.ssafy.recipe.service.RecipeServiceImpl;
 import com.ssafy.recipe.service.feign.HouseIngredientFeign;
 import com.ssafy.recipe.service.feign.MemberFeign;
@@ -44,16 +45,19 @@ class RecipeApplicationTests {
 	@Autowired
 	HouseIngredientFeign houseIngredientFeign;
 
+	@Autowired
+	RecipeSearchService recipeSearchService;
+
 	@Test
 	void test(){
-		Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(1);
+		MemberResponse memberResponse = recipeSearchService.getMember(3029548333L);
 		System.out.println(memberResponse.toString());
 		assertNotNull(memberResponse);
 	}
 
 	@Test
 	void houseIngredientFeignTest() throws JSONException {
-		String st = houseIngredientFeign.getHouseIngredient(1);
+		String st = houseIngredientFeign.getHouseIngredient("");
 
 		System.out.println(st);
 		JSONObject jsonObject = new JSONObject(st);

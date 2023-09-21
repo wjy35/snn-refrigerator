@@ -36,7 +36,7 @@ public class FavoriteRecipeController {
         favoriteRecipeService.deleteFavoriteRecipe(recipeId, memberId.getMemberId());
         response.setMessage("OK");
         response.addRequest("recipeId",recipeId);
-        response.addRequest("memberId",memberId);
+        response.addRequest("memberId",memberId.getMemberId());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

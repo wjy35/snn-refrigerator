@@ -28,8 +28,6 @@ public interface RecipeService {
 
     void saveRecipeIngredient(Recipe recipe, RecipeIngredientParam recipeIngredientParam);
 
-    MemberResponse getMember(Long memberId);
-
     RecipeDetailResponse getRecipe(RecipeDetailRequest request);
 
     List<ContentParam> getRecipeDetail(int recipeId);
