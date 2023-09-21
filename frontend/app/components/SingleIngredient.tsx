@@ -3,13 +3,14 @@ import {Text, TouchableWithoutFeedback, View} from "react-native";
 import {ingredientStyles} from "@/styles/ingredientStyles";
 import {styles} from "@/styles/styles";
 import IngredientIcon from "@/components/IngredientIcon";
+import tw from 'twrnc';
 
 interface props {
   ingredientName: string;
   storageType: number;
   lastDate: string;
   storageDate: string;
-  houseIngredientId: string;
+  houseIngredientId: number;
   ingredientInfoId: number;
 }
 
@@ -22,7 +23,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
     const date: Date = new Date;
     const last: Date = new Date(lastDate);
     // @ts-ignore date 계산 관련 ts 에러 무시
-    const gap: number = Math.floor((last.getTime() - date) / (1000 * 60 * 60 * 24));
+    const gap: number = 1+ Math.floor((last.getTime() - date) / (1000 * 60 * 60 * 24));
     setResult(gap)
     if (storageType === 1){
       setContainer(ingredientStyles.coldContainer)
@@ -46,31 +47,29 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
     console.log(result)
   }
 
+  function getDDay(){
+    if(storageType===1) return '냉동';
+    return `D${(result<0?'+':'-')+Math.abs(result)}`;
+  }
+
   return (
-    <View style={[ingredientStyles.singleContainer, container]}>
+    <View style={[ingredientStyles.singleContainer, container, tw``]}>
       <TouchableWithoutFeedback onPress={toDetail}>
-        <View style={ingredientStyles.singleRowContainer}>
-          <View style={ingredientStyles.singleLeft}>
+        <View style={ingredientStyles.singleColumnContainer}>
+          <View style={ingredientStyles.singleTop}>
             <View style={ingredientStyles.dateContainer}>
               <Text style={[styles.font]}>6일 전 등록</Text>
             </View>
-            <View style={ingredientStyles.nameContainer}>
-              <Text style={[styles.font, ingredientStyles.singleName, text]}>{ingredientName}</Text>
-            </View>
-          </View>
-          <View style={ingredientStyles.singleRight}>
-            <View style={ingredientStyles.iconContainer}>
+            <View style={[ingredientStyles.iconContainer, tw`flex-wrap`]}>
               <IngredientIcon storageType={storageType} ingredientInfoId={ingredientInfoId}/>
             </View>
-            <View style={ingredientStyles.dDayContainer}>
-              {
-                storageType === 1?(
-                  <Text style={[styles.font, text]}>냉동</Text>
-                ):(
-                  <Text style={[styles.font, text]}>D{result>0?`-${result}`:`+${-result}`}</Text>
-                )
-              }
-
+          </View>
+          <View style={[ingredientStyles.singleBottom]}>
+            <View style={[ingredientStyles.nameContainer,tw`self-end`]}>
+              <Text style={[styles.font, text, tw`${ingredientName.length>4?'text-3xl':'text-3xl'} `]} numberOfLines={1} ellipsizeMode={"tail"} >{ingredientName}</Text>
+            </View>
+            <View style={[ingredientStyles.dDayContainer,tw`self-end`]}>
+              <Text style={[styles.font, text, tw`text-right text-base`]}>{getDDay()}</Text>
             </View>
           </View>
         </View>
