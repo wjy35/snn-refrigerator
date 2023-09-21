@@ -1,20 +1,26 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Button, Text, TouchableWithoutFeedback} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {styles} from 'styles/styles';
 import {bottomTabStyles} from "@/styles/bottomTabStyles";
 import {homeDisactive, homeActive, mypageDisactive, mypageActive, recipeActive, recipeDisactive, shareActive, shareDisactive} from '@/assets/icons/icons';
 import {SvgXml} from 'react-native-svg';
+import Modal from 'react-native-modal';
+import MyHouseModal from "@/components/MyHouseModal";
+import {useDispatch, useSelector} from "react-redux";
+import {toggleVisibleAction} from '@/actions/houseAction';
 
 interface props {
   now: string,
 }
 const BottomNavigator = ({now}: props) => {
   const navigation: any = useNavigation();
+  const dispatch = useDispatch();
+  const isVisible = useSelector((state: any) => state.houseReducer.isVisible)
 
   return (
-    <View style={bottomTabStyles.tabContainer}>
-      <View style={bottomTabStyles.tabItemContainer}>
+    <View style={[bottomTabStyles.tabContainer, {zIndex: 100}]}>
+      <View style={[bottomTabStyles.tabItemContainer]}>
         <View style={bottomTabStyles.singleTab}>
           <TouchableWithoutFeedback
             onPress={() => navigation.push('Home')}>
@@ -42,9 +48,11 @@ const BottomNavigator = ({now}: props) => {
             </View>
           </TouchableWithoutFeedback>
         </View>
-        <View style={bottomTabStyles.singleTab}>
+        <View style={[bottomTabStyles.singleTab]}>
           <TouchableWithoutFeedback
-            onPress={ () => navigation.navigate('Home')}
+            onPress={ () => {
+              dispatch(toggleVisibleAction({}));
+            }}
           >
             <Text>냉장고</Text>
           </TouchableWithoutFeedback>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Button, ScrollView} from 'react-native';
 import RecipeLayout from "@/screens/recipe/RecipeLayout";
 import RecipeList from "@/components/RecipeList";
@@ -72,6 +72,10 @@ const RecipeListScreen = ({navigation}:any) => {
     console.log('gd')
     navigation.navigate('RecipeCreate')
   }
+
+  useEffect(() => {
+    console.log('recipe');
+  }, []);
 
   return (
     <RecipeLayout title="레시피" optionTitle="등록" optionFunction={goToCreate}>

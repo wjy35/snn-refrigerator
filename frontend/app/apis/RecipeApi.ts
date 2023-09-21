@@ -18,6 +18,9 @@ interface props {
   memberId: string;
   keyword: string;
   payload: any;
+  requiredIngredients: any[];
+  excludedIngredients: any[];
+  missingIngredientCount: number;
 }
 
 const recipeApi = {
@@ -59,9 +62,16 @@ const recipeApi = {
     );
     return res;
   },
-  searchRecipe: async () => {
-    const res = await PrivateRecipeApi.get(
-      'search'
+  searchRecipe: async ({memberId, requiredIngredients, excludedIngredients, missingIngredientCount, keyword}: props) => {
+    const res = await PrivateRecipeApi.post(
+      'search',
+      {
+        memberId: memberId,
+        requiredIngredients: requiredIngredients,
+        excludedIngredients: excludedIngredients,
+        missingIngredientCount: missingIngredientCount,
+        keyword: keyword,
+      }
     );
     return res;
   },
@@ -105,6 +115,6 @@ const recipeApi = {
     );
     return res;
   }
-
-
 }
+
+export default recipeApi;
