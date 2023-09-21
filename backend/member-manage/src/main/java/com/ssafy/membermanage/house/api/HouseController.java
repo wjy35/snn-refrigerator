@@ -5,10 +5,7 @@ import com.ssafy.membermanage.error.CustomException;
 import com.ssafy.membermanage.error.ErrorCode;
 import com.ssafy.membermanage.member.db.Member;
 
-import com.ssafy.membermanage.house.db.House;
-import com.ssafy.membermanage.house.db.HouseRepository;
 import com.ssafy.membermanage.house.dto.ModifyMemberHouseDto;
-import com.ssafy.membermanage.house.service.HouseServiceImpl;
 import com.ssafy.membermanage.member.db.MemberRepository;
 import com.ssafy.membermanage.member.service.MemberServiceImpl;
 import com.ssafy.membermanage.response.Response;
@@ -26,13 +23,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping("/house")
 public class HouseController {
-
-    @Autowired
-    private HouseRepository houseRepository;
-
-    @Autowired
-    private HouseServiceImpl houseService;
-
     @Autowired
     private MemberRepository memberRepository;
 
@@ -40,60 +30,5 @@ public class HouseController {
     private MemberServiceImpl memberService;
 
 
-    @PostMapping("")
-    @JsonView(ResponseViews.NoRequest.class)
-    public ResponseEntity<Response> createHouse(){
-        House house = houseService.createHouse();
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("houseCode", house.getHouseCode());
-
-        Response response = Response.
-                builder().
-                message("OK").
-                data(data).
-                build();
-        return ResponseEntity.ok(response);
-    }//OK
-
-    @GetMapping("/{houseCode}")
-    @JsonView(ResponseViews.NoRequest.class)
-    public ResponseEntity<Response> checkHouse(@PathVariable String houseCode){
-        boolean flag = houseRepository.existsByHouseCode(houseCode);
-        Map<String, Object> data = new HashMap<>();
-        data.put("existance", flag);
-
-        Response response = Response.
-                builder().
-                message("OK").
-                data(data).
-                build();
-        return ResponseEntity.ok(response);
-    }//OK
-
-    @PutMapping("")
-    @JsonView(ResponseViews.NoRequest.class)
-    public ResponseEntity<Response> modifyMemberHouse(@RequestBody ModifyMemberHouseDto request){
-        Long memberId = request.getMemberId();
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
-
-        String houseCode = request.getHouseCode();
-        member = memberService.modifyMemberHouse(member, houseCode);
-        memberService.save(member);
-
-        Map<String, Object> houseInfo = new HashMap<>();
-        houseInfo.put("memberId", memberId);
-        houseInfo.put("houseCode", houseCode);
-
-        Map<String, Object> data = new HashMap<>();
-        data.put("houseInfo", houseInfo);
-
-        Response response = Response.
-                builder().
-                message("OK").
-                data(data).
-                build();
-        return ResponseEntity.ok(response);
-    }//OK
 }

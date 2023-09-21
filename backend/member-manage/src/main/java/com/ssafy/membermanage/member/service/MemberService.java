@@ -11,6 +11,8 @@ public interface MemberService {
 
     boolean existsByNickname(String nickname);
     Member save(Member member);
+
+    boolean existsByHouseCode(String houseCode);
     void deleteByMemberId(Long id);
     String getToken(HttpServletRequest request);
     Long validateToken(HttpServletRequest request);
