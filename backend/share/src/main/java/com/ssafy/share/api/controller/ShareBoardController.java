@@ -51,12 +51,12 @@ public class ShareBoardController {
             MemberResponse memberResponse=shareBoardService.getMember(post.getMemberId());
             String nickname=memberResponse.getNickname();
             String userProfileImageUrl=memberResponse.getProfileImageUrl();
-            sharePostResponses.add(new SharePostResponse(post,nickname,userProfileImageUrl));
+            sharePostResponses.add(new SharePostResponse(post,nickname,userProfileImageUrl,timeUtil.dateTypeConverter(post.getCreateDate())));
         }
         return new SharePostListResponse(locationInfo.getLocationName(),sharePostResponses);
     }
 
-    @GetMapping("/{location}/{shareBoardId}")
+    @GetMapping("/{locationId}/{shareBoardId}") // getPostList()와 요청 형식이 겹쳐서 이렇게 만들었음
     public SharePostDetailResponse getPostDetail(@PathVariable Long shareBoardId){
         SharePost post=shareBoardService.getPostDetail(shareBoardId);
         String nickname=shareBoardService.getMember(post.getMemberId()).getNickname();
@@ -93,6 +93,5 @@ public class ShareBoardController {
         shareBoardService.delete(shareBoardId);
         return "나눔글 삭제 성공";
     }
-
 
 }

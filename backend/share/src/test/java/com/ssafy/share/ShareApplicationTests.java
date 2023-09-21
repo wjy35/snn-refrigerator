@@ -15,7 +15,7 @@ class ShareApplicationTests {
 
     @Test
     void memberFeginTest() {
-        log.info("{}",memberFeign.getMemberDetail(1));
+        log.info("{}",memberFeign.getMemberDetail(3027437248L));
     }
 
 }
