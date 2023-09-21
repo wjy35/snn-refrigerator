@@ -1,8 +1,8 @@
-export const sample = 'sample';
+export const toggleVisible = 'toggleVisible';
 
-export const sampleAction = (res: any) => {
+export const toggleVisibleAction = (res: any) => {
   return {
-    type: sample,
+    type: toggleVisible,
     payload: res,
   }
 }

@@ -1,8 +1,9 @@
 import React from 'react';
-import {ImageBackground, View} from 'react-native';
+import {Dimensions, ImageBackground, Keyboard, TouchableWithoutFeedback, View} from 'react-native';
 import {styles} from "@/styles/styles";
 import BottomNavigator from "@/components/BottomNavigator";
 import TopNavigator from "@/components/TopNavigator";
+import MyHouseModal from "@/components/MyHouseModal";
 
 interface props {
   children: any;
@@ -11,15 +12,27 @@ interface props {
   optionFunction?: Function;
 }
 
+
 const ShareLayout = ({children, title, optionTitle, optionFunction}: props) => {
+  const screenDimensions = Dimensions.get('screen');
+
+  function hideKeyboard(){
+    Keyboard.dismiss();
+  }
+
   return (
-    <View style={styles.layout}>
-      <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
-        <TopNavigator title={title} optionTitle={optionTitle} optionFunction={optionFunction}/>
-        {children}
-        <View style={{height: 80}}></View>
-        <BottomNavigator now='share'/>
-      </ImageBackground>
+    <View style={[styles.layout, {width: screenDimensions.width, height: screenDimensions.height}]}>
+      <TouchableWithoutFeedback onPress={hideKeyboard}>
+        <View style={{width: screenDimensions.width, height: screenDimensions.height, position: 'relative'}}>
+          <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
+            <MyHouseModal/>
+            <TopNavigator title={title} optionTitle={optionTitle} optionFunction={optionFunction}/>
+            {children}
+            <View style={{height: 80}}></View>
+          </ImageBackground>
+          <BottomNavigator now='share'/>
+        </View>
+      </TouchableWithoutFeedback>
     </View>
   )
 }
