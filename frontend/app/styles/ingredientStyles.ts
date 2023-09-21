@@ -8,28 +8,28 @@ export const ingredientStyles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   singleContainer: {
-    width: 180,
-    height: 70,
-    marginBottom: 10,
+    width: '46%',
+    aspectRatio : 2/1,
+    marginVertical: '1%',
+    marginHorizontal: '0%',
   },
-  singleRowContainer: {
-    flexDirection: 'row',
+  singleColumnContainer: {
+    flexDirection: 'column',
     justifyContent: 'space-between',
     width: '100%',
     height: '100%',
-    padding: 7,
+    padding: 10,
   },
-  singleLeft: {
-    flex: 2,
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    justifyContent: "space-between",
-  },
-  singleRight: {
+  singleTop: {
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: "space-around",
+  },
+  singleBottom: {
+    flex: 3,
+    flexDirection: 'row',
+    justifyContent: "space-around",
+    verticalAlign:"bottom",
   },
   singleName: {
     fontSize: 30,
@@ -42,8 +42,7 @@ export const ingredientStyles = StyleSheet.create({
     marginTop: 3,
   },
   iconContainer: {
-    flex: 1,
-    flexDirection: 'row',
+    // flex: 1,
   },
   dDayContainer: {
     flex: 1,
