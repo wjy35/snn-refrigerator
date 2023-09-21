@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
+@Setter
 @ToString
 public class HouseIngredientResponse {
 

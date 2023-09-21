@@ -8,6 +8,7 @@ import com.ssafy.recipe.api.request.RecipeIngredientParam;
 import com.ssafy.recipe.api.request.RecipeRequest;
 import com.ssafy.recipe.api.response.ContentParam;
 import com.ssafy.recipe.api.response.HouseIngredientResponse;
+import com.ssafy.recipe.api.response.Response;
 import com.ssafy.recipe.db.entity.Recipe;
 import com.ssafy.recipe.db.entity.RecipeDetail;
 import com.ssafy.recipe.db.repository.RecipeRepository;
@@ -54,6 +55,12 @@ class RecipeApplicationTests {
 		MemberResponse memberResponse = recipeSearchService.getMember(memberId);
 		System.out.println(memberResponse.toString());
 		assertNotNull(memberResponse);
+	}
+
+	@Test
+	void memberFeignTest(){
+		Response s = memberFeign.getMemberDetail(3029548333l);
+		System.out.println(s);
 	}
 
 	@Test
