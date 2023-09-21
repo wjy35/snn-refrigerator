@@ -92,7 +92,7 @@ public class RecipeServiceImpl implements RecipeService{
         this.deleteRecipeIngredient(recipe);
         for(int i=0; i<request.getIngredients().size(); i++){
             RecipeIngredientParam recipeIngredientParam = request.getIngredients().get(i);
-            if(recipeIngredientParam.getIngredientInfoId()==-1){
+            if(recipeIngredientParam.getIngredientInfoId()==0){
                 this.saveRecipeCustomIngredient(recipe, recipeIngredientParam);
             }else{
                 this.saveRecipeIngredient(recipe, recipeIngredientParam);
