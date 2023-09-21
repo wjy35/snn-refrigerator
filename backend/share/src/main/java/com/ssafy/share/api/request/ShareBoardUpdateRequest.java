@@ -5,32 +5,25 @@ import com.ssafy.share.db.entity.LocationInfo;
 import com.ssafy.share.db.entity.ShareImage;
 import com.ssafy.share.db.entity.ShareIngredient;
 import com.ssafy.share.db.entity.SharePost;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class ShareBoardWriteRequest {
-    private Long memberId;
+public class ShareBoardUpdateRequest {
     private Short locationId;
-    private LocationInfo locationInfo; // 받아온 ID로 변환할것임
+    private LocationInfo locationInfo;
     private String title;
     private String content;
     private List<ShareIngredient> shareIngredients;
     private List<ShareImage> shareImages;
 
-    public ShareBoardWriteRequest(Long memberId, Short locationId, String title, String content) {
+    public ShareBoardUpdateRequest(Long memberId, Short locationId, String title, String content) {
         this.shareIngredients=new ArrayList<>();
-        this.memberId = memberId;
         this.locationId = locationId;
         this.title = title;
         this.content = content;
     }
 
-    public SharePost toEntity(){
-        return SharePost.builder().memberId(memberId).locationInfo(locationInfo).title(title).content(content)
-                .shareIngredients(shareIngredients).shareImages(shareImages).build();
-    }
 }

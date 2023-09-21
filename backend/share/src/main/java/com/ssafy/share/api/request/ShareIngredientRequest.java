@@ -1,6 +1,7 @@
 package com.ssafy.share.api.request;
 
 import com.ssafy.share.db.entity.ShareIngredient;
+import com.ssafy.share.db.entity.SharePost;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,6 +9,7 @@ import lombok.Data;
 public class ShareIngredientRequest {
     private Short ingredientInfoId;
     private Integer amount;
+    private SharePost sharePost;
 
     public ShareIngredientRequest(Short ingredientInfoId, Integer amount) {
         this.ingredientInfoId = ingredientInfoId;
@@ -15,6 +17,6 @@ public class ShareIngredientRequest {
     }
 
     public ShareIngredient toEntity() {
-        return ShareIngredient.builder().ingredientInfoId(ingredientInfoId).amount(amount).build();
+        return ShareIngredient.builder().ingredientInfoId(ingredientInfoId).amount(amount).sharePost(sharePost).build();
     }
 }
