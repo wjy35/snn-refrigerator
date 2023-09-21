@@ -16,11 +16,11 @@ public interface RecipeSearchService {
     void getRecipeSearchResponse(long memberId);
     public int getNeededIngredientsCnt(Recipe recipe);
 
-    public int getMyIngredientCnt(Recipe recipe, int houseSeq);
+    public int getMyIngredientCnt(Recipe recipe, String houseCode);
 
-    public MemberResponse getMember(Recipe recipe);
+    public MemberResponse getMember(Long memberId);
 
     boolean favoriteCheck(long memberId, int recipeId);
 
-    List<HouseIngredientResponse> getHouseIngredientResponse(int houstSeq);
+    List<HouseIngredientResponse> getHouseIngredientResponse(String houseCode);
 }

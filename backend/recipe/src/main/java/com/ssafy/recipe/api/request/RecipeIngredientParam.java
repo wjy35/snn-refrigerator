@@ -3,6 +3,7 @@ package com.ssafy.recipe.api.request;
 import lombok.*;
 
 @Getter
+@ToString
 public class RecipeIngredientParam {
     private String ingredientName;
     private String amount;

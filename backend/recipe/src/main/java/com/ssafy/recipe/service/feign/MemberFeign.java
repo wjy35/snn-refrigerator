@@ -1,6 +1,7 @@
 package com.ssafy.recipe.service.feign;
 
 import com.ssafy.recipe.api.response.MemberResponse;
+import com.ssafy.recipe.api.response.Response;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,5 +12,7 @@ import java.util.Optional;
 public interface MemberFeign {
 
     @GetMapping("/{memberId}")
-    Optional<MemberResponse> getMemberDetail(@PathVariable long memberId);
+    Response getMemberDetail(@PathVariable long memberId);
+
+
 }
