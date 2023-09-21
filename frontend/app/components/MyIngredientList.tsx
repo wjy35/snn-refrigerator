@@ -9,7 +9,7 @@ const MyIngredientList = ({children}: any) => {
       houseIngredientId: "21",
       houseSeq: "1243",
       ingredientInfoId: 123, // -1이면 커스텀 재료
-      ingredientName: "가자미",
+      ingredientName: "가자미가자가자가자미",
       storageType: 0, // 0 냉장, 1 냉동, 2 상온
       lastDate: "2023-09-21",
       storageDate: "", // datetime

@@ -68,7 +68,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
               <Text style={[styles.font]}>6일 전 등록</Text>
             </View>
             <View style={ingredientStyles.nameContainer}>
-              <Text style={[styles.font, ingredientStyles.singleName, text]}>{ingredientName}</Text>
+              <Text style={[styles.font, ingredientStyles.singleName, text]} numberOfLines={1}>{ingredientName}</Text>
             </View>
           </View>
           <View style={ingredientStyles.singleRight}>
