@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -29,9 +30,7 @@ public class MemberServiceImpl {
     private HouseRepository houseRepository;
 
     public Member modifyMemberHouse(Member member, String houseCode) throws CustomException{
-        House house = houseRepository.findByHouseCode(houseCode)
-                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_House));
-        member.setHouse(house);
+        member.setHouseCode(houseCode);
         member = memberRepository.save(member);
         return member;
     }
@@ -132,4 +131,7 @@ public class MemberServiceImpl {
         }
     }
 
+    public String createHouseCode(){
+        return UUID.randomUUID().toString();
+    }
 }
