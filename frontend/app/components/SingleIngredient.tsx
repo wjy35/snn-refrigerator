@@ -18,6 +18,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
   const [result, setResult] = useState<number>(0)
   const [container, setContainer] = useState<any>()
   const [text, setText] = useState<any>()
+  const [selected, setSelected] = useState<boolean>(false);
 
   useEffect(() => {
     const date: Date = new Date;
@@ -65,23 +66,23 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
   }
 
   return (
-    <View style={[ingredientStyles.singleContainer, container, tw``]}>
+    <View style={[tw`w-[${selected?98:48}%] my-[1%] aspect-video mx-[1%] bg-white`]}>
       <TouchableWithoutFeedback onPress={toDetail}>
-        <View style={ingredientStyles.singleColumnContainer}>
+        <View style={[container, ingredientStyles.singleColumnContainer]}>
           <View style={ingredientStyles.singleTop}>
             <View style={ingredientStyles.dateContainer}>
-              <Text style={[styles.font]}>6일 전 등록</Text>
+              <Text style={[styles.font, tw`text-base`]}>6일 전 등록</Text>
             </View>
-            <View style={[ingredientStyles.iconContainer, tw`flex-wrap`]}>
+            <View style={[tw`flex-wrap`]}>
               <IngredientIcon storageType={storageType} ingredientInfoId={ingredientInfoId}/>
             </View>
           </View>
           <View style={[ingredientStyles.singleBottom]}>
             <View style={[ingredientStyles.nameContainer,tw`self-end`]}>
-              <Text style={[styles.font, text, tw`${ingredientName.length>4?'text-3xl':'text-3xl'} `]} numberOfLines={1} ellipsizeMode={"tail"} >{ingredientName}</Text>
+              <Text style={[styles.font, text, tw`text-4xl`]} numberOfLines={1} ellipsizeMode={"tail"} >{ingredientName}</Text>
             </View>
             <View style={[ingredientStyles.dDayContainer,tw`self-end`]}>
-              <Text style={[styles.font, text, tw`text-right text-base`]}>{getDDay()}</Text>
+              <Text style={[styles.font, text, tw`text-right text-lg`]}>{getDDay()}</Text>
             </View>
           </View>
         </View>
