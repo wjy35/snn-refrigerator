@@ -1,11 +1,24 @@
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
+  layout: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    width: '100%',
+    height: '100%',
+  },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    backgroundColor: '#ffffff',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    borderWidth: 1,
+    width: '100%',
+  },
+  bg: {
+    flex: 1,
+    width: '100%',
   },
   marginContainer: {
     flex: 1,
@@ -28,6 +41,10 @@ export const styles = StyleSheet.create({
     height: 80,
     width: '100%'
   },
+  centerContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   mainColor: {
     color: '#3093EF',
   },
@@ -36,13 +53,14 @@ export const styles = StyleSheet.create({
   },
   font: {
     fontFamily: 'BM-HANNA',
+    color: '#000000'
   },
   flex: {
     flex: 1,
   },
   input: {
     height: 40,
-    margin: 12,
+    marginVertical: 12,
     borderWidth: 1,
     padding: 10,
   },

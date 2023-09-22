@@ -4,7 +4,7 @@ import MyPageLayout from "@/screens/myPage/MyPageLayout";
 
 const AlarmSettingScreen = ({navigation}:any) => {
   return (
-    <MyPageLayout>
+    <MyPageLayout title="알림 설정">
       <Text>AlarmSettingScreen</Text>
     </MyPageLayout>
   )

@@ -1,28 +1,72 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import {recipeStyles} from "@/styles/recipeStyles";
+import {useNavigation} from "@react-navigation/native";
+import CircularPercent from "@/components/CircularPercent";
+import RecipeInfo from "@/components/RecipeInfo";
+import {starActive, starDisactive} from "@/assets/icons/icons";
+import {SvgXml} from "react-native-svg";
 
-const RecipeItem = ({navigation}:any) => {
+
+interface props {
+  item: any;
+  navigation: any;
+  width?: any;
+  height?: any;
+}
+
+const RecipeItem = ({item, navigation, width, height}:props) => {
+  function toDetail() {
+    navigation.navigate('RecipeDetail', {recipeId: item.recipeId})
+  }
+
   return (
-    <View style={recipeStyles.recipeItemContainer}>
-      <View style={recipeStyles.recipeItemImage}>
-        <Text>음식 사진</Text>
-      </View>
-      <View style={recipeStyles.recipeItemInfo}>
-        <View style={recipeStyles.recipeItemTitleContainer}>
-          <Text style={recipeStyles.recipeItemTitle}>음식 제목</Text>
+    <TouchableWithoutFeedback
+      onPress={toDetail}
+    >
+      <View style={[recipeStyles.recipeItemContainer, {width: width, height: height}]}>
+        <View style={recipeStyles.recipeItemImage}>
+          <View style={recipeStyles.recipeFavoriteContainer}>
+            <SvgXml
+              xml={starDisactive}
+              width={25}
+              height={25}
+              style={{position: 'relative'}}
+            />
+          </View>
+          <Text>음식 사진</Text>
         </View>
-        <View style={recipeStyles.recipeItemUser}>
-          <Text>작성자</Text>
+        <View style={recipeStyles.recipeItemInfo}>
+          <View style={recipeStyles.recipeItemTitleContainer}>
+            <Text style={recipeStyles.recipeItemTitle}>{item.title}</Text>
+          </View>
+          <View style={recipeStyles.recipeItemUser}>
+            <View style={{width: 20, height: 20, borderWidth: 1,}}>
+
+            </View>
+            <Text>{item.imageUrl}</Text>
+          </View>
+          <View style={recipeStyles.recipeItemInfo}>
+            <View style={recipeStyles.recipeItemTitleContainer}>
+              <Text style={recipeStyles.recipeItemTitle}>{item.title}</Text>
+            </View>
+            <View style={recipeStyles.recipeItemUser}>
+              <View style={{width: 20, height: 20, borderWidth: 1,}}>
+
+              </View>
+              <Text>{item.nickname}</Text>
+            </View>
+            <View style={recipeStyles.recipeItemInfoContainer}>
+              <View>
+                <RecipeInfo foodName={item.foodName} cookingTime={item.cookingTime} serving={item.serving}/>
+              </View>
+              <View style={recipeStyles.recipeItemPercent}>
+                <CircularPercent total={item.neededIngredients} now={item.myIngredients}/>
+              </View>
+            </View>
+          </View>
         </View>
-        <View>
-          <Text>정보</Text>
-        </View>
-        <View style={recipeStyles.recipeItemPercent}>
-          <Text>일치도</Text>
-        </View>
-      </View>
-    </View>
+      </TouchableWithoutFeedback>
   )
 }
 
