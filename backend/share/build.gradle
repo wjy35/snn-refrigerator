@@ -38,6 +38,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'io.netty:netty-all:4.1.24.Final'
     implementation 'org.apache.commons:commons-lang3:3.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 //    runtimeOnly 'com.h2database:h2'

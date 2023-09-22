@@ -22,7 +22,7 @@ public class SharePostDetailResponse {
     public SharePostDetailResponse(SharePost entity,String nickname,String createdTime) {
         this.title = entity.getTitle();
         this.nickname=nickname;
-        this.locationName = entity.getLocationInfo().getLocationName();
+
         this.content = entity.getContent();
         for (ShareImage imgs:entity.getShareImages()){
             this.shareImages.add(imgs.getSharePostImageUrl());
