@@ -7,9 +7,8 @@ import java.time.LocalDate;
 
 @Getter
 @Builder
-public class HouseIngredientDetailParam {
-    private Short ingredientInfoId;
-    private String ingredientName;
+public class HouseIngredientSaveRequest {
+    private Integer houseIngredientId;
     private Byte storageType;
     private LocalDate lastDate;
 }
