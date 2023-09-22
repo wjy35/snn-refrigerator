@@ -19,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,8 +42,9 @@ public class ShareBoardController {
 
 
     @GetMapping("/{locationId}")
-    public SharePostListResponse getPostList(@PathVariable Short locationId,@RequestParam(required = false) String keyword,
-                                               @PageableDefault(sort = "sharePostId", size = 5, direction = Sort.Direction.DESC) Pageable pageable){ // 게시글 리스트 조회, 키워드 검색 가능
+    public ResponseEntity<?> getPostList(@PathVariable Short locationId, @RequestParam(required = false) String keyword,
+                                         @PageableDefault(sort = "sharePostId", size = 5, direction = Sort.Direction.DESC) Pageable pageable){ // 게시글 리스트 조회, 키워드 검색 가능
+        Response response = new Response();
         LocationInfo locationInfo=locationInfoRepository.findByLocationId(locationId)
                 .orElseThrow(() -> new IllegalArgumentException("장소를 찾을 수 없습니다. ID: " + locationId));
         Page<SharePost> posts=shareBoardService.getPostList(pageable,locationInfo,keyword);
@@ -53,7 +56,11 @@ public class ShareBoardController {
             String userProfileImageUrl=memberResponse.getProfileImageUrl();
             sharePostResponses.add(new SharePostResponse(post,nickname,userProfileImageUrl,timeUtil.dateTypeConverter(post.getCreateDate())));
         }
-        return new SharePostListResponse(locationInfo.getLocationName(),sharePostResponses);
+        response.setMessage("OK");
+        response.addRequest("locationId",locationId);
+        response.addData("response", new SharePostListResponse(locationInfo.getLocationName(),sharePostResponses));
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/detail/{shareBoardId}") // getPostList()와 요청 형식이 겹쳐서 이렇게 만들었음
