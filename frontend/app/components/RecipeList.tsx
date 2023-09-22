@@ -20,7 +20,7 @@ const RecipeList = ({horizontal, recipeList, navigation, width=350}:props) => {
         renderItem={(item) => <RecipeItem item={item.item} navigation={navigation} width={width}/>}
         keyExtractor={(item) => String(item.recipeId)}
         horizontal={horizontal}
-        scrollEnabled={true}
+        contentContainerStyle={{alignItems: 'center'}}
       />
     </View>
   )

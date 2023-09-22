@@ -4,69 +4,53 @@ import {styles} from "@/styles/styles";
 import ShareLayout from "@/screens/share/ShareLayout";
 import AutoCompleteInput from "@/components/AutoCompleteInput";
 import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
+import PlainInput from "@/components/PlainInput";
+import useInput from "@/hooks/useInput";
+import ShareItem from "@/components/ShareItem";
 
 const ShareListScreen = ({navigation}:any) => {
-  const [now, setNow] = useState(0)
-  const [text, setText] = useState('')
-  const [textList, setTextList] = useState<any[]>()
+  const shareText = useInput({
+    placeholder: '검색',
+  })
+  const [shareList, setShareList] = useState<any[]>([
+    {name: '1'}, {name: '2'}, {name: '3'}, {name: '4'}, {name: '5'},{name: '6'}, {name: '7'}, {name: '8'},
+  ])
 
-  function onChangeText(newText: string){
-    setText(newText)
-    check(newText)
-  }
-
-  const check = async (keyword: string) => {
-    try {
-      const res = await ingredientAutocompleteApi.check({keyword: keyword})
-      if (res.status === 200) {
-        setTextList(res.data.data.ingredients)
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  function onPressIn(now: number){
-    setNow(now)
-  }
-
-  function onBlur(){
-    setNow(0)
-    setText('')
-    setTextList([])
+  function goShareCreate(){
+    navigation.navigate('ShareCreate')
   }
 
   return (
-    <ShareLayout title="나눔">
+    <ShareLayout title="나눔" optionTitle='등록' optionFunction={goShareCreate}>
       {/*<Text>ShareListScreen</Text>*/}
-      {/*<Button*/}
-      {/*  title="나눔글 생성"*/}
-      {/*  onPress={ () => navigation.navigate('ShareCreate')}*/}
-      {/*/>*/}
-      {/*<Button*/}
-      {/*  title="나눔글 상세"*/}
-      {/*  onPress={ () => navigation.navigate('ShareDetail')}*/}
-      {/*/>*/}
-      {/*<Button*/}
-      {/*  title="나눔채팅목록"*/}
-      {/*  onPress={ () => navigation.navigate('ShareChatList')}*/}
-      {/*/>*/}
       {/*<Button*/}
       {/*  title="개별나눔채팅"*/}
       {/*  onPress={ () => navigation.navigate('SingleShareChat')}*/}
       {/*/>*/}
       <ScrollView keyboardShouldPersistTaps='handled'>
-        {
-          (now===0 || now===1) && (
-            <AutoCompleteInput placeholder={'검색'} onChangeText={onChangeText} onPressIn={onPressIn} now={1} text={text} textList={textList} onBlur={onBlur}/>
-          )
-        }
-        {
-          (now===0 || now===2) && (
-            <AutoCompleteInput placeholder={'검색'} onChangeText={onChangeText} onPressIn={onPressIn} now={2} text={text} textList={textList} onBlur={onBlur}/>
-          )
-        }
+        <View style={{width: '100%', height: 150, borderWidth: 1}}>
+          <View>
+            <Text>역삼동</Text>
+          </View>
+          <View>
+            <PlainInput {...shareText}/>
+          </View>
+        </View>
+        <View style={[{width: '100%', justifyContent: 'center', alignItems: 'center'}]}>
+          {
+            shareList.map((i, idx) => {
+              return (
+                <React.Fragment key={`share${idx}`}>
+                  <ShareItem title={i.name}/>
+                </React.Fragment>
+              )
+            })
+          }
+        </View>
       </ScrollView>
+      <View style={[{width: 50, height: 50, position: 'absolute', bottom: 80, right: 50}]}>
+        <Button title='채팅' onPress={() => navigation.navigate('ShareChatList')}></Button>
+      </View>
     </ShareLayout>
   );
 };
