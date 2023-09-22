@@ -10,15 +10,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ChatViewServiceImpl implements ChatViewService {
-    private final RedisTemplate<Integer, ChatEntity> redisTemplate;
+    private final RedisTemplate<Integer, ChatEntity> messageRedisTemplate;
 
     @Override
     public List<ChatEntity> viewAllChat(Integer chatRoomId) {
-        return redisTemplate.opsForList().range(chatRoomId,0,-1);
+        return messageRedisTemplate.opsForList().range(chatRoomId,0,-1);
     }
 
     @Override
     public ChatEntity viewCurrentChat(Integer chatRoomId) {
-        return redisTemplate.opsForList().range(chatRoomId,-1,-1).get(0);
+        return messageRedisTemplate.opsForList().range(chatRoomId,-1,-1).get(0);
     }
 }
