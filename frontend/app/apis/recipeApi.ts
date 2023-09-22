@@ -1,13 +1,14 @@
 import axios from 'axios';
 import {baseURL} from '@/apis/BASEURL'
+import RecipeListScreen from "@/screens/recipe/RecipeListScreen";
 
 
 const PublicRecipeApi = axios.create({
-  baseURL: `${baseURL}/ingredient-autocomplete`,
+  baseURL: `${baseURL}/recipe`,
 })
 
 const PrivateRecipeApi = axios.create({
-  baseURL: `${baseURL}/ingredient-autocomplete`,
+  baseURL: `${baseURL}/recipe`,
   headers: {
     // Authorization: `Bearer ${localStorage.getItem('token')}`
   }
@@ -18,6 +19,15 @@ interface props {
   memberId: string;
   keyword: string;
   payload: any;
+}
+
+interface search {
+    memberId: bigint;
+    contain: any[];
+    remove: any[];
+    n: number;
+    keyword: string;
+
 }
 
 const recipeApi = {
@@ -59,9 +69,17 @@ const recipeApi = {
     );
     return res;
   },
-  searchRecipe: async () => {
-    const res = await PrivateRecipeApi.get(
-      'search'
+  searchRecipe: async ({memberId, contain, remove, n, keyword}: search) => {
+    const res = await PrivateRecipeApi.post(
+      'search/',
+        {
+            memberId: memberId,
+            requiredIngredients: contain,
+            excludedIngredients: remove,
+            missingIngredientCount: n,
+            keyword: keyword,
+        }
+
     );
     return res;
   },
@@ -108,3 +126,5 @@ const recipeApi = {
 
 
 }
+
+export default recipeApi;

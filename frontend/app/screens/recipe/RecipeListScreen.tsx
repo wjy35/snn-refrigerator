@@ -1,8 +1,12 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Button, ScrollView} from 'react-native';
 import RecipeLayout from "@/screens/recipe/RecipeLayout";
 import RecipeList from "@/components/RecipeList";
 import {styles} from "@/styles/styles";
+import searchRecipe from "@/apis/recipeApi";
+import sampleApi from "@/apis/sampleApi";
+import recipeApi from "@/apis/recipeApi";
+import houseApi from "@/apis/houseApi";
 
 
 const RecipeListScreen = ({navigation}:any) => {
@@ -11,67 +15,57 @@ const RecipeListScreen = ({navigation}:any) => {
     {title: 'title2', id: 2},
     {title: 'title3', id: 3},
   ])
-  const recipe = [
+  const [recipe , setRecipe]= useState<any[]>([
     {
-      recipeId:"123123",
-      nickname:"독버섯 왕준영",
-      title:"곽민규찜",
-      imageUrl:"레시피 이미지",
-      favoriteCount:19,
-      neededIngredients:8,
-      myIngredients:6,
-      foodName:"김치찜",
-      cookingTime:"120분",
-      serving:2
-    },
-    {
-      recipeId:"123124",
-      nickname:"독버섯 왕준영",
-      title:"곽민규찜",
-      imageUrl:"레시피 이미지",
-      favoriteCount:19,
-      neededIngredients:12,
-      myIngredients:6,
-      foodName:"김치찜",
-      cookingTime:"120분",
-      serving:2
-    },
-    {
-      recipeId:"123125",
-      nickname:"독버섯 왕준영",
-      title:"곽민규찜",
-      imageUrl:"레시피 이미지",
-      favoriteCount:19,
-      neededIngredients:10,
-      myIngredients:3,
-      foodName:"김치찜",
-      cookingTime:"120분",
-      serving:2
-    },
-    {
-      recipeId:"123126",
-      nickname:"독버섯 왕준영",
-      title:"곽민규찜",
-      imageUrl:"레시피 이미지",
-      favoriteCount:19,
-      neededIngredients:7,
-      myIngredients:6,
-      foodName:"김치찜",
-      cookingTime:"120분",
-      serving:2
-    },
-  ];
+      recipeId:"",
+      nickname:"",
+      title:"",
+      imageUrl:"",
+      favoriteCount: 0,
+      neededIngredients: 0,
+      myIngredients: 0,
+      foodName:"",
+      cookingTime:"",
+      serving:0
+    }
+  ]);
+  const memberId : string = '3029548333'
+
   const [settings, setSettings] = useState({
-    contain: [{name: '베이컨', id: 1}, {name: '양파', id: 2}, {name: '아스파라거스', id: 3}],
-    remove: [{name: '번데기', id: 1}, {name: '땅콩', id: 2}, {name: '아몬드', id: 3}],
-    n: 3,
-    keyword: '김치찌개'
+    memberId: memberId,
+    contain: [],
+    remove: [],
+    n: 100,
+    keyword: ''
   })
 
   function goToCreate(){
     console.log('gd')
     navigation.navigate('RecipeCreate')
   }
+
+
+
+  useEffect(() => {
+    const getRecipe = async () => {
+      console.log(typeof settings)
+      try {
+        let res = await recipeApi.searchRecipe(settings);
+        if (res.status === 200) {
+          console.log(res.data.data.recipe);
+          setRecipe(res.data.data.recipe);
+
+          console.log(recipe.length);
+        } else {
+          console.log(res.data.data.recipe)
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    getRecipe();
+  }, [settings]);
 
   return (
     <RecipeLayout title="레시피" optionTitle="등록" optionFunction={goToCreate}>
