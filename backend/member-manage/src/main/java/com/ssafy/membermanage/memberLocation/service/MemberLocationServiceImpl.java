@@ -43,7 +43,7 @@ public class MemberLocationServiceImpl {
     public List<LocationInfo> getLocations(Member member){
         List<MemberLocation> memberLocations = findAllByMember(member);
 
-        List<LocationInfo> locations = new ArrayList<LocationInfo>();
+        List<LocationInfo> locations = new ArrayList<>();
 
         for(MemberLocation memberLocation: memberLocations){
 
