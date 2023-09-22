@@ -33,7 +33,7 @@ const RecipeItem = ({item, navigation, width}:props) => {
                   style={{position: 'relative'}}
               />
             </View>
-            <Text>음식 사진</Text>
+            <Text>{item.imageUrl}</Text>
           </View>
           <View style={recipeStyles.recipeItemInfo}>
             <View style={recipeStyles.recipeItemTitleContainer}>

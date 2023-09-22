@@ -3,18 +3,10 @@ import {View, Text, Button, ScrollView} from 'react-native';
 import RecipeLayout from "@/screens/recipe/RecipeLayout";
 import RecipeList from "@/components/RecipeList";
 import {styles} from "@/styles/styles";
-import searchRecipe from "@/apis/recipeApi";
-import sampleApi from "@/apis/sampleApi";
 import recipeApi from "@/apis/recipeApi";
-import houseApi from "@/apis/houseApi";
 
 
 const RecipeListScreen = ({navigation}:any) => {
-  const [recipeList, setRecipeList] = useState([
-    {title: 'title1', id: 1},
-    {title: 'title2', id: 2},
-    {title: 'title3', id: 3},
-  ])
   const [recipe , setRecipe]= useState<any[]>([
     {
       recipeId:"",
@@ -35,7 +27,7 @@ const RecipeListScreen = ({navigation}:any) => {
     memberId: memberId,
     contain: [],
     remove: [],
-    n: 100,
+    n: 1000,
     keyword: ''
   })
 
@@ -48,14 +40,10 @@ const RecipeListScreen = ({navigation}:any) => {
 
   useEffect(() => {
     const getRecipe = async () => {
-      console.log(typeof settings)
       try {
         let res = await recipeApi.searchRecipe(settings);
         if (res.status === 200) {
-          console.log(res.data.data.recipe);
           setRecipe(res.data.data.recipe);
-
-          console.log(recipe.length);
         } else {
           console.log(res.data.data.recipe)
         }
