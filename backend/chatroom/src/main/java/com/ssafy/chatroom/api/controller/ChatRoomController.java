@@ -4,18 +4,15 @@ import com.ssafy.chatroom.api.mapper.ChatRoomMapper;
 import com.ssafy.chatroom.api.request.ChatRoomCreateRequest;
 import com.ssafy.chatroom.api.response.Response;
 import com.ssafy.chatroom.service.ChatRoomCreateService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import java.sql.SQLIntegrityConstraintViolationException;
 
+
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ChatRoomController {
     private final ChatRoomCreateService chatRoomCreateService;
 
@@ -43,6 +40,5 @@ public class ChatRoomController {
                 .build();
         return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
     }
-
 
 }
