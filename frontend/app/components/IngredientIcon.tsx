@@ -10,20 +10,23 @@ interface props {
   storageType: number;
   ingredientInfoId: number;
 }
+
+const SIZE = 20;
+
 const IngredientIcon = ({storageType, ingredientInfoId}: props) => {
   return (
     <>
       {ingredientInfoId === 0 && (
         <SvgXml
           xml={custom}
-          width={15}
-          height={15}
+          width={SIZE}
+          height={SIZE}
         />
       )}
       <SvgXml
           xml={storageType === 0?cool:(storageType === 1?cold:warm)}
-          width={15}
-          height={15}
+          width={SIZE}
+          height={SIZE}
           style={[tw`ml-1`]}
       />
     </>

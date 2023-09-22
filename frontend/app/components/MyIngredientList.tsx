@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View} from "react-native";
 import SingleIngredient from "@/components/SingleIngredient";
-import {ingredientStyles} from "@/styles/ingredientStyles";
-import tw from "twrnc";
+import tw from 'twrnc';
 import houseApi from "@/apis/houseApi";
 
 const MyIngredientList = ({children}: any) => {
@@ -27,8 +26,8 @@ const MyIngredientList = ({children}: any) => {
         let res = await houseApi.houseIngredientList(houseCode);
         // console.log(res);
         if(res.status===200){
-          console.log(res.data.data.ingredients);
-          setIngredients(res.data.data.ingredients);
+            console.log(res.data.data.ingredients);
+            setIngredients(res.data.data.ingredients);
         }else{
           console.log(res.data.message);
         }
@@ -42,11 +41,11 @@ const MyIngredientList = ({children}: any) => {
 
 
   return (
-    <View style={[ingredientStyles.ingredientContainer, tw`w-full bg-white border`]}>
+    <View style={tw`w-full flex flex-wrap flex-row min-h-[40]`}>
       {ingredients.map((i) => {
         return (
             // @ts-ignore
-            1+ Math.floor((new Date(i.lastDate).getTime() - new Date()) / (1000 * 60 * 60 * 24))<7&&
+            // 1+ Math.floor((new Date(i.lastDate).getTime() - new Date()) / (1000 * 60 * 60 * 24))<7&&
             i.storageType!=1&&
           <React.Fragment key={`ingredient ${i.houseIngredientId}`}>
             <SingleIngredient
