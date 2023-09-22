@@ -14,11 +14,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 const LogInScreen = ({navigation}: any) => {
   async function goHome() {
-    try {
-      await AsyncStorage.setItem('my-key', 'testtoken');
-    } catch (e) {
-      console.log(e);
-    }
     navigation.navigate('Home');
   }
 
@@ -30,6 +25,11 @@ const LogInScreen = ({navigation}: any) => {
           await AsyncStorage.setItem('idToken', result.idToken);
           await AsyncStorage.setItem('refreshToken', result.refreshToken);
           console.log(result);
+          if (result.idToken) {
+            navigation.navigate('Home');
+          } else {
+            throw new Error('Login failed');
+          }
         })
         .catch(error => {
           if (error.code === 'E_CANCELLED_OPERATION') {
