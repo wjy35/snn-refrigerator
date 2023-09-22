@@ -1,10 +1,8 @@
 package com.ssafy.share.api.request;
 
 
-import com.ssafy.share.db.entity.LocationInfo;
 import com.ssafy.share.db.entity.ShareImage;
 import com.ssafy.share.db.entity.ShareIngredient;
-import com.ssafy.share.db.entity.SharePost;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -12,8 +10,8 @@ import java.util.List;
 
 @Data
 public class ShareBoardUpdateRequest {
+    private Long memberId;
     private Short locationId;
-    private LocationInfo locationInfo;
     private String title;
     private String content;
     private List<ShareIngredient> shareIngredients;
