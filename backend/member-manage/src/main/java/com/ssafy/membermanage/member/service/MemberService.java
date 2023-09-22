@@ -1,28 +1,20 @@
 package com.ssafy.membermanage.member.service;
 
-import com.ssafy.membermanage.error.CustomException;
-import com.ssafy.membermanage.error.ErrorCode;
-import com.ssafy.membermanage.house.db.House;
-import com.ssafy.membermanage.house.db.HouseRepository;
 import com.ssafy.membermanage.member.db.Member;
-import com.ssafy.membermanage.member.db.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
-@Service
-public class MemberService {
-    @Autowired
-    private MemberRepository memberRepository;
+public interface MemberService {
+    Member modifyMemberHouse(Member member, String houseCode);
+    Optional<Member> findByMemberId(Long id);
 
-    @Autowired
-    private HouseRepository houseRepository;
+    boolean existsByNickname(String nickname);
+    Member save(Member member);
 
-    public Member modifyMemberHouse(Member member, String houseCode) throws CustomException{
-        House house = houseRepository.findByHouseCode(houseCode)
-                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_House));
-        member.setHouse(house);
-        return member;
-    }
+    boolean existsByHouseCode(String houseCode);
+    void deleteByMemberId(Long id);
+    String getToken(HttpServletRequest request);
+    Long validateToken(HttpServletRequest request);
+    boolean kakaoLogout(HttpServletRequest request, Long memberId);
 }
