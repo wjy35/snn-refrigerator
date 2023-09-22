@@ -22,33 +22,29 @@ const LogInScreen = ({navigation}: any) => {
   const [accessToken, setAccessToken] = useState<string>('');
   const [refreshToken, setRefreshToken] = useState<string>('');
   const [birthday, setBirthday] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
+  const [profileImageUrl, setProfileImageUrl] = useState<string>('');
   const [memberId, setMemberId] = useState<bigint>(BigInt(-1));
   const [email, setEmail] = useState<string>('');
 
-  async function getKaKaoInfo(t: string) {
-    try {
-      // let dummy = AsyncStorage.getItem('accessToken');
-      // dummy = dummy as string;
-      // console.log(dummy);
-      // setAccessToken(dummy);
-      // console.log(typeof accessToken);
-      // if (accessToken === null) {
-      //   throw new Error('Access token is null');
-      // }
-      // // accessToken = accessToken as string;
-      // console.log(accessToken);
-      let res = await memberApi.getKaKaoInfo(t);
-      if (res.status === 200) {
-        let memberInfo = res.data.data.kakaoMemberInfo;
-        console.log(memberInfo.email);
-        setBirthday(memberInfo.birthday);
-        setMemberId(memberInfo.memberId);
-        setEmail(memberInfo.email);
-      } else {
-        throw new Error('invalid member info');
-      }
-    } catch (err) {
-      console.log(err);
+  async function getKakaoId(token: string){
+    let res = await memberApi.getKaKaoInfo(token);
+    let memberInfo = res.data.data.kakaoMemberInfo;
+    setMemberId(memberInfo.id); // 이것은 회원가입을 할 때도 들고 있어야 하고 홈화면으로 갈때도 들고 있어야 함.
+    return memberInfo.id;
+  }
+
+  async function checkMemberExists(memberId : bigint){
+    let memberInfoResponse = await memberApi.memberDetail(memberId);
+    if (memberInfoResponse.status === 200) {
+      let memberInfo = memberInfoResponse.data.data.memberInfo;
+      setNickname(memberInfo.nickname);
+      setBirthday(memberInfo.birthday);
+      setProfileImageUrl(memberInfo.profileImageUrl);
+      setEmail(memberInfo.email);
+      navigation.navigate('Home'); //회원 정보 다 저장한 후엔 홈 화면으로.
+    } else {
+      navigation.navigate('Signup'); //아니라면 회원가입.
     }
   }
 
@@ -64,9 +60,10 @@ const LogInScreen = ({navigation}: any) => {
           //   throw new Error('Access token is null');
           // }
           //access Token을 백엔드에 요청 후 받아오기.
-          //로그인 성공시 홈 화면으로 이동
-          await getKaKaoInfo(result.accessToken);
-          navigation.navigate('Home');
+          //카카오 로그인 성공시 유저 memberId가 있으면 정보를 받아오고 아니라면 회원 가입.
+
+          let id = await getKakaoId(result.accessToken);
+          await checkMemberExists(memberId);
         })
         .catch(error => {
           if (error.code === 'E_CANCELLED_OPERATION') {

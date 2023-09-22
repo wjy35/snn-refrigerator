@@ -27,7 +27,6 @@ interface props {
 
 const memberApi = {
   getKaKaoInfo: async (accessToken: string) => {
-    console.log(accessToken);
     const res = await PublicMemberApi.post('/get-kakao-info', {
       accessToken: accessToken,
     });
@@ -75,7 +74,7 @@ const memberApi = {
     );
     return res;
   },
-  memberDetail: async ({memberId}: props) => {
+  memberDetail: async (memberId: bigint) => {
     const res = await PrivateMemberApi.get(
       `${memberId}`
     );
