@@ -18,7 +18,7 @@ import java.util.List;
 public class ChatController {
     private final ChatViewService chatViewService;
 
-    @GetMapping("/all/{chatRoomId}")
+    @GetMapping("/view/all/{chatRoomId}")
     ResponseEntity<Response> viewAll(@PathVariable Integer chatRoomId){
         List<ChatParam> chatParamList = ChatMapper.INSTANCE
                 .entityListtoParamList(chatViewService.viewAllChat(chatRoomId));
@@ -33,7 +33,7 @@ public class ChatController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{chatRoomId}")
+    @GetMapping("/view/{chatRoomId}")
     ResponseEntity<Response> viewCurrentChat(@PathVariable Integer chatRoomId){
         ChatParam chatParam = ChatMapper.INSTANCE
                 .entityToParam(chatViewService.viewCurrentChat(chatRoomId));
