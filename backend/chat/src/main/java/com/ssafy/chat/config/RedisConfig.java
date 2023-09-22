@@ -6,13 +6,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 
 @Configuration
-public class ChatMessageRedisConfig {
-    @Value("${CHAT_MESSAGE_REDIS_HOST}")
+public class RedisConfig {
+    @Value("${REDIS_HOST}")
     public String host;
 
-    @Value("${CHAT_MESSAGE_REDIS_PORT}")
+    @Value("${REDIS_PORT}")
     public int port;
 
     @Value("${REDIS_PASSWORD}")
@@ -33,4 +35,13 @@ public class ChatMessageRedisConfig {
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         return redisTemplate;
     }
+
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer(ChatMessageListener chatMessageListener, ChatSessionInfo chatSessionInfo) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(redisConnectionFactory());
+        container.addMessageListener(chatMessageListener, new ChannelTopic(chatSessionInfo.getId()));
+        return container;
+    }
+
 }
