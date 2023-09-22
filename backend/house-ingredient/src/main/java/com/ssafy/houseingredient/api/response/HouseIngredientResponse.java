@@ -7,9 +7,10 @@ import java.time.LocalDateTime;
 
 @Data
 public class HouseIngredientResponse {
-    private Integer houseSeq;
+    private Integer houseIngredientId;
+    private String houseCode;
     private Short ingredientInfoId;
-    private String ingredientInfoName;
+    private String ingredientName;
     private Byte storageType;
     private Date lastDate;
     private LocalDateTime storageDate;
