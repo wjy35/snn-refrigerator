@@ -5,7 +5,8 @@ export const recipeStyles = StyleSheet.create({
     flex: 1,
     width: '100%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    // borderWidth: 1
   },
   recipeItemContainer: {
     flexDirection: 'row',

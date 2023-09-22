@@ -1,6 +1,8 @@
-import React, {Component, useRef, useState} from 'react';
-import {View, Text, TextInput, FlatList, Dimensions, TouchableWithoutFeedback} from 'react-native';
-import {styles} from "@/styles/styles";
+import React, { useRef, useState} from 'react';
+import {View, Text, TextInput, FlatList, Dimensions, TouchableWithoutFeedback, ScrollView} from 'react-native';
+import AutoCompleteItem from "@/components/AutoCompleteItem";
+import {useFocusEffect} from "@react-navigation/native";
+
 
 interface props {
   placeholder: string;
@@ -11,12 +13,16 @@ interface props {
   textList?: any[];
   onBlur?: Function;
   title?: string;
+  reset?: Function;
+  name: string;
+  keyValue: string;
 }
 
 
-const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, textList, onBlur, title}: props) => {
+const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, textList, onBlur, title, keyValue, name}: props) => {
   const inputRef = useRef();
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const dimensionWidth = Dimensions.get('screen').width;
 
   const screen = Dimensions.get('screen');
   function onPressInFunction(){
@@ -25,52 +31,57 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
   }
 
   function onBlurFunction() {
-    onBlur();
+    onBlur&&onBlur();
     setIsVisible(false);
   }
 
   return (
-    <View style={{marginTop: 30, marginHorizontal: 12}}>
-      { title && (
-          <View style={[{width: '100%'}]}>
-            <Text>요리 제목</Text>
-          </View>
-        )
-      }
-      <View style={[{width: '100%'}]}>
-        <TextInput
-          ref={inputRef}
-          placeholder={placeholder}
-          style={[{height: 40, borderWidth: 1, padding: 10}]}
-          onChangeText={(newText)=>onChangeText(newText)}
-          onPressIn={onPressInFunction}
-          value={text}
-          onBlur={onBlurFunction}
-        >
-        </TextInput>
-        {
-          isVisible && (
-            <View style={{height: 120}}>
-              <FlatList
-                nestedScrollEnabled
-                data={textList}
-                renderItem={(item) => {
-                  return (
-                    <View style={{width: '100%', height: 40, borderWidth: 1, padding: 10, backgroundColor: 'rgba(255, 255, 255, 1)'}}>
-                      <TouchableWithoutFeedback onPress={()=>console.log(item.item.ingredientName)}>
-                        <Text>{item.item.ingredientName}</Text>
-                      </TouchableWithoutFeedback>
-                    </View>
-                  )
-                }}
-                keyExtractor={(item) => String(item.ingredientInfoId)}
-                disableScrollViewPanResponder={true}
-              />
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      style={{borderWidth: 1}}
+      contentContainerStyle={{
+        flexGrow: 1,
+        justifyContent: 'center',
+        width: '100%',
+      }}>
+      <View style={{marginTop: 30, marginHorizontal: 12, width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+        { title && (
+            <View style={[{width: '100%'}]}>
+              <Text>{title}</Text>
             </View>
           )
         }
+        <View style={[{width: '100%'}]}>
+          <TextInput
+            ref={inputRef}
+            placeholder={placeholder}
+            style={[{height: 40, borderWidth: 1, padding: 10}]}
+            onChangeText={(newText)=>onChangeText(newText)}
+            onPressIn={onPressInFunction}
+            value={text}
+            onBlur={onBlurFunction}
+          >
+          </TextInput>
+          {
+            isVisible && (
+              <View style={{height: 120}}>
+                <FlatList
+                  windowSize={2}
+                  nestedScrollEnabled
+                  data={textList}
+                  renderItem={(item) => <AutoCompleteItem item={item} name={name}/>}
+                  keyExtractor={(item) => {
+                    return String(item[keyValue])
+                  }}
+                  disableScrollViewPanResponder={true}
+                />
+              </View>
+            )
+          }
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
