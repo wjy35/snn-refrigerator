@@ -19,6 +19,6 @@ public class ChatSessionServiceImpl implements ChatSessionService {
 
     @Override
     public void exitSession() {
-        System.out.println("redisTemplate.opsForValue().get(1) = " + redisTemplate.opsForValue().get(1));
+
     }
 }
