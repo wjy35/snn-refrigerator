@@ -1,12 +1,15 @@
 package com.ssafy.recipe.api.request;
 
 import com.ssafy.recipe.db.entity.RecipeDetail;
-import lombok.Getter;
+import lombok.*;
+import org.hibernate.annotations.NaturalId;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Setter
+@AllArgsConstructor
+@ToString
 public class RecipeRequest {
     private String title;
     private Long memberId;
@@ -15,6 +18,6 @@ public class RecipeRequest {
     private String imageUrl;
     private byte serving;
     private String youtubeUrl;
-    private List<RecipeDetail> content;
-    private List<RecipeIngredientRequest> ingredients;
+    private List<RecipeDetailParam> contents;
+    private List<RecipeIngredientParam> ingredients;
 }

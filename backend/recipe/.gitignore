@@ -38,4 +38,5 @@ out/
 
 
 ### Credentials ###
+**/src/main/resources/application.properties
 **/src/main/resources/env.properties
