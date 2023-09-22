@@ -17,7 +17,7 @@ const loginStyles = StyleSheet.create({
     width: '60%'
   },
   bodyText: {
-    fontSize: 30,
+    fontSize: 26,
     textAlign: 'center'
 
   },
@@ -26,7 +26,7 @@ const loginStyles = StyleSheet.create({
   },
   itemContainer: {
     width: '100%',
-    height: 550,
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },

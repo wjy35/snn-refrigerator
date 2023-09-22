@@ -28,3 +28,6 @@ const ingredientExtractionApi = {
     return res;
   },
 }
+
+
+export default ingredientExtractionApi;

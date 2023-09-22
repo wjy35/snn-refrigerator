@@ -24,5 +24,6 @@ const shareApi = {
     );
     return res;
   },
-
 }
+
+export default shareApi;

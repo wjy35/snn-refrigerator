@@ -11,10 +11,11 @@ import {SvgXml} from "react-native-svg";
 interface props {
   item: any;
   navigation: any;
-  width?: number;
+  width?: any;
+  height?: any;
 }
 
-const RecipeItem = ({item, navigation, width}:props) => {
+const RecipeItem = ({item, navigation, width, height}:props) => {
   function toDetail() {
     navigation.navigate('RecipeDetail', {recipeId: item.recipeId})
   }
@@ -23,7 +24,7 @@ const RecipeItem = ({item, navigation, width}:props) => {
     <TouchableWithoutFeedback
       onPress={toDetail}
     >
-      <View style={[recipeStyles.recipeItemContainer, {width: width}]}>
+      <View style={[recipeStyles.recipeItemContainer, {width: width, height: height}]}>
         <View style={recipeStyles.recipeItemImage}>
           <View style={recipeStyles.recipeFavoriteContainer}>
             <SvgXml
@@ -43,19 +44,29 @@ const RecipeItem = ({item, navigation, width}:props) => {
             <View style={{width: 20, height: 20, borderWidth: 1,}}>
 
             </View>
-            <Text>{item.nickname}</Text>
+            <Text>{item.imageUrl}</Text>
           </View>
-          <View style={recipeStyles.recipeItemInfoContainer}>
-            <View>
-              <RecipeInfo foodName={item.foodName} cookingTime={item.cookingTime} serving={item.serving}/>
+          <View style={recipeStyles.recipeItemInfo}>
+            <View style={recipeStyles.recipeItemTitleContainer}>
+              <Text style={recipeStyles.recipeItemTitle}>{item.title}</Text>
             </View>
-            <View style={recipeStyles.recipeItemPercent}>
-              <CircularPercent total={item.neededIngredients} now={item.myIngredients}/>
+            <View style={recipeStyles.recipeItemUser}>
+              <View style={{width: 20, height: 20, borderWidth: 1,}}>
+
+              </View>
+              <Text>{item.nickname}</Text>
+            </View>
+            <View style={recipeStyles.recipeItemInfoContainer}>
+              <View>
+                <RecipeInfo foodName={item.foodName} cookingTime={item.cookingTime} serving={item.serving}/>
+              </View>
+              <View style={recipeStyles.recipeItemPercent}>
+                <CircularPercent total={item.neededIngredients} now={item.myIngredients}/>
+              </View>
             </View>
           </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
   )
 }
 

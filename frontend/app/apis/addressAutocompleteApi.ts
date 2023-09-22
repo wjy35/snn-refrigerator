@@ -25,3 +25,5 @@ const addressAutocompleteApi = {
     return res;
   },
 }
+
+export default addressAutocompleteApi;

@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#ffffff',
-    borderWidth: 1,
     width: '100%',
     height: '100%',
   },
@@ -61,7 +60,7 @@ export const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    margin: 12,
+    marginVertical: 12,
     borderWidth: 1,
     padding: 10,
   },
