@@ -2,12 +2,12 @@ package com.ssafy.membermanage.member.api;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.membermanage.aws.utils.S3helper;
 import com.ssafy.membermanage.error.CustomException;
 import com.ssafy.membermanage.error.ErrorCode;
 import com.ssafy.membermanage.followPerson.service.FollowServiceImpl;
 import com.ssafy.membermanage.hateIngredient.db.HateIngredient;
+import com.ssafy.membermanage.hateIngredient.dto.HateIngredientInfo;
 import com.ssafy.membermanage.hateIngredient.service.HateIngredientServiceImpl;
 import com.ssafy.membermanage.house.dto.ModifyMemberHouseDto;
 import com.ssafy.membermanage.member.db.Member;
@@ -16,16 +16,15 @@ import com.ssafy.membermanage.member.request.SignupRequest;
 import com.ssafy.membermanage.member.request.SingleMemberRequest;
 import com.ssafy.membermanage.member.service.MemberServiceImpl;
 import com.ssafy.membermanage.member.util.Helper;
+import com.ssafy.membermanage.memberLocation.dto.LocationInfo;
+import com.ssafy.membermanage.memberLocation.service.MemberLocationServiceImpl;
 import com.ssafy.membermanage.response.Response;
 import com.ssafy.membermanage.response.ResponseViews;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +46,9 @@ public class MemberController {
     private FollowServiceImpl followService;
 
     @Autowired
+    private MemberLocationServiceImpl memberLocationService;
+
+    @Autowired
     private Helper helper;
 
     @Autowired
@@ -61,6 +63,38 @@ public class MemberController {
     @Value("${member-default-profile-image}") String defaultProfileImage;
 
 
+    @GetMapping("/{memberId}/me")
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<Response> getMyInfo(@PathVariable Long memberId){
+        Member member = memberService.findByMemberId(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
+
+        List<LocationInfo> locationInfos = memberLocationService.getLocations(member);
+        List<HateIngredientInfo> hateIngredientInfos = hateIngredientService.getHateIngredientInfo(member);
+
+        Map<String, Object> memberInfo = new HashMap<>();
+        memberInfo.put("memberId", memberId);
+        memberInfo.put("nickname", member.getNickname());
+        memberInfo.put("profileImageUrl", s3helper.getS3ImageUrl(member.getProfileImageFilename()));
+        memberInfo.put("birthday", member.getBirthday());
+        memberInfo.put("email", member.getEmail());
+        memberInfo.put("houseCode", member.getHouseCode());
+        memberInfo.put("followCount", member.getFollowCount());
+        memberInfo.put("placeList", locationInfos);
+        memberInfo.put("hateIngredientList", hateIngredientInfos);
+
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("memberInfo", memberInfo);
+
+        Response response = Response
+                .builder()
+                .message("ok")
+                .data(data)
+                .build();
+        return ResponseEntity.ok(response);
+    } //OK
+
     @GetMapping("/{memberId}")
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<Response> getMemberInfo(@PathVariable Long memberId){
@@ -71,10 +105,8 @@ public class MemberController {
         memberInfo.put("memberId", memberId);
         memberInfo.put("nickname", member.getNickname());
         memberInfo.put("profileImageUrl", s3helper.getS3ImageUrl(member.getProfileImageFilename()));
-        memberInfo.put("birthday", member.getBirthday());
-        memberInfo.put("email", member.getEmail());
-        memberInfo.put("houseCode", member.getHouseCode());
         memberInfo.put("followCount", member.getFollowCount());
+
 
         Map<String, Object> data = new HashMap<>();
         data.put("memberInfo", memberInfo);
@@ -137,7 +169,7 @@ public class MemberController {
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
 
-        String ingredientName = hateIngredientService.ingredientName(ingredientId);
+        String ingredientName = hateIngredientService.getIngredientName(ingredientId);
         HateIngredient hateIngredient = HateIngredient
                 .builder()
                 .member(member)
@@ -166,7 +198,7 @@ public class MemberController {
         List<Map<String, Object>> ingredients = new ArrayList<>();
         for(HateIngredient ingredient : ingredientList){
             Short id = ingredient.getIngredientId();
-            String name = hateIngredientService.ingredientName(id);
+            String name = hateIngredientService.getIngredientName(id);
 
             Map<String, Object> mp = new HashMap<>();
             mp.put("ingredientId", id);
