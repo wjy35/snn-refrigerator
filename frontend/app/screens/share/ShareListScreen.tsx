@@ -56,16 +56,18 @@ const ShareListScreen = ({navigation}:any) => {
       {/*  onPress={ () => navigation.navigate('SingleShareChat')}*/}
       {/*/>*/}
       <ScrollView keyboardShouldPersistTaps='handled'>
-        {
-          (now===0 || now===1) && (
-            <AutoCompleteInput placeholder={'검색'} onChangeText={onChangeText} onPressIn={onPressIn} now={1} text={text} textList={textList} onBlur={onBlur}/>
-          )
-        }
-        {
-          (now===0 || now===2) && (
-            <AutoCompleteInput placeholder={'검색'} onChangeText={onChangeText} onPressIn={onPressIn} now={2} text={text} textList={textList} onBlur={onBlur}/>
-          )
-        }
+        <View style={{}}>
+          {
+            (now===0 || now===1) && (
+              <AutoCompleteInput placeholder={'검색'} onChangeText={onChangeText} onPressIn={onPressIn} now={1} text={text} textList={textList} onBlur={onBlur}/>
+            )
+          }
+          {
+            (now===0 || now===2) && (
+              <AutoCompleteInput placeholder={'검색'} onChangeText={onChangeText} onPressIn={onPressIn} now={2} text={text} textList={textList} onBlur={onBlur}/>
+            )
+          }
+        </View>
       </ScrollView>
     </ShareLayout>
   );
