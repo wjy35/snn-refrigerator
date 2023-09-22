@@ -24,10 +24,17 @@ public class LogAspect {
         Method method = getMethod(joinPoint);
         log.debug("------> method name = {} 진입", method.getName());
         Object[] args = joinPoint.getArgs();
-        if (args.length <= 0) log.debug("no parameter");
-        for (Object arg : args) {
-            log.debug("parameter type = {}", arg.getClass().getSimpleName());
-            log.debug("parameter value = {}", arg.toString());
+        if (args == null) {
+            log.debug("No parameters");
+        } else {
+            for (Object arg : args) {
+                if (arg != null) {
+                    log.debug("parameter type = {}", arg.getClass().getSimpleName());
+                    log.debug("parameter value = {}", arg.toString());
+                } else {
+                    log.debug("parameter is null");
+                }
+            }
         }
     }
 
