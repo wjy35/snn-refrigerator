@@ -2,12 +2,15 @@ package com.ssafy.membermanage.member.db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByMemberId(Long memberId);
 
-    Boolean existsByNickname(String nickname);
+    boolean existsByNickname(String nickname);
+
+    boolean existsByHouseCode(String houseCode);
 
     Member save(Member member);
 }
