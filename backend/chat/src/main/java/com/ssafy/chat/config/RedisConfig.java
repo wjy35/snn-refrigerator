@@ -10,10 +10,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
 public class RedisConfig {
-    @Value("${CHAT_MESSAGE_REDIS_HOST}")
+    @Value("${REDIS_HOST}")
     public String host;
 
-    @Value("${CHAT_MESSAGE_REDIS_PORT}")
+    @Value("${REDIS_PORT}")
     public int port;
 
     @Value("${REDIS_PASSWORD}")
@@ -29,11 +29,10 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<?, ?> messageRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+    public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
     }
-
 
 }
