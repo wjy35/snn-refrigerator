@@ -1,6 +1,7 @@
 package com.ssafy.share.api.response;
 
 import com.ssafy.share.db.entity.ShareImage;
+import com.ssafy.share.db.entity.ShareIngredient;
 import com.ssafy.share.db.entity.SharePost;
 import lombok.Data;
 
@@ -14,14 +15,19 @@ public class SharePostDetailResponse {
     private String locationName;
     private String content;
     private List<String> shareImages=new ArrayList<>(); // url들 들어갈거임
+    private List<ShareIngredientResponse> shareIngredients=new ArrayList<>();
+    private String createdTime;
 
-    public SharePostDetailResponse(SharePost entity,String nickname) {
+
+    public SharePostDetailResponse(SharePost entity,String nickname,String createdTime) {
         this.title = entity.getTitle();
-        this.nickname = nickname;
-        this.locationName = entity.getLocationInfo().getLocationName();
+        this.nickname=nickname;
+
         this.content = entity.getContent();
         for (ShareImage imgs:entity.getShareImages()){
-            shareImages.add(imgs.getSharePostImageUrl());
+            this.shareImages.add(imgs.getSharePostImageUrl());
         }
+
+        this.createdTime=createdTime;
     }
 }
