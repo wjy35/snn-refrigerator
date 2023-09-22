@@ -66,10 +66,10 @@ public class ShareBoardServiceImpl implements ShareBoardService {
     }
 
     @Override
-    public Page<SharePost> getPostList(Pageable pageable,Short locationId, String keyword) { // 나눔글 리스트 조회
+    public List<SharePost> getPostList(Short locationId, String keyword) { // 나눔글 리스트 조회
         log.info("검색 키워드: {}",keyword);
-        if(keyword==null) return shareBoardRepository.findByLocationId(pageable,locationId); // 초기화면 or 검색어 없을 때 전체 조회
-        return shareBoardRepository.findByLocationIdAndTitleContaining(pageable,locationId,keyword); // 검색어를 입력했을 때
+        if(keyword==null) return shareBoardRepository.findByLocationId(locationId); // 초기화면 or 검색어 없을 때 전체 조회
+        return shareBoardRepository.findByLocationIdAndTitleContaining(locationId,keyword); // 검색어를 입력했을 때
     }
 
     @Override

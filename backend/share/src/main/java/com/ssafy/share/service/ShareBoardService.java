@@ -18,7 +18,7 @@ public interface ShareBoardService {
 
     public String getIngredientInfoName(Short ingredientInfoId);
 
-    public Page<SharePost> getPostList(Pageable pageable, Short locationId, String keyword);
+    public List<SharePost> getPostList(Short locationId, String keyword);
 
     public SharePost getPostDetail(Long shareBoardId);
 

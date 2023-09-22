@@ -32,19 +32,21 @@ public class ShareBoardController {
     private final TimeUtil timeUtil;
 
 
-    @GetMapping("/{locationId}")
-    public ResponseEntity<?> getPostList(@PathVariable Short locationId, @RequestParam(required = false) String keyword,
+    @GetMapping("/{locationId}/{pageNum}/{items}")
+    public ResponseEntity<?> getPostList(@PathVariable Short locationId, @PathVariable(required = false) Short pageNum,
+                                         @PathVariable(required = false) Short items,
+                                         @RequestParam(required = false) String keyword,
                                          @PageableDefault(sort = "sharePostId", size = 5, direction = Sort.Direction.DESC) Pageable pageable){ // 게시글 리스트 조회, 키워드 검색 가능
         Response response = new Response();
         String locationName=shareBoardService.getLocationName(locationId);
-        Page<SharePost> posts=shareBoardService.getPostList(pageable,locationId,keyword);
+        List<SharePost> posts=shareBoardService.getPostList(locationId,keyword);
 
         List<SharePostResponse> sharePostResponses=new ArrayList<>();
-        for(SharePost post:posts){
-            MemberResponse memberResponse=shareBoardService.getMember(post.getMemberId());
+        for(int i=pageNum*items;i<pageNum*items+items;i++){
+            MemberResponse memberResponse=shareBoardService.getMember(posts.get(i).getMemberId());
             String nickname=memberResponse.getNickname();
             String userProfileImageUrl=memberResponse.getProfileImageUrl();
-            sharePostResponses.add(new SharePostResponse(post,nickname,userProfileImageUrl,timeUtil.dateTypeConverter(post.getCreateDate())));
+            sharePostResponses.add(new SharePostResponse(posts.get(i),nickname,userProfileImageUrl,timeUtil.dateTypeConverter(posts.get(i).getCreateDate())));
         }
         response.setMessage("OK");
         response.addRequest("locationId",locationId);
