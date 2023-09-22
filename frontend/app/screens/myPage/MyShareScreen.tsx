@@ -4,7 +4,7 @@ import MyPageLayout from "@/screens/myPage/MyPageLayout";
 
 const MyShareScreen = ({navigation}:any) => {
   return (
-    <MyPageLayout>
+    <MyPageLayout title="내 나눔 내역">
       <Text>MyShareScreen</Text>
     </MyPageLayout>
   )

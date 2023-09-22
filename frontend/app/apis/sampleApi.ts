@@ -1,9 +1,8 @@
 import axios from 'axios';
 import {testURL} from '@/apis/BASEURL'
 
-
 const SampleApi = axios.create({
-  baseURL: `${testURL}/member-manage`,
+  baseURL: `${testURL}/ingredient-manage`,
 })
 
 

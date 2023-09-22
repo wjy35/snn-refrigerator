@@ -4,7 +4,7 @@ import MyPageLayout from "@/screens/myPage/MyPageLayout";
 
 const MyPageUpdateScreen = ({navigation}:any) => {
   return (
-    <MyPageLayout>
+    <MyPageLayout title="마이페이지">
       <Text>MyPageUpdateScreen</Text>
     </MyPageLayout>
   )
