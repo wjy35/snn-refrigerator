@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ChatSaveServiceImpl implements ChatSaveService {
-    private final RedisTemplate<Integer, ChatEntity> redisTemplate;
+    private final RedisTemplate<Integer, ChatEntity> messageRedisTemplate;
 
     @Override
     @Transactional
     public void save(Integer chatRoomId, ChatEntity chatEntity) {
-        redisTemplate.opsForList().rightPush(chatRoomId, chatEntity);
+        messageRedisTemplate.opsForList().rightPush(chatRoomId, chatEntity);
     }
 }
