@@ -5,5 +5,5 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 public class AuthorizationRequest {
-    private String authorizationCode;
+    private String accessToken;
 }

@@ -251,42 +251,12 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/get-kakao-info")
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<Response> kakaoLoginAndGetUserInfo(@RequestBody AuthorizationRequest request) throws JsonProcessingException {
-
-        String authorizationCode = request.getAuthorizationCode();
-
-        log.info("authorization code = {}", authorizationCode);
-        String kakaoGetAuthTokenUrl = "https://kauth.kakao.com/oauth/token";
-        RestTemplate restTemplate=new RestTemplate();
-
-        //Set Header
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.add("Accept", "application/json");
-
-        //Set parameters
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", clientId);
-        params.add("redirect_uri", redirectUri);
-        params.add("code", authorizationCode);
-        params.add("client_secret", clientSecret);
-
-        //Set http entity
-        HttpEntity<MultiValueMap<String, String>> kakaoRequest = new HttpEntity<>(params, headers);
-        ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(kakaoGetAuthTokenUrl, kakaoRequest, String.class);
-
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> KakaoAuthResponse = mapper.readValue(stringResponseEntity.getBody(), Map.class);
-
-        //Get tokens from KaKao Server.
-        String access_token = (String) KakaoAuthResponse.get("access_token");
-        String refresh_token = (String) KakaoAuthResponse.get("refresh_token");
-
+        String accessToken = request.getAccessToken();
         //
-        Map<String, Object> kakaoUserInfo = helper.getKakaoUserInfo(access_token);
+        Map<String, Object> kakaoUserInfo = helper.getKakaoUserInfo(accessToken);
 
         Long memberId = (Long) kakaoUserInfo.get("id");
         Map<String, Object> userInfo = (Map<String, Object>) kakaoUserInfo.get("kakao_account");
@@ -295,8 +265,6 @@ public class MemberController {
         kakaoMemberInfo.put("id",  memberId);
         kakaoMemberInfo.put("email", userInfo.getOrDefault("email", "No Email"));
         kakaoMemberInfo.put("birthday", userInfo.getOrDefault("birthday", "9999"));
-        kakaoMemberInfo.put("accessToken", access_token);
-        kakaoMemberInfo.put("refreshToken", refresh_token);
 
         Map<String, Object> data = new HashMap<>();
         data.put("kakaoMemberInfo", kakaoMemberInfo);
