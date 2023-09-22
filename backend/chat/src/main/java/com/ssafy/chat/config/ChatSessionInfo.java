@@ -13,8 +13,7 @@ public class ChatSessionInfo {
         this.id = UUID.randomUUID().toString();
     }
 
-    @Bean
-    public String chatSessionId() {
+    public String getId() {
         return id;
     }
 }
