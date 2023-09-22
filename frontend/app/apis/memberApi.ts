@@ -14,7 +14,7 @@ const PrivateMemberApi = axios.create({
 })
 
 interface props {
-  accessToken: string;
+  accessToken: any;
   nickname: string;
   houseCode: string;
   idToken: number;
@@ -26,7 +26,7 @@ interface props {
 }
 
 const memberApi = {
-  getKaKaoInfo: async ({accessToken}: props) => {
+  getKaKaoInfo: async (accessToken: string) => {
     console.log(accessToken);
     const res = await PublicMemberApi.post('/get-kakao-info', {
       accessToken: accessToken,
