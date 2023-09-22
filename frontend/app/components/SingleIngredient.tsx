@@ -45,6 +45,18 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
 
   function toDetail(){
     console.log(result)
+    check()
+  }
+
+  const check = async () => {
+    try {
+      const res = await ingredientAutocompleteApi.check({keyword: ingredientName})
+      if (res.status === 200) {
+        console.log(res.data)
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function getDDay(){

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {baseURL} from '@/apis/BASEURL'
-import RecipeListScreen from "@/screens/recipe/RecipeListScreen";
 
 
 const PublicRecipeApi = axios.create({

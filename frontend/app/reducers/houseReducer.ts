@@ -1,14 +1,15 @@
-import {sample} from "@/actions/houseAction"
+import {toggleVisible} from "@/actions/houseAction"
 
 const houseState = {
-  test: 'test',
+  isVisible: false,
 }
 
 const houseReducer = (state=houseState, action: any) => {
   switch (action.type) {
-    case sample:
+    case toggleVisible:
       return {
-        ...state
+        ...state,
+        isVisible: !state.isVisible,
       }
 
     default:

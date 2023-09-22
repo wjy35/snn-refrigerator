@@ -1,59 +1,75 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import SearchableDropdown from 'react-native-searchable-dropdown';
+import React, {Component, useRef, useState} from 'react';
+import {View, Text, TextInput, FlatList, Dimensions, TouchableWithoutFeedback} from 'react-native';
+import {styles} from "@/styles/styles";
 
-const AutoCompleteInput = () => {
-  const localData = [
-    { id: 1, name: '1' },
-    { id: 2, name: '2' },
-    { id: 3, name: '3' },
-    { id: 4, name: '4' },
-    { id: 5, name: '5' },
-    { id: 6, name: '6' },
-    { id: 7, name: '7' },
-    { id: 8, name: '8' },
-    { id: 9, name: '9' },
-    { id: 10, name: '10' },
-  ];
+interface props {
+  placeholder: string;
+  onChangeText: Function;
+  onPressIn: Function;
+  now: number;
+  text: string;
+  textList?: any[];
+  onBlur?: Function;
+  title?: string;
+}
+
+
+const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, textList, onBlur, title}: props) => {
+  const inputRef = useRef();
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
+  const screen = Dimensions.get('screen');
+  function onPressInFunction(){
+    onPressIn(now);
+    setIsVisible(true);
+  }
+
+  function onBlurFunction() {
+    onBlur();
+    setIsVisible(false);
+  }
 
   return (
-    <View style={{ flex: 1, marginTop: 30 }}>
-      <SearchableDropdown
-        onTextChange={(text: string) => console.log(text)}
-        onItemSelect={(item: any) => console.log(item)}
-        //suggestion container style
-        containerStyle={{ padding: 5 }}
-        textInputStyle={{
-          padding: 12,
-          borderWidth: 1,
-          borderColor: '#ccc',
-          backgroundColor: '#FAF7F6',
-        }}
-        //single dropdown item style
-        itemStyle={{
-          padding: 10,
-          marginTop: 2,
-          backgroundColor: '#FAF9F8',
-          borderColor: '#bbb',
-          borderWidth: 1,
-        }}
-        //single dropdown item text style
-        itemTextStyle={{
-          color: '#222',
-        }}
-        //maxHeight to restrict height of items dropdown
-        itemsContainerStyle={{
-          maxHeight: '100%',
-        }}
-        //mapping of item array
-        items={localData}
-        //default selected item index
-        defaultIndex={2}
-        //placeholder text for search input
-        placeholder="placeholder"
-        //to remove underline from android input
-        underlineColorAndroid="transparent"
-      />
+    <View style={{marginTop: 30, marginHorizontal: 12}}>
+      { title && (
+          <View style={[{width: '100%'}]}>
+            <Text>요리 제목</Text>
+          </View>
+        )
+      }
+      <View style={[{width: '100%'}]}>
+        <TextInput
+          ref={inputRef}
+          placeholder={placeholder}
+          style={[{height: 40, borderWidth: 1, padding: 10}]}
+          onChangeText={(newText)=>onChangeText(newText)}
+          onPressIn={onPressInFunction}
+          value={text}
+          onBlur={onBlurFunction}
+        >
+        </TextInput>
+        {
+          isVisible && (
+            <View style={{height: 120}}>
+              <FlatList
+                nestedScrollEnabled
+                data={textList}
+                renderItem={(item) => {
+                  return (
+                    <View style={{width: '100%', height: 40, borderWidth: 1, padding: 10, backgroundColor: 'rgba(255, 255, 255, 1)'}}>
+                      <TouchableWithoutFeedback onPress={()=>console.log(item.item.ingredientName)}>
+                        <Text>{item.item.ingredientName}</Text>
+                      </TouchableWithoutFeedback>
+                    </View>
+                  )
+                }}
+                keyExtractor={(item) => String(item.ingredientInfoId)}
+                disableScrollViewPanResponder={true}
+              />
+            </View>
+          )
+        }
+      </View>
     </View>
   );
 }
