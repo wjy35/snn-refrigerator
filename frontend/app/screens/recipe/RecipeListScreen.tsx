@@ -42,6 +42,7 @@ const RecipeListScreen = ({navigation}:any) => {
     const getRecipe = async () => {
       try {
         let res = await recipeApi.searchRecipe(settings);
+        console.log(res.data.data)
         if (res.status === 200) {
           setRecipe(res.data.data.recipe);
         } else {

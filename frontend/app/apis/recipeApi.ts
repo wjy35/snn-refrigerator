@@ -30,9 +30,13 @@ interface search {
 }
 
 const recipeApi = {
-  detail: async ({recipeId}: props) => {
-    const res = await PrivateRecipeApi.get(
-      `${recipeId}`
+  detail: async ({memberId, recipeId}: props) => {
+    const res = await PrivateRecipeApi.post(
+      `recipe`,{
+            memberId: memberId,
+            recipeId: recipeId
+        }
+        
     );
     return res;
   },
