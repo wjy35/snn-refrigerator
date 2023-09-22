@@ -1,2 +1,2 @@
-export const baseURL: string = 'https://a502.store/';
-export const testURL: string = 'https://a502.store:32780/';
+export const baseURL: string = 'http://a502.store';
+export const testURL: string = 'http://a502.store';

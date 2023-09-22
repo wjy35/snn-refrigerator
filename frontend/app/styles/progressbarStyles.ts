@@ -3,10 +3,11 @@ import {StyleSheet} from "react-native";
 export const progressbarStyles = StyleSheet.create({
   container: {
     height: 60,
+    width: '100%'
   },
   progressContainer: {
     flex: 1,
-    width: 350,
+    width: '90%',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -14,7 +15,6 @@ export const progressbarStyles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    width: 350,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
