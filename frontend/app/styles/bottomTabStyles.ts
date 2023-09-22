@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 export const bottomTabStyles = StyleSheet.create({
   tabContainer: {
     height: 80,
-    position: 'relative',
+    position: 'absolute',
     left: 0,
     right: 0,
     bottom: 0,
@@ -22,14 +22,7 @@ export const bottomTabStyles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 10,
-  },
-  activeSingleTab: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 10,
-    color: '#3093EF'
+    margin: 5,
   },
   tabFontSize: {
     paddingTop: 5,

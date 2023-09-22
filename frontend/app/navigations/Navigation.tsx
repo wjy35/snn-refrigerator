@@ -20,6 +20,7 @@ import ShareDetailScreen from '@/screens/share/ShareDetailScreen';
 import ShareListScreen from '@/screens/share/ShareListScreen';
 import SingleShareChatScreen from '@/screens/share/SingleShareChatScreen';
 import React from "react";
+import HouseAddScreen from "@/screens/HouseAddScreen";
 
 const Stack = createStackNavigator();
 
@@ -27,7 +28,7 @@ const Stack = createStackNavigator();
 const Navigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false, animationEnabled: false }}>
         <Stack.Screen name="LogIn" component={LogInScreen}/>
         <Stack.Screen name="SignUp" component={SignUpScreen}/>
         <Stack.Screen name="Home" component={HomeScreen}/>
@@ -47,6 +48,7 @@ const Navigation = () => {
         <Stack.Screen name="AlarmSetting" component={AlarmSettingScreen}/>
         <Stack.Screen name="MyShare" component={MyShareScreen}/>
         <Stack.Screen name="MyFavorite" component={MyFavoriteScreen}/>
+        <Stack.Screen name="HouseAdd" component={HouseAddScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
