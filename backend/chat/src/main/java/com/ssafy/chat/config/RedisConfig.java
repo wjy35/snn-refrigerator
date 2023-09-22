@@ -9,7 +9,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
-public class ChatMessageRedisConfig {
+public class RedisConfig {
     @Value("${CHAT_MESSAGE_REDIS_HOST}")
     public String host;
 
@@ -20,7 +20,7 @@ public class ChatMessageRedisConfig {
     public String password;
 
     @Bean
-    public LettuceConnectionFactory messageRedisConnectionFactory() {
+    public LettuceConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(host);
         redisStandaloneConfiguration.setPort(port);
@@ -29,9 +29,11 @@ public class ChatMessageRedisConfig {
     }
 
     @Bean
-    public RedisTemplate<?, ?> messageRedisTemplate() {
+    public RedisTemplate<?, ?> messageRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(messageRedisConnectionFactory());
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
     }
+
+
 }
