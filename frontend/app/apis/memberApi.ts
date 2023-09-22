@@ -3,17 +3,18 @@ import {baseURL} from '@/apis/BASEURL'
 
 
 const PublicMemberApi = axios.create({
-  baseURL: `${baseURL}/member`,
+  baseURL: `${baseURL}/member-manage`,
 })
 
 const PrivateMemberApi = axios.create({
-  baseURL: `${baseURL}/member`,
+  baseURL: `${baseURL}/member-manage`,
   headers: {
     // Authorization: `Bearer ${localStorage.getItem('token')}`
   }
 })
 
 interface props {
+  accessToken: string;
   nickname: string;
   houseCode: string;
   idToken: number;
@@ -25,13 +26,11 @@ interface props {
 }
 
 const memberApi = {
-  login: async () => {
-    const res = await PublicMemberApi.post(
-      'login',
-      {
-
-      }
-    );
+  getKaKaoInfo: async ({accessToken}: props) => {
+    console.log(accessToken);
+    const res = await PublicMemberApi.post('/get-kakao-info', {
+      accessToken: accessToken,
+    });
     return res;
   },
   checkDuplicate: async ({nickname}: props) => {
