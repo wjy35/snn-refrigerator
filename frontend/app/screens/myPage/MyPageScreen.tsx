@@ -7,7 +7,7 @@ import SettingContainer from "@/components/SettingContainer";
 
 const MyPageScreen = ({navigation}:any) => {
   const settings = [
-    {name: '계정 설정', goto: 'AccountSetting'},{name: '알림 설정', goto: 'AlarmSetting'},{name: '내 나눔 내역', goto: 'MyShare'},{name: '즐겨찾기 레시피', goto: 'MyFavorite'},
+    {name: '계정 설정', goto: 'AccountSetting'},{name: '알림 설정', goto: 'AlarmSetting'},{name: '내 나눔 내역', goto: 'MyShare'},{name: '즐겨찾기 레시피', goto: 'MyFavorite'}, {name:'임시 회원가입용', goto: 'SignUp'}, {name: '유저페이지', goto: 'User'}
   ]
 
   function goto(t: string){

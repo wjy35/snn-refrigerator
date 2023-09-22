@@ -4,12 +4,12 @@ import {styles} from "@/styles/styles";
 
 
 interface props {
-  title: string;
+  title?: string;
   placeholder: string;
   onChangeText: Function;
-  onPressIn: Function;
+  onPressIn?: Function;
   text: string;
-  now: number;
+  now?: number;
 }
 
 const PlainInput = ({title, placeholder, onChangeText, onPressIn, text, now}: props) => {
@@ -28,7 +28,7 @@ const PlainInput = ({title, placeholder, onChangeText, onPressIn, text, now}: pr
           style={[styles.input, styles.font]}
           placeholder={placeholder}
           onChangeText={(newText) => onChangeText(newText)}
-          onPressIn={onPressInFunction}
+          onPressIn={onPressIn&&onPressInFunction}
           value={text}
         />
       </View>
