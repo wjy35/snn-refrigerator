@@ -44,19 +44,29 @@ const RecipeItem = ({item, navigation, width, height}:props) => {
             <View style={{width: 20, height: 20, borderWidth: 1,}}>
 
             </View>
-            <Text>{item.nickname}</Text>
+            <Text>{item.imageUrl}</Text>
           </View>
-          <View style={recipeStyles.recipeItemInfoContainer}>
-            <View>
-              <RecipeInfo foodName={item.foodName} cookingTime={item.cookingTime} serving={item.serving}/>
+          <View style={recipeStyles.recipeItemInfo}>
+            <View style={recipeStyles.recipeItemTitleContainer}>
+              <Text style={recipeStyles.recipeItemTitle}>{item.title}</Text>
             </View>
-            <View style={recipeStyles.recipeItemPercent}>
-              <CircularPercent total={item.neededIngredients} now={item.myIngredients}/>
+            <View style={recipeStyles.recipeItemUser}>
+              <View style={{width: 20, height: 20, borderWidth: 1,}}>
+
+              </View>
+              <Text>{item.nickname}</Text>
+            </View>
+            <View style={recipeStyles.recipeItemInfoContainer}>
+              <View>
+                <RecipeInfo foodName={item.foodName} cookingTime={item.cookingTime} serving={item.serving}/>
+              </View>
+              <View style={recipeStyles.recipeItemPercent}>
+                <CircularPercent total={item.neededIngredients} now={item.myIngredients}/>
+              </View>
             </View>
           </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
   )
 }
 
