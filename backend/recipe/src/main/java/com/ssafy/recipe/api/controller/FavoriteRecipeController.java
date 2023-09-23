@@ -7,6 +7,8 @@ import com.ssafy.recipe.api.response.Response;
 import com.ssafy.recipe.service.FavoriteRecipeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +44,9 @@ public class FavoriteRecipeController {
     }
 
     @GetMapping("/{memberId}")
-    public ResponseEntity<?> getFavoriteRecipe (@PathVariable long memberId){
+    public ResponseEntity<?> getFavoriteRecipe (@PathVariable long memberId, Pageable pageable){
         Response response = new Response();
-        List<RecipeSearchResponse> recipeSearchResponseList = favoriteRecipeService.getFavoriteResponse(memberId);
+        List<RecipeSearchResponse> recipeSearchResponseList = favoriteRecipeService.getFavoriteResponse(memberId, pageable);
         response.setMessage("OK");
         response.addRequest("memberId",memberId);
         response.addData("recipe", recipeSearchResponseList);
