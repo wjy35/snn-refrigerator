@@ -47,8 +47,11 @@ public class FavoriteRecipeController {
     public ResponseEntity<?> getFavoriteRecipe (@PathVariable long memberId, Pageable pageable){
         Response response = new Response();
         List<RecipeSearchResponse> recipeSearchResponseList = favoriteRecipeService.getFavoriteResponse(memberId, pageable);
+        long count = favoriteRecipeService.getCount(memberId);
         response.setMessage("OK");
         response.addRequest("memberId",memberId);
+        response.addData("totPage", (int)Math.ceil((double)count/ pageable.getPageSize()));
+        response.addData("totCount", count);
         response.addData("recipe", recipeSearchResponseList);
 
         return new ResponseEntity<>(response, HttpStatus.OK);

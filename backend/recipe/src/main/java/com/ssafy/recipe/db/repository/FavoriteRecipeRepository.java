@@ -11,5 +11,6 @@ public interface FavoriteRecipeRepository extends JpaRepository<FavoriteRecipe, 
     Optional<FavoriteRecipe> findByRecipeRecipeIdAndMemberId(int recipeId, Long memberId);
 
     List<FavoriteRecipe> findAllByMemberId(long memberId, Pageable pageable);
+    long countAllByMemberId(long memberId);
 
 }

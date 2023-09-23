@@ -58,7 +58,6 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
     public List<RecipeSearchResponse> getFavoriteResponse(long memberId, Pageable pageable){
         pageable = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize());
         List<FavoriteRecipe> favoriteRecipeList = favoriteRecipeRepository.findAllByMemberId(memberId, pageable);
-
         List<RecipeSearchResponse> result = new ArrayList<>();
 
         MemberResponse memberResponse =  recipeSearchService.getMember(memberId);
@@ -91,6 +90,11 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
             result.add(recipeSearchResponse);
         }
         return result;
+    }
+
+    public long getCount(long memberId){
+        long count = favoriteRecipeRepository.countAllByMemberId(memberId);
+        return count;
     }
 
 
