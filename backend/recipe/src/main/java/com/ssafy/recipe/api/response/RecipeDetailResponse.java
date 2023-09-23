@@ -18,6 +18,9 @@ public class RecipeDetailResponse {
     private int favoriteCount;
     private long followCount;
     private boolean isFavorite;
+    private short serving;
+    private String foodName;
+    private String cookingTime;
     private List<IngredientParam> ingredientResponseList;
     private List<ContentParam> contentResponseList;
 }
