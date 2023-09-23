@@ -63,7 +63,7 @@ public class MemberController {
     @Value("${member-default-profile-image}") String defaultProfileImage;
 
 
-    @GetMapping("/{memberId}/me")
+    @GetMapping("/{memberId}")
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<Response> getMyInfo(@PathVariable Long memberId){
         Member member = memberService.findByMemberId(memberId)
@@ -95,7 +95,7 @@ public class MemberController {
         return ResponseEntity.ok(response);
     } //OK
 
-    @GetMapping("/{memberId}")
+    @GetMapping("/{memberId}/others")
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<Response> getMemberInfo(@PathVariable Long memberId){
         Member member = memberService.findByMemberId(memberId)
