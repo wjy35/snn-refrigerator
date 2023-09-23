@@ -202,7 +202,6 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
     @Override
     public MemberResponse getMember(Long memberId){
         MemberResponse memberResponse = objectMapper.convertValue(memberFeign.getMemberDetail(memberId).getData().get("memberInfo"),MemberResponse.class);
-
         if(memberResponse != null){
             return memberResponse;
         }else{

@@ -187,6 +187,9 @@ public class RecipeServiceImpl implements RecipeService{
                 .isFavorite(isFavorite)
                 .favoriteCount(recipe.get().getFavoriteCount())
                 .followCount((memberResponse.getFollowCount()))
+                .cookingTime(recipe.get().getCookingTime())
+                .foodName(recipe.get().getFoodName())
+                .serving(recipe.get().getServing())
                 .contentResponseList(recipeDetails)
                 .ingredientResponseList(ingredientParams)
                 .build();
