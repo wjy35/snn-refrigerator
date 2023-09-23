@@ -10,6 +10,8 @@ import com.ssafy.recipe.exception.CustomException;
 import com.ssafy.recipe.exception.ErrorCode;
 import com.ssafy.recipe.service.feign.MemberFeign;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,9 +55,9 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
         favoriteRecipeRepository.delete(favoriteRecipe.get());
     }
 
-    public List<RecipeSearchResponse> getFavoriteResponse(long memberId){
-        List<FavoriteRecipe> favoriteRecipeList = favoriteRecipeRepository.findAllByMemberId(memberId);
-
+    public List<RecipeSearchResponse> getFavoriteResponse(long memberId, Pageable pageable){
+        pageable = PageRequest.of(pageable.getPageNumber()-1, pageable.getPageSize());
+        List<FavoriteRecipe> favoriteRecipeList = favoriteRecipeRepository.findAllByMemberId(memberId, pageable);
         List<RecipeSearchResponse> result = new ArrayList<>();
 
         MemberResponse memberResponse =  recipeSearchService.getMember(memberId);
@@ -88,6 +90,11 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
             result.add(recipeSearchResponse);
         }
         return result;
+    }
+
+    public long getCount(long memberId){
+        long count = favoriteRecipeRepository.countAllByMemberId(memberId);
+        return count;
     }
 
 
