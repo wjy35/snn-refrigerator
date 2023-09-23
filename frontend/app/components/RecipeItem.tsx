@@ -66,7 +66,8 @@ const RecipeItem = ({item, navigation, width, height}:props) => {
             </View>
           </View>
         </View>
-      </TouchableWithoutFeedback>
+      </View>
+    </TouchableWithoutFeedback>
   )
 }
 
