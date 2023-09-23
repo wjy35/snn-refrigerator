@@ -101,6 +101,7 @@ const LogInScreen = ({navigation}: any) => {
               resizeMode={'contain'}
             />
           </TouchableWithoutFeedback>
+          <Button title='홈으로(test)' onPress={()=>navigation.navigate('Home')}/>
         </View>
       </ImageBackground>
     </View>
