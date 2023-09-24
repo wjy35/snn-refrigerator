@@ -14,9 +14,9 @@ const RecipeListScreen = ({navigation}:any) => {
       title:"",
       imageUrl:"",
       favoriteCount: 0,
-      neededIngredients: 0,
-      myIngredients: 0,
+      followCount: 0,
       foodName:"",
+      favorite:false,
       cookingTime:"",
       serving:0
     }
