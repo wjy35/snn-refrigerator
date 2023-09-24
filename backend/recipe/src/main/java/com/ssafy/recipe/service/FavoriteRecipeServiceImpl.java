@@ -8,7 +8,6 @@ import com.ssafy.recipe.db.repository.FavoriteRecipeRepository;
 import com.ssafy.recipe.db.repository.RecipeRepository;
 import com.ssafy.recipe.exception.CustomException;
 import com.ssafy.recipe.exception.ErrorCode;
-import com.ssafy.recipe.service.feign.MemberFeign;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,11 +25,8 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
 
     private final RecipeRepository recipeRepository;
 
-    private final MemberFeign memberFeign;
-
     private final RecipeSearchService recipeSearchService;
 
-    private final RecipeService recipeService;
     @Override
     public void addFavoriteRecipe(int recipeId, long memberId) {
 
@@ -62,10 +58,8 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
 
         MemberResponse memberResponse =  recipeSearchService.getMember(memberId);
 
-        for(int i=0; i<favoriteRecipeList.size(); i++){
-            Recipe recipe = favoriteRecipeList.get(i).getRecipe();
-
-            String nickname = memberResponse.getNickname();
+        for (FavoriteRecipe favoriteRecipe : favoriteRecipeList) {
+            Recipe recipe = favoriteRecipe.getRecipe();
 
             int myIngredients = recipeSearchService.getMyIngredientCnt(recipe, memberResponse.getHouseCode());
 
@@ -76,13 +70,15 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
             RecipeSearchResponse recipeSearchResponse = RecipeSearchResponse.builder()
                     .recipeId(recipe.getRecipeId())
                     .title(recipe.getTitle())
-                    .nickname(nickname)
+                    .nickname(memberResponse.getNickname())
+                    .profileImageUrl(memberResponse.getProfileImageUrl())
                     .imageUrl(recipe.getImageUrl())
                     .cookingTime(recipe.getCookingTime())
                     .serving(recipe.getServing())
                     .favoriteCount(recipe.getFavoriteCount())
                     .foodName(recipe.getFoodName())
                     .isFavorite(isFavorite)
+                    .followCount(memberResponse.getFollowCount())
                     .neededIngredients(neededIngredients)
                     .myIngredients(myIngredients)
                     .build();
@@ -93,8 +89,7 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
     }
 
     public long getCount(long memberId){
-        long count = favoriteRecipeRepository.countAllByMemberId(memberId);
-        return count;
+        return favoriteRecipeRepository.countAllByMemberId(memberId);
     }
 
 

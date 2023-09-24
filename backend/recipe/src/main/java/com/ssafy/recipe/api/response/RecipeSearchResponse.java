@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Getter
 @Builder
@@ -15,6 +14,8 @@ public class RecipeSearchResponse {
     private String nickname;
     private String title;
     private String imageUrl;
+    private String profileImageUrl;
+    private int followCount;
     private int favoriteCount;
     private int neededIngredients;
     private int myIngredients;

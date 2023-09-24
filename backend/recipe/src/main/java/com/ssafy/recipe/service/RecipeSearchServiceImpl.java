@@ -18,17 +18,12 @@ import com.ssafy.recipe.service.feign.MemberFeign;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.lang.reflect.Member;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -88,8 +83,6 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
         for(int i=0; i<recipeList.size(); i++){
             Recipe recipe = recipeList.get(i);
 
-            String nickname = memberResponse.getNickname();
-
             int myIngredients = this.getMyIngredientCnt(recipe, memberResponse.getHouseCode());
 
             int neededIngredients = this.getNeededIngredientsCnt(recipe);
@@ -101,7 +94,8 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
             RecipeSearchResponse recipeSearchResponse = RecipeSearchResponse.builder()
                     .recipeId(recipe.getRecipeId())
                     .title(recipe.getTitle())
-                    .nickname(nickname)
+                    .nickname(memberResponse.getNickname())
+                    .profileImageUrl(memberResponse.getProfileImageUrl())
                     .imageUrl(recipe.getImageUrl())
                     .cookingTime(recipe.getCookingTime())
                     .serving(recipe.getServing())
@@ -109,6 +103,7 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
                     .foodName(recipe.getFoodName())
                     .neededIngredients(neededIngredients)
                     .isFavorite(isFavorite)
+                    .followCount(memberResponse.getFollowCount())
                     .myIngredients(myIngredients)
                     .build();
 
@@ -225,7 +220,7 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
         query.setParameter("requiredIngredients", requiredIngredientIds);
         query.setParameter("excludedIngredients", excludedIngredientIds);
         query.setParameter("keyword", "%" + keyword + "%");
-        query.setParameter("requiredIngredientsSize", (long) size);
+        query.setParameter("requiredIngredientsSize", size);
 
 
         return query;

@@ -1,7 +1,6 @@
 package com.ssafy.recipe.api.response;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -17,6 +16,7 @@ public class RecipeDetailResponse {
     private String youtubeUrl;
     private int favoriteCount;
     private long followCount;
+    private String profileImageUrl;
     private boolean isFavorite;
     private short serving;
     private String foodName;
