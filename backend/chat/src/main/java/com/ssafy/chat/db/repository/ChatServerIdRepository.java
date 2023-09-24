@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Repository
 public class ChatServerIdRepository {
@@ -22,5 +24,9 @@ public class ChatServerIdRepository {
 
     public void deleteByMemberId(Long memberId){
         redisTemplate.opsForValue().getAndDelete(chatServerIdPrefix+memberId);
+    }
+
+    public boolean isEnteredMemberId(Long memberId){
+        return Optional.ofNullable(redisTemplate.opsForValue().get(memberId)).isPresent();
     }
 }

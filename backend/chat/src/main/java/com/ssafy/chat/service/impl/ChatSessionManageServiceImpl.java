@@ -23,4 +23,9 @@ public class ChatSessionManageServiceImpl implements ChatSessionManageService {
         Long memberId = memberIdRepository.deleteAndGetBySimpSessionId(simpSessionId);
         chatServerIdRepository.deleteByMemberId(memberId);
     }
+
+    @Override
+    public boolean isEnteredMemberId(Long memberId) {
+        return chatServerIdRepository.isEnteredMemberId(memberId);
+    }
 }
