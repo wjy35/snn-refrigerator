@@ -1,7 +1,7 @@
 package com.ssafy.chat.service;
 
-public interface ChatSessionManageService {
+public interface ChatServerManageService {
     void enter(Long memberId, String simpSessionId);
     void leave(String simpSessionId);
-    boolean isEnteredMemberId(Long memberId);
+    Long getChatServerId(Long memberId);
 }

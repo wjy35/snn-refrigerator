@@ -2,13 +2,13 @@ package com.ssafy.chat.service.impl;
 
 import com.ssafy.chat.db.repository.MemberIdRepository;
 import com.ssafy.chat.db.repository.ChatServerIdRepository;
-import com.ssafy.chat.service.ChatSessionManageService;
+import com.ssafy.chat.service.ChatServerManageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ChatSessionManageServiceImpl implements ChatSessionManageService {
+public class ChatServerManageServiceImpl implements ChatServerManageService {
     private final MemberIdRepository memberIdRepository;
     private final ChatServerIdRepository chatServerIdRepository;
 
@@ -25,7 +25,7 @@ public class ChatSessionManageServiceImpl implements ChatSessionManageService {
     }
 
     @Override
-    public boolean isEnteredMemberId(Long memberId) {
-        return chatServerIdRepository.isEnteredMemberId(memberId);
+    public Long getChatServerId(Long memberId) {
+         return chatServerIdRepository.getChatServerIdByMemberId(memberId);
     }
 }
