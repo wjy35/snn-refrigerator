@@ -16,7 +16,6 @@ import com.ssafy.recipe.exception.CustomException;
 import com.ssafy.recipe.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +44,6 @@ public class RecipeServiceImpl implements RecipeService{
     private final RecipeIngredientRepository recipeIngredientRepository;
 
     private final RecipeSearchService recipeSearchService;
-
-    private final MemberFeign memberFeign;
-
-    private final ObjectMapper objectMapper;
 
     @Override
     public void createRecipe(RecipeRequest request) {
@@ -181,12 +176,17 @@ public class RecipeServiceImpl implements RecipeService{
 
         return RecipeDetailResponse.builder()
                 .nickname(memberResponse.getNickname())
+                .profileImageUrl(memberResponse.getProfileImageUrl())
                 .title(recipe.get().getTitle())
                 .image(recipe.get().getImageUrl())
                 .youtubeUrl(recipe.get().getYoutubeUrl())
                 .isFavorite(isFavorite)
                 .favoriteCount(recipe.get().getFavoriteCount())
                 .followCount((memberResponse.getFollowCount()))
+                .cookingTime(recipe.get().getCookingTime())
+                .foodName(recipe.get().getFoodName())
+                .serving(recipe.get().getServing())
+                .followCount(memberResponse.getFollowCount())
                 .contentResponseList(recipeDetails)
                 .ingredientResponseList(ingredientParams)
                 .build();
