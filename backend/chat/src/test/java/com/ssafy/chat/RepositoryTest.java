@@ -25,7 +25,7 @@ public class RepositoryTest {
 
         // when-then
         assertDoesNotThrow(()->{
-            memberIdRepository.setBySimpSessionId(simpSessionId,memberId);
+            memberIdRepository.saveBySimpSessionId(simpSessionId,memberId);
         });
     }
 
@@ -34,7 +34,7 @@ public class RepositoryTest {
         // given
         Long memberId = 3029548333l;
         String simpSessionId = "test";
-        memberIdRepository.setBySimpSessionId(simpSessionId,memberId);
+        memberIdRepository.saveBySimpSessionId(simpSessionId,memberId);
 
         // when-then
         assertDoesNotThrow(()->{

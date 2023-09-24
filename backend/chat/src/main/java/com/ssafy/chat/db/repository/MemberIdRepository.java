@@ -12,7 +12,7 @@ public class MemberIdRepository {
     private String simpSessionIdPrefix;
     private final RedisTemplate<String,Long> redisTemplate;
 
-    public void setBySimpSessionId(String simpSessionId, Long memberId){
+    public void saveBySimpSessionId(String simpSessionId, Long memberId){
         redisTemplate.opsForValue().set(simpSessionIdPrefix+simpSessionId, memberId);
     }
 
