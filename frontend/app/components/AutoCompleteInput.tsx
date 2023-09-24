@@ -7,7 +7,7 @@ import {useFocusEffect} from "@react-navigation/native";
 interface props {
   placeholder: string;
   onChangeText: Function;
-  onPressIn: Function;
+  onPressIn?: Function;
   now: number;
   text: string;
   textList?: any[];
@@ -26,7 +26,7 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
 
   const screen = Dimensions.get('screen');
   function onPressInFunction(){
-    onPressIn(now);
+    onPressIn&&onPressIn(now);
     setIsVisible(true);
   }
 
@@ -65,9 +65,10 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
           </TextInput>
           {
             isVisible && (
-              <View style={{height: 120}}>
+              <View style={{maxHeight: 200}}>
                 <FlatList
                   windowSize={2}
+                  initialNumToRender={5}
                   nestedScrollEnabled
                   data={textList}
                   renderItem={(item) => <AutoCompleteItem item={item} name={name}/>}
