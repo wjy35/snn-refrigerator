@@ -26,7 +26,7 @@ public class ChatServerIdRepository {
         redisTemplate.opsForValue().getAndDelete(chatServerIdPrefix+memberId);
     }
 
-    public boolean isEnteredMemberId(Long memberId){
-        return Optional.ofNullable(redisTemplate.opsForValue().get(memberId)).isPresent();
+    public Long getChatServerIdByMemberId(Long memberId){
+        return redisTemplate.opsForValue().get(memberId);
     }
 }
