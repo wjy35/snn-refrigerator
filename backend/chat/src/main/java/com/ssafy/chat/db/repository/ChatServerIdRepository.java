@@ -27,6 +27,6 @@ public class ChatServerIdRepository {
     }
 
     public String getChatServerIdByMemberId(Long memberId){
-        return redisTemplate.opsForValue().get(memberId);
+        return redisTemplate.opsForValue().get(chatServerIdPrefix+memberId);
     }
 }
