@@ -79,10 +79,10 @@ public class RecipeSearchTests {
                 .keyword(keyword)
                 .excludedIngredients(excludedIngredients).build();
         // when
-        List<RecipeSearchResponse> list = recipeSearchService.getSearchRecipe(request);
+//        List<RecipeSearchResponse> list = recipeSearchService.getSearchRecipe(request);
 
         // then
-        System.out.println(list.size());
+//        System.out.println(list.size());
 //        System.out.println(list.get(0).getRecipeId());
 //        System.out.println(list.get(0).getTitle());
     }

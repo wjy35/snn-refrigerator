@@ -17,5 +17,7 @@ public class RecipeSearchRequest {
     private String keyword;
     private List<IngredientInfo> requiredIngredients;
     private List<IngredientInfo> excludedIngredients;
-    private  long missingIngredientCount;
+    private long missingIngredientCount;
+    private int page;
+    private int size;
 }
