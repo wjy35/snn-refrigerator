@@ -23,7 +23,7 @@ public class ChatSocketController {
     private final ChatSaveService chatSaveService;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    @SubscribeMapping("/{chatRoomId}/{memberId}")
+    @SubscribeMapping("/topic/{chatRoomId}/{memberId}")
     void enter(@DestinationVariable Integer chatRoomId,
                @DestinationVariable Long memberId,
                @Header("simpSessionId") String simpSessionId){
@@ -44,6 +44,7 @@ public class ChatSocketController {
                 .ifPresent((chatServerId)->{
                     ChatPublish chatPublish = ChatPublish
                             .builder()
+                            .chatRoomId(chatPayload.getChatRoomId())
                             .memberId(chatPayload.getReceiveMemberId())
                             .content(chatPayload.getContent())
                             .timestamp(chatEntity.getTimestamp())
