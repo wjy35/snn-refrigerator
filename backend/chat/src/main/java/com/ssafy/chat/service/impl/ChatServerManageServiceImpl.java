@@ -25,7 +25,7 @@ public class ChatServerManageServiceImpl implements ChatServerManageService {
     }
 
     @Override
-    public Long getChatServerId(Long memberId) {
+    public String getChatServerIdByMemberId(Long memberId) {
          return chatServerIdRepository.getChatServerIdByMemberId(memberId);
     }
 }

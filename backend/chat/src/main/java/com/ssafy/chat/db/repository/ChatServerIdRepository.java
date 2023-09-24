@@ -15,18 +15,18 @@ public class ChatServerIdRepository {
     String chatServerIdPrefix;
 
     private final ChatServerInfo chatServerInfo;
-    private final RedisTemplate<String,Long> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
 
     public void saveByMemberId(Long memberId){
-        redisTemplate.opsForValue().set(chatServerIdPrefix+chatServerInfo.getId(),memberId);
+        redisTemplate.opsForValue().set(chatServerIdPrefix+memberId, chatServerInfo.getId());
     }
 
     public void deleteByMemberId(Long memberId){
         redisTemplate.opsForValue().getAndDelete(chatServerIdPrefix+memberId);
     }
 
-    public Long getChatServerIdByMemberId(Long memberId){
+    public String getChatServerIdByMemberId(Long memberId){
         return redisTemplate.opsForValue().get(memberId);
     }
 }
