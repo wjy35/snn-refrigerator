@@ -4,12 +4,16 @@ import Progressbar from "@/components/Progressbar";
 import {styles} from "@/styles/styles";
 import GetImageFrom from "@/components/GetImageFrom";
 import ShowYoutube from "@/components/ShowYoutube";
+import BasicBadge from "@/components/BasicBadge";
 
 interface props {
   textList: string[];
+  ingredients: any[];
+  setNow: Function;
+  now: number;
 }
 
-const HouseAddStorage = ({textList}: props) => {
+const HouseAddStorage = ({textList, ingredients, setNow, now}: props) => {
   const isWarm = useState<boolean>(true)
   return (
     <View style={styles.marginContainer}>
@@ -30,11 +34,36 @@ const HouseAddStorage = ({textList}: props) => {
             {
               isWarm ? (
                 <View style={{borderWidth: 1, width: '80%', height: 150}}>
+                  <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+                    {
+                      ingredients.map((i, idx) => {
+                        if (i.storageType === 2) {
+                          return (
+                            <React.Fragment key={`${i.ingredientName}${idx}`}>
+                              <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} onPress={()=>{}}/>
+                            </React.Fragment>
+                          )
+                        }
+                      })
+                    }
+                  </View>
 
                 </View>
               ):(
                 <View style={{borderWidth: 1, width: '80%', height: 150}}>
-
+                  <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+                    {
+                      ingredients.map((i, idx) => {
+                        if (i.storageType === 1) {
+                          return (
+                            <React.Fragment key={`${i.ingredientName}${idx}`}>
+                              <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} onPress={()=>{}}/>
+                            </React.Fragment>
+                          )
+                        }
+                      })
+                    }
+                  </View>
                 </View>
               )
             }
@@ -49,7 +78,19 @@ const HouseAddStorage = ({textList}: props) => {
               </View>
             </View>
             <View style={{borderWidth: 1, width: '80%', height: 150}}>
-
+              <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+                {
+                  ingredients.map((i, idx) => {
+                    if (i.storageType === 0) {
+                      return (
+                        <React.Fragment key={`${i.ingredientName}${idx}`}>
+                          <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} onPress={()=>{}}/>
+                        </React.Fragment>
+                      )
+                    }
+                  })
+                }
+              </View>
             </View>
           </View>
         </View>
