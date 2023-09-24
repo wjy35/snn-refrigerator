@@ -16,8 +16,8 @@ public class MemberIdRepository {
         redisTemplate.opsForValue().set(simpSessionIdPrefix+simpSessionId, memberId);
     }
 
-    public void deleteBySimpSessionId(String simpSessionId){
-        redisTemplate.opsForValue().getAndDelete(simpSessionIdPrefix+simpSessionId);
+    public Long deleteBySimpSessionId(String simpSessionId){
+        return redisTemplate.opsForValue().getAndDelete(simpSessionIdPrefix+simpSessionId);
     }
 
 }
