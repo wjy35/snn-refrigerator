@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
 @Repository
-public class ServerIdRepository {
+public class ChatServerIdRepository {
     @Value("${CHAT_SERVER_ID_REPOSITORY_PREFIX}")
     String chatServerIdPrefix;
 
@@ -16,11 +16,11 @@ public class ServerIdRepository {
     private final RedisTemplate<String,Long> redisTemplate;
 
 
-    private void saveByMemberId(Long memberId){
+    public void saveByMemberId(Long memberId){
         redisTemplate.opsForValue().set(chatServerIdPrefix+chatServerInfo.getId(),memberId);
     }
 
-    private void deleteByMemberId(Long memberId){
+    public void deleteByMemberId(Long memberId){
         redisTemplate.opsForValue().getAndDelete(chatServerIdPrefix+memberId);
     }
 }
