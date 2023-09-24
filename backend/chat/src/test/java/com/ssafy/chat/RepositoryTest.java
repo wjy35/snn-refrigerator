@@ -38,7 +38,7 @@ public class RepositoryTest {
 
         // when-then
         assertDoesNotThrow(()->{
-            memberIdRepository.deleteBySimpSessionId(simpSessionId);
+            memberIdRepository.deleteAndGetBySimpSessionId(simpSessionId);
         });
     }
 
