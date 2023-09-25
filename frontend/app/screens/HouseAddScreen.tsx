@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {View, Text, Button, ImageBackground} from 'react-native';
 import BottomNavigator from "@/components/BottomNavigator";
 import {styles} from "@/styles/styles";
-import MyHouseModal from "@/components/MyHouseModal";
 import ProgressPage from "@/components/ProgressPage";
 import HouseAddIngredient from "@/pages/houseAdd/HouseAddIngredient";
 import TopNavigator from "@/components/TopNavigator";
@@ -30,7 +29,6 @@ const HouseAddScreen = ({navigation}:any) => {
   return (
     <View style={styles.layout}>
       <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
-        <MyHouseModal/>
         {
           now === 0 && (
             <TopNavigator title='내 냉장고 등록' optionTitle='다음'/>
