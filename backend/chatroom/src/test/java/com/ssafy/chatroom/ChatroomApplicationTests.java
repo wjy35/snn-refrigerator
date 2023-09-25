@@ -133,7 +133,11 @@ class ChatroomApplicationTests {
     @Test
     void testShareBoardOpenFeign(){
         // given
-        Integer shareBoardId = 1;
+        Integer shareBoardId = 3;
+
+        ShareBoardDto shareBoardDto = objectMapper.convertValue(shareBoardOpenFeign.getShareBoardDto(3).getData().get("response"),ShareBoardDto.class);
+
+        System.out.println("shareBoardDto = " + shareBoardDto);
     }
 
 }
