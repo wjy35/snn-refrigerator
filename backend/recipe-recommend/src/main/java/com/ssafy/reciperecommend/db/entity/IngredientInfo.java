@@ -18,7 +18,7 @@ public class IngredientInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private short ingredientInfoId;
 
-    @Column(name = "ingredient_name", nullable = false, length = 32)
+    @Column(name = "ingredient_info_name", nullable = false, length = 32)
     private String ingredientName;
 }
 
