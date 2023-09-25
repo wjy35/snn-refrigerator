@@ -56,7 +56,6 @@ public class ChatRoomController {
         List<ChatRoomEntity> chatRoomEntityList = chatRoomSearchService.searchByMemberId(memberId);
 
         for(ChatRoomEntity chatRoomEntity : chatRoomEntityList){
-
             chatRoomSearchParamList.add(ChatRoomMapper.INSTANCE.toChatRoomSearchParam(
                     chatRoomEntity,
                     viewCurrentChatService.viewByChatRoomId(chatRoomEntity.getChatRoomId()),
