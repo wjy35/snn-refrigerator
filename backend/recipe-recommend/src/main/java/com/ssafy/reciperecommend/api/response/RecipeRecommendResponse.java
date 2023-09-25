@@ -12,9 +12,12 @@ public class RecipeRecommendResponse {
     private String nickname;
     private String title;
     private String imageUrl;
+    private String profileImageUrl;
+    private int followCount;
     private int favoriteCount;
     private int neededIngredients;
     private int myIngredients;
+    private boolean favorite;
     private String foodName;
     private String cookingTime;
     private short serving;
