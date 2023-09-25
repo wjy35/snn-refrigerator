@@ -17,9 +17,6 @@ export const topNavStyles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
   },
-  tabFontSize: {
-    fontSize: 25,
-  },
   backButton: {
     alignItems: 'center',
     justifyContent: 'center',

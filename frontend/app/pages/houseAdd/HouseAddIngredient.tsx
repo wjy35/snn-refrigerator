@@ -8,6 +8,7 @@ import BasicBadge from "@/components/BasicBadge";
 import AutoCompleteInput from "@/components/AutoCompleteInput";
 import useInput from "@/hooks/useInput";
 import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
+import {closeIcon} from "@/assets/icons/icons";
 
 interface props {
   textList: string[];
@@ -68,7 +69,7 @@ const HouseAddIngredient = ({textList, ingredients, setNow, now, addIngredient}:
               ingredients.map((i, idx) => {
                 return (
                   <React.Fragment key={`${i.ingredientName}${idx}`}>
-                    <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} onPress={()=>{}}/>
+                    <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{}}/>
                   </React.Fragment>
                 )
               })
