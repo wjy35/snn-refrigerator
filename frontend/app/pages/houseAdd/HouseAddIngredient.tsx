@@ -13,10 +13,11 @@ interface props {
   textList: string[];
   ingredients: any[];
   setNow: Function;
-  now: number
+  now: number;
+  addIngredient: Function;
 }
 
-const HouseAddIngredient = ({textList, ingredients, setNow, now}: props) => {
+const HouseAddIngredient = ({textList, ingredients, setNow, now, addIngredient}: props) => {
   const [autoCompleteIngredientList, setAutoCompleteIngredientList] = useState<any[]>();
   const checkIngredient = async (keyword: string) => {
     try {
@@ -37,14 +38,13 @@ const HouseAddIngredient = ({textList, ingredients, setNow, now}: props) => {
   });
 
   function onBlur(){
-    setNow(0)
-    setAutoCompleteIngredientList([])
+    setNow(0);
+    // setAutoCompleteIngredientList([]);
   }
 
   function onPressIn(newNum: number) {
-    setNow(newNum)
+    setNow(newNum);
   }
-
 
   return (
     <View style={styles.marginContainer}>
@@ -55,9 +55,9 @@ const HouseAddIngredient = ({textList, ingredients, setNow, now}: props) => {
           </View>
         )
       }
-      <ScrollView style={{width: '100%'}} keyboardShouldPersistTaps='handled'>
+      <ScrollView style={{width: '100%'}}>
         <View style={[{width: '100%'}]}>
-          <AutoCompleteInput {...ingredientText} textList={autoCompleteIngredientList} keyValue='ingredientInfoId' name='ingredientName' onPressIn={onPressIn}/>
+          <AutoCompleteInput {...ingredientText} textList={autoCompleteIngredientList} keyValue='ingredientName' name='ingredientName' onPressIn={onPressIn} onSelect={addIngredient} onBlur={onBlur}/>
           <View style={{justifyContent: 'center', width: '100%', alignItems: 'center'}}>
             <Text>직접 입력한 식재료는 레시피 추천에서 제외됩니다.</Text>
           </View>
