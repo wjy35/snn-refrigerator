@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,15 +34,14 @@ public class HateIngredientServiceImpl {
         }
     }
 
-    public List<HateIngredientInfo> getHateIngredientInfo(Member member){
+    public List<Map<String, Object>> getHateIngredientInfo(Member member){
         List<HateIngredient> hateIngredientList = hateIngredientRepository.findByMember(member);
-        List<HateIngredientInfo> hateIngredientInfos = new ArrayList<HateIngredientInfo>();
+        List<Map<String, Object>> hateIngredientInfos = new ArrayList<>();
         for(HateIngredient hateIngredient : hateIngredientList){
-            HateIngredientInfo info = HateIngredientInfo
-                    .builder()
-                    .ingredientId(hateIngredient.getIngredientId())
-                    .ingredientName(getIngredientName(hateIngredient.getIngredientId()))
-                    .build();
+
+            Map<String, Object> info = new HashMap<>();
+            info.put("ingredientInfoName", getIngredientName(hateIngredient.getIngredientId()));
+            info.put("ingredientId", hateIngredient.getIngredientId());
             hateIngredientInfos.add(info);
         }
         return hateIngredientInfos;
