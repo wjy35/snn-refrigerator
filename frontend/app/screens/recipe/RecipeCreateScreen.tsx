@@ -14,16 +14,17 @@ const RecipeCreateScreen = ({navigation}:any) => {
     {order: 3, content: '냄비에 들기름을 두르고 김치와 볶아주세요'},
   ]);
   const [ingredients, setIngredients] = useState<any[]>([
-    { ingredientName: '돼지고기(목살)', ingredientServing: '300g'},
-    { ingredientName: '돼지고기(목살)', ingredientServing: '300g'},
-    { ingredientName: '돼지고기(목살)', ingredientServing: '300g'},
-    { ingredientName: '돼지고기(목살)', ingredientServing: '300g'},
+    { ingredientName: '돼지고기(목살)', amount: '300g', ingredientInfoId: 1},
+    { ingredientName: '돼지고기(목살)', amount: '300g', ingredientInfoId: 1},
+    { ingredientName: '돼지고기(목살)', amount: '300g', ingredientInfoId: 1},
+    { ingredientName: '돼지고기(목살)', amount: '300g', ingredientInfoId: 1},
   ]);
+  const [recipeInfo, setRecipeInfo] = useState<any>({})
 
   // TODO: 재료 추가 로직 구현
-  function addIngredient(ingredientName: string, ingredientServing: string){
+  function addIngredient(ingredientName: string, amount: string, ingredientInfoId: number){
     const _ingredients = [...ingredients];
-    _ingredients.push({ingredientName, ingredientServing});
+    _ingredients.push({ingredientName, amount, ingredientInfoId});
     setIngredients(_ingredients);
   }
 
@@ -47,63 +48,33 @@ const RecipeCreateScreen = ({navigation}:any) => {
 
   }
 
-  const foodName = useInput({
-    placeholder: '요리 제목',
-    title: '요리 제목',
-    nowNum: 0,
-  });
-
-  const title = useInput({
-    placeholder: '레시피 제목',
-    title: '레시피 제목',
-    nowNum: 0,
-  });
-
-  const serving = useInput({
-    placeholder: '조리 양',
-    title: '조리 양',
-    nowNum: 0,
-  });
-
-  const cookingTime = useInput({
-    placeholder: '조리 시간',
-    title: '조리 시간',
-    nowNum: 0,
-  });
-
-  const youtubeUrl = useInput({
-    placeholder: '유튜브 링크',
-    title: '유튜브 링크',
-    nowNum: 0,
-  });
+  function changeInfo(key: string, value: string){
+    setRecipeInfo({...recipeInfo, [key]: value});
+    console.log(recipeInfo)
+  }
 
   return (
     <RecipeLayout title="레시피" optionTitle="다음">
       <ProgressPage>
         <RecipeCreateBasicInfo
           textList={textList}
-          foodName={foodName}
-          title={title}
-          serving={serving}
-          cookingTime={cookingTime}
-          youtubeUrl={youtubeUrl}
+          setRecipeInfo={changeInfo}
         />
         <RecipeCreateIngredientInfo
           textList={textList}
-          foodName={foodName}
-          serving={serving}
           ingredients={ingredients}
           addIngredient={addIngredient}
           deleteIngredient={deleteIngredient}
+          foodName={recipeInfo.foodName&&recipeInfo.foodName}
+          serving={recipeInfo.serving&&recipeInfo.serving}
         />
         <RecipeCreateCookInfo
           textList={textList}
-          foodName={foodName}
-          serving={serving}
           content={content}
           addContent={addContent}
           deleteContent={deleteContent}
           editContent={editContent}
+          recipeInfo={recipeInfo}
         />
       </ProgressPage>
     </RecipeLayout>

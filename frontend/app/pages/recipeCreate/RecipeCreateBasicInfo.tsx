@@ -10,19 +10,54 @@ import useInput from "@/hooks/useInput";
 
 interface props {
   textList: string[];
-  foodName: any;
-  title: any;
-  serving: any;
-  cookingTime: any;
-  youtubeUrl: any;
+  setRecipeInfo: Function;
+
 }
 
-const RecipeCreateBasicInfo = ({textList, foodName, title, youtubeUrl, serving, cookingTime}: props) => {
+const RecipeCreateBasicInfo = ({textList, setRecipeInfo}: props) => {
   const [now, setNow] = useState<number>(0);
   const [showUrl, setShowUrl] = useState<string>('');
   function onPressIn(t:number){
     setNow(t);
   }
+
+  const foodName = useInput({
+    placeholder: '요리 제목',
+    title: '요리 제목',
+    nowNum: 0,
+    onChange: (keyword: string) => {setRecipeInfo('foodName', keyword)}
+  });
+
+  const title = useInput({
+    placeholder: '레시피 제목',
+    title: '레시피 제목',
+    nowNum: 0,
+    onChange: (keyword: string) => {setRecipeInfo('title', keyword)}
+  });
+
+  const serving = useInput({
+    placeholder: '조리 양',
+    title: '조리 양',
+    nowNum: 0,
+    onChange: (keyword: string) => {setRecipeInfo('serving', keyword)}
+
+  });
+
+  const cookingTime = useInput({
+    placeholder: '조리 시간',
+    title: '조리 시간',
+    nowNum: 0,
+    onChange: (keyword: string) => {setRecipeInfo('cookingTime', keyword)}
+
+  });
+
+  const youtubeUrl = useInput({
+    placeholder: '유튜브 링크',
+    title: '유튜브 링크',
+    nowNum: 0,
+    onChange: (keyword: string) => {setRecipeInfo('youtubeUrl', keyword)}
+
+  });
 
   useEffect(() => {
     const splitUrl = youtubeUrl.text.split('?v=');
