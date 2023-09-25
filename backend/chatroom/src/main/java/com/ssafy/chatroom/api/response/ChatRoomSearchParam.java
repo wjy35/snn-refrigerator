@@ -4,7 +4,7 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class ChatRoomSearchResponse {
+public class ChatRoomSearchParam {
     private Integer chatRoomId;
     private String profileImageUrl;
     private String locationName;

@@ -68,7 +68,7 @@ class ChatroomApplicationTests {
     void findChatRoom(){
         // given
         Integer sharePostId = 1;
-        Long senderMemberId = 1l;
+        Long senderMemberId = 3029548333l;
         System.out.println("sharePostId = " + sharePostId);
         System.out.println("senderMemberId = " + senderMemberId);
 
@@ -78,7 +78,6 @@ class ChatroomApplicationTests {
                         sharePostId,
                         senderMemberId)
                 .get();
-
         // then
         System.out.println("chatRoomEntity.getChatRoomId() = " + chatRoomEntity.getChatRoomId());
         assertNotNull(chatRoomEntity.getChatRoomId());
@@ -88,7 +87,7 @@ class ChatroomApplicationTests {
     @Transactional
     void testFindChatRoomsBySenderMemberIdOrReceiverMemberId(){
         // given
-        Long memberId = 1l;
+        Long memberId = 3029548333l;
         System.out.println("memberId = " + memberId);
 
         // when
@@ -130,17 +129,11 @@ class ChatroomApplicationTests {
         Assertions.assertNotNull(chatDto);
     }
 
+    // TODO AOP Test 에 추가
     @Test
     void testShareBoardOpenFeign(){
         // given
         Integer shareBoardId = 1;
-
-//        System.out.println("shareBoardOpenFeign.getShareBoardDto(shareBoardId) = " + shareBoardOpenFeign.getShareBoardDto(shareBoardId));
-        // when
-//        ShareBoardDto shareBoardDto = objectMapper.convertValue(shareBoardOpenFeign.getShareBoardDto(shareBoardId).getData().get("response"),ShareBoardDto.class);
-
-//        // then
-//        System.out.println("shareBoardDto = " + shareBoardDto);
     }
 
 }
