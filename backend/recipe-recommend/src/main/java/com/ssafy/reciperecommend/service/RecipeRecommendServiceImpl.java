@@ -1,10 +1,13 @@
 package com.ssafy.reciperecommend.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.reciperecommend.api.response.IngredientResponse;
 import com.ssafy.reciperecommend.api.response.MemberResponse;
 import com.ssafy.reciperecommend.api.response.RecipeRecommendResponse;
+import com.ssafy.reciperecommend.db.entity.FavoriteRecipe;
 import com.ssafy.reciperecommend.db.entity.Recipe;
 import com.ssafy.reciperecommend.db.entity.RecipeIngredient;
+import com.ssafy.reciperecommend.db.repository.FavoriteRecipeRepository;
 import com.ssafy.reciperecommend.db.repository.RecipeCustomIngredientRepository;
 import com.ssafy.reciperecommend.db.repository.RecipeIngredientRepository;
 import com.ssafy.reciperecommend.service.feign.HouseIngredientFeign;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,6 +37,10 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
     private final RecipeIngredientRepository recipeIngredientRepository;
 
     private final RecipeCustomIngredientRepository recipeCustomIngredientRepository;
+
+    private final ObjectMapper objectMapper;
+
+    private final FavoriteRecipeRepository favoriteRecipeRepository;
     @Override
     public List<RecipeRecommendResponse> getRecipeRecommend(long memberId) {
         TypedQuery<Recipe> query = entityManager.createQuery(
@@ -42,52 +50,48 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
                         "WHERE r.recipeId IN (" +
                         " SELECT req.recipe.recipeId " +
                         " FROM RecipeIngredient req " +
-                        " WHERE req.ingredientInfo.ingredientInfoId IN :requiredIngredients " +
-                        " AND req.recipe.recipeId NOT IN (" +
+                        " WHERE req.recipe.recipeId NOT IN (" +
                         " SELECT req2.recipe.recipeId " +
                         " FROM RecipeIngredient req2 " +
-                        " WHERE req2.ingredientInfo.ingredientInfoId IN :hateIngredientIds " +
+                        " WHERE req2.ingredientInfo.ingredientInfoId IN :excludedIngredients " +
                         " )" +
                         ")" +
                         "GROUP BY r.recipeId " +
-                        "HAVING COUNT(r.recipeId) >= 1", Recipe.class);
+                        "HAVING COUNT(r.recipeId) >= 0", Recipe.class);
 
-        Optional<MemberResponse> memberResponse = memberFeign.getMemberDetail(memberId);
 
-        List<IngredientResponse> houseIngredientResponseList = this.getHouseIngredientResponse(memberResponse.get().getHouseSeq());
 
-        List<IngredientResponse> hateIngredientList = memberFeign.getHateIngredient(memberId);
+        MemberResponse memberResponse = this.getMember(memberId);
 
-        List<Short> requiredIngredientIds = houseIngredientResponseList.stream()
-                .map(h -> (short) h.getIngredientInfoId()) // int를 Short로 캐스팅
-                .collect(Collectors.toList());
+        List<IngredientResponse> hateIngredientList = this.getHateIngredient(memberId);
+
 
         List<Short> hateIngredientIds = hateIngredientList.stream()
                 .map(h -> (short) h.getIngredientInfoId()) // int를 Short로 캐스팅
                 .collect(Collectors.toList());
 
 
-        query.setParameter("requiredIngredients", requiredIngredientIds);
-        query.setParameter("hateIngredientIds", hateIngredientIds);
+        query.setParameter("excludedIngredients", hateIngredientIds);
 
         List<Recipe> recipeList = query.getResultList();
-
         List<RecipeRecommendResponse> result = new ArrayList<>();
-
         for(int i=0; i<recipeList.size(); i++){
             Recipe recipe = recipeList.get(i);
 
-            String nickname = memberResponse.get().getNickname();
-
-            int myIngredients = this.getMyIngredientCnt(recipe, memberResponse.get().getHouseSeq());
-
+            MemberResponse memberResponse1 = this.getMember(recipe.getMemberId());
+            String nickname = memberResponse.getNickname();
+            int myIngredients = this.getMyIngredientCnt(recipe, memberResponse.getHouseCode());
             int neededIngredients = this.getNeededIngredientsCnt(recipe);
+
+            boolean isFavorite = this.favoriteCheck(memberId, recipe.getRecipeId());
 
             RecipeRecommendResponse recipeSearchResponse = RecipeRecommendResponse.builder()
                     .recipeId(recipe.getRecipeId())
                     .title(recipe.getTitle())
                     .nickname(nickname)
+                    .favorite(isFavorite)
                     .imageUrl(recipe.getImageUrl())
+                    .profileImageUrl(memberResponse1.getProfileImageUrl())
                     .cookingTime(recipe.getCookingTime())
                     .serving(recipe.getServing())
                     .favoriteCount(recipe.getFavoriteCount())
@@ -99,6 +103,7 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
             result.add(recipeSearchResponse);
         }
 
+        Collections.shuffle(result);
         return result;
     }
 
@@ -106,8 +111,8 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
         return recipeIngredientRepository.countAllByRecipe(recipe)+recipeCustomIngredientRepository.countAllByRecipe(recipe);
     }
 
-    public int getMyIngredientCnt(Recipe recipe, int houseSeq){
-        List<IngredientResponse> houseIngredientResponses= this.getHouseIngredientResponse(houseSeq);
+    public int getMyIngredientCnt(Recipe recipe, String houseCode){
+        List<IngredientResponse> houseIngredientResponses= this.getHouseIngredientResponse(houseCode);
 
         List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findAllByRecipe(recipe);
 
@@ -123,33 +128,72 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
     }
 
 
-    public List<IngredientResponse> getHouseIngredientResponse(int houseSeq){
-        String st = houseIngredientFeign.getHouseIngredient(houseSeq);
-
-        System.out.println(st);
+    public List<IngredientResponse> getHouseIngredientResponse(String houseCode){
+        String st = houseIngredientFeign.getHouseIngredient(houseCode);
 
         JSONObject jsonObject = new JSONObject(st);
 
-        // "request" 객체에서 "houseSeq" 값을 추출
         JSONArray ingredientsArray = jsonObject.getJSONObject("data").getJSONArray("ingredients");
 
-        // 결과를 저장할 리스트
         List<IngredientResponse> resultList = new ArrayList<>();
 
-        // "ingredients" 배열을 순회하면서 필요한 데이터를 추출하여 객체로 만들고 리스트에 추가
         for (int i = 0; i < ingredientsArray.length(); i++) {
             JSONObject ingredientObject = ingredientsArray.getJSONObject(i);
+
             int ingredientInfoId = ingredientObject.getInt("ingredientInfoId");
+
             String ingredientName = ingredientObject.getString("ingredientName");
 
             IngredientResponse houseIngredientResponse = IngredientResponse.builder()
                     .ingredientInfoId(ingredientInfoId)
-                    .ingredientName(ingredientName).build();
+                    .ingredientInfoName(ingredientName).build();
 
             resultList.add(houseIngredientResponse);
         }
 
         return resultList;
+    }
+
+    public MemberResponse getMember(Long memberId){
+        MemberResponse memberResponse = objectMapper.convertValue(memberFeign.getMemberDetail(memberId).getData().get("memberInfo"),MemberResponse.class);
+        if(memberResponse != null){
+            return memberResponse;
+        }else{
+            throw new RuntimeException();
+        }
+    }
+
+    public List<IngredientResponse> getHateIngredient(Long memberId){
+        String st = memberFeign.getHateIngredient(memberId);
+
+        JSONObject jsonObject = new JSONObject(st);
+
+        JSONArray ingredientsArray = jsonObject.getJSONObject("data").getJSONArray("ingredient");
+
+        List<IngredientResponse> resultList = new ArrayList<>();
+
+        for (int i = 0; i < ingredientsArray.length(); i++) {
+            JSONObject ingredientObject = ingredientsArray.getJSONObject(i);
+
+            int ingredientInfoId = ingredientObject.getInt("ingredientInfoId");
+
+            String ingredientName = ingredientObject.getString("ingredientName");
+
+            IngredientResponse houseIngredientResponse = IngredientResponse.builder()
+                    .ingredientInfoId(ingredientInfoId)
+                    .ingredientInfoName(ingredientName).build();
+
+            resultList.add(houseIngredientResponse);
+        }
+        return resultList;
+    }
+
+    public boolean favoriteCheck(long memberId, int recipeId){
+        Optional<FavoriteRecipe> favoriteRecipe = favoriteRecipeRepository.findByRecipeRecipeIdAndMemberId(recipeId, memberId);
+
+        if(favoriteRecipe.isEmpty()) return false;
+
+        return true;
     }
 
 }
