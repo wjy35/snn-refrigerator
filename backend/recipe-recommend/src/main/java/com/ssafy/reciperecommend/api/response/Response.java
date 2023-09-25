@@ -42,5 +42,4 @@ public class Response {
                 ", data=" + data +
                 '}';
     }
-
 }

@@ -10,5 +10,5 @@ import lombok.ToString;
 public class IngredientResponse {
 
     private int ingredientInfoId;
-    private String ingredientName;
+    private String ingredientInfoName;
 }
