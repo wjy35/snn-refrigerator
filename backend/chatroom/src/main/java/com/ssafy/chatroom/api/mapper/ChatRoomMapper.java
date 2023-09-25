@@ -2,7 +2,7 @@ package com.ssafy.chatroom.api.mapper;
 
 import com.ssafy.chatroom.api.request.ChatRoomCreateRequest;
 import com.ssafy.chatroom.api.response.ChatRoomCreateResponse;
-import com.ssafy.chatroom.api.response.ChatRoomSearchResult;
+import com.ssafy.chatroom.api.response.ChatRoomSearchResponse;
 import com.ssafy.chatroom.cloud.dto.ChatDto;
 import com.ssafy.chatroom.cloud.dto.MemberDto;
 import com.ssafy.chatroom.cloud.dto.ShareBoardDto;
@@ -17,7 +17,7 @@ public interface ChatRoomMapper {
     ChatRoomCreateResponse entityToResponse(ChatRoomEntity chatRoomEntity);
     ChatRoomEntity requestToEntity(ChatRoomCreateRequest chatRoomCreateRequest);
 
-    ChatRoomSearchResult toChatRoomSearchResult(
+    ChatRoomSearchResponse toChatRoomSearchResult(
             ChatRoomEntity chatRoomEntity,
             ChatDto chatDto,
             ShareBoardDto shareBoardDto,
