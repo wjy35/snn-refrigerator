@@ -5,6 +5,7 @@ import {styles} from "@/styles/styles";
 import EditableIngredients from "@/components/EditableIngredients";
 import AutoCompleteInput from "@/components/AutoCompleteInput";
 import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
+import useInput from "@/hooks/useInput";
 
 interface props {
   textList: string[];
@@ -17,34 +18,38 @@ interface props {
 
 const RecipeCreateIngredientInfo = ({textList, foodName, serving, ingredients, deleteIngredient, addIngredient}: props) => {
   const [text, setText] = useState('')
-  const [autoCompleteList, setAutoCompleteList] = useState<any[]>()
+  const [autoCompleteIngredientList, setAutoCompleteIngredientList] = useState<any[]>();
   const [now, setNow] = useState(0)
 
-  function onChangeText(newText: string){
-    setText(newText)
-    check(newText)
-  }
-
-  const check = async (keyword: string) => {
+  const checkIngredient = async (keyword: string) => {
     try {
       const res = await ingredientAutocompleteApi.check({keyword: keyword})
       if (res.status === 200) {
-        setAutoCompleteList(res.data.data.ingredients)
+        setAutoCompleteIngredientList(res.data.data.ingredients)
+        console.log(res.data.data.ingredients);
+        console.log(autoCompleteIngredientList);
       }
     } catch (err) {
       console.log(err);
     }
   }
 
-  function onPressIn(now: number){
-    setNow(1);
+  function onBlur(){
+    setNow(0)
+    setAutoCompleteIngredientList([])
   }
 
-  function onBlur(){
-    setNow(0);
-    setText('');
-    setAutoCompleteList([]);
+  function onPressIn(newNum: number) {
+    setNow(newNum)
   }
+
+
+  const ingredientText = useInput({
+    placeholder: '재료 추가',
+    title: '',
+    nowNum: 1,
+    onChange: checkIngredient,
+  });
 
 
   return (
@@ -70,15 +75,7 @@ const RecipeCreateIngredientInfo = ({textList, foodName, serving, ingredients, d
         }
         <View style={{}}>
           <View style={[{width: '100%'}]}>
-            <AutoCompleteInput
-              placeholder='재료 추가'
-              text={text}
-              textList={autoCompleteList}
-              onChangeText={onChangeText}
-              onPressIn={onPressIn}
-              now={now}
-              onBlur={onBlur}
-            />
+            <AutoCompleteInput {...ingredientText} textList={autoCompleteIngredientList} keyValue='ingredientInfoId' name='ingredientName' onPressIn={onPressIn}/>
           </View>
         </View>
         <View style={styles.marginContainer}>
