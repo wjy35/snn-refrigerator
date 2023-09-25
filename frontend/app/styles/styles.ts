@@ -55,6 +55,14 @@ export const styles = StyleSheet.create({
     fontFamily: 'BM-HANNA',
     color: '#000000'
   },
+  headerFont: {
+    fontSize : 30,
+    color: '#002055'
+  },
+  subHeaderFont: {
+    fontSize : 23,
+    color: '#002055',
+  },
   flex: {
     flex: 1,
   },
