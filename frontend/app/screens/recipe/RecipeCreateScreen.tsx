@@ -4,19 +4,14 @@ import ProgressPage from "@/components/ProgressPage";
 import RecipeCreateBasicInfo from "@/pages/recipeCreate/RecipeCreateBasicInfo";
 import RecipeCreateIngredientInfo from "@/pages/recipeCreate/RecipeCreateIngredientInfo";
 import RecipeCreateCookInfo from "@/pages/recipeCreate/RecipeCreateCookInfo";
+import useInput from "@/hooks/useInput";
 
 const RecipeCreateScreen = ({navigation}:any) => {
   const textList = ['기본 정보', '필요한 재료', '조리 과정']
-  const [title, setTitle] = useState<string>();
-  const [youtubeUrl, setYouTubeUrl] = useState<string>();
-  const [serving, setServing] = useState<string>('1~2인분');
-  const [cookingTime, setCookingTime] = useState<string>();
-  const [foodName, setFoodName] = useState<string>('김치찌개');
   const [content, setContent] = useState<any[]>([
     {order: 1, content: '돼지고기를 찬 물에 담가 핏물을 빼주세요'},
     {order: 2, content: '잘 익은 김치 한 포기를 잘라주세요'},
     {order: 3, content: '냄비에 들기름을 두르고 김치와 볶아주세요'},
-
   ]);
   const [ingredients, setIngredients] = useState<any[]>([
     { ingredientName: '돼지고기(목살)', ingredientServing: '300g'},
@@ -29,7 +24,7 @@ const RecipeCreateScreen = ({navigation}:any) => {
   function addIngredient(ingredientName: string, ingredientServing: string){
     const _ingredients = [...ingredients];
     _ingredients.push({ingredientName, ingredientServing});
-    setIngredients(_ingredients)
+    setIngredients(_ingredients);
   }
 
   // TODO: 재료 삭제 로직 구현
@@ -52,14 +47,46 @@ const RecipeCreateScreen = ({navigation}:any) => {
 
   }
 
-  const swiper = useRef()
+  const foodName = useInput({
+    placeholder: '요리 제목',
+    title: '요리 제목',
+    nowNum: 0,
+  });
 
+  const title = useInput({
+    placeholder: '레시피 제목',
+    title: '레시피 제목',
+    nowNum: 0,
+  });
+
+  const serving = useInput({
+    placeholder: '조리 양',
+    title: '조리 양',
+    nowNum: 0,
+  });
+
+  const cookingTime = useInput({
+    placeholder: '조리 시간',
+    title: '조리 시간',
+    nowNum: 0,
+  });
+
+  const youtubeUrl = useInput({
+    placeholder: '유튜브 링크',
+    title: '유튜브 링크',
+    nowNum: 0,
+  });
 
   return (
     <RecipeLayout title="레시피" optionTitle="다음">
       <ProgressPage>
         <RecipeCreateBasicInfo
           textList={textList}
+          foodName={foodName}
+          title={title}
+          serving={serving}
+          cookingTime={cookingTime}
+          youtubeUrl={youtubeUrl}
         />
         <RecipeCreateIngredientInfo
           textList={textList}

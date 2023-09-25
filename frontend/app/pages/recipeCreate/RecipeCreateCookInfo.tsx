@@ -7,8 +7,8 @@ import EditableContent from "@/components/EditableContent";
 
 interface props {
   textList: string[];
-  foodName?: string;
-  serving?: string;
+  foodName?: any;
+  serving?: any;
   content: any[];
   addContent: Function;
   deleteContent: Function;
@@ -24,8 +24,8 @@ const RecipeCreateCookInfo = ({textList, foodName, serving, content, editContent
       <ScrollView overScrollMode="never" style={{width: '100%'}}>
         <View style={styles.marginContainer}>
           <Text style={[styles.font, styles.mainColor, {fontSize: 22}]}>
-            <Text>{foodName} </Text>
-            <Text>{serving} </Text>
+            <Text>{foodName.text} </Text>
+            <Text>{serving.text} </Text>
             <Text>레시피</Text>
           </Text>
         </View>

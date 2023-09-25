@@ -9,8 +9,8 @@ import useInput from "@/hooks/useInput";
 
 interface props {
   textList: string[];
-  foodName?: string;
-  serving?: string;
+  foodName?: any;
+  serving?: any;
   ingredients: any[];
   addIngredient: Function;
   deleteIngredient: Function;
@@ -66,8 +66,8 @@ const RecipeCreateIngredientInfo = ({textList, foodName, serving, ingredients, d
           (
             <View style={styles.marginContainer}>
               <Text style={[styles.font, styles.mainColor, {fontSize: 22}]}>
-                <Text>{foodName} </Text>
-                <Text>{serving} </Text>
+                <Text>{foodName.text} </Text>
+                <Text>{serving.text} </Text>
                 <Text>레시피</Text>
               </Text>
             </View>
