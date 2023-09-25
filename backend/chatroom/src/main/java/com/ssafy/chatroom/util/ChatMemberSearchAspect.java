@@ -22,7 +22,7 @@ public class ChatMemberSearchAspect {
             memberDto = MemberDto
                     .builder()
                     .memberId(0l)
-                    .nickname("unknown")
+                    .nickname("default")
                     .profileImageUrl("default")
                     .build();
         }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class ChatShareBoardSearchAspect {
 
-    @Around("execution(* com.ssafy.chatroom.service.ChatMemberSearchService.searchByMemberId(..))")
+    @Around("execution(* com.ssafy.chatroom.service..*.searchByShareBoardId(..))")
     public ShareBoardDto around(ProceedingJoinPoint pjp){
         ShareBoardDto shareBoardDto = null;
 
