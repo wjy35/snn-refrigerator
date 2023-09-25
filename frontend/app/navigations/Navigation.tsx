@@ -21,7 +21,7 @@ import ShareListScreen from '@/screens/share/ShareListScreen';
 import SingleShareChatScreen from '@/screens/share/SingleShareChatScreen';
 import React from "react";
 import HouseAddScreen from "@/screens/HouseAddScreen";
-import FridgeScreen from "@/screens/FridgeScreen";
+import FridgeScreen from "@/screens/fridge/FridgeScreen";
 
 const Stack = createStackNavigator();
 

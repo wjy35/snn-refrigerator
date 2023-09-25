@@ -37,13 +37,13 @@ const TopNavigator = ({title, optionTitle, optionFunction}: props) => {
           </TouchableWithoutFeedback>
         </View>
         <View>
-          <Text style={[styles.font, topNavStyles.tabFontSize]}>{title}</Text>
+          <Text style={[styles.font, styles.headerFont]}>{title}</Text>
         </View>
         <View style={topNavStyles.optionalRightButton}>
           {
             optionTitle && (
               <TouchableWithoutFeedback onPress={optionFunction&&optionFunc} style={{borderWidth: 1}}>
-                <Text style={[styles.font, topNavStyles.tabFontSize]}>{optionTitle}</Text>
+                <Text style={[styles.font, styles.subHeaderFont]} numberOfLines={1}>{optionTitle}</Text>
               </TouchableWithoutFeedback>
             )
           }

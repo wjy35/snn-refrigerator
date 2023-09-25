@@ -34,7 +34,7 @@ const BottomNavigator = ({now}: props) => {
                 width={24}
                 height={24}
               />
-              <Text style={[now==='home'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]}>홈</Text>
+              <Text style={[now==='home'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]} numberOfLines={1}>홈</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -48,7 +48,7 @@ const BottomNavigator = ({now}: props) => {
                 width={24}
                 height={24}
               />
-              <Text style={[now==='recipe'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]}>레시피</Text>
+              <Text style={[now==='recipe'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]} numberOfLines={1}>레시피</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -63,7 +63,7 @@ const BottomNavigator = ({now}: props) => {
                   width={24}
                   height={24}
               />
-              <Text style={[now==='fridge'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]}>냉장고</Text>
+              <Text style={[now==='fridge'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]} numberOfLines={1}>냉장고</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -77,7 +77,7 @@ const BottomNavigator = ({now}: props) => {
                 width={24}
                 height={24}
               />
-              <Text style={[now==='share'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]}>나눔</Text>
+              <Text style={[now==='share'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]} numberOfLines={1}>나눔</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -91,7 +91,7 @@ const BottomNavigator = ({now}: props) => {
                 width={24}
                 height={24}
               />
-              <Text style={[now==='mypage'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]}>마이페이지</Text>
+              <Text style={[now==='mypage'&&styles.mainColor, styles.font, bottomTabStyles.tabFontSize]} numberOfLines={1}>마이페이지</Text>
             </View>
           </TouchableWithoutFeedback>
         </View>
