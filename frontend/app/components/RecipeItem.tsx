@@ -41,21 +41,11 @@ const RecipeItem = ({item, navigation, width, height}:props) => {
             <Text style={recipeStyles.recipeItemTitle}>{item.title}</Text>
           </View>
           <View style={recipeStyles.recipeItemUser}>
-            <View style={{width: 20, height: 20, borderWidth: 1,}}>
-
+            <View style={{width: 20, height: 20, borderWidth: 1}}>
             </View>
-            <Text>{item.imageUrl}</Text>
+            <Text>{item.nickname}</Text>
           </View>
           <View style={recipeStyles.recipeItemInfo}>
-            <View style={recipeStyles.recipeItemTitleContainer}>
-              <Text style={recipeStyles.recipeItemTitle}>{item.title}</Text>
-            </View>
-            <View style={recipeStyles.recipeItemUser}>
-              <View style={{width: 20, height: 20, borderWidth: 1,}}>
-
-              </View>
-              <Text>{item.nickname}</Text>
-            </View>
             <View style={recipeStyles.recipeItemInfoContainer}>
               <View>
                 <RecipeInfo foodName={item.foodName} cookingTime={item.cookingTime} serving={item.serving}/>
