@@ -10,8 +10,8 @@ const imagePickerOption = {
   includeBase64: Platform.OS === 'android',
 };
 function CameraButton() {
-    const [response, setResponse] = useState(null);
-    const [imageFile, setImageFile] = useState("");
+  const [response, setResponse] = useState(null);
+  const [imageFile, setImageFile] = useState('');
   // const [loading, setLoading] = useState(false);
   // 선택 사진 또는 촬영된 사진 정보
   const onPickImage = res => {
@@ -72,5 +72,4 @@ function CameraButton() {
     </View>
   );
 }
-
 export default CameraButton;

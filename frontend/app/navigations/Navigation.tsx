@@ -21,6 +21,7 @@ import ShareListScreen from '@/screens/share/ShareListScreen';
 import SingleShareChatScreen from '@/screens/share/SingleShareChatScreen';
 import React from "react";
 import HouseAddScreen from "@/screens/HouseAddScreen";
+import TextExtractScreen from "@/screens/myPage/GetImage";
 
 const Stack = createStackNavigator();
 
@@ -49,6 +50,7 @@ const Navigation = () => {
         <Stack.Screen name="MyShare" component={MyShareScreen}/>
         <Stack.Screen name="MyFavorite" component={MyFavoriteScreen}/>
         <Stack.Screen name="HouseAdd" component={HouseAddScreen}/>
+        <Stack.Screen name="TextExtract" component={TextExtractScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -31,10 +31,12 @@ const LogInScreen = ({navigation}: any) => {
     let res = await memberApi.getKaKaoInfo(token);
     let memberInfo = res.data.data.kakaoMemberInfo;
     setMemberId(memberInfo.id); // 이것은 회원가입을 할 때도 들고 있어야 하고 홈화면으로 갈때도 들고 있어야 함.
+    // console.log(memberId);
     return memberInfo.id;
   }
 
   async function checkMemberExists(memberId : bigint){
+    console.log(memberId);
     let memberInfoResponse = await memberApi.memberDetail(memberId);
     if (memberInfoResponse.status === 200) {
       let memberInfo = memberInfoResponse.data.data.memberInfo;
@@ -63,7 +65,8 @@ const LogInScreen = ({navigation}: any) => {
           //카카오 로그인 성공시 유저 memberId가 있으면 정보를 받아오고 아니라면 회원 가입.
 
           let id = await getKakaoId(result.accessToken);
-          await checkMemberExists(memberId);
+          // console.log(id);
+          await checkMemberExists(id);
         })
         .catch(error => {
           if (error.code === 'E_CANCELLED_OPERATION') {
@@ -77,12 +80,17 @@ const LogInScreen = ({navigation}: any) => {
     }
   }
 
+  async function moveTo(){
+    navigation.navigate('TextExtract')
+  }
+
   return (
     <View style={styles.layout}>
       <ImageBackground
         source={require('@/assets/images/background1.png')}
         resizeMode="cover"
         style={styles.bg}>
+        <Button title="test" onPress={moveTo} />
         <View style={{width: '100%', height: '80%'}}>
           <LoginSwiper />
         </View>
