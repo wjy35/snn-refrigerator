@@ -172,7 +172,6 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
 
         List<IngredientResponse> resultList = new ArrayList<>();
 
-        System.out.println("1");
         for (int i = 0; i < ingredientsArray.length(); i++) {
             JSONObject ingredientObject = ingredientsArray.getJSONObject(i);
 
@@ -186,8 +185,6 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
 
             resultList.add(houseIngredientResponse);
         }
-        System.out.println("2");
-
         return resultList;
     }
 
