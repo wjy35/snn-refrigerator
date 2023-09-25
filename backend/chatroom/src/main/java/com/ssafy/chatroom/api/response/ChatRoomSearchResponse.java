@@ -8,7 +8,7 @@ public class ChatRoomSearchResponse {
     private Integer chatRoomId;
     private String profileImageUrl;
     private String locationName;
-    private String ThumbnailImageUrl;
+    private String thumbnailImageUrl;
     private String nickname;
     private String content;
     private Timestamp timestamp;
