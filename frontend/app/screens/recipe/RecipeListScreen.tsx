@@ -46,7 +46,7 @@ const RecipeListScreen = ({navigation}:any) => {
         if (res.status === 200) {
           setRecipe(res.data.data.recipe);
         } else {
-          console.log(res.data.data.recipe)
+          console.log(res.data.data.recipe);
         }
       } catch (err) {
         console.log(err);
