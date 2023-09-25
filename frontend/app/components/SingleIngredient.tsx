@@ -4,6 +4,7 @@ import {ingredientStyles} from "@/styles/ingredientStyles";
 import {styles} from "@/styles/styles";
 import IngredientIcon from "@/components/IngredientIcon";
 import tw from 'twrnc';
+import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
 
 interface props {
   ingredientName: string;
@@ -18,7 +19,6 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
   const [result, setResult] = useState<number>(0)
   const [container, setContainer] = useState<any>()
   const [text, setText] = useState<any>()
-  const [selected, setSelected] = useState<boolean>(false);
 
   useEffect(() => {
     const date: Date = new Date;
@@ -66,7 +66,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
   }
 
   return (
-    <View style={[tw`w-[${selected?98:48}%] my-[1%] aspect-video mx-[1%] bg-white`]}>
+    <View style={[tw`w-[48%] my-[1%] mx-[1%] bg-white`,{aspectRatio:"2/1"}]}>
       <TouchableWithoutFeedback onPress={toDetail}>
         <View style={[container, ingredientStyles.singleColumnContainer]}>
           <View style={ingredientStyles.singleTop}>
@@ -79,7 +79,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
           </View>
           <View style={[ingredientStyles.singleBottom]}>
             <View style={[ingredientStyles.nameContainer,tw`self-end`]}>
-              <Text style={[styles.font, text, tw`text-4xl`]} numberOfLines={1} ellipsizeMode={"tail"} >{ingredientName}</Text>
+              <Text style={[styles.font, text, tw`text-3xl`]} numberOfLines={1} ellipsizeMode={"tail"} >{ingredientName}</Text>
             </View>
             <View style={[ingredientStyles.dDayContainer,tw`self-end`]}>
               <Text style={[styles.font, text, tw`text-right text-lg`]}>{getDDay()}</Text>

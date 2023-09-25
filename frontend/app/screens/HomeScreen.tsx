@@ -96,9 +96,8 @@ const HomeScreen = ({navigation}:any) => {
         <ScrollView style={{width: '100%'}}>
           <View style={styles.container}>
             <View style={homeScreenStyles.homeMention}>
-              <View style={{width: 230}}>
-                <Text style={[styles.font, {fontSize: 30}]}>오늘은 어떤 음식을 만들어 볼까요?</Text>
-              </View>
+              <Text style={[styles.font, styles.headerFont]}>오늘은 어떤 음식을</Text>
+              <Text style={[styles.font, styles.headerFont]}>만들어 볼까요?</Text>
             </View>
             <View style={homeScreenStyles.homeRecipeContainer}>
               <View style={{margin: 10}}>
