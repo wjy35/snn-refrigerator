@@ -9,8 +9,6 @@ import {
 } from 'react-native';
 import {styles} from '@/styles/styles';
 import LoginSwiper from '@/components/LoginSwiper';
-import MyHouseModal from '@/components/MyHouseModal';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import memberApi from '@/apis/memberApi';
 

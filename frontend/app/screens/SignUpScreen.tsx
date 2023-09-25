@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {View, Text, Button, ImageBackground, TouchableWithoutFeedback, Image, ScrollView} from 'react-native';
 import {styles} from "@/styles/styles";
-import {homeScreenStyles} from "@/styles/homeScreenStyles";
 import PlainInput from "@/components/PlainInput";
 import AutoCompleteInput from "@/components/AutoCompleteInput";
 import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
