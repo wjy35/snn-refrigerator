@@ -3,8 +3,10 @@ package com.ssafy.chatroom;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.chatroom.cloud.dto.ChatDto;
 import com.ssafy.chatroom.cloud.dto.MemberDto;
+import com.ssafy.chatroom.cloud.dto.ShareBoardDto;
 import com.ssafy.chatroom.cloud.openfeign.ChatOpenFeign;
 import com.ssafy.chatroom.cloud.openfeign.MemberOpenFeign;
+import com.ssafy.chatroom.cloud.openfeign.ShareBoardOpenFeign;
 import com.ssafy.chatroom.db.entity.ChatRoomEntity;
 import com.ssafy.chatroom.db.repository.ChatRoomRepository;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,6 +29,9 @@ class ChatroomApplicationTests {
 
     @Autowired
     ChatOpenFeign chatOpenFeign;
+
+    @Autowired
+    ShareBoardOpenFeign shareBoardOpenFeign;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -123,6 +128,19 @@ class ChatroomApplicationTests {
         // then
         System.out.println("chatDto = " + chatDto);
         Assertions.assertNotNull(chatDto);
+    }
+
+    @Test
+    void testShareBoardOpenFeign(){
+        // given
+        Integer shareBoardId = 1;
+
+//        System.out.println("shareBoardOpenFeign.getShareBoardDto(shareBoardId) = " + shareBoardOpenFeign.getShareBoardDto(shareBoardId));
+        // when
+//        ShareBoardDto shareBoardDto = objectMapper.convertValue(shareBoardOpenFeign.getShareBoardDto(shareBoardId).getData().get("response"),ShareBoardDto.class);
+
+//        // then
+//        System.out.println("shareBoardDto = " + shareBoardDto);
     }
 
 }

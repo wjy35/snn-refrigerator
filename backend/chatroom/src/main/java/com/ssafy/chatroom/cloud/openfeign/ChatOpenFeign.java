@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(value="chatOpenFeign", url = "a502.store/chat")
 public interface ChatOpenFeign {
 
-    @GetMapping("/{chatRoomId}")
+    @GetMapping("/view/{chatRoomId}")
     Response getChatDto(@PathVariable Integer chatRoomId);
 }
