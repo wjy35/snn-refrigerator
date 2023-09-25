@@ -1,20 +1,26 @@
 import React, {useState} from 'react';
-import {ScrollView, Text, TextInput, View} from 'react-native';
+import {ScrollView, Text, TextInput, TouchableWithoutFeedback, View} from 'react-native';
 import Progressbar from "@/components/Progressbar";
 import {styles} from "@/styles/styles";
-import GetImageFrom from "@/components/GetImageFrom";
-import ShowYoutube from "@/components/ShowYoutube";
 import BasicBadge from "@/components/BasicBadge";
+import {useFocusEffect} from "@react-navigation/native";
 
 interface props {
   textList: string[];
   ingredients: any[];
   setNow: Function;
   now: number;
+  onChange: Function;
 }
 
-const HouseAddStorage = ({textList, ingredients, setNow, now}: props) => {
-  const isWarm = useState<boolean>(true)
+const HouseAddStorage = ({textList, ingredients, setNow, now, onChange}: props) => {
+  const [isWarm, setIsWarm] = useState<boolean>(true);
+
+  function onPress(item: any, storageType: number){
+    item.storageType = storageType;
+    onChange();
+  }
+
   return (
     <View style={styles.marginContainer}>
       <View>
@@ -25,10 +31,14 @@ const HouseAddStorage = ({textList, ingredients, setNow, now}: props) => {
           <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
             <View style={[styles.marginRowContainer, {width: '80%', marginBottom: 0, justifyContent: 'flex-start'}]}>
               <View>
-                <Text>상온</Text>
+                <TouchableWithoutFeedback onPress={()=>setIsWarm(true)}>
+                  <Text>상온</Text>
+                </TouchableWithoutFeedback>
               </View>
               <View>
-                <Text>냉동</Text>
+                <TouchableWithoutFeedback onPress={()=>setIsWarm(false)}>
+                  <Text>냉동</Text>
+                </TouchableWithoutFeedback>
               </View>
             </View>
             {
@@ -40,7 +50,7 @@ const HouseAddStorage = ({textList, ingredients, setNow, now}: props) => {
                         if (i.storageType === 2) {
                           return (
                             <React.Fragment key={`${i.ingredientName}${idx}`}>
-                              <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} onPress={()=>{}}/>
+                              <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} onPress={()=>onPress(i, 0)}/>
                             </React.Fragment>
                           )
                         }
@@ -57,7 +67,7 @@ const HouseAddStorage = ({textList, ingredients, setNow, now}: props) => {
                         if (i.storageType === 1) {
                           return (
                             <React.Fragment key={`${i.ingredientName}${idx}`}>
-                              <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} onPress={()=>{}}/>
+                              <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} onPress={()=>onPress(i, 0)}/>
                             </React.Fragment>
                           )
                         }
@@ -84,7 +94,7 @@ const HouseAddStorage = ({textList, ingredients, setNow, now}: props) => {
                     if (i.storageType === 0) {
                       return (
                         <React.Fragment key={`${i.ingredientName}${idx}`}>
-                          <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} onPress={()=>{}}/>
+                          <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} onPress={()=>onPress(i, isWarm ? 2 : 1)}/>
                         </React.Fragment>
                       )
                     }

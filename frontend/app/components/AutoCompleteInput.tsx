@@ -16,10 +16,11 @@ interface props {
   reset?: Function;
   name: string;
   keyValue: string;
+  onSelect?: Function;
 }
 
 
-const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, textList, onBlur, title, keyValue, name}: props) => {
+const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, textList, onBlur, title, keyValue, name, onSelect}: props) => {
   const inputRef = useRef();
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const dimensionWidth = Dimensions.get('screen').width;
@@ -32,7 +33,7 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
 
   function onBlurFunction() {
     onBlur&&onBlur();
-    setIsVisible(false);
+    // setIsVisible(false);
   }
 
   return (
@@ -47,9 +48,9 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
       }}>
       <View style={{marginTop: 30, marginHorizontal: 12, width: '100%', justifyContent: 'center', alignItems: 'center'}}>
         { title && (
-            <View style={[{width: '100%'}]}>
-              <Text>{title}</Text>
-            </View>
+          <View style={[{width: '100%'}]}>
+            <Text>{title}</Text>
+          </View>
           )
         }
         <View style={[{width: '100%'}]}>
@@ -71,11 +72,11 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
                   initialNumToRender={5}
                   nestedScrollEnabled
                   data={textList}
-                  renderItem={(item) => <AutoCompleteItem item={item} name={name}/>}
+                  renderItem={(item) => <AutoCompleteItem item={item} name={name} onSelect={onSelect}/>}
                   keyExtractor={(item) => {
                     return String(item[keyValue])
                   }}
-                  disableScrollViewPanResponder={true}
+                  // disableScrollViewPanResponder={true}
                 />
               </View>
             )
