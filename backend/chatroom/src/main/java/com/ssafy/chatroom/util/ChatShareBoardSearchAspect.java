@@ -7,6 +7,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Slf4j
 @Component
 @Aspect
@@ -21,7 +23,7 @@ public class ChatShareBoardSearchAspect {
         }catch (Throwable e){
             shareBoardDto = ShareBoardDto
                     .builder()
-                    .thumbnailImageUrl("default")
+                    .shareImages(new ArrayList<>())
                     .locationName("default")
                     .build();
         }
