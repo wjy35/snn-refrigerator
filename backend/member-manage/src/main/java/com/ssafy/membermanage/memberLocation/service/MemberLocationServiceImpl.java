@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,21 +41,18 @@ public class MemberLocationServiceImpl {
         return (String) data.get("locationName");
     }
 
-    public List<LocationInfo> getLocations(Member member){
+    public List<Map<String, Object>> getLocations(Member member){
         List<MemberLocation> memberLocations = findAllByMember(member);
 
-        List<LocationInfo> locations = new ArrayList<>();
+        List<Map<String, Object>> locations = new ArrayList<>();
 
         for(MemberLocation memberLocation: memberLocations){
 
             Short locationId = memberLocation.getLocationId();
-            locations.add(
-                    LocationInfo
-                            .builder()
-                            .locationId(locationId)
-                            .locationName(getLocationName(locationId))
-                            .build()
-            );
+            Map<String, Object> infos = new HashMap<>();
+            infos.put("locationId", locationId);
+            infos.put("locationName", getLocationName(locationId));
+            locations.add(infos);
         }
         return locations;
     }

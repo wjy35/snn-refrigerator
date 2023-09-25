@@ -69,8 +69,8 @@ public class MemberController {
         Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
-        List<LocationInfo> locationInfos = memberLocationService.getLocations(member);
-        List<HateIngredientInfo> hateIngredientInfos = hateIngredientService.getHateIngredientInfo(member);
+        List<Map<String, Object>> locationInfos = memberLocationService.getLocations(member);
+        List<Map<String, Object>> hateIngredientInfos = hateIngredientService.getHateIngredientInfo(member);
 
         Map<String, Object> memberInfo = new HashMap<>();
         memberInfo.put("memberId", memberId);
