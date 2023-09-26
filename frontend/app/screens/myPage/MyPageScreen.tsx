@@ -53,8 +53,14 @@ const MyPageScreen = ({navigation}:any) => {
             }
           </View>
           <View style={[myPageStyles.profileInfo, {alignItems: 'center', marginTop: 10}]}>
-            <Text style={[styles.font, {fontSize: 36}]}>{user.nickname}</Text>
-            <Text style={[styles.font, {color: 'grey', fontSize: 24}]}>서울 역삼동</Text>
+            {
+              user && (
+                <>
+                  <Text style={[styles.font, {fontSize: 36}]}>{user.nickname}</Text>
+                  <Text style={[styles.font, {color: 'grey', fontSize: 24}]}>서울 역삼동</Text>
+                </>
+              )
+            }
             <TouchableWithoutFeedback onPress={()=>console.log('수정')}>
               <View>
                 <Text>
