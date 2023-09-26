@@ -6,6 +6,8 @@ import {recipeStyles} from "@/styles/recipeStyles";
 import {styles} from "@/styles/styles";
 import RecipeInfo from "@/components/RecipeInfo";
 import recipeApi from "@/apis/recipeApi";
+import {useSelector} from "react-redux";
+import {RootState} from "@/reducers/reducers";
 
 
 interface props {
@@ -14,6 +16,8 @@ interface props {
 const RecipeDetailScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
+
+  const {memberId} = useSelector((state:RootState)=>state.userReducer);
 
   const [recipeDetail, setRecipeDetail] = useState({
     recipeId:"",
@@ -35,9 +39,6 @@ const RecipeDetailScreen = () => {
     // const serving = route?.params?.serving;
     setRecipeDetail(recipeId)
     // setRecipeDetail(serving)
-
-    // Todo : 멤버아이디 가져와야함
-    const memberId : string = '3029548333'
 
     const getRecipeDetail = async() => {
       try{

@@ -6,6 +6,8 @@ import RecipeCreateIngredientInfo from "@/pages/recipeCreate/RecipeCreateIngredi
 import RecipeCreateCookInfo from "@/pages/recipeCreate/RecipeCreateCookInfo";
 import useInput from "@/hooks/useInput";
 import recipeApi from "@/apis/recipeApi";
+import {useSelector} from "react-redux";
+import {RootState} from "@/reducers/reducers";
 
 const RecipeCreateScreen = ({navigation}:any) => {
   const textList = ['기본 정보', '필요한 재료', '조리 과정']
@@ -17,6 +19,7 @@ const RecipeCreateScreen = ({navigation}:any) => {
   const [ingredients, setIngredients] = useState<any[]>([]);
   const [recipeInfo, setRecipeInfo] = useState<any>({});
   const [image, setImage] = useState<any>();
+  const {memberId} = useSelector((state:RootState)=>state.userReducer);
 
   function addIngredient({ingredientName, amount, ingredientInfoId}: any){
     const _ingredients = [...ingredients, {ingredientName: ingredientName, amount: amount, ingredientInfoId: ingredientInfoId}];
@@ -82,7 +85,7 @@ const RecipeCreateScreen = ({navigation}:any) => {
       serving: recipeInfo.serving,
       youtubeUrl: recipeInfo.youtubeUrl,
       title: recipeInfo.title,
-      memberId: 3029548333,
+      memberId: memberId,
     };
 
     try {
