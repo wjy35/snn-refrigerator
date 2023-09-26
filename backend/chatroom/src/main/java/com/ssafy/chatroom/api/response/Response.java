@@ -10,7 +10,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class Response {
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String request;
+    private Object request;
     private String message;
     @Singular("response")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
