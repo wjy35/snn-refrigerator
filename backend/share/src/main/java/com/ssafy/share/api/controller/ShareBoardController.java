@@ -4,6 +4,7 @@ import com.ssafy.share.api.request.ShareBoardUpdateRequest;
 import com.ssafy.share.api.request.ShareBoardWriteRequest;
 import com.ssafy.share.api.request.ShareIngredientRequest;
 import com.ssafy.share.api.response.*;
+import com.ssafy.share.db.entity.ShareImage;
 import com.ssafy.share.db.entity.ShareIngredient;
 import com.ssafy.share.db.entity.SharePost;
 import com.ssafy.share.service.S3Service;
@@ -34,7 +35,6 @@ public class ShareBoardController {
     private final S3Service s3Service;
     private final TimeUtil timeUtil;
 
-
     @GetMapping("/{locationId}/{pageNum}/{items}")
     public ResponseEntity<?> getPostList(@PathVariable Short locationId, @PathVariable(required = false) Short pageNum,
                                          @PathVariable(required = false) Short items,
@@ -48,7 +48,9 @@ public class ShareBoardController {
             MemberResponse memberResponse=shareBoardService.getMember(posts.get(i).getMemberId());
             String nickname=memberResponse.getNickname();
             String userProfileImageUrl=memberResponse.getProfileImageUrl();
-            sharePostResponses.add(new SharePostResponse(posts.get(i),nickname,userProfileImageUrl,timeUtil.dateTypeConverter(posts.get(i).getCreateDate())));
+
+            sharePostResponses.add(new SharePostResponse(posts.get(i),nickname,userProfileImageUrl,
+                    timeUtil.dateTypeConverter(posts.get(i).getCreateDate()),s3Service.getS3ImageUrl(posts.get(i).getThumbnail())));
         }
         response.setMessage("OK");
         response.addRequest("locationId",locationId);
@@ -68,6 +70,10 @@ public class ShareBoardController {
             String ingredientName= shareBoardService.getIngredientInfoName(s.getIngredientInfoId());
             sharePostDetailResponse.getShareIngredients().add(new ShareIngredientResponse(ingredientName,s.getAmount()));
         }
+        for (ShareImage s:post.getShareImages()){
+            sharePostDetailResponse.getShareImages().add(s3Service.getS3ImageUrl(s.getSharePostImageUrl()));
+        }
+
         sharePostDetailResponse.setLocationName(shareBoardService.getLocationName(post.getLocationId()));
         response.setMessage("OK");
         response.addRequest("shareBoardId",shareBoardId);

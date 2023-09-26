@@ -69,6 +69,7 @@ public class SharePost extends BaseTimeEntity{
         for (String i:shareImages){
             this.shareImages.add(new ShareImage(this,i));
         }
+        this.thumbnail= shareImages.get(0);
     }
     public void update(ShareBoardUpdateRequest request){
         this.title=request.getTitle();
