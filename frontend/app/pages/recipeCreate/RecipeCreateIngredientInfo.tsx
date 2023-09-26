@@ -13,13 +13,13 @@ interface props {
   addIngredient: Function;
   deleteIngredient: Function;
   foodName?: string;
-  serving?: string
+  serving?: string;
+  editIngredient: Function;
 }
 
-const RecipeCreateIngredientInfo = ({textList, ingredients, deleteIngredient, addIngredient, foodName, serving}: props) => {
-  const [text, setText] = useState('')
+const RecipeCreateIngredientInfo = ({textList, ingredients, deleteIngredient, addIngredient, foodName, serving, editIngredient}: props) => {
   const [autoCompleteIngredientList, setAutoCompleteIngredientList] = useState<any[]>();
-  const [now, setNow] = useState(0)
+  const [now, setNow] = useState(0);
 
   const checkIngredient = async (keyword: string) => {
     try {
@@ -30,15 +30,15 @@ const RecipeCreateIngredientInfo = ({textList, ingredients, deleteIngredient, ad
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   function onBlur(){
-    setNow(0)
+    setNow(0);
     setAutoCompleteIngredientList([])
   }
 
   function onPressIn(newNum: number) {
-    setNow(newNum)
+    setNow(newNum);
   }
 
 
@@ -50,10 +50,9 @@ const RecipeCreateIngredientInfo = ({textList, ingredients, deleteIngredient, ad
   });
 
   function onSelect(item: any){
-    if(checkDuplicate(item)){
-      addIngredient({...item, amount: ''})
+    if (checkDuplicate(item)) {
+      addIngredient({...item, amount: ''});
     }
-
   }
 
   function checkDuplicate(item: any){
@@ -98,7 +97,7 @@ const RecipeCreateIngredientInfo = ({textList, ingredients, deleteIngredient, ad
             ingredients.map((i: any, idx)=>{
               return (
                 <React.Fragment key={`ingredient${idx}`}>
-                  <EditableIngredients deleteIngredient={deleteIngredient} ingredientName={i.ingredientName} ingredientServing={i.ingredientServing}/>
+                  <EditableIngredients deleteIngredient={deleteIngredient} ingredientName={i.ingredientName} ingredientServing={i.ingredientServing} index={idx} editIngredient={editIngredient}/>
                 </React.Fragment>
               )
             })

@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     margin: 10,
-    borderWidth: 1,
+    // borderWidth: 1,
     width: '96%',
   },
   marginRowContainer: {
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     margin: 10,
-    borderWidth: 1,
+    // borderWidth: 1,
     width: '96%'
   },
   smallContainer: {
@@ -67,10 +67,11 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   input: {
-    height: 40,
+    height: 60,
     marginVertical: 12,
     borderWidth: 1,
     padding: 10,
+    borderRadius: 16,
   },
   image: {
     width: 100,

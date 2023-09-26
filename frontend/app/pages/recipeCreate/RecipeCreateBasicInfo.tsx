@@ -11,10 +11,10 @@ import useInput from "@/hooks/useInput";
 interface props {
   textList: string[];
   setRecipeInfo: Function;
-
+  getImage: Function;
 }
 
-const RecipeCreateBasicInfo = ({textList, setRecipeInfo}: props) => {
+const RecipeCreateBasicInfo = ({textList, setRecipeInfo, getImage}: props) => {
   const [now, setNow] = useState<number>(0);
   const [showUrl, setShowUrl] = useState<string>('');
   function onPressIn(t:number){
@@ -40,7 +40,6 @@ const RecipeCreateBasicInfo = ({textList, setRecipeInfo}: props) => {
     title: '조리 양',
     nowNum: 0,
     onChange: (keyword: string) => {setRecipeInfo('serving', keyword)}
-
   });
 
   const cookingTime = useInput({
@@ -48,7 +47,6 @@ const RecipeCreateBasicInfo = ({textList, setRecipeInfo}: props) => {
     title: '조리 시간',
     nowNum: 0,
     onChange: (keyword: string) => {setRecipeInfo('cookingTime', keyword)}
-
   });
 
   const youtubeUrl = useInput({
@@ -56,7 +54,6 @@ const RecipeCreateBasicInfo = ({textList, setRecipeInfo}: props) => {
     title: '유튜브 링크',
     nowNum: 0,
     onChange: (keyword: string) => {setRecipeInfo('youtubeUrl', keyword)}
-
   });
 
   useEffect(() => {
@@ -80,13 +77,13 @@ const RecipeCreateBasicInfo = ({textList, setRecipeInfo}: props) => {
             <PlainInput {...title} onPressIn={onPressIn} now={0}/>
           </View>
         </View>
-        <View style={[styles.marginRowContainer]}>
-          <View style={[{flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', borderWidth: 1, marginRight: 10}]}>
+        <View style={[styles.marginRowContainer, {marginTop: 30}]}>
+          <View style={[{flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', marginRight: 10}]}>
             <View style={styles.smallContainer}>
               <PlainInput {...serving} onPressIn={onPressIn} now={0}/>
             </View>
           </View>
-          <View style={[{flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', borderWidth: 1, marginLeft: 10}]}>
+          <View style={[{flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', marginLeft: 10}]}>
             <View style={styles.smallContainer}>
               <PlainInput {...cookingTime} onPressIn={onPressIn} now={0}/>
             </View>
@@ -98,7 +95,7 @@ const RecipeCreateBasicInfo = ({textList, setRecipeInfo}: props) => {
               <Text>사진 입력</Text>
             </View>
             <View style={[{width: '100%'}]}>
-              <GetImageFrom/>
+              <GetImageFrom getImage={getImage}/>
             </View>
           </View>
         </View>
@@ -106,7 +103,7 @@ const RecipeCreateBasicInfo = ({textList, setRecipeInfo}: props) => {
           <View style={styles.smallContainer}>
             <View>
               <PlainInput {...youtubeUrl} onPressIn={onPressIn} now={0}/>
-              { showUrl !== '' && (
+              { showUrl && (
                   <View style={{alignItems: 'center'}}>
                     <ShowYoutube youtubeId={showUrl} />
                   </View>

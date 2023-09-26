@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, Text, TextInput, View} from 'react-native';
+import {Button, ScrollView, Text, TextInput, View} from 'react-native';
 import Progressbar from "@/components/Progressbar";
 import {styles} from "@/styles/styles";
 import EditableIngredients from "@/components/EditableIngredients";
@@ -7,7 +7,7 @@ import EditableContent from "@/components/EditableContent";
 
 interface props {
   textList: string[];
-  content: any[];
+  content: string[];
   addContent: Function;
   deleteContent: Function;
   editContent: Function;
@@ -30,14 +30,15 @@ const RecipeCreateCookInfo = ({textList, content, editContent, deleteContent, ad
         </View>
         <View style={styles.marginContainer}>
           {
-            content.map((i: any, idx)=>{
+            content.map((i: string, idx)=>{
               return (
                 <React.Fragment key={`ingredient${idx}`}>
-                  <EditableContent deleteContent={deleteContent} order={i.order} content={i.content}/>
+                  <EditableContent deleteContent={deleteContent} content={i} editContent={editContent} index={idx} addContent={addContent}/>
                 </React.Fragment>
               )
             })
           }
+          <Button title='추가하기' onPress={()=>addContent(0)}/>
         </View>
       </ScrollView>
     </View>
