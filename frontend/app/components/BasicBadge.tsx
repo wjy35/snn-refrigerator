@@ -23,7 +23,7 @@ const BasicBadge = ({backgroundColor, name, onPress, icon, leftIcon}: props) => 
   }
 
   return (
-    <View style={{margin: 5, borderWidth:1}}>
+    <View style={{margin: 5}}>
       <TouchableWithoutFeedback onPress={onPressFunction}>
         <View style={{padding: 10, height: 40, backgroundColor: backgroundColor, borderRadius: 100, justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
           {leftIcon&&(<SvgXml

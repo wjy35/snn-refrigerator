@@ -112,7 +112,7 @@ const HomeScreen = ({navigation}:any) => {
                 <Text style={[styles.font, {fontSize: 20}]}>빨리 소비해야 해요</Text>
               </View>
               <View>
-                <MyIngredientList/>
+                <MyIngredientList types={[0,2]} maxDate={7}/>
               </View>
             </View>
             {/*<Button onPress={test} title={'fdasfdsa'}></Button>*/}
