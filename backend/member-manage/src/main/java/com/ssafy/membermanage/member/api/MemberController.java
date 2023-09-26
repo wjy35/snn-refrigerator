@@ -317,6 +317,9 @@ public class MemberController {
         String houseCode = request.getHouseCode();
         String birthday = request.getBirthday();
         String email = request.getEmail();
+
+        if(houseCode == null) houseCode = memberService.createHouseCode();
+
         Member member = Member
                 .builder()
                 .memberId(memberId)
@@ -328,9 +331,13 @@ public class MemberController {
                 .build();
         member = memberService.save(member);
 
+        Map<String, Object> data = new HashMap<>();
+        data.put("houseCode", houseCode);
+
         Response response = Response
                 .builder()
                 .message("OK")
+                .data(data)
                 .build();
         return ResponseEntity.ok(response);
     }//OK
