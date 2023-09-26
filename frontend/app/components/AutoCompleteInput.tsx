@@ -2,6 +2,7 @@ import React, { useRef, useState} from 'react';
 import {View, Text, TextInput, FlatList, Dimensions, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import AutoCompleteItem from "@/components/AutoCompleteItem";
 import {useFocusEffect} from "@react-navigation/native";
+import {styles} from "@/styles/styles";
 
 
 interface props {
@@ -39,7 +40,6 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      style={{borderWidth: 1}}
       contentContainerStyle={{
         flexGrow: 1,
         justifyContent: 'center',
@@ -48,14 +48,14 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
       <View style={{marginTop: 30, marginHorizontal: 12, width: '100%', justifyContent: 'center', alignItems: 'center'}}>
         { title && (
           <View style={[{width: '100%'}]}>
-            <Text>{title}</Text>
+            <Text style={[styles.font, {fontSize: 20}]}>{title}</Text>
           </View>
           )
         }
         <View style={[{width: '100%'}]}>
           <TextInput
             placeholder={placeholder}
-            style={[{height: 40, borderWidth: 1, padding: 10}]}
+            style={[styles.input]}
             onChangeText={(newText)=>onChangeText(newText)}
             onPressIn={onPressInFunction}
             value={text}
