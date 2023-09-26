@@ -86,11 +86,15 @@ const RecipeCreateScreen = ({navigation}:any) => {
     };
 
     try {
-      const formdata = new FormData();
-      formdata.append('recipeRequest', data);
-      formdata.append('recipeImage', recipeImage);
+      // const formdata = new FormData();
+      // formdata.append('recipeRequest', data);
+      // formdata.append('recipeImage', recipeImage);
+      const requestData = {
+        recipeImage: recipeImage,
+        recipeRequest: data,
+      }
 
-      const res = await recipeApi.createRecipe(formdata);
+      const res = await recipeApi.createRecipe(requestData);
       if (res.status === 200){
         console.log('성공');
       }

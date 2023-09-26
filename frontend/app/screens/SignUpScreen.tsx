@@ -83,7 +83,7 @@ const SignUpScreen = ({navigation}:any) => {
   return (
     <View style={styles.layout}>
       <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
-        <View style={[{width: '100%', height: '90%', borderWidth: 1}]}>
+        <View style={[{width: '100%', height: '90%'}]}>
           <ScrollView>
             <View style={{width: '100%', padding: 30, flexDirection: 'row', justifyContent: 'space-between', borderWidth: 1}}>
               <View style={{flex: 1}}>
@@ -93,8 +93,8 @@ const SignUpScreen = ({navigation}:any) => {
                 <Text style={[styles.font, {fontSize: 16, color: 'gray'}]}>냉장고를 더 편하게 관리해보세요!</Text>
               </View>
             </View>
-            <View>
-              <View>
+            <View style={[{justifyContent: 'center'}]}>
+              <View style={[{width: '90%'}]}>
                 <PlainInput {...nickName}/>
               </View>
               <View style={{width: '100%', borderWidth: 1}}>
