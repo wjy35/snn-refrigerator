@@ -1,7 +1,7 @@
 import {setMemberId} from '@/actions/userAction';
 
 const userState = {
-  memberId: '',
+  memberId: '3029548333',
   nickname: '',
   email: '',
 };
