@@ -1,14 +1,9 @@
 import React, {useState} from 'react';
 import {View, Text, Button, ScrollView, ImageBackground} from 'react-native';
-import BottomNavigator from "@/components/BottomNavigator";
 import {styles} from "@/styles/styles";
-import {homeScreenStyles} from "@/styles/homeScreenStyles";
 import MyIngredientList from "@/components/MyIngredientList";
 import BasicBadge from "@/components/BasicBadge";
 import {cold, coldWhite, cool, coolWhite, eyeIcon, eyeSlashIcon, warm, warmWhite} from "@/assets/icons/icons";
-import TopNavigator from "@/components/TopNavigator";
-import RecipeLayout from "@/screens/recipe/RecipeLayout";
-import RecipeList from "@/components/RecipeList";
 import FridgeLayout from "@/screens/fridge/FridgeLayout";
 import {COLD_COLOR, COOL_COLOR, TEXT_COLOR, WARM_COLOR} from "@/assets/colors/colors";
 import {SvgXml} from "react-native-svg";
