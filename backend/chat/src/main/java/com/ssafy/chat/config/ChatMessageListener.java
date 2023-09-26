@@ -27,9 +27,15 @@ public class ChatMessageListener implements MessageListener {
             chatParam.setTimestamp(chatPublish.getTimestamp());
 
             simpMessageSendingOperations.convertAndSend(
-                    chatPublish.getDestination(),
+                    chatPublish.getChatRoomDetailDestination(),
                     objectMapper.writeValueAsString(chatParam)
             );
+
+            simpMessageSendingOperations.convertAndSend(
+                    chatPublish.getChatRoomListDestination(),
+                    objectMapper.writeValueAsString(chatParam)
+            );
+
         }catch (Exception e){
             e.printStackTrace();
         }

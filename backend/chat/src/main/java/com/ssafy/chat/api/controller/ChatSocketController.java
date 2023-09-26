@@ -23,13 +23,6 @@ public class ChatSocketController {
     private final ChatSaveService chatSaveService;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    @SubscribeMapping("/topic/{chatRoomId}/{memberId}")
-    void enter(@DestinationVariable Integer chatRoomId,
-               @DestinationVariable Long memberId,
-               @Header("simpSessionId") String simpSessionId){
-        chatServerManageService.enter(memberId,simpSessionId);
-    }
-
     // ToDo Refactoring + save Fail Exception 처리
     @MessageMapping("/")
     void send(@Payload ChatPayload chatPayload){
