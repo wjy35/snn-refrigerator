@@ -63,7 +63,7 @@ spring:
           filters:
             - RewritePath=/chat/(?<path>.*),/$\{path}
         - id: chat-socket
-          uri: lb:ws://CHAT/
+          uri: ws://CHAT/
           predicates:
             - Path=/chat-socket/**
           filters:
