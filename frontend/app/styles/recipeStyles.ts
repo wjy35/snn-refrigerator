@@ -1,4 +1,5 @@
 import {StyleSheet} from "react-native";
+import {MAIN_COLOR, TEXT_COLOR} from "@/assets/colors/colors";
 
 export const recipeStyles = StyleSheet.create({
   recipeListContainer: {
@@ -6,33 +7,31 @@ export const recipeStyles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    // borderWidth: 1
+    borderWidth: 1
   },
   recipeItemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 140,
-    borderColor: '#da3c3c',
+    borderColor: MAIN_COLOR,
     borderWidth: 1,
     borderRadius: 10,
-    margin: 10,
+    margin:5,
   },
   recipeItemImage: {
     flex: 1,
     height: '95%',
-    borderWidth: 1,
-    borderColor: '#000000',
-    borderRadius: 10,
+    // borderWidth: 1,
     marginLeft: 5,
   },
   recipeItemInfo: {
-    height: '95%',
+    width: '100%',
+    height: '100%',
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    borderWidth: 1,
+    padding:5,
   },
   recipeItemPercent: {
     borderWidth: 1,
@@ -44,23 +43,42 @@ export const recipeStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  recipeItemUser: {
+  recipeInfoContainer:{
     justifyContent: 'flex-start',
     alignItems: 'center',
-    height: '15%',
+    height: '100%',
+    width: '65%',
+    flexDirection: 'column',
+  },
+  recipeProgressContainer:{
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    height: '100%',
+    width: '35%',
+    flexDirection: 'row',
+  },
+  recipeInfoLineContainer: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    height: '25%',
     width: '100%',
-    borderWidth: 1,
     flexDirection: 'row',
   },
   recipeItemTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 23,
+    color:TEXT_COLOR,
   },
   recipeItemTitleContainer: {
     alignItems: 'center',
     justifyContent:'center',
     height: '45%',
-    borderWidth: 1,
+    width: '100%',
+  },
+  recipeItemBodyContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent:'center',
+    height: '55%',
     width: '100%',
   },
   recipeItemInfoContainer: {
@@ -81,12 +99,13 @@ export const recipeStyles = StyleSheet.create({
     backgroundColor: 'rgba(217, 217, 217, 0.50)',
     width: 30,
     height: 30,
-    position: 'relative',
+    position: 'absolute',
     top: 5,
     left: 5,
     borderRadius: 99,
     alignItems: 'center',
     justifyContent:'center',
+    zIndex:10,
   },
   recipeDetailImage: {
     width: '100%',
