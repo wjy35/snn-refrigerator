@@ -117,18 +117,18 @@ const recipeApi = {
     );
     return res;
   },
-  createRecipe: async (formdata: FormData) => {
+  createRecipe: async (formdata: any) => {
     console.log(formdata);
     const res = await PrivateRecipeApi.post(
       '',
       formdata,
       {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
           },
-        transformRequest: (data, headers) => {
-          return data;
-          },
+        // transformRequest: (data, headers) => {
+        //   return data;
+        //   },
       },
     );
     return res;
