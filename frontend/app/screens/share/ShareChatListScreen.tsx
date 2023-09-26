@@ -2,10 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, Button, ScrollView} from 'react-native';
 import ShareLayout from "@/screens/share/ShareLayout";
 import ShareChatItem from "@/components/ShareChatItem";
-import houseApi from "@/apis/houseApi";
 import chatRoomApi from "@/apis/chatRoomApi";
-import SettingContainer from "@/components/SettingContainer";
-import {it} from "@jest/globals";
 
 const ShareChatListScreen = ({navigation}: any) => {
 
