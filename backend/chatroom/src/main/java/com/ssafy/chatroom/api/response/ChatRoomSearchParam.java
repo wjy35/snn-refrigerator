@@ -4,11 +4,12 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class ChatRoomSearchResult {
+public class ChatRoomSearchParam {
     private Integer chatRoomId;
-    private String nickname;
     private String profileImageUrl;
-    private String placeInfo;
+    private String locationName;
+    private String thumbnailImageUrl;
+    private String nickname;
     private String content;
     private Timestamp timestamp;
 }

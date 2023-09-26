@@ -14,7 +14,7 @@ public class ChatRoomSearchServiceImpl implements ChatRoomSearchService {
     private final ChatRoomRepository chatRoomRepository;
 
     @Override
-    public List<ChatRoomEntity> searchBySenderMemberId(Long memberId) {
+    public List<ChatRoomEntity> searchByMemberId(Long memberId) {
         return chatRoomRepository.findAllBySenderMemberIdOrReceiverMemberId(memberId,memberId);
     }
 
