@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.util.List;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.*;
 
+@Slf4j
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -59,15 +61,20 @@ public class SharePost extends BaseTimeEntity{
     }
     public void setShareIngredients(List<ShareIngredientRequest> shareIngredientRequests){
         for (ShareIngredientRequest s:shareIngredientRequests){
-            this.shareIngredients.add(s.toEntity());
+            this.shareIngredients.add(new ShareIngredient(this,s.getIngredientInfoId(),s.getAmount()));
         }
     }
-
+    public void setShareImages(List<String> shareImages){
+        log.info("이미지 : {}",shareImages);
+        for (String i:shareImages){
+            this.shareImages.add(new ShareImage(this,i));
+        }
+    }
     public void update(ShareBoardUpdateRequest request){
         this.title=request.getTitle();
         this.locationId=request.getLocationId();
         this.content=request.getContent();
-        this.shareImages=request.getShareImages();
-        this.shareIngredients=request.getShareIngredients();
+//        this.shareImages=request.getShareImages();
+//        this.shareIngredients=request.getShareIngredients();
     }
 }

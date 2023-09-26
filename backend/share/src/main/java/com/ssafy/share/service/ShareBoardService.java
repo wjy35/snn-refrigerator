@@ -22,10 +22,10 @@ public interface ShareBoardService {
 
     public SharePost getPostDetail(Long shareBoardId);
 
-    SharePost save(List<MultipartFile> imageFiles, List<ShareIngredientRequest> shareIngredientRequests
+    SharePost save(List<ShareIngredientRequest> shareIngredientRequests, List<String> images
             , ShareBoardWriteRequest shareBoardWriteRequest);
 
-    SharePost update(Long shareBoardId, List<MultipartFile> imageFiles, List<ShareIngredientRequest> shareIngredientRequests
+    SharePost update(Long shareBoardId,List<ShareIngredientRequest> shareIngredientRequests, List<String> images
             ,ShareBoardUpdateRequest shareBoardUpdateRequest);
 
     void delete(Long shareBoardId);
