@@ -30,7 +30,7 @@ public class IngredientController {
 
         Set<Short> s = trie.ahoCorasick(text);
 
-        List<String> ingredients = new ArrayList<>();
+        List<Map<String, Object>> ingredients = new ArrayList<>();
         for(Short idx : s){
             ingredients.add(trie.getIngredient(idx));
         }

@@ -13,8 +13,14 @@ public class Trie {
         root.fail = root;
     }
 
-    public String getIngredient(Short idx){
-        return dict.get(idx);
+    public Map<String, Object> getIngredient(Short idx){
+        Map<String, Object> res = new HashMap<>();
+        Map<String, Object> ingredient = new HashMap<>();
+
+        ingredient.put("id", idx);
+        ingredient.put("name", dict.get(idx));
+        res.put("ingredient", ingredient);
+        return res;
     }
 
     public void addWord(Short id, String word){
