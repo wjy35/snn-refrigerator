@@ -23,7 +23,7 @@ public class RecipeController {
 
     private final RecipeServiceImpl recipeService;
 
-    @PostMapping(value = "/", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> createRecipe (@RequestPart(value = "recipeRequest") RecipeRequest recipeRequest
             , @RequestPart(value="recipeImage") MultipartFile recipeImage) throws IOException {
         Response response = new Response();
