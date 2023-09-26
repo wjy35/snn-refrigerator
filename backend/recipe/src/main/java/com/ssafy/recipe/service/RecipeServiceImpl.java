@@ -3,6 +3,7 @@ package com.ssafy.recipe.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.recipe.api.request.RecipeDetailRequest;
 import com.ssafy.recipe.api.response.*;
+import com.ssafy.recipe.s3.util.S3helper;
 import com.ssafy.recipe.service.feign.MemberFeign;
 import com.ssafy.recipe.api.mapper.RecipeCustomIngredientMapper;
 import com.ssafy.recipe.api.mapper.RecipeDetailMapper;
@@ -16,7 +17,9 @@ import com.ssafy.recipe.exception.CustomException;
 import com.ssafy.recipe.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,8 +48,14 @@ public class RecipeServiceImpl implements RecipeService{
 
     private final RecipeSearchService recipeSearchService;
 
+    private final S3helper s3helper;
+
     @Override
-    public void createRecipe(RecipeRequest request) {
+    public void createRecipe(RecipeRequest request, MultipartFile recipeImage) throws IOException {
+        String fileName = s3helper.upload("recipe", String.valueOf(request.getMemberId()), recipeImage);
+        String file = s3helper.getS3ImageUrl(fileName);
+        request.setImageUrl(file);
+
         Recipe recipe = recipeMapper.recipeRequestToRecipe(request);
 
         this.saveRecipe(recipe);
