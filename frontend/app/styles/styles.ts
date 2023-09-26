@@ -13,7 +13,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    // borderWidth: 1,
     width: '100%',
   },
   bg: {
@@ -26,7 +25,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     margin: 10,
-    // borderWidth: 1,
     width: '96%',
   },
   marginRowContainer: {
@@ -34,7 +32,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     margin: 10,
-    // borderWidth: 1,
     width: '96%'
   },
   smallContainer: {

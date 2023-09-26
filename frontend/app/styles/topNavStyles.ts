@@ -7,7 +7,6 @@ export const topNavStyles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ffffff',
     shadowColor: '#000000',
-    borderWidth: 1,
     width: '100%',
   },
   tabItemContainer: {
