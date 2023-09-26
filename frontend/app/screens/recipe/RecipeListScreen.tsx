@@ -13,6 +13,7 @@ const RecipeListScreen = ({navigation}:any) => {
       nickname:"",
       title:"",
       imageUrl:"",
+      profileImageUrl:"",
       favoriteCount: 0,
       followCount: 0,
       foodName:"",
@@ -28,7 +29,9 @@ const RecipeListScreen = ({navigation}:any) => {
     contain: [],
     remove: [],
     n: 1000,
-    keyword: ''
+    keyword: '',
+    page:1,
+    size:3,
   })
 
   function goToCreate(){
@@ -42,7 +45,6 @@ const RecipeListScreen = ({navigation}:any) => {
     const getRecipe = async () => {
       try {
         let res = await recipeApi.searchRecipe(settings);
-        console.log(res.data.data)
         if (res.status === 200) {
           setRecipe(res.data.data.recipe);
         } else {
