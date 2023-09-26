@@ -17,6 +17,7 @@ export const recipeStyles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     margin:5,
+    backgroundColor:'white',
   },
   recipeItemImage: {
     flex: 1,
