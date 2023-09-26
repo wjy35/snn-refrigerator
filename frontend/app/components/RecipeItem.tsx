@@ -34,9 +34,10 @@ const RecipeItem = ({item, navigation, width, height}:props) => {
               style={{position: 'relative'}}
             />
           </View>
-          <Image source={{uri: item.profileImageUrl}}
-                style={{width:100, height:100}}
-          />
+          { item.profileImageUrl && (
+              <Image source={{uri: item.profileImageUrl}} style={{width:100, height:100}}/>
+            )
+          }
         </View>
         <View style={recipeStyles.recipeItemInfo}>
           <View style={recipeStyles.recipeItemTitleContainer}>
@@ -44,9 +45,10 @@ const RecipeItem = ({item, navigation, width, height}:props) => {
           </View>
           <View style={recipeStyles.recipeItemUser}>
             <View style={{width: 20, height: 20, borderWidth: 1}}>
-              <Image source={{uri: item.profileImageUrl}}
-                     style={{width:20, height:20}}
-              />
+              { item.profileImageUrl && (
+                  <Image source={{uri: item.profileImageUrl}} style={{width:20, height:20}}/>
+                )
+              }
             </View>
             <Text>{item.nickname}</Text>
           </View>
