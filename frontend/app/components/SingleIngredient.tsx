@@ -66,12 +66,12 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
   }
 
   return (
-    <View style={[tw`w-[48%] my-[1%] mx-[1%] bg-white`,{aspectRatio:"2/1"}]}>
+    <View style={[tw`w-[48%] my-[1%] mx-[1%] bg-white`,{aspectRatio:"11/5"}]}>
       <TouchableWithoutFeedback onPress={toDetail}>
         <View style={[container, ingredientStyles.singleColumnContainer]}>
           <View style={ingredientStyles.singleTop}>
             <View style={ingredientStyles.dateContainer}>
-              <Text style={[styles.font, tw`text-base`]}>6일 전 등록</Text>
+              <Text style={[styles.font, tw`text-sm`]}>6일 전 등록</Text>
             </View>
             <View style={[tw`flex-wrap`]}>
               <IngredientIcon storageType={storageType} ingredientInfoId={ingredientInfoId}/>
