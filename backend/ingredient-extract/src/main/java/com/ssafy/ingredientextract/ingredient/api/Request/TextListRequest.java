@@ -6,5 +6,5 @@ import java.util.List;
 
 @Getter
 public class TextListRequest {
-    private List<String> textList;
+    private String text;
 }
