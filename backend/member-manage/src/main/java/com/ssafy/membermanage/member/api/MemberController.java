@@ -16,6 +16,7 @@ import com.ssafy.membermanage.member.request.SignupRequest;
 import com.ssafy.membermanage.member.request.SingleMemberRequest;
 import com.ssafy.membermanage.member.service.MemberServiceImpl;
 import com.ssafy.membermanage.member.util.Helper;
+import com.ssafy.membermanage.memberLocation.db.MemberLocation;
 import com.ssafy.membermanage.memberLocation.dto.LocationInfo;
 import com.ssafy.membermanage.memberLocation.service.MemberLocationServiceImpl;
 import com.ssafy.membermanage.response.Response;
@@ -330,6 +331,26 @@ public class MemberController {
                 .email(email)
                 .build();
         member = memberService.save(member);
+
+        for(Short hate: request.getHateIngredientList()){
+            HateIngredient hateIngredient = HateIngredient.builder()
+                            .ingredientId(hate)
+                            .member(member)
+                            .build();
+            hateIngredientService.save(
+                    hateIngredient
+            );
+        }
+
+        for(Short place: request.getPlaceInfoList()){
+            MemberLocation placeInfo = MemberLocation.builder()
+                            .locationId(place)
+                            .member(member)
+                            .build();
+            memberLocationService.save(
+                    placeInfo
+            );
+        }
 
         Map<String, Object> data = new HashMap<>();
         data.put("houseCode", houseCode);
