@@ -37,11 +37,11 @@ const RecipeItem = ({item, navigation}:props) => {
           />
         </View>
         <View style={[recipeStyles.recipeItemImage]}>
-          <ImageBackground source={{uri: item.profileImageUrl}}
+          {item.profileImageUrl&&<ImageBackground source={{uri: item.profileImageUrl}}
                            resizeMode={"cover"}
                            style={{width:'100%', height:'100%'}}
                            imageStyle={{borderRadius: 10,}}
-          />
+          />}
         </View>
 
 
