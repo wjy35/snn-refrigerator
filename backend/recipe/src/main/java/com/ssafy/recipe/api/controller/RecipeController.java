@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,9 +23,10 @@ public class RecipeController {
     private final RecipeServiceImpl recipeService;
 
     @PostMapping("/")
-    public ResponseEntity<?> createRecipe (@RequestBody RecipeRequest recipeRequest) {
+    public ResponseEntity<?> createRecipe (@RequestPart(value = "recipeRequest") RecipeRequest recipeRequest
+            , @RequestPart(value="recipeImage") MultipartFile recipeImage) throws IOException {
         Response response = new Response();
-        recipeService.createRecipe(recipeRequest);
+        recipeService.createRecipe(recipeRequest, recipeImage);
         response.setMessage("OK");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
