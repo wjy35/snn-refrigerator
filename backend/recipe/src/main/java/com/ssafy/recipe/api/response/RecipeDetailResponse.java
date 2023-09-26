@@ -12,7 +12,7 @@ import java.util.List;
 public class RecipeDetailResponse {
     private String nickname;
     private String title;
-    private String image;
+    private String imageUrl;
     private String youtubeUrl;
     private int favoriteCount;
     private long followCount;
