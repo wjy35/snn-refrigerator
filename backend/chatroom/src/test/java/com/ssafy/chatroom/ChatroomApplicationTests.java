@@ -3,8 +3,10 @@ package com.ssafy.chatroom;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.chatroom.cloud.dto.ChatDto;
 import com.ssafy.chatroom.cloud.dto.MemberDto;
+import com.ssafy.chatroom.cloud.dto.ShareBoardDto;
 import com.ssafy.chatroom.cloud.openfeign.ChatOpenFeign;
 import com.ssafy.chatroom.cloud.openfeign.MemberOpenFeign;
+import com.ssafy.chatroom.cloud.openfeign.ShareBoardOpenFeign;
 import com.ssafy.chatroom.db.entity.ChatRoomEntity;
 import com.ssafy.chatroom.db.repository.ChatRoomRepository;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,6 +29,9 @@ class ChatroomApplicationTests {
 
     @Autowired
     ChatOpenFeign chatOpenFeign;
+
+    @Autowired
+    ShareBoardOpenFeign shareBoardOpenFeign;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -63,7 +68,7 @@ class ChatroomApplicationTests {
     void findChatRoom(){
         // given
         Integer sharePostId = 1;
-        Long senderMemberId = 1l;
+        Long senderMemberId = 3029548333l;
         System.out.println("sharePostId = " + sharePostId);
         System.out.println("senderMemberId = " + senderMemberId);
 
@@ -73,7 +78,6 @@ class ChatroomApplicationTests {
                         sharePostId,
                         senderMemberId)
                 .get();
-
         // then
         System.out.println("chatRoomEntity.getChatRoomId() = " + chatRoomEntity.getChatRoomId());
         assertNotNull(chatRoomEntity.getChatRoomId());
@@ -83,7 +87,7 @@ class ChatroomApplicationTests {
     @Transactional
     void testFindChatRoomsBySenderMemberIdOrReceiverMemberId(){
         // given
-        Long memberId = 1l;
+        Long memberId = 3029548333l;
         System.out.println("memberId = " + memberId);
 
         // when
@@ -123,6 +127,17 @@ class ChatroomApplicationTests {
         // then
         System.out.println("chatDto = " + chatDto);
         Assertions.assertNotNull(chatDto);
+    }
+
+    // TODO AOP Test 에 추가
+    @Test
+    void testShareBoardOpenFeign(){
+        // given
+        Integer shareBoardId = 3;
+
+        ShareBoardDto shareBoardDto = objectMapper.convertValue(shareBoardOpenFeign.getShareBoardDto(3).getData().get("response"),ShareBoardDto.class);
+
+        System.out.println("shareBoardDto = " + shareBoardDto);
     }
 
 }
