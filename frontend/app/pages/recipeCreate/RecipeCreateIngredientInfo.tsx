@@ -9,38 +9,36 @@ import useInput from "@/hooks/useInput";
 
 interface props {
   textList: string[];
-  foodName?: string;
-  serving?: string;
   ingredients: any[];
   addIngredient: Function;
   deleteIngredient: Function;
+  foodName?: string;
+  serving?: string;
+  editIngredient: Function;
 }
 
-const RecipeCreateIngredientInfo = ({textList, foodName, serving, ingredients, deleteIngredient, addIngredient}: props) => {
-  const [text, setText] = useState('')
+const RecipeCreateIngredientInfo = ({textList, ingredients, deleteIngredient, addIngredient, foodName, serving, editIngredient}: props) => {
   const [autoCompleteIngredientList, setAutoCompleteIngredientList] = useState<any[]>();
-  const [now, setNow] = useState(0)
+  const [now, setNow] = useState(0);
 
   const checkIngredient = async (keyword: string) => {
     try {
       const res = await ingredientAutocompleteApi.check({keyword: keyword})
       if (res.status === 200) {
         setAutoCompleteIngredientList(res.data.data.ingredients)
-        console.log(res.data.data.ingredients);
-        console.log(autoCompleteIngredientList);
       }
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   function onBlur(){
-    setNow(0)
+    setNow(0);
     setAutoCompleteIngredientList([])
   }
 
   function onPressIn(newNum: number) {
-    setNow(newNum)
+    setNow(newNum);
   }
 
 
@@ -50,6 +48,22 @@ const RecipeCreateIngredientInfo = ({textList, foodName, serving, ingredients, d
     nowNum: 1,
     onChange: checkIngredient,
   });
+
+  function onSelect(item: any){
+    if (checkDuplicate(item)) {
+      addIngredient({...item, amount: ''});
+    }
+  }
+
+  function checkDuplicate(item: any){
+    return (
+      ingredients.every((ingredient: any) => {
+        if (ingredient.ingredientName !== item.ingredientName){
+          return true;
+        }
+      })
+    );
+  }
 
 
   return (
@@ -66,8 +80,8 @@ const RecipeCreateIngredientInfo = ({textList, foodName, serving, ingredients, d
           (
             <View style={styles.marginContainer}>
               <Text style={[styles.font, styles.mainColor, {fontSize: 22}]}>
-                <Text>{foodName} </Text>
-                <Text>{serving} </Text>
+                <Text>{foodName&&foodName} </Text>
+                <Text>{serving&&serving} </Text>
                 <Text>레시피</Text>
               </Text>
             </View>
@@ -75,7 +89,7 @@ const RecipeCreateIngredientInfo = ({textList, foodName, serving, ingredients, d
         }
         <View style={{}}>
           <View style={[{width: '100%'}]}>
-            <AutoCompleteInput {...ingredientText} textList={autoCompleteIngredientList} keyValue='ingredientInfoId' name='ingredientName' onPressIn={onPressIn}/>
+            <AutoCompleteInput {...ingredientText} textList={autoCompleteIngredientList} keyValue='ingredientInfoId' name='ingredientName' onPressIn={onPressIn} onSelect={onSelect}/>
           </View>
         </View>
         <View style={styles.marginContainer}>
@@ -83,7 +97,7 @@ const RecipeCreateIngredientInfo = ({textList, foodName, serving, ingredients, d
             ingredients.map((i: any, idx)=>{
               return (
                 <React.Fragment key={`ingredient${idx}`}>
-                  <EditableIngredients deleteIngredient={deleteIngredient} ingredientName={i.ingredientName} ingredientServing={i.ingredientServing}/>
+                  <EditableIngredients deleteIngredient={deleteIngredient} ingredientName={i.ingredientName} ingredientServing={i.ingredientServing} index={idx} editIngredient={editIngredient}/>
                 </React.Fragment>
               )
             })

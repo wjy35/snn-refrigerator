@@ -16,12 +16,11 @@ interface props {
   reset?: Function;
   name: string;
   keyValue: string;
-  onSelect?: Function;
+  onSelect: Function;
 }
 
 
 const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, textList, onBlur, title, keyValue, name, onSelect}: props) => {
-  const inputRef = useRef();
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const dimensionWidth = Dimensions.get('screen').width;
 
@@ -55,7 +54,6 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
         }
         <View style={[{width: '100%'}]}>
           <TextInput
-            ref={inputRef}
             placeholder={placeholder}
             style={[{height: 40, borderWidth: 1, padding: 10}]}
             onChangeText={(newText)=>onChangeText(newText)}

@@ -14,29 +14,37 @@ const PrivateRecipeApi = axios.create({
 })
 
 interface props {
-  recipeId: string;
-  memberId: string;
-  keyword: string;
-  payload: any;
+  recipeId?: string;
+  memberId?: string;
+  keyword?: string;
+  payload?: any;
+  title?: string;
+  youtubeUrl?: string;
+  serving?: string;
+  cookingTime?: string;
+  foodName?: string;
+  contents?: any[];
+  ingredients?: any[];
+  imageUrl?: any;
 }
 
 interface search {
-    memberId: bigint;
-    contain: any[];
-    remove: any[];
-    n: number;
-    keyword: string;
+  memberId: bigint;
+  contain: any[];
+  remove: any[];
+  n: number;
+  keyword: string;
 
 }
 
 const recipeApi = {
   detail: async ({memberId, recipeId}: props) => {
     const res = await PrivateRecipeApi.post(
-      `recipe`,{
-            memberId: memberId,
-            recipeId: recipeId
+      `recipe`,
+      {
+        memberId: memberId,
+        recipeId: recipeId,
         }
-        
     );
     return res;
   },
@@ -109,20 +117,19 @@ const recipeApi = {
     );
     return res;
   },
-  createRecipe: async ({payload}: props) => {
+  createRecipe: async (formdata: FormData) => {
+    console.log(formdata);
     const res = await PrivateRecipeApi.post(
       '',
+      formdata,
       {
-        memberId: payload.memberId,
-        title: payload.title,
-        // TODO: image 등록
-        youtubeUrl: payload.youtubeUrl,
-        serving: payload.serving,
-        cookingTime: payload.cookingTime,
-        foodName: payload.foodName,
-        contents: payload.contents,
-        ingredients: payload.ingredients,
-      }
+        headers: {
+          'Content-Type': 'application/json',
+          },
+        transformRequest: (data, headers) => {
+          return data;
+          },
+      },
     );
     return res;
   }

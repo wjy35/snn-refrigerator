@@ -40,13 +40,21 @@ const SignUpScreen = ({navigation}:any) => {
   }
 
   function onBlurLocation(){
-    location.reset();
-    setLocationList([]);
+    // location.reset();
+    // setLocationList([]);
+  }
+
+  function onSelectLocation() {
+
+  }
+
+  function onSelectIngredient(){
+
   }
 
   function onBlurIngredient(){
-    excludeIngredient.reset();
-    setExcludeIngredientList([]);
+    // excludeIngredient.reset();
+    // setExcludeIngredientList([]);
   }
 
   const nickName = useInput({
@@ -90,11 +98,11 @@ const SignUpScreen = ({navigation}:any) => {
                 <PlainInput {...nickName}/>
               </View>
               <View style={{width: '100%', borderWidth: 1}}>
-                <AutoCompleteInput {...location} textList={locationList} onPressIn={onPressIn} onBlur={onBlurLocation} keyValue='locationId' name='locationName'/>
+                <AutoCompleteInput {...location} textList={locationList} onPressIn={onPressIn} onBlur={onBlurLocation} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
                 <View></View>
               </View>
               <View style={{width: '100%', borderWidth: 1}}>
-                <AutoCompleteInput {...excludeIngredient} textList={excludeIngredientList} onPressIn={onPressIn} onBlur={onBlurIngredient} keyValue='ingredientInfoId' name='ingredientName'/>
+                <AutoCompleteInput {...excludeIngredient} textList={excludeIngredientList} onPressIn={onPressIn} onBlur={onBlurIngredient} keyValue='ingredientInfoId' name='ingredientName' onSelect={onSelectIngredient}/>
                 <View></View>
               </View>
               <View>
