@@ -8,11 +8,13 @@ import com.ssafy.recipe.api.response.IngredientParam;
 import com.ssafy.recipe.api.response.MemberResponse;
 import com.ssafy.recipe.api.response.RecipeDetailResponse;
 import com.ssafy.recipe.db.entity.Recipe;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface RecipeService {
-    void createRecipe(RecipeRequest request);
+    void createRecipe(RecipeRequest request, MultipartFile recipeImage) throws IOException;
 
     void updateRecipe(int recipeId, RecipeRequest request);
 
