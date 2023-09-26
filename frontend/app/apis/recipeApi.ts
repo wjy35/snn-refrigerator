@@ -36,7 +36,7 @@ const recipeApi = {
             memberId: memberId,
             recipeId: recipeId
         }
-        
+
     );
     return res;
   },
@@ -72,7 +72,7 @@ const recipeApi = {
     );
     return res;
   },
-  searchRecipe: async ({memberId, contain, remove, n, keyword}: search) => {
+  searchRecipe: async ({memberId, contain, remove, n, keyword, page, size}: search) => {
     const res = await PrivateRecipeApi.post(
       'search/',
         {
@@ -81,6 +81,8 @@ const recipeApi = {
             excludedIngredients: remove,
             missingIngredientCount: n,
             keyword: keyword,
+            page: page,
+            size: size,
         }
 
     );

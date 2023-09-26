@@ -35,6 +35,7 @@ const RecipeItem = ({item, navigation, width, height}:props) => {
             />
           </View>
           <Text>음식 사진</Text>
+          <Image source={item.profileImageUrl}></Image>
         </View>
         <View style={recipeStyles.recipeItemInfo}>
           <View style={recipeStyles.recipeItemTitleContainer}>
