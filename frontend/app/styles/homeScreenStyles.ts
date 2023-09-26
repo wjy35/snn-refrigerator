@@ -13,7 +13,7 @@ export const homeScreenStyles = StyleSheet.create({
     justifyContent: 'center',
     margin: 10,
     marginTop: 20,
-    borderWidth: 1,
+    // borderWidth: 1,
     width: '96%',
     height: 100
   },
@@ -22,7 +22,7 @@ export const homeScreenStyles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     margin: 10,
-    borderWidth: 1,
+    // borderWidth: 1,
     width: '96%',
   },
   ingredientContainer: {
@@ -30,7 +30,7 @@ export const homeScreenStyles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     margin: 5,
-    borderWidth: 1,
+    // borderWidth: 1,
     width: '96%',
   },
   homeRecipeListContainer: {
