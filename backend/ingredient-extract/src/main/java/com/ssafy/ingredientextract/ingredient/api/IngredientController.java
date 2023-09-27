@@ -26,21 +26,16 @@ public class IngredientController {
     @JsonView(ResponseViews.NoRequest.class)
     @PostMapping("/ingredient-extract")
     public ResponseEntity<Response> ingredientExtract(@RequestBody TextListRequest request){
-        List<String> textList = request.getTextList();
+        String text = request.getText();
 
-        StringBuilder sb = new StringBuilder();
-        for(String text : textList){
-            sb.append(text);
-        }
-        String concat = sb.toString();
-        Set<Short> s = trie.ahoCorasick(concat);
+        Set<Short> s = trie.ahoCorasick(text);
 
-        List<String> ingredients = new ArrayList<String>();
+        List<Map<String, Object>> ingredients = new ArrayList<>();
         for(Short idx : s){
             ingredients.add(trie.getIngredient(idx));
         }
 
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         data.put("data", ingredients);
 
         Response response = Response
