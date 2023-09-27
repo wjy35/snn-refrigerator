@@ -80,17 +80,12 @@ const LogInScreen = ({navigation}: any) => {
     }
   }
 
-  async function moveTo(){
-    navigation.navigate('TextExtract')
-  }
-
   return (
     <View style={styles.layout}>
       <ImageBackground
         source={require('@/assets/images/background1.png')}
         resizeMode="cover"
         style={styles.bg}>
-        <Button title="test" onPress={moveTo} />
         <View style={{width: '100%', height: '80%'}}>
           <LoginSwiper />
         </View>
