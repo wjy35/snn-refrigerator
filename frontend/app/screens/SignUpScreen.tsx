@@ -12,6 +12,7 @@ import {closeIcon} from "@/assets/icons/icons";
 import memberApi from "@/apis/memberApi";
 import {useDispatch} from "react-redux";
 import {setHouseCodeAction} from "@/actions/houseAction";
+import {setMemberIdAction} from "@/actions/userAction";
 
 
 const SignUpScreen = ({navigation}:any) => {
@@ -22,6 +23,7 @@ const SignUpScreen = ({navigation}:any) => {
   const [locations, setLocations] = useState<any[]>([]);
   const [ingredients, setIngredients] = useState<any[]>([]);
   const dispatch = useDispatch();
+  const [nickNameStatus, setNickNameStatus] = useState<number>(0)
 
   const checkLocation = async (keyword: string) => {
     try {
@@ -70,13 +72,12 @@ const SignUpScreen = ({navigation}:any) => {
   }
 
   function onBlurLocation(){
-    // location.reset();
-    // setLocationList([]);
+    excludeIngredient.reset();
+    setExcludeIngredientList([]);
   }
 
   function onSelectLocation(item: any) {
     if (checkDuplicateLocation(item)){
-      // addlocation
       setLocations([...locations, {...item}]);
     }
 
@@ -84,14 +85,13 @@ const SignUpScreen = ({navigation}:any) => {
 
   function onSelectIngredient(item: any){
     if (checkDuplicateIngredient(item)){
-      // addingredient
       setIngredients([...ingredients, {...item}]);
     }
   }
 
   function onBlurIngredient(){
-    // excludeIngredient.reset();
-    // setExcludeIngredientList([]);
+    location.reset();
+    setLocationList([]);
   }
 
   function removeIngredient(idx: number){
@@ -106,10 +106,24 @@ const SignUpScreen = ({navigation}:any) => {
     setLocationList(_locations);
   }
 
+  async function checkDuplicateNickname(nickname: string){
+    try {
+      const res = await memberApi.checkDuplicate({
+        nickname: nickname
+      });
+      if (res.status === 200) {
+        res.data.data.isUnique?setNickNameStatus(2):setNickNameStatus(1);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   const nickName = useInput({
     placeholder:'닉네임',
     title: '닉네임',
     nowNum: 1,
+    onChange: checkDuplicateNickname,
   });
   const houseCode = useInput({
     placeholder:'(선택) 집 공유 코드 입력',
@@ -129,21 +143,39 @@ const SignUpScreen = ({navigation}:any) => {
     onChange: checkExcludeIngredient,
   });
 
-  // TODO 로그인 api 연동
-  // async function signup(){
-  //   try {
-  //     const res = await memberApi.signup({
-  //       // nickname
-  //       // address,
-  //       // housecode,
-  //       // id,
-  //       //
-  //     });
-  //     if (res.status === 200) {
-  //       dispatch(setHouseCodeAction(res.data.data.houseCode))
-  //     }
-  //   }
-  // }
+  // 회원가입 후 홈스크린 getrecipe에서 에러
+  async function signup(){
+    const hateIngredientList = Array.from(ingredients, (i) => i.ingredientInfoId);
+    const placeInfoList = Array.from(locations, (i) => i.locationId);
+    try {
+      const res = await memberApi.signup({
+        nickname: nickName.text,
+        memberId: route.params.id,
+        hateIngredientList: hateIngredientList,
+        placeInfoList: placeInfoList,
+        birthday: route.params.birthday,
+        email: route.params.email,
+      });
+      if (res.status === 200) {
+        dispatch(setHouseCodeAction(res.data.data.houseCode));
+      }
+    } catch (err) {
+      console.log('여기서 에러나는거임signup');
+      console.log(err);
+    }
+  }
+
+  function trySignup(){
+    if (nickNameStatus === 2){
+      signup().then(navigation.navigate('Home'));
+    } else if (nickNameStatus === 0) {
+      // TODO: toast로 변경 필요
+      console.log('닉네임을 입력해주세요');
+    } else if (nickNameStatus === 1) {
+      // TODO: toast로 변경 필요
+      console.log('중복된 닉네임은 사용할 수 없습니다');
+    }
+  }
 
   return (
     <View style={styles.layout}>
@@ -161,6 +193,16 @@ const SignUpScreen = ({navigation}:any) => {
             <View style={[{alignItems: 'center'}]}>
               <View style={[{width: '90%'}]}>
                 <PlainInput {...nickName}/>
+                {
+                  nickNameStatus === 1 && (
+                    <Text style={[styles.font, {color: 'red'}]}>중복 닉네임 입니다</Text>
+                  )
+                }
+                {
+                  nickNameStatus === 2 && (
+                    <Text style={[styles.font, {color: 'blue'}]}>사용 가능한 닉네임 입니다</Text>
+                  )
+                }
               </View>
               <View style={{width: '90%'}}>
                 <AutoCompleteInput {...location} textList={locationList} onPressIn={onPressIn} onBlur={onBlurLocation} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
@@ -202,7 +244,7 @@ const SignUpScreen = ({navigation}:any) => {
         </View>
         <View style={[{width: '100%', justifyContent: 'center', alignItems: 'center', height: '10%'}]}>
           <View style={[{width: '70%'}]}>
-            <Button title='회원가입'></Button>
+            <Button title='회원가입' onPress={trySignup}></Button>
           </View>
         </View>
       </ImageBackground>

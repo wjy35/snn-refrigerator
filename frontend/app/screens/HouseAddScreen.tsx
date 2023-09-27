@@ -30,14 +30,22 @@ const HouseAddScreen = ({navigation}:any) => {
   }
 
   function onAddIngredient(item: any){
-    checkIngredient(item) && setIngredients([...ingredients, {...item, storageType: 0, lastDate: ''}]);
+    console.log(item);
+    checkIngredient(item) && setIngredients([...ingredients, {ingredientName: item.ingredientName, ingredientInfoId: item.ingredientInfoId, storageType: 0, lastDate: null}]);
   }
 
   function onChangeIngredients(){
     setIngredients([...ingredients]);
   }
 
+  function deleteIngredient(idx: number){
+    const _ingredients = [...ingredients];
+    _ingredients.splice(idx, 1);
+    setIngredients(_ingredients);
+  }
+
   async function finishAdd(){
+    console.log(ingredients);
     try {
       const res = await houseApi.addIngredient({
         houseCode: '492f9401-c684-4966-936e-56f0941eaffe',
@@ -50,7 +58,6 @@ const HouseAddScreen = ({navigation}:any) => {
       console.log(err);
     }
   }
-
   return (
     <View style={styles.layout}>
       <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
@@ -60,7 +67,7 @@ const HouseAddScreen = ({navigation}:any) => {
           )
         }
         <ProgressPage>
-          <HouseAddIngredient textList={textList} ingredients={ingredients} setNow={changeNow} now={now} addIngredient={onAddIngredient}/>
+          <HouseAddIngredient textList={textList} ingredients={ingredients} setNow={changeNow} now={now} addIngredient={onAddIngredient} deleteIngredient={deleteIngredient}/>
           <HouseAddStorage textList={textList} ingredients={ingredients} setNow={changeNow} now={now} onChange={onChangeIngredients}/>
           <HouseAddDate textList={textList} ingredients={ingredients} setNow={changeNow} now={now} onChange={onChangeIngredients}/>
         </ProgressPage>

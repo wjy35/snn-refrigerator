@@ -20,21 +20,13 @@ const HouseAddDate = ({textList, ingredients, setNow, now, onChange}: props) => 
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [selected, setSelected] = useState<any>({});
 
-  // useEffect(()=>{
-  //   const _selected = {}
-  //   ingredients.forEach((i)=>{
-  //     if (i.lastDate && _selected[i.lastDate]){
-  //       _selected[i.lastDate].dots.push(warm);
-  //     } else if (i.lastDate) {
-  //       _selected[i.lastDate] = {dots: [cold]};
-  //     }
-  //   })
-  //   setSelected(_selected);
-  // }, [ingredients])
-
-  function test(){
-    console.log('test');
-  }
+  useEffect(()=>{
+    const _selected = {}
+    ingredients.forEach((i)=>{
+      _selected[i.lastDate] = {dots: [cool]};
+    });
+    setSelected(_selected);
+  }, [ingredients])
 
   return (
     <View style={{flex: 1, width: '100%'}}>
@@ -45,7 +37,7 @@ const HouseAddDate = ({textList, ingredients, setNow, now, onChange}: props) => 
             <Progressbar progress={3} total={3} textList={textList}/>
           </View>
         </View>
-        <View style={[{borderWidth: 1}]}>
+        <View>
           <CalendarComponent selectedList={selected} selectedDate={selectedDate} setSelectedDate={(newDate)=>setSelectedDate(newDate)}/>
         </View>
         <View style={{flex: 1, marginTop: 20}}>
@@ -84,27 +76,30 @@ const HouseAddDate = ({textList, ingredients, setNow, now, onChange}: props) => 
                 }}
               />
             </View>
-            <View style={{width: '40%'}}>
-              <FlatList
-                nestedScrollEnabled
-                data={ingredients}
-                renderItem={(item)=>{
-                  if (item.item.lastDate === selectedDate){
-                    return (
-                      <View style={{borderWidth: 1, width: '100%', height: 30}}>
-                        <Text>
-                          <Text>{item.item.ingredientName}</Text>
-                        </Text>
-                      </View>
-                    );
-                  }
-                }}
-                keyExtractor={(item)=>{
-                  return String(item.ingredientName);
-                }}
-              />
-
-            </View>
+            {
+              selectedDate&&(
+                <View style={{width: '40%'}}>
+                  <FlatList
+                    nestedScrollEnabled
+                    data={ingredients}
+                    renderItem={(item)=>{
+                      if (item.item.lastDate === selectedDate){
+                        return (
+                          <View style={{borderWidth: 1, width: '100%', height: 30}}>
+                            <Text>
+                              <Text>{item.item.ingredientName}</Text>
+                            </Text>
+                          </View>
+                        );
+                      }
+                    }}
+                    keyExtractor={(item)=>{
+                      return String(item.ingredientName);
+                    }}
+                  />
+                </View>
+              )
+            }
           </View>
         </View>
       {/*</ScrollView>*/}
