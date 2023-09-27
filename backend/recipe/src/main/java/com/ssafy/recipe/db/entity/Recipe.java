@@ -32,7 +32,7 @@ public class Recipe {
     private int favoriteCount;
 
     @Column(name = "serving", nullable = false)
-    private byte serving;
+    private String serving;
 
     @Column(name = "cooking_time", length = 10)
     private String cookingTime;
@@ -74,7 +74,7 @@ public class Recipe {
     }
 
     @Builder
-    public Recipe(Long memberId, String title, String imageUrl, String youtubeUrl, byte serving, String cookingTime, String foodName) {
+    public Recipe(Long memberId, String title, String imageUrl, String youtubeUrl, String serving, String cookingTime, String foodName) {
         this.memberId = memberId;
         this.title = title;
         this.imageUrl = imageUrl;

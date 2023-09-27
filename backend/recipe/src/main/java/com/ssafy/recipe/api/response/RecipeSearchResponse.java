@@ -22,7 +22,7 @@ public class RecipeSearchResponse {
     private boolean isFavorite;
     private String foodName;
     private String cookingTime;
-    private short serving;
+    private String serving;
 
 
 
