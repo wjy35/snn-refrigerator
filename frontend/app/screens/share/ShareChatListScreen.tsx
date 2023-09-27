@@ -1,34 +1,37 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, Button, ScrollView} from 'react-native';
 import ShareLayout from "@/screens/share/ShareLayout";
 import ShareChatItem from "@/components/ShareChatItem";
 import chatRoomApi from "@/apis/chatRoomApi";
+import * as Stomp from "webstomp-client";
+import {useFocusEffect} from "@react-navigation/native";
+
 
 const ShareChatListScreen = ({navigation}: any) => {
-
-
     const [chatRoomList, setchatRoomList] = useState<
         Array<{
-            chatRoomId : number,
-            profileImageUrl : string,
-            locationName : string,
-            thumbnailImageUrl : string,
-            nickname : string,
-            content : string,
+            chatRoomId: number,
+            profileImageUrl: string,
+            locationName: string,
+            thumbnailImageUrl: string,
+            nickname: string,
+            content: string,
             timestamp: number
         }>
     >([]);
 
     // TODO 민규형한테 리덕스에서 memberId 꺼내달라고 하기
-    const memberId : number = 3029548333;
+    const memberId: number = 3029548333;
 
     useEffect(() => {
-
-        const getChatRoomList = async() => {
-            try{
+        // TODO 민규형한테 client redux 에 넣어달라고 찡찡거리기
+        const getChatRoomList = async () => {
+            try {
                 let res = await chatRoomApi.chatRoomList(memberId);
-                setchatRoomList(res.data.data.chatRoomList);
-            }catch (e){
+                if(res.status === 200){
+                    setchatRoomList(res.data.data.chatRoomList);
+                }
+            } catch (e) {
                 console.log(e);
             }
         }
@@ -36,12 +39,34 @@ const ShareChatListScreen = ({navigation}: any) => {
 
     }, []);
 
+    useFocusEffect(
+        useCallback(() => {
+            const client = Stomp.client("ws://a502.store/chat/endpoint");
+            client.isBinary=true;
+            client.connect(
+                {
+                    memberId:memberId
+                },
+                () => {
+                    console.log("connect")
+                },
+                (error) => {
+                    console.log(error)
+                    // ToDo socket연결 실패 오류를 출력
+                });
+            return ()=>{
+                client.disconnect(()=>{
+                    console.log("disconnect")
+                })
+            }
+        }, []))
+
     return (
         <ShareLayout title="나눔 채팅">
             <View>
                 <ScrollView>
                     {
-                        chatRoomList.map((item,index) => {
+                        chatRoomList.map((item, index) => {
                             return (
                                 <React.Fragment key={`chatRoom${index}`}>
                                     <ShareChatItem
