@@ -67,7 +67,7 @@ public class MemberLocationController {
         Member member = memberServiceImpl.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
 
-        List<LocationInfo> locationInfos = memberLocationService.getLocations(member);
+        List<Map<String, Object>> locationInfos = memberLocationService.getLocations(member);
 
         Map<String, Object> data = new HashMap<>();
         data.put("location", locationInfos);

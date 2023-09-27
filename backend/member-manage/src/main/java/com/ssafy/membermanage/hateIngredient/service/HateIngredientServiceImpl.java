@@ -4,11 +4,14 @@ import com.ssafy.membermanage.error.CustomException;
 import com.ssafy.membermanage.error.ErrorCode;
 import com.ssafy.membermanage.hateIngredient.db.HateIngredient;
 import com.ssafy.membermanage.hateIngredient.db.HateIngredientRepository;
+import com.ssafy.membermanage.hateIngredient.dto.HateIngredientInfo;
 import com.ssafy.membermanage.member.db.Member;
 import com.ssafy.membermanage.feign.client.RequestIngredientApiClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +23,7 @@ public class HateIngredientServiceImpl {
 
     @Autowired
     private HateIngredientRepository hateIngredientRepository;
-    public String ingredientName(Short id){
+    public String getIngredientName(Short id){
         try{
             Map<String, Object> response = requestIngredientApiClient.getIngredientName(id);
             Map<String, Object> data = (Map<String, Object>) response.get("data");
@@ -29,6 +32,19 @@ public class HateIngredientServiceImpl {
         } catch (Exception e){
             throw new CustomException(ErrorCode.No_Such_Ingredient);
         }
+    }
+
+    public List<Map<String, Object>> getHateIngredientInfo(Member member){
+        List<HateIngredient> hateIngredientList = hateIngredientRepository.findByMember(member);
+        List<Map<String, Object>> hateIngredientInfos = new ArrayList<>();
+        for(HateIngredient hateIngredient : hateIngredientList){
+
+            Map<String, Object> info = new HashMap<>();
+            info.put("ingredientInfoName", getIngredientName(hateIngredient.getIngredientId()));
+            info.put("ingredientId", hateIngredient.getIngredientId());
+            hateIngredientInfos.add(info);
+        }
+        return hateIngredientInfos;
     }
 
     public HateIngredient save(HateIngredient hateIngredient){
