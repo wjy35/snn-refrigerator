@@ -10,6 +10,7 @@ import com.ssafy.share.db.entity.ShareImage;
 import com.ssafy.share.db.entity.ShareIngredient;
 import com.ssafy.share.db.entity.SharePost;
 import com.ssafy.share.db.repository.ShareBoardRepository;
+import com.ssafy.share.db.repository.ShareImageRepository;
 import com.ssafy.share.db.repository.ShareIngredientRepository;
 import com.ssafy.share.feign.IngredientFeign;
 import com.ssafy.share.feign.LocationFeign;
@@ -33,6 +34,7 @@ public class ShareBoardServiceImpl implements ShareBoardService {
 
     private final ShareBoardRepository shareBoardRepository;
     private final ShareIngredientRepository shareIngredientRepository;
+    private final ShareImageRepository shareImageRepository;
     private final MemberFeign memberFeign;
     private final LocationFeign locationFeign;
     private final IngredientFeign ingredientFeign;
@@ -66,60 +68,60 @@ public class ShareBoardServiceImpl implements ShareBoardService {
     }
 
     @Override
-    public Page<SharePost> getPostList(Pageable pageable,Short locationId, String keyword) { // 나눔글 리스트 조회
+    public List<SharePost> getPostList(Short locationId, String keyword) { // 나눔글 리스트 조회
         log.info("검색 키워드: {}",keyword);
-        if(keyword==null) return shareBoardRepository.findByLocationId(pageable,locationId); // 초기화면 or 검색어 없을 때 전체 조회
-        return shareBoardRepository.findByLocationIdAndTitleContaining(pageable,locationId,keyword); // 검색어를 입력했을 때
+        if(keyword==null) return shareBoardRepository.findByLocationId(locationId); // 초기화면 or 검색어 없을 때 전체 조회
+        return shareBoardRepository.findByLocationIdAndTitleContaining(locationId,keyword); // 검색어를 입력했을 때
     }
 
     @Override
     public SharePost getPostDetail(Long shareBoardId) {
         return shareBoardRepository.findBySharePostId(shareBoardId)
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + shareBoardId));
-
     }
+
 
     @Override
     @Transactional
-    public SharePost save(List<MultipartFile> imageFiles, List<ShareIngredientRequest> shareIngredientRequests,
+    public SharePost save(List<ShareIngredientRequest> shareIngredientRequests,List<String> images,
                           ShareBoardWriteRequest shareBoardWriteRequest) { // 나눔글 등록
-        List<ShareImage> images=null;
-
-        if(imageFiles != null){
-            shareBoardWriteRequest.setShareImages(images);
-            // todo: 이미지에 url을 뽑아내서 저장해야함
-        }
 
         SharePost post=shareBoardWriteRequest.toEntity(); // post 엔티티 생성
-        for(ShareIngredientRequest s:shareIngredientRequests){ // 나눔식재료 하나하나 post 등록
-            s.setSharePost(post);
-            ShareIngredient shareIngredient=s.toEntity();
-            shareBoardWriteRequest.getShareIngredients().add(shareIngredient);
-        }
+        post.setShareIngredients(shareIngredientRequests);
+        post.setShareImages(images);
+
+//        for (String i:images){
+//            ShareImage shareImage=ShareImage.builder().sharePostImageUrl(i).sharePost(post).build();
+//            shareBoardWriteRequest.getShareImages().add(shareImage);
+//        }
+//        for(ShareIngredientRequest s:shareIngredientRequests){
+//            s.setSharePost(post);
+//            ShareIngredient shareIngredient=s.toEntity();
+//            shareBoardWriteRequest.getShareIngredients().add(shareIngredient);
+//        }
         return shareBoardRepository.save(post);
     }
 
     @Override
     @Transactional
-    public SharePost update(Long shareBoardId, List<MultipartFile> imageFiles, List<ShareIngredientRequest> shareIngredientRequests,
+    public SharePost update(Long shareBoardId, List<ShareIngredientRequest> shareIngredientRequests, List<String> images,
                             ShareBoardUpdateRequest shareBoardUpdateRequest) {
 
         SharePost post=shareBoardRepository.findBySharePostId(shareBoardId)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 게시글을 찾을 수 없습니다. ID: " + shareBoardId));
 
-        List<ShareImage> images=null;
-        if(imageFiles != null){
-            shareBoardUpdateRequest.setShareImages(images);
-            // todo: 이미지에 url을 뽑아내서 저장해야함
-        }
-        // 기존의 나눔식재료는 삭제
+        // 기존의 나눔식재료와 사진은 삭제
         shareIngredientRepository.deleteBySharePost(post);
+        shareImageRepository.deleteBySharePost(post);
 
-        for(ShareIngredientRequest s:shareIngredientRequests){ // 나눔식재료 하나하나 post 등록
-            s.setSharePost(post);
-            ShareIngredient shareIngredient=s.toEntity();
-            shareBoardUpdateRequest.getShareIngredients().add(shareIngredient);
-        }
+        post.setShareIngredients(shareIngredientRequests);
+        post.setShareImages(images);
+
+//        for(ShareIngredientRequest s:shareIngredientRequests){ // 나눔식재료 하나하나 post 등록
+//            s.setSharePost(post);
+//            ShareIngredient shareIngredient=s.toEntity();
+//            shareBoardUpdateRequest.getShareIngredients().add(shareIngredient);
+//        }
 
         post.update(shareBoardUpdateRequest);
         return post;

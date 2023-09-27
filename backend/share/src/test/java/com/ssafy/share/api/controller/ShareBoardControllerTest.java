@@ -55,10 +55,6 @@ class ShareBoardControllerTest {
         ShareBoardWriteRequest shareBoardWriteRequest=new ShareBoardWriteRequest(1L, (short) 1,
                 "감자 나눔합니다","3시에 가능함");
 
-        SharePost sharePost=shareBoardService.save(null,shareIngredientRequests,shareBoardWriteRequest);
-        log.info("테스트 엔티티 {}",sharePost);
-        assertEquals("감자 나눔합니다",sharePost.getTitle());
-        assertEquals(10,sharePost.getShareIngredients().get(1).getAmount());
 
 
         // when & then

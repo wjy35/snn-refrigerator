@@ -12,12 +12,12 @@ public class SharePostResponse { // 나눔글 목록 응답 DTO의 글 정보 �
     private String userProfileImageUrl;
     private String thumbnail;
 
-    public SharePostResponse(SharePost entity, String nickname, String userProfileImageUrl,String createdTime) {
+    public SharePostResponse(SharePost entity, String nickname, String userProfileImageUrl,String createdTime,String thumbnail) {
         this.sharePostId = entity.getSharePostId();
         this.title = entity.getTitle();
         this.nickname = nickname;
         this.createTime = createdTime;
         this.userProfileImageUrl=userProfileImageUrl;
-        this.thumbnail = entity.getThumbnail();
+        this.thumbnail = thumbnail;
     }
 }
