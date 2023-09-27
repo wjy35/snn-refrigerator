@@ -1,4 +1,8 @@
 spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 15MB
 
   application:
     name: ${DOMAIN_NAME}
@@ -28,3 +32,20 @@ eureka:
     service-url:
       defaultZone: ${EUREKA_URL}
 
+member-default-profile-image: ${MEMBER_DEFAULT_IMAGE}
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
+    s3:
+      bucket: ${S3_BUCKET}
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
+metamask:
+  WALLET_ADDRESS: "0x015093bAf428F1813Dc02dEFEf8c93A95e9CA769" # 지갑 주소
+  CONTRACT_ADDRESS: "0x49F2c4a5e5561867E1F55F067857b218A32C2158" # 통신할 스마트컨트랙트 주소
+  PRIVATE_KEY: "3e3411017c28c00d47bbfc21550c5f99a240ba6ba54e0d4002587ed6a3b57297" # 지갑 private key
