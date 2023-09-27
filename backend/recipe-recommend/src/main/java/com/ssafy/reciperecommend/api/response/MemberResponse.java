@@ -9,7 +9,8 @@ import lombok.ToString;
 @Builder
 public class MemberResponse {
     private String nickname;
-    private long followCount;
-    private int houseSeq;
+    private int followCount;
+    private String houseCode;
+    private String profileImageUrl;
 
 }
