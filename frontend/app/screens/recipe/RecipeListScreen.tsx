@@ -24,8 +24,8 @@ const RecipeListScreen = ({navigation}:any) => {
       serving:0
     }
   ]);
-  let memberId = "3029548333"
-  // const { memberId } = useSelector((state:RootState) => state.houseReducer)
+
+  const {memberId} = useSelector((state:RootState)=>state.userReducer);
 
   const [settings, setSettings] = useState({
     memberId: memberId,

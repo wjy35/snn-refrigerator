@@ -23,6 +23,7 @@ import React from "react";
 import HouseAddScreen from "@/screens/HouseAddScreen";
 import FridgeScreen from "@/screens/fridge/FridgeScreen";
 import FixScreen from "@/screens/FixScreen";
+import TextExtractScreen from '@/screens/myPage/GetImage';
 
 const Stack = createStackNavigator();
 
@@ -59,6 +60,7 @@ const Navigation = () => {
         <Stack.Screen name="MyShare" component={FixScreen}/>
         <Stack.Screen name="MyFavorite" component={MyFavoriteScreen}/>
         <Stack.Screen name="HouseAdd" component={HouseAddScreen}/>
+        <Stack.Screen name="TextExtract" component={TextExtractScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

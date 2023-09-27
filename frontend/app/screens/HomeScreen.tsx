@@ -14,8 +14,7 @@ import {RootState} from "@/reducers/reducers";
 const HomeScreen = ({navigation}:any) => {
 
   const [recipeList, setRecipeList] = useState([]);
-  let memberId = "3029548333"
-  // const { memberId } = useSelector((state:RootState) => state.houseReducer)
+  const { memberId } = useSelector((state:RootState) => state.userReducer)
 
   const getToken = async () => {
     try {
