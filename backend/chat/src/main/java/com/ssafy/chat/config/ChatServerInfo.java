@@ -1,15 +1,14 @@
 package com.ssafy.chat.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Component
-public class ChatSessionInfo {
+public class ChatServerInfo {
     private final String id;
 
-    public ChatSessionInfo() {
+    public ChatServerInfo() {
         this.id = UUID.randomUUID().toString();
     }
 
