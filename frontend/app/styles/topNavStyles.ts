@@ -7,7 +7,6 @@ export const topNavStyles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ffffff',
     shadowColor: '#000000',
-    borderWidth: 1,
     width: '100%',
   },
   tabItemContainer: {
@@ -16,9 +15,6 @@ export const topNavStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
-  },
-  tabFontSize: {
-    fontSize: 25,
   },
   backButton: {
     alignItems: 'center',
