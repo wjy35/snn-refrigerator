@@ -187,7 +187,7 @@ public class RecipeServiceImpl implements RecipeService{
                 .nickname(memberResponse.getNickname())
                 .profileImageUrl(memberResponse.getProfileImageUrl())
                 .title(recipe.get().getTitle())
-                .image(recipe.get().getImageUrl())
+                .imageUrl(recipe.get().getImageUrl())
                 .youtubeUrl(recipe.get().getYoutubeUrl())
                 .isFavorite(isFavorite)
                 .favoriteCount(recipe.get().getFavoriteCount())
