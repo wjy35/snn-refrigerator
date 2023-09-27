@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Button, ScrollView, ImageBackground} from 'react-native';
 import BottomNavigator from 'components/BottomNavigator';
 import {styles} from '@/styles/styles';
@@ -7,64 +7,14 @@ import sampleApi from '@/apis/sampleApi';
 import {homeScreenStyles} from "@/styles/homeScreenStyles";
 import MyIngredientList from "@/components/MyIngredientList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import recipeApi from "@/apis/recipeApi";
+import {useSelector} from "react-redux";
+import {RootState} from "@/reducers/reducers";
 
 const HomeScreen = ({navigation}:any) => {
 
-  const [recipeList, setRecipeList] = useState([
-    {title: 'title1', id: 1},
-    {title: 'title2', id: 2},
-    {title: 'title3', id: 3},
-  ]);
-  const recipe = [
-    {
-      recipeId:"123123",
-      nickname:"독버섯 왕준영",
-      title:"곽민규찜",
-      imageUrl:"레시피 이미지",
-      favoriteCount:19,
-      neededIngredients:8,
-      myIngredients:6,
-      foodName:"김치찜",
-      cookingTime:"120분",
-      serving:2
-    },
-    {
-      recipeId:"123124",
-      nickname:"독버섯 왕준영",
-      title:"곽민규찜",
-      imageUrl:"레시피 이미지",
-      favoriteCount:19,
-      neededIngredients:12,
-      myIngredients:6,
-      foodName:"김치찜",
-      cookingTime:"120분",
-      serving:2
-    },
-    {
-      recipeId:"123125",
-      nickname:"독버섯 왕준영",
-      title:"곽민규찜",
-      imageUrl:"레시피 이미지",
-      favoriteCount:19,
-      neededIngredients:10,
-      myIngredients:3,
-      foodName:"김치찜",
-      cookingTime:"120분",
-      serving:2
-    },
-    {
-      recipeId:"123126",
-      nickname:"독버섯 왕준영",
-      title:"곽민규찜",
-      imageUrl:"레시피 이미지",
-      favoriteCount:19,
-      neededIngredients:7,
-      myIngredients:6,
-      foodName:"김치찜",
-      cookingTime:"120분",
-      serving:2
-    },
-  ];
+  const [recipeList, setRecipeList] = useState([]);
+  const { memberId } = useSelector((state:RootState) => state.userReducer)
 
   const getToken = async () => {
     try {
@@ -90,6 +40,30 @@ const HomeScreen = ({navigation}:any) => {
     }
   }
 
+  useEffect(() => {
+    const getRecipe = async () => {
+      try {
+        let res = await recipeApi.searchRecipe({
+          memberId: memberId,
+          contain: [],
+          remove: [],
+          n: 1000,
+          keyword: '',
+          page:1,
+          size:3,
+        });
+        console.log(res);
+        if (res.status === 200) {
+          setRecipeList(res.data.data.recipe);
+        }
+      } catch (err) {
+        console.log('여기서 나는거임home');
+        console.log(err);
+      }
+    }
+    getRecipe();
+  }, []);
+
   return (
     <View style={styles.layout}>
       <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
@@ -104,7 +78,7 @@ const HomeScreen = ({navigation}:any) => {
                 <Text style={[styles.font, {fontSize: 20}]}>추천 레시피</Text>
               </View>
               <View style={homeScreenStyles.homeRecipeListContainer}>
-                <RecipeList horizontal={true} recipeList={recipe} navigation={navigation} width={250}/>
+                <RecipeList horizontal={true} recipeList={recipeList} navigation={navigation} width={250}/>
               </View>
             </View>
             <View style={homeScreenStyles.ingredientContainer}>
@@ -112,7 +86,7 @@ const HomeScreen = ({navigation}:any) => {
                 <Text style={[styles.font, {fontSize: 20}]}>빨리 소비해야 해요</Text>
               </View>
               <View>
-                <MyIngredientList/>
+                <MyIngredientList types={[0,2]} maxDate={7}/>
               </View>
             </View>
             {/*<Button onPress={test} title={'fdasfdsa'}></Button>*/}

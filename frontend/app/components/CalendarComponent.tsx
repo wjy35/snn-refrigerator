@@ -2,6 +2,8 @@ import React, {Component, useEffect, useState} from 'react'
 import {Text, View} from 'react-native';
 import {Calendar, CalendarList, Agenda} from 'react-native-calendars';
 import {LocaleConfig} from 'react-native-calendars';
+import {styles} from "@/styles/styles";
+import {MAIN_COLOR} from "@/assets/colors/colors";
 
 LocaleConfig.locales['fr'] = {
   monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
@@ -31,7 +33,8 @@ const CalendarComponent = ({selectedList, selectedDate, setSelectedDate}: props)
         disableAllTouchEventsForDisabledDays={true}
         markingType='multi-dot'
         renderHeader={(date) => {
-          return <Text>몇월 몇일</Text>
+          const dateList = date.toLocaleString().split('. ');
+          return <Text style={[styles.font, {fontSize: 20}]}>{dateList[0]}년 {dateList[1]}월</Text>
         }}
         markedDates={{
           [date.toDateString()]: {selected: true},
@@ -39,7 +42,7 @@ const CalendarComponent = ({selectedList, selectedDate, setSelectedDate}: props)
           [selectedDate]: {
             selected: true,
             disableTouchEvent: true,
-            selectedColor: 'blue',
+            selectedColor: MAIN_COLOR,
           },
         }}
       />

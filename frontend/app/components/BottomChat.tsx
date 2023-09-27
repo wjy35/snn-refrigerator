@@ -13,8 +13,9 @@ import useInput from "@/hooks/useInput";
 import PlainInput from "@/components/PlainInput";
 
 interface props {
+  onSubmit: Function,
 }
-const BottomNavigator = ({}: props) => {
+const BottomChat = ({onSubmit}: props) => {
   const navigation: any = useNavigation();
   const [chatList, setChatList] = useState<any[]>([]);
 
@@ -29,14 +30,12 @@ const BottomNavigator = ({}: props) => {
 
         </View>
         <View style={[{flex: 1}]}>
-          <PlainInput {...text}/>
+          <PlainInput {...text} onSubmit={onSubmit}/>
         </View>
-        <View style={[{width: 80, height: 80, borderWidth: 1}]}>
-
-        </View>
+        <View style={[{width: 80, height: 80, borderWidth: 1}]}></View>
       </View>
     </View>
   );
 };
 
-export default BottomNavigator;
+export default BottomChat;

@@ -11,38 +11,46 @@ import {styles} from '@/styles/styles';
 import LoginSwiper from '@/components/LoginSwiper';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import memberApi from '@/apis/memberApi';
+import {useDispatch} from "react-redux";
+import {setMemberIdAction} from "@/actions/userAction";
+import {setHouseCodeAction} from "@/actions/houseAction";
 
 interface props {
   accessToken: string;
 }
 
 const LogInScreen = ({navigation}: any) => {
-  const [accessToken, setAccessToken] = useState<string>('');
-  const [refreshToken, setRefreshToken] = useState<string>('');
-  const [birthday, setBirthday] = useState<string>('');
-  const [nickname, setNickname] = useState<string>('');
-  const [profileImageUrl, setProfileImageUrl] = useState<string>('');
-  const [memberId, setMemberId] = useState<bigint>(BigInt(-1));
-  const [email, setEmail] = useState<string>('');
+  const dispatch = useDispatch();
+  const [privateInfo, setPrivateInfo] = useState({});
 
   async function getKakaoId(token: string){
-    let res = await memberApi.getKaKaoInfo(token);
-    let memberInfo = res.data.data.kakaoMemberInfo;
-    setMemberId(memberInfo.id); // 이것은 회원가입을 할 때도 들고 있어야 하고 홈화면으로 갈때도 들고 있어야 함.
-    return memberInfo.id;
+    try {
+      const res = await memberApi.getKaKaoInfo(token);
+      if (res.status === 200) {
+        dispatch(setMemberIdAction(res.data.data.kakaoMemberInfo.id));
+        setPrivateInfo({
+          email: res.data.data.kakaoMemberInfo.email,
+          birthday: res.data.data.kakaoMemberInfo.birthday,
+          id: res.data.data.kakaoMemberInfo.id,
+        });
+        return res.data.data.kakaoMemberInfo.id;
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   async function checkMemberExists(memberId : bigint){
-    let memberInfoResponse = await memberApi.memberDetail(memberId);
-    if (memberInfoResponse.status === 200) {
-      let memberInfo = memberInfoResponse.data.data.memberInfo;
-      setNickname(memberInfo.nickname);
-      setBirthday(memberInfo.birthday);
-      setProfileImageUrl(memberInfo.profileImageUrl);
-      setEmail(memberInfo.email);
-      navigation.navigate('Home'); //회원 정보 다 저장한 후엔 홈 화면으로.
-    } else {
-      navigation.navigate('Signup'); //아니라면 회원가입.
+    try {
+      const res = await memberApi.memberDetail(memberId);
+      if (res.status === 200) {
+        dispatch(setHouseCodeAction(res.data.data.memberInfo.houseCode));
+        navigation.navigate('Home'); //회원 정보 다 저장한 후엔 홈 화면으로.
+      } else {
+        navigation.navigate('Signup', {...privateInfo}); //아니라면 회원가입.
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
@@ -53,15 +61,8 @@ const LogInScreen = ({navigation}: any) => {
           // await AsyncStorage.setItem('accessToken', result.accessToken);
           // await AsyncStorage.setItem('idToken', result.idToken);
           // await AsyncStorage.setItem('refreshToken', result.refreshToken);
-          // console.log(result);
-          // if (result.idToken === null) {
-          //   throw new Error('Access token is null');
-          // }
-          //access Token을 백엔드에 요청 후 받아오기.
-          //카카오 로그인 성공시 유저 memberId가 있으면 정보를 받아오고 아니라면 회원 가입.
-
-          let id = await getKakaoId(result.accessToken);
-          await checkMemberExists(memberId);
+          const id = await getKakaoId(result.accessToken);
+          await checkMemberExists(id);
         })
         .catch(error => {
           if (error.code === 'E_CANCELLED_OPERATION') {
@@ -71,7 +72,7 @@ const LogInScreen = ({navigation}: any) => {
           }
         });
     } catch (e) {
-      console.log(e);
+      console.log(e.message);
     }
   }
 

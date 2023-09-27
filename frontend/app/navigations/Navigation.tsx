@@ -22,6 +22,8 @@ import SingleShareChatScreen from '@/screens/share/SingleShareChatScreen';
 import React from "react";
 import HouseAddScreen from "@/screens/HouseAddScreen";
 import FridgeScreen from "@/screens/fridge/FridgeScreen";
+import FixScreen from "@/screens/FixScreen";
+import TextExtractScreen from '@/screens/myPage/GetImage';
 
 const Stack = createStackNavigator();
 
@@ -38,19 +40,27 @@ const Navigation = () => {
         <Stack.Screen name="RecipeList" component={RecipeListScreen}/>
         <Stack.Screen name="RecipeCreate" component={RecipeCreateScreen}/>
         <Stack.Screen name="RecipeDetail" component={RecipeDetailScreen}/>
-        <Stack.Screen name="RecipeUpdate" component={RecipeUpdateScreen}/>
-        <Stack.Screen name="ShareList" component={ShareListScreen}/>
-        <Stack.Screen name="ShareDetail" component={ShareDetailScreen}/>
-        <Stack.Screen name="ShareCreate" component={ShareCreateScreen}/>
-        <Stack.Screen name="ShareChatList" component={ShareChatListScreen}/>
-        <Stack.Screen name="SingleShareChat" component={SingleShareChatScreen}/>
+        {/*<Stack.Screen name="RecipeUpdate" component={RecipeUpdateScreen}/>*/}
+        <Stack.Screen name="RecipeUpdate" component={FixScreen}/>
+        {/*<Stack.Screen name="ShareList" component={ShareListScreen}/>*/}
+        <Stack.Screen name="ShareList" component={FixScreen}/>
+        {/*<Stack.Screen name="ShareDetail" component={ShareDetailScreen}/>*/}
+        <Stack.Screen name="ShareDetail" component={FixScreen}/>
+        {/*<Stack.Screen name="ShareCreate" component={ShareCreateScreen}/>*/}
+        <Stack.Screen name="ShareCreate" component={FixScreen}/>
+        {/*<Stack.Screen name="ShareChatList" component={ShareChatListScreen}/>*/}
+        <Stack.Screen name="ShareChatList" component={FixScreen}/>
+        {/*<Stack.Screen name="SingleShareChat" component={SingleShareChatScreen}/>*/}
+        <Stack.Screen name="SingleShareChat" component={FixScreen}/>
         <Stack.Screen name="MyPage" component={MyPageScreen}/>
         <Stack.Screen name="MyPageUpdate" component={MyPageUpdateScreen}/>
         <Stack.Screen name="AccountSetting" component={AccountSettingScreen}/>
         <Stack.Screen name="AlarmSetting" component={AlarmSettingScreen}/>
-        <Stack.Screen name="MyShare" component={MyShareScreen}/>
+        {/*<Stack.Screen name="MyShare" component={MyShareScreen}/>*/}
+        <Stack.Screen name="MyShare" component={FixScreen}/>
         <Stack.Screen name="MyFavorite" component={MyFavoriteScreen}/>
         <Stack.Screen name="HouseAdd" component={HouseAddScreen}/>
+        <Stack.Screen name="TextExtract" component={TextExtractScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

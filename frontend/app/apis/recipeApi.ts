@@ -29,12 +29,13 @@ interface props {
 }
 
 interface search {
-  memberId: bigint;
-  contain: any[];
-  remove: any[];
-  n: number;
-  keyword: string;
-
+    memberId: string;
+    contain: any[];
+    remove: any[];
+    n: number;
+    keyword: string;
+    page: number,
+    size: number,
 }
 
 const recipeApi = {

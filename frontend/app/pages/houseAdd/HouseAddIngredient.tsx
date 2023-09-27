@@ -16,9 +16,10 @@ interface props {
   setNow: Function;
   now: number;
   addIngredient: Function;
+  deleteIngredient: Function;
 }
 
-const HouseAddIngredient = ({textList, ingredients, setNow, now, addIngredient}: props) => {
+const HouseAddIngredient = ({textList, ingredients, setNow, now, addIngredient, deleteIngredient}: props) => {
   const [autoCompleteIngredientList, setAutoCompleteIngredientList] = useState<any[]>();
   const checkIngredient = async (keyword: string) => {
     try {
@@ -49,7 +50,7 @@ const HouseAddIngredient = ({textList, ingredients, setNow, now, addIngredient}:
 
   function onSelect(item: any){
     if (checkDuplicate(item)){
-      addIngredient({...item, amount: ''})
+      addIngredient({...item});
     }
   }
 
@@ -85,7 +86,7 @@ const HouseAddIngredient = ({textList, ingredients, setNow, now, addIngredient}:
               ingredients.map((i, idx) => {
                 return (
                   <React.Fragment key={`${i.ingredientName}${idx}`}>
-                    <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{}}/>
+                    <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{deleteIngredient(idx)}}/>
                   </React.Fragment>
                 )
               })
