@@ -5,8 +5,8 @@ import ShareChatItem from "@/components/ShareChatItem";
 import chatRoomApi from "@/apis/chatRoomApi";
 import * as Stomp from "webstomp-client";
 import {useFocusEffect} from "@react-navigation/native";
-import {list} from "postcss";
-
+import {RootState} from "@/reducers/reducers";
+import {useSelector} from "react-redux";
 
 const ShareChatListScreen = ({navigation}: any) => {
     const [chatRoomList, setchatRoomList] = useState<
@@ -21,11 +21,10 @@ const ShareChatListScreen = ({navigation}: any) => {
         }>
     >([]);
 
-    // TODO 민규형한테 리덕스에서 memberId 꺼내달라고 하기
-    const memberId: number = 3029548333;
+
+    const { memberId } = useSelector((state:RootState) => state.userReducer);
 
     useEffect(() => {
-        // TODO 민규형한테 client redux 에 넣어달라고 찡찡거리기
         const getChatRoomList = async () => {
             try {
                 let res = await chatRoomApi.chatRoomList(memberId);
