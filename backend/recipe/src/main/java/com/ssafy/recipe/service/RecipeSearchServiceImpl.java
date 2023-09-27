@@ -78,10 +78,10 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
 
         List<RecipeSearchResponse> result = new ArrayList<>();
 
-        MemberResponse memberResponse = this.getMember(recipeSearchRequest.getMemberId());
 
         for(int i=0; i<recipeList.size(); i++){
             Recipe recipe = recipeList.get(i);
+            MemberResponse memberResponse = this.getMember(recipe.getMemberId());
 
             int myIngredients = this.getMyIngredientCnt(recipe, memberResponse.getHouseCode());
 
