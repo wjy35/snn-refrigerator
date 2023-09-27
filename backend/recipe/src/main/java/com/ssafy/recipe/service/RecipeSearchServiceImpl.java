@@ -5,6 +5,7 @@ import com.ssafy.recipe.api.request.RecipeSearchRequest;
 import com.ssafy.recipe.api.response.HouseIngredientResponse;
 import com.ssafy.recipe.api.response.MemberResponse;
 import com.ssafy.recipe.api.response.RecipeSearchResponse;
+import com.ssafy.recipe.api.response.Response;
 import com.ssafy.recipe.db.entity.FavoriteRecipe;
 import com.ssafy.recipe.db.entity.IngredientInfo;
 import com.ssafy.recipe.db.entity.Recipe;
@@ -21,12 +22,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.lang.reflect.Member;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,30 +50,14 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
 
     @Override
 // TODO : 쿼리 검증 및 최적화 방안 모색
-    public  List<RecipeSearchResponse> getSearchRecipe(RecipeSearchRequest recipeSearchRequest) {
+    public Response getSearchRecipe(RecipeSearchRequest recipeSearchRequest) {
+        Response response = new Response();
         int size = recipeSearchRequest.getRequiredIngredients().size();
         if(recipeSearchRequest.getRequiredIngredients().size() == 0){
             size = 0;
             recipeSearchRequest.setRequiredIngredients(ingredientInfoRepository.findAll());
         }
 
-        TypedQuery<Recipe> query = entityManager.createQuery(
-                "SELECT DISTINCT r " +
-                        "FROM Recipe r " +
-                        "JOIN r.recipeIngredients ri " +
-                        "WHERE r.recipeId IN (" +
-                        " SELECT req.recipe.recipeId " +
-                        " FROM RecipeIngredient req " +
-                        " WHERE req.ingredientInfo.ingredientInfoId IN :requiredIngredients " +
-                        " AND req.recipe.recipeId NOT IN (" +
-                        " SELECT req2.recipe.recipeId " +
-                        " FROM RecipeIngredient req2 " +
-                        " WHERE req2.ingredientInfo.ingredientInfoId IN :excludedIngredients " +
-                        " )" +
-                        ")" +
-                        "AND r.title LIKE :keyword " +
-                        "GROUP BY r.recipeId " +
-                        "HAVING COUNT(r.recipeId) >= :requiredIngredientsSize", Recipe.class);
 
         List<Short> requiredIngredientIds = recipeSearchRequest.getRequiredIngredients().stream()
                 .map(IngredientInfo::getIngredientInfoId)
@@ -86,21 +67,21 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
                 .map(IngredientInfo::getIngredientInfoId)
                 .collect(Collectors.toList());
 
-        query.setParameter("requiredIngredients", requiredIngredientIds);
-        query.setParameter("excludedIngredients", excludedIngredientIds);
-        query.setParameter("keyword", "%" + recipeSearchRequest.getKeyword() + "%");
-        query.setParameter("requiredIngredientsSize", (long) size);
+        TypedQuery<Recipe> query = this.getTotalCount(requiredIngredientIds, excludedIngredientIds, recipeSearchRequest.getKeyword(), size);
+        List<Recipe> totRecipeList = query.getResultList();
+
+        int startPosition = (recipeSearchRequest.getPage()-1) * recipeSearchRequest.getSize();
+        query.setFirstResult(startPosition);
+        query.setMaxResults(recipeSearchRequest.getSize());
 
         List<Recipe> recipeList = query.getResultList();
 
         List<RecipeSearchResponse> result = new ArrayList<>();
 
-        MemberResponse memberResponse = this.getMember(recipeSearchRequest.getMemberId());
 
         for(int i=0; i<recipeList.size(); i++){
             Recipe recipe = recipeList.get(i);
-
-            String nickname = memberResponse.getNickname();
+            MemberResponse memberResponse = this.getMember(recipe.getMemberId());
 
             int myIngredients = this.getMyIngredientCnt(recipe, memberResponse.getHouseCode());
 
@@ -113,7 +94,8 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
             RecipeSearchResponse recipeSearchResponse = RecipeSearchResponse.builder()
                     .recipeId(recipe.getRecipeId())
                     .title(recipe.getTitle())
-                    .nickname(nickname)
+                    .nickname(memberResponse.getNickname())
+                    .profileImageUrl(memberResponse.getProfileImageUrl())
                     .imageUrl(recipe.getImageUrl())
                     .cookingTime(recipe.getCookingTime())
                     .serving(recipe.getServing())
@@ -121,12 +103,18 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
                     .foodName(recipe.getFoodName())
                     .neededIngredients(neededIngredients)
                     .isFavorite(isFavorite)
+                    .followCount(memberResponse.getFollowCount())
                     .myIngredients(myIngredients)
                     .build();
 
             result.add(recipeSearchResponse);
         }
-        return result;
+        response.addData("recipe",result);
+        response.addRequest("page", recipeSearchRequest.getPage());
+        response.addRequest("size", recipeSearchRequest.getSize());
+        response.addData("totalCount", totRecipeList.size());
+        response.addData("totalPage", (int) Math.ceil((double)totRecipeList.size()/recipeSearchRequest.getSize()));
+        return response;
     }
 
     @Override
@@ -202,11 +190,39 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
     @Override
     public MemberResponse getMember(Long memberId){
         MemberResponse memberResponse = objectMapper.convertValue(memberFeign.getMemberDetail(memberId).getData().get("memberInfo"),MemberResponse.class);
-
         if(memberResponse != null){
             return memberResponse;
         }else{
             throw new CustomException(ErrorCode.NOT_FOUND_MEMBER);
         }
+    }
+
+    @Override
+    public TypedQuery<Recipe> getTotalCount(List<Short> requiredIngredientIds, List<Short> excludedIngredientIds, String keyword, long size){
+        TypedQuery<Recipe> query = entityManager.createQuery(
+                "SELECT DISTINCT r " +
+                        "FROM Recipe r " +
+                        "JOIN r.recipeIngredients ri " +
+                        "WHERE r.recipeId IN (" +
+                        " SELECT req.recipe.recipeId " +
+                        " FROM RecipeIngredient req " +
+                        " WHERE req.ingredientInfo.ingredientInfoId IN :requiredIngredients " +
+                        " AND req.recipe.recipeId NOT IN (" +
+                        " SELECT req2.recipe.recipeId " +
+                        " FROM RecipeIngredient req2 " +
+                        " WHERE req2.ingredientInfo.ingredientInfoId IN :excludedIngredients " +
+                        " )" +
+                        ")" +
+                        "AND r.title LIKE :keyword " +
+                        "GROUP BY r.recipeId " +
+                        "HAVING COUNT(r.recipeId) >= :requiredIngredientsSize", Recipe.class);
+
+        query.setParameter("requiredIngredients", requiredIngredientIds);
+        query.setParameter("excludedIngredients", excludedIngredientIds);
+        query.setParameter("keyword", "%" + keyword + "%");
+        query.setParameter("requiredIngredientsSize", size);
+
+
+        return query;
     }
 }

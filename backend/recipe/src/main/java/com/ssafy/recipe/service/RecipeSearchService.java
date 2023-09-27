@@ -4,14 +4,16 @@ import com.ssafy.recipe.api.request.RecipeSearchRequest;
 import com.ssafy.recipe.api.response.HouseIngredientResponse;
 import com.ssafy.recipe.api.response.MemberResponse;
 import com.ssafy.recipe.api.response.RecipeSearchResponse;
+import com.ssafy.recipe.api.response.Response;
 import com.ssafy.recipe.db.entity.IngredientInfo;
 import com.ssafy.recipe.db.entity.Recipe;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public interface RecipeSearchService {
 
-    List<RecipeSearchResponse> getSearchRecipe(RecipeSearchRequest request);
+    Response getSearchRecipe(RecipeSearchRequest request);
 
     void getRecipeSearchResponse(long memberId);
     public int getNeededIngredientsCnt(Recipe recipe);
@@ -23,4 +25,6 @@ public interface RecipeSearchService {
     boolean favoriteCheck(long memberId, int recipeId);
 
     List<HouseIngredientResponse> getHouseIngredientResponse(String houseCode);
+
+    TypedQuery<Recipe> getTotalCount(List<Short> requiredIngredientIds, List<Short> excludedIngredientIds, String keyword, long size);
 }

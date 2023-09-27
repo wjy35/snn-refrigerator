@@ -1,6 +1,6 @@
-package com.ssafy.recipe.db.repository;
+package com.ssafy.reciperecommend.db.repository;
 
-import com.ssafy.recipe.db.entity.FavoriteRecipe;
+import com.ssafy.reciperecommend.db.entity.FavoriteRecipe;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 

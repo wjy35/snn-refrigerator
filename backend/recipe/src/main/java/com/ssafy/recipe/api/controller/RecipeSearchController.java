@@ -9,10 +9,12 @@ import com.ssafy.recipe.service.RecipeSearchService;
 import com.ssafy.recipe.service.RecipeServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -24,11 +26,8 @@ public class RecipeSearchController {
 
     @PostMapping("/")
     public ResponseEntity<?> getAllRecipe (@RequestBody RecipeSearchRequest recipeSearchRequest) {
-        Response response = new Response();
-        List<RecipeSearchResponse> recipeSearchResponseList = recipeSearchService.getSearchRecipe(recipeSearchRequest);
-        response.addData("recipe",recipeSearchResponseList);
+        Response response  = recipeSearchService.getSearchRecipe(recipeSearchRequest);
         response.setMessage("OK");
-
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

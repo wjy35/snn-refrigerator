@@ -3,6 +3,7 @@ package com.ssafy.recipe.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.recipe.api.request.RecipeDetailRequest;
 import com.ssafy.recipe.api.response.*;
+import com.ssafy.recipe.s3.util.S3helper;
 import com.ssafy.recipe.service.feign.MemberFeign;
 import com.ssafy.recipe.api.mapper.RecipeCustomIngredientMapper;
 import com.ssafy.recipe.api.mapper.RecipeDetailMapper;
@@ -16,8 +17,9 @@ import com.ssafy.recipe.exception.CustomException;
 import com.ssafy.recipe.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,12 +48,11 @@ public class RecipeServiceImpl implements RecipeService{
 
     private final RecipeSearchService recipeSearchService;
 
-    private final MemberFeign memberFeign;
-
-    private final ObjectMapper objectMapper;
+    private final S3helper s3helper;
 
     @Override
-    public void createRecipe(RecipeRequest request) {
+    public void createRecipe(RecipeRequest request) throws IOException {
+
         Recipe recipe = recipeMapper.recipeRequestToRecipe(request);
 
         this.saveRecipe(recipe);
@@ -171,7 +172,7 @@ public class RecipeServiceImpl implements RecipeService{
 
         if(recipe.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
 
-        MemberResponse memberResponse = recipeSearchService.getMember(memberId);
+        MemberResponse memberResponse = recipeSearchService.getMember(recipe.get().getMemberId());
 
         List<IngredientParam> ingredientParams = this.getIngredientList(memberId, recipe.get());
 
@@ -181,12 +182,17 @@ public class RecipeServiceImpl implements RecipeService{
 
         return RecipeDetailResponse.builder()
                 .nickname(memberResponse.getNickname())
+                .profileImageUrl(memberResponse.getProfileImageUrl())
                 .title(recipe.get().getTitle())
-                .image(recipe.get().getImageUrl())
+                .imageUrl(recipe.get().getImageUrl())
                 .youtubeUrl(recipe.get().getYoutubeUrl())
                 .isFavorite(isFavorite)
                 .favoriteCount(recipe.get().getFavoriteCount())
                 .followCount((memberResponse.getFollowCount()))
+                .cookingTime(recipe.get().getCookingTime())
+                .foodName(recipe.get().getFoodName())
+                .serving(recipe.get().getServing())
+                .followCount(memberResponse.getFollowCount())
                 .contentResponseList(recipeDetails)
                 .ingredientResponseList(ingredientParams)
                 .build();
