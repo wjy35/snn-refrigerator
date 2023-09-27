@@ -1,5 +1,5 @@
 import {StyleSheet} from "react-native";
-import {MAIN_COLOR, TEXT_COLOR} from "@/assets/colors/colors";
+import {MAIN_COLOR, TEXT_COLOR, TEXT_DEACTIVATED_COLOR, TEXT_SUB_COLOR} from "@/assets/colors/colors";
 
 export const recipeStyles = StyleSheet.create({
   recipeListContainer: {
@@ -17,6 +17,7 @@ export const recipeStyles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     margin:5,
+    backgroundColor:'white',
   },
   recipeItemImage: {
     flex: 1,
@@ -48,6 +49,13 @@ export const recipeStyles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     width: '65%',
+    flexDirection: 'column',
+  },
+  recipeDetailInfoLinesContainer:{
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    // height: '100%',
+    width: '30%',
     flexDirection: 'column',
   },
   recipeProgressContainer:{
@@ -110,51 +118,60 @@ export const recipeStyles = StyleSheet.create({
   recipeDetailImage: {
     width: '100%',
     height: 200,
-    borderWidth: 1,
+    // borderWidth: 1,
   },
   recipeDetailInfoContainer: {
     Width: '100%',
-    height: 150,
-    borderWidth: 1,
-    paddingLeft: 20,
-    paddingRight: 20,
+    height: 100,
+    // borderWidth: 1,
+    flexDirection: 'row',
+    // backgroundColor:'white',
+    marginHorizontal:20,
+    // alignItems: 'center',
+    justifyContent: 'space-between',
   },
   recipeDetailTitleText: {
     fontSize: 35,
+    marginHorizontal:20,
   },
   recipeDetailInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderWidth: 1,
-    borderRadius: 10,
-    height: '70%'
+    // borderWidth: 1,
+    // borderRadius: 10,
+    // height: '70%'
   },
   recipeDetailUserContainer: {
-    borderWidth: 1,
+    // borderWidth: 1,
     flexDirection: 'row',
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
   },
   recipeDetailUserImage: {
-    borderWidth: 1,
-    height: '80%',
-    width: 80,
+    // borderWidth: 1,
+    height:'100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   recipeDetailUserInfo: {
-    borderWidth: 1,
-    height: '80%',
-    width: 100,
+    // borderWidth: 1,
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'flex-start',
     paddingLeft: 5,
   },
   recipeDetailBodyContainer: {
     margin: 20,
-    borderWidth: 1,
+    // borderWidth: 1,
+  },
+  recipeDetailLineContainer: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    height: '33%',
+    width: '100%',
+    flexDirection: 'row',
   },
   recipeDetailTabContainer: {
     flexDirection: 'row',
@@ -164,13 +181,26 @@ export const recipeStyles = StyleSheet.create({
   recipeDetailBody: {
     height: 500,
     borderWidth: 1,
-
+    borderTopWidth: 0,
+    borderBottomLeftRadius:20,
+    borderBottomRightRadius:20,
+    backgroundColor:'white'
   },
   recipeDetailSingleTab: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    height: 50,
+    height: 60,
+    borderTopLeftRadius:20,
+    borderTopRightRadius:20,
+    borderColor:TEXT_DEACTIVATED_COLOR,
+    borderBottomColor:TEXT_COLOR,
+    backgroundColor:'white'
+  },
+  recipeDetailSingleSelectedTab: {
+    borderColor:TEXT_COLOR,
+    borderBottomWidth:0,
+    zIndex:5,
   }
 })

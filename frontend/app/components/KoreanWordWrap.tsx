@@ -16,7 +16,7 @@ export default function KoreanWordWrap(props: {
                 justifyContent:'center',
             }}>
                 {
-                    props.str.split(' ').map((word: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | null | undefined) => <Text style={props.textStyle}>{word} </Text>)
+                    props.str.split(' ').map((word: string, index) => <Text key={index} style={props.textStyle}>{word} </Text>)
                 }
             </View>
         </View>
