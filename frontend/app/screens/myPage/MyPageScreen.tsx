@@ -41,10 +41,6 @@ const MyPageScreen = ({navigation}:any) => {
 
   return (
     <MyPageLayout title="마이 페이지">
-      {/*<Button*/}
-      {/*  title="수정"*/}
-      {/*  onPress={ () => navigation.navigate('MyPageUpdate')}*/}
-      {/*/>*/}
       <ScrollView style={{width: '100%'}}>
         <View style={[myPageStyles.infoContainer]}>
           <View style={[myPageStyles.profileImage, {marginTop: 20}]}>
