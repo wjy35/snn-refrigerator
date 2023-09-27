@@ -19,6 +19,7 @@ public class ShareBoardWriteRequest {
     private List<ShareImage> shareImages;
 
     public ShareBoardWriteRequest(Long memberId, Short locationId, String title, String content) {
+        this.shareImages=new ArrayList<>();
         this.shareIngredients=new ArrayList<>();
         this.memberId = memberId;
         this.locationId = locationId;

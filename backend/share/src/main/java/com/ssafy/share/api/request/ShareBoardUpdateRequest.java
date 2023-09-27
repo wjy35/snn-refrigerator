@@ -19,6 +19,7 @@ public class ShareBoardUpdateRequest {
 
     public ShareBoardUpdateRequest(Long memberId, Short locationId, String title, String content) {
         this.shareIngredients=new ArrayList<>();
+        this.shareImages=new ArrayList<>();
         this.locationId = locationId;
         this.title = title;
         this.content = content;

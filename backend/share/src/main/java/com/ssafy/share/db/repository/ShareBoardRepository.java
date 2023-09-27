@@ -5,12 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 
 public interface ShareBoardRepository extends JpaRepository<SharePost,Long> {
     Optional<SharePost> findBySharePostId(Long sharePostId);
-    Page<SharePost> findByLocationId(Pageable pageable,Short locationId);
+    List<SharePost> findByLocationId(Short locationId);
 
-    Page<SharePost> findByLocationIdAndTitleContaining(Pageable pageable, Short locationId, String keyword);
+    List<SharePost> findByLocationIdAndTitleContaining(Short locationId, String keyword);
 }

@@ -4,8 +4,10 @@ import com.ssafy.share.api.request.ShareBoardUpdateRequest;
 import com.ssafy.share.api.request.ShareBoardWriteRequest;
 import com.ssafy.share.api.request.ShareIngredientRequest;
 import com.ssafy.share.api.response.*;
+import com.ssafy.share.db.entity.ShareImage;
 import com.ssafy.share.db.entity.ShareIngredient;
 import com.ssafy.share.db.entity.SharePost;
+import com.ssafy.share.service.S3Service;
 import com.ssafy.share.service.ShareBoardService;
 import com.ssafy.share.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,22 +32,25 @@ import java.util.List;
 public class ShareBoardController {
 
     private final ShareBoardService shareBoardService;
+    private final S3Service s3Service;
     private final TimeUtil timeUtil;
 
-
-    @GetMapping("/{locationId}")
-    public ResponseEntity<?> getPostList(@PathVariable Short locationId, @RequestParam(required = false) String keyword,
+    @GetMapping("/{locationId}/{pageNum}/{items}")
+    public ResponseEntity<?> getPostList(@PathVariable Short locationId, @PathVariable(required = false) Short pageNum,
+                                         @PathVariable(required = false) Short items,
+                                         @RequestParam(required = false) String keyword,
                                          @PageableDefault(sort = "sharePostId", size = 5, direction = Sort.Direction.DESC) Pageable pageable){ // 게시글 리스트 조회, 키워드 검색 가능
         Response response = new Response();
         String locationName=shareBoardService.getLocationName(locationId);
-        Page<SharePost> posts=shareBoardService.getPostList(pageable,locationId,keyword);
-
+        List<SharePost> posts=shareBoardService.getPostList(locationId,keyword);
         List<SharePostResponse> sharePostResponses=new ArrayList<>();
-        for(SharePost post:posts){
-            MemberResponse memberResponse=shareBoardService.getMember(post.getMemberId());
+        for(int i=pageNum*items;i<pageNum*items+items;i++){
+            MemberResponse memberResponse=shareBoardService.getMember(posts.get(i).getMemberId());
             String nickname=memberResponse.getNickname();
             String userProfileImageUrl=memberResponse.getProfileImageUrl();
-            sharePostResponses.add(new SharePostResponse(post,nickname,userProfileImageUrl,timeUtil.dateTypeConverter(post.getCreateDate())));
+
+            sharePostResponses.add(new SharePostResponse(posts.get(i),nickname,userProfileImageUrl,
+                    timeUtil.dateTypeConverter(posts.get(i).getCreateDate()),s3Service.getS3ImageUrl(posts.get(i).getThumbnail())));
         }
         response.setMessage("OK");
         response.addRequest("locationId",locationId);
@@ -64,6 +70,10 @@ public class ShareBoardController {
             String ingredientName= shareBoardService.getIngredientInfoName(s.getIngredientInfoId());
             sharePostDetailResponse.getShareIngredients().add(new ShareIngredientResponse(ingredientName,s.getAmount()));
         }
+        for (ShareImage s:post.getShareImages()){
+            sharePostDetailResponse.getShareImages().add(s3Service.getS3ImageUrl(s.getSharePostImageUrl()));
+        }
+
         sharePostDetailResponse.setLocationName(shareBoardService.getLocationName(post.getLocationId()));
         response.setMessage("OK");
         response.addRequest("shareBoardId",shareBoardId);
@@ -71,14 +81,18 @@ public class ShareBoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("")
+    @PostMapping("/")
     public ResponseEntity<?> writePost(@RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles,
                                @RequestPart(value = "shareIngredients") List<ShareIngredientRequest> shareIngredientRequests,
-                               @RequestPart(value = "shareBoardWriteRequest") ShareBoardWriteRequest shareBoardWriteRequest, HttpServletRequest request) {
+                               @RequestPart(value = "shareBoardWriteRequest") ShareBoardWriteRequest shareBoardWriteRequest, HttpServletRequest request) throws IOException {
         Response response = new Response();
-        log.info("shareIngredientRequests = {}",shareIngredientRequests);
-        log.info("shareBoardWriteRequest = {}",shareBoardWriteRequest);
-        shareBoardService.save(imageFiles,shareIngredientRequests,shareBoardWriteRequest);
+        List<String> images=new ArrayList<>();
+        if(imageFiles != null) {
+            for (MultipartFile m : imageFiles) {
+                images.add(s3Service.upload("share", m.getOriginalFilename(), m));
+            }
+        }
+        shareBoardService.save(shareIngredientRequests,images,shareBoardWriteRequest);
         response.setMessage("OK");
         return new ResponseEntity<>(response, HttpStatus.OK);
 
@@ -87,10 +101,16 @@ public class ShareBoardController {
     @PatchMapping("/{shareBoardId}")
     public ResponseEntity<?> updatePost(@PathVariable Long shareBoardId,@RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles,
                                 @RequestPart(value = "shareIngredients") List<ShareIngredientRequest> shareIngredientRequests,
-                                @RequestPart(value = "shareBoardUpdateRequest") ShareBoardUpdateRequest shareBoardUpdateRequest, HttpServletRequest request) {
+                                @RequestPart(value = "shareBoardUpdateRequest") ShareBoardUpdateRequest shareBoardUpdateRequest, HttpServletRequest request) throws IOException {
         log.info("shareIngredientRequests = {}",shareIngredientRequests);
         Response response = new Response();
-        shareBoardService.update(shareBoardId,imageFiles,shareIngredientRequests,shareBoardUpdateRequest);
+        List<String> images=new ArrayList<>();
+        if(imageFiles != null) {
+            for (MultipartFile m : imageFiles) {
+                images.add(s3Service.upload("share", m.getOriginalFilename(), m));
+            }
+        }
+        shareBoardService.update(shareBoardId,shareIngredientRequests,images,shareBoardUpdateRequest);
         response.setMessage("OK");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
