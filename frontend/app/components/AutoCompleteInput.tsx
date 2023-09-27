@@ -2,12 +2,13 @@ import React, { useRef, useState} from 'react';
 import {View, Text, TextInput, FlatList, Dimensions, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import AutoCompleteItem from "@/components/AutoCompleteItem";
 import {useFocusEffect} from "@react-navigation/native";
+import {styles} from "@/styles/styles";
 
 
 interface props {
   placeholder: string;
   onChangeText: Function;
-  onPressIn: Function;
+  onPressIn?: Function;
   now: number;
   text: string;
   textList?: any[];
@@ -16,30 +17,29 @@ interface props {
   reset?: Function;
   name: string;
   keyValue: string;
+  onSelect: Function;
 }
 
 
-const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, textList, onBlur, title, keyValue, name}: props) => {
-  const inputRef = useRef();
+const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, textList, onBlur, title, keyValue, name, onSelect}: props) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const dimensionWidth = Dimensions.get('screen').width;
 
   const screen = Dimensions.get('screen');
   function onPressInFunction(){
-    onPressIn(now);
+    onPressIn&&onPressIn(now);
     setIsVisible(true);
   }
 
   function onBlurFunction() {
     onBlur&&onBlur();
-    setIsVisible(false);
+    // setIsVisible(false);
   }
 
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      style={{borderWidth: 1}}
       contentContainerStyle={{
         flexGrow: 1,
         justifyContent: 'center',
@@ -47,16 +47,15 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
       }}>
       <View style={{marginTop: 30, marginHorizontal: 12, width: '100%', justifyContent: 'center', alignItems: 'center'}}>
         { title && (
-            <View style={[{width: '100%'}]}>
-              <Text>{title}</Text>
-            </View>
+          <View style={[{width: '100%'}]}>
+            <Text style={[styles.font, {fontSize: 20}]}>{title}</Text>
+          </View>
           )
         }
         <View style={[{width: '100%'}]}>
           <TextInput
-            ref={inputRef}
             placeholder={placeholder}
-            style={[{height: 40, borderWidth: 1, padding: 10}]}
+            style={[styles.input]}
             onChangeText={(newText)=>onChangeText(newText)}
             onPressIn={onPressInFunction}
             value={text}
@@ -65,16 +64,17 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
           </TextInput>
           {
             isVisible && (
-              <View style={{height: 120}}>
+              <View style={{maxHeight: 200}}>
                 <FlatList
                   windowSize={2}
+                  initialNumToRender={5}
                   nestedScrollEnabled
                   data={textList}
-                  renderItem={(item) => <AutoCompleteItem item={item} name={name}/>}
+                  renderItem={(item) => <AutoCompleteItem item={item} name={name} onSelect={onSelect}/>}
                   keyExtractor={(item) => {
                     return String(item[keyValue])
                   }}
-                  disableScrollViewPanResponder={true}
+                  // disableScrollViewPanResponder={true}
                 />
               </View>
             )

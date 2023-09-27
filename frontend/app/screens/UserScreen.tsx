@@ -3,8 +3,6 @@ import {View, Text, Button, ScrollView} from 'react-native';
 import BottomNavigator from "@/components/BottomNavigator";
 import {styles} from "@/styles/styles";
 import TopNavigator from "@/components/TopNavigator";
-import MyHouseModal from "@/components/MyHouseModal";
-import RecipeList from "@/components/RecipeList";
 import {useNavigation} from "@react-navigation/native";
 import RecipeItem from "@/components/RecipeItem";
 
