@@ -5,6 +5,7 @@ import ShareChatItem from "@/components/ShareChatItem";
 import chatRoomApi from "@/apis/chatRoomApi";
 import * as Stomp from "webstomp-client";
 import {useFocusEffect} from "@react-navigation/native";
+import {list} from "postcss";
 
 
 const ShareChatListScreen = ({navigation}: any) => {
@@ -39,6 +40,19 @@ const ShareChatListScreen = ({navigation}: any) => {
 
     }, []);
 
+    function onToggle(currentChat){
+        console.log("current",currentChat)
+        setchatRoomList((prevChatRoomList:any[])=>{
+            const newChatRoomList = [];
+            prevChatRoomList.map((chatRoom) =>{
+                chatRoom.chatRoomId === currentChat.chatRoomId ?
+                    newChatRoomList.push({...chatRoom, content: currentChat.content}):newChatRoomList.push(chatRoom)
+            });
+            return newChatRoomList;
+        }
+        );
+    };
+
     useFocusEffect(
         useCallback(() => {
             const client = Stomp.client("ws://a502.store/chat/endpoint");
@@ -48,7 +62,12 @@ const ShareChatListScreen = ({navigation}: any) => {
                     memberId:memberId
                 },
                 () => {
-                    console.log("connect")
+                    client.subscribe(
+                        `/topic/${memberId}`,
+                        (res)=>{
+                        let currentChat = JSON.parse(res.body);
+                        onToggle(currentChat);
+                    })
                 },
                 (error) => {
                     console.log(error)
