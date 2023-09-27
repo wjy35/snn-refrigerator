@@ -15,15 +15,30 @@ const RecipeDetailScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const [recipeDetail, setRecipeDetail] = useState<any>({
-
+  const [recipeDetail, setRecipeDetail] = useState({
+    recipeId:"",
+    nickname:"",
+    title:"",
+    imageUrl:"",
+    favoriteCount: 0,
+    // TODO : 백에서 profile이미지, followCount 응답 추가해야함
+    followCount: 0,
+    ingredientResponseList:[],
+    contentResponseList:[],
+    foodName:"",
+    cookingTime:"",
+    serving:2
   });
 
   useEffect(() => {
     const recipeId = route?.params?.recipeId;
-    console.log(recipeId)
+    // const serving = route?.params?.serving;
+    setRecipeDetail(recipeId)
+    // setRecipeDetail(serving)
 
+    // Todo : 멤버아이디 가져와야함
     const memberId : string = '3029548333'
+
     const getRecipeDetail = async() => {
       try{
         let res = await recipeApi.detail({memberId, recipeId});
@@ -45,7 +60,7 @@ const RecipeDetailScreen = () => {
             order: content.order,
           })),
         };
-        setRecipeDetail(mappedData);
+        setRecipeDetail(mappedData)
         if(res.status===200){
         }else{
           console.log(res.data.message);
@@ -61,16 +76,17 @@ const RecipeDetailScreen = () => {
     <RecipeLayout title="레시피" optionTitle="수정">
       <ScrollView style={{width: '100%'}}>
         <View style={recipeStyles.recipeDetailImage}>
+          <Text>음식 이미지</Text>
           {/* 음식 이미지 삽입 */}
         </View>
         <View style={recipeStyles.recipeDetailInfoContainer}>
           <View>
-            <Text style={[styles.font, recipeStyles.recipeDetailTitleText]}>초간단 김치찌개</Text>
+            <Text style={[styles.font, recipeStyles.recipeDetailTitleText]}>{recipeDetail.title}</Text>
           </View>
           <View style={recipeStyles.recipeDetailInfo}>
             <View style={recipeStyles.recipeDetailUserContainer}>
               <View style={recipeStyles.recipeDetailUserImage}>
-                {/* 유저 프로필 이미지 */}
+                <Text>프로필 이미지</Text>{/*{recipeDetail.image}*/}
               </View>
               <View style={recipeStyles.recipeDetailUserInfo}>
                 <Text>{recipeDetail.nickname}</Text>
@@ -91,8 +107,31 @@ const RecipeDetailScreen = () => {
               <Text>조리 과정</Text>
             </View>
           </View>
+
+          {/* 재료 목록 가져옴*/}
           <View style={recipeStyles.recipeDetailBody}>
-            {/*{recipeDetail}*/}
+            {recipeDetail.ingredientResponseList ? (
+                recipeDetail.ingredientResponseList.map((ingredient, index) => (
+                    <View key={index}>
+                      <Text>{ingredient.name}</Text>
+                      <Text>{ingredient.amount}</Text>
+                      <Text>{ingredient.lastDate}</Text>
+                    </View>
+                ))
+            ) : (
+                <Text>재료 정보가 없습니다.</Text>
+            )}
+
+            {/* 세부 내용 목록 가져옴 */}
+            {recipeDetail.contentResponseList ? (
+                recipeDetail.contentResponseList.map((ingredient, index) => (
+                    <View key={index}>
+                      <Text>order: {ingredient.order}, content: {ingredient.content}</Text>
+                    </View>
+                ))
+            ) : (
+                <Text>내용 정보가 없습니다.</Text>
+            )}
           </View>
         </View>
 

@@ -4,79 +4,134 @@ import ProgressPage from "@/components/ProgressPage";
 import RecipeCreateBasicInfo from "@/pages/recipeCreate/RecipeCreateBasicInfo";
 import RecipeCreateIngredientInfo from "@/pages/recipeCreate/RecipeCreateIngredientInfo";
 import RecipeCreateCookInfo from "@/pages/recipeCreate/RecipeCreateCookInfo";
+import useInput from "@/hooks/useInput";
+import recipeApi from "@/apis/recipeApi";
 
 const RecipeCreateScreen = ({navigation}:any) => {
   const textList = ['기본 정보', '필요한 재료', '조리 과정']
-  const [title, setTitle] = useState<string>();
-  const [youtubeUrl, setYouTubeUrl] = useState<string>();
-  const [serving, setServing] = useState<string>('1~2인분');
-  const [cookingTime, setCookingTime] = useState<string>();
-  const [foodName, setFoodName] = useState<string>('김치찌개');
-  const [content, setContent] = useState<any[]>([
-    {order: 1, content: '돼지고기를 찬 물에 담가 핏물을 빼주세요'},
-    {order: 2, content: '잘 익은 김치 한 포기를 잘라주세요'},
-    {order: 3, content: '냄비에 들기름을 두르고 김치와 볶아주세요'},
-
+  const [content, setContent] = useState<string[]>([
+    '',
+    '',
+    '',
   ]);
-  const [ingredients, setIngredients] = useState<any[]>([
-    { ingredientName: '돼지고기(목살)', ingredientServing: '300g'},
-    { ingredientName: '돼지고기(목살)', ingredientServing: '300g'},
-    { ingredientName: '돼지고기(목살)', ingredientServing: '300g'},
-    { ingredientName: '돼지고기(목살)', ingredientServing: '300g'},
-  ]);
+  const [ingredients, setIngredients] = useState<any[]>([]);
+  const [recipeInfo, setRecipeInfo] = useState<any>({});
+  const [image, setImage] = useState<any>();
 
-  // TODO: 재료 추가 로직 구현
-  function addIngredient(ingredientName: string, ingredientServing: string){
+  function addIngredient({ingredientName, amount, ingredientInfoId}: any){
+    const _ingredients = [...ingredients, {ingredientName: ingredientName, amount: amount, ingredientInfoId: ingredientInfoId}];
+    setIngredients(_ingredients);
+  }
+
+  function editIngredientAmount(idx: number, amount: string){
     const _ingredients = [...ingredients];
-    _ingredients.push({ingredientName, ingredientServing});
-    setIngredients(_ingredients)
+    _ingredients[idx].amount = amount;
+    setIngredients(_ingredients);
+  }
+  function deleteIngredient(idx: number){
+    const _ingredients = [...ingredients];
+    _ingredients.splice(idx, 1);
+    setIngredients(_ingredients);
   }
 
-  // TODO: 재료 삭제 로직 구현
-  function deleteIngredient(){
-
+  function addContent(idx: number){
+    const _content = [...content];
+    if (idx === 0) {
+      _content.push('');
+    } else {
+      _content.splice(idx + 1, 0, '');
+    }
+    setContent(_content);
   }
 
-  // TODO: 빈 조리과정 추가
-  function addContent(){
-
+  function deleteContent(idx: number){
+    const _content = [...content];
+    _content.splice(idx, 1);
+    setContent(_content);
   }
 
-  // TODO: 조리과정 삭제
-  function deleteContent(){
-
+  function editContent(idx: number, newText: string){
+    const _content = [...content];
+    _content[idx] = newText;
+    setContent(_content);
   }
 
-  // TODO: 조리과정 입력, 수정
-  function editContent(){
-
+  function changeInfo(key: string, value: string){
+    setRecipeInfo({...recipeInfo, [key]: value});
   }
 
-  const swiper = useRef()
+  async function createRecipe(){
+    const contents = Array.from(content, (context, idx)=>{
+      return {
+        order: idx + 1,
+        content: context,
+      };
+    });
 
+    const recipeImage = {
+      name: image.assets[0].fileName,
+      type: image.assets[0].type,
+      uri: image.assets[0].uri,
+    };
+
+    const data = {
+      ingredients: ingredients,
+      contents: contents,
+      foodName: recipeInfo.foodName,
+      cookingTime: recipeInfo.cookingTime,
+      serving: recipeInfo.serving,
+      youtubeUrl: recipeInfo.youtubeUrl,
+      title: recipeInfo.title,
+      memberId: 3029548333,
+    };
+
+    try {
+      // const formdata = new FormData();
+      // formdata.append('recipeRequest', data);
+      // formdata.append('recipeImage', recipeImage);
+      const requestData = {
+        recipeImage: recipeImage,
+        recipeRequest: data,
+      }
+
+      const res = await recipeApi.createRecipe(requestData);
+      if (res.status === 200){
+        console.log('성공');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function getImage(uri: string){
+    setImage(uri);
+    console.log(uri);
+  }
 
   return (
-    <RecipeLayout title="레시피" optionTitle="다음">
+    <RecipeLayout title="레시피" optionTitle="등록" optionFunction={createRecipe}>
       <ProgressPage>
         <RecipeCreateBasicInfo
           textList={textList}
+          setRecipeInfo={changeInfo}
+          getImage={getImage}
         />
         <RecipeCreateIngredientInfo
           textList={textList}
-          foodName={foodName}
-          serving={serving}
           ingredients={ingredients}
           addIngredient={addIngredient}
           deleteIngredient={deleteIngredient}
+          foodName={recipeInfo.foodName&&recipeInfo.foodName}
+          serving={recipeInfo.serving&&recipeInfo.serving}
+          editIngredient={editIngredientAmount}
         />
         <RecipeCreateCookInfo
           textList={textList}
-          foodName={foodName}
-          serving={serving}
           content={content}
           addContent={addContent}
           deleteContent={deleteContent}
           editContent={editContent}
+          recipeInfo={recipeInfo}
         />
       </ProgressPage>
     </RecipeLayout>

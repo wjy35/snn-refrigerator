@@ -5,45 +5,64 @@ import {styles} from "@/styles/styles";
 import EditableIngredients from "@/components/EditableIngredients";
 import AutoCompleteInput from "@/components/AutoCompleteInput";
 import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
+import useInput from "@/hooks/useInput";
 
 interface props {
   textList: string[];
-  foodName?: string;
-  serving?: string;
   ingredients: any[];
   addIngredient: Function;
   deleteIngredient: Function;
+  foodName?: string;
+  serving?: string;
+  editIngredient: Function;
 }
 
-const RecipeCreateIngredientInfo = ({textList, foodName, serving, ingredients, deleteIngredient, addIngredient}: props) => {
-  const [text, setText] = useState('')
-  const [autoCompleteList, setAutoCompleteList] = useState<any[]>()
-  const [now, setNow] = useState(0)
+const RecipeCreateIngredientInfo = ({textList, ingredients, deleteIngredient, addIngredient, foodName, serving, editIngredient}: props) => {
+  const [autoCompleteIngredientList, setAutoCompleteIngredientList] = useState<any[]>();
+  const [now, setNow] = useState(0);
 
-  function onChangeText(newText: string){
-    setText(newText)
-    check(newText)
-  }
-
-  const check = async (keyword: string) => {
+  const checkIngredient = async (keyword: string) => {
     try {
       const res = await ingredientAutocompleteApi.check({keyword: keyword})
       if (res.status === 200) {
-        setAutoCompleteList(res.data.data.ingredients)
+        setAutoCompleteIngredientList(res.data.data.ingredients)
       }
     } catch (err) {
       console.log(err);
     }
-  }
-
-  function onPressIn(now: number){
-    setNow(1);
-  }
+  };
 
   function onBlur(){
     setNow(0);
-    setText('');
-    setAutoCompleteList([]);
+    setAutoCompleteIngredientList([])
+  }
+
+  function onPressIn(newNum: number) {
+    setNow(newNum);
+  }
+
+
+  const ingredientText = useInput({
+    placeholder: '재료 추가',
+    title: '',
+    nowNum: 1,
+    onChange: checkIngredient,
+  });
+
+  function onSelect(item: any){
+    if (checkDuplicate(item)) {
+      addIngredient({...item, amount: ''});
+    }
+  }
+
+  function checkDuplicate(item: any){
+    return (
+      ingredients.every((ingredient: any) => {
+        if (ingredient.ingredientName !== item.ingredientName){
+          return true;
+        }
+      })
+    );
   }
 
 
@@ -61,8 +80,8 @@ const RecipeCreateIngredientInfo = ({textList, foodName, serving, ingredients, d
           (
             <View style={styles.marginContainer}>
               <Text style={[styles.font, styles.mainColor, {fontSize: 22}]}>
-                <Text>{foodName} </Text>
-                <Text>{serving} </Text>
+                <Text>{foodName&&foodName} </Text>
+                <Text>{serving&&serving} </Text>
                 <Text>레시피</Text>
               </Text>
             </View>
@@ -70,15 +89,7 @@ const RecipeCreateIngredientInfo = ({textList, foodName, serving, ingredients, d
         }
         <View style={{}}>
           <View style={[{width: '100%'}]}>
-            <AutoCompleteInput
-              placeholder='재료 추가'
-              text={text}
-              textList={autoCompleteList}
-              onChangeText={onChangeText}
-              onPressIn={onPressIn}
-              now={now}
-              onBlur={onBlur}
-            />
+            <AutoCompleteInput {...ingredientText} textList={autoCompleteIngredientList} keyValue='ingredientInfoId' name='ingredientName' onPressIn={onPressIn} onSelect={onSelect}/>
           </View>
         </View>
         <View style={styles.marginContainer}>
@@ -86,7 +97,7 @@ const RecipeCreateIngredientInfo = ({textList, foodName, serving, ingredients, d
             ingredients.map((i: any, idx)=>{
               return (
                 <React.Fragment key={`ingredient${idx}`}>
-                  <EditableIngredients deleteIngredient={deleteIngredient} ingredientName={i.ingredientName} ingredientServing={i.ingredientServing}/>
+                  <EditableIngredients deleteIngredient={deleteIngredient} ingredientName={i.ingredientName} ingredientServing={i.ingredientServing} index={idx} editIngredient={editIngredient}/>
                 </React.Fragment>
               )
             })
