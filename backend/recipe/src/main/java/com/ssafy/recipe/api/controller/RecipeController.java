@@ -62,7 +62,7 @@ public class RecipeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/image/{memberId}")
+    @PostMapping(path = "/image/{memberId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> testImagePost(@PathVariable String memberId, @RequestPart(value = "recipeImage",required = false) MultipartFile recipeImage) throws Exception{
         Response response = new Response();
         String fileName = s3helper.upload("recipe", String.valueOf(memberId), recipeImage);

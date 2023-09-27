@@ -18,7 +18,7 @@ public class RecipeDetailResponse {
     private long followCount;
     private String profileImageUrl;
     private boolean isFavorite;
-    private short serving;
+    private String serving;
     private String foodName;
     private String cookingTime;
     private List<IngredientParam> ingredientResponseList;
