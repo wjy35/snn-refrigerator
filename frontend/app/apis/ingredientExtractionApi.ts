@@ -3,31 +3,27 @@ import {baseURL} from '@/apis/BASEURL'
 
 
 const PublicIngredientExtractionApi = axios.create({
-  baseURL: `${baseURL}/ingredient-extraction`,
-})
+  baseURL: `${baseURL}/ingredient-extract`,
+});
 
 const PrivateIngredientExtractionApi = axios.create({
-  baseURL: `${baseURL}/ingredient-extraction`,
+  baseURL: `${baseURL}/ingredient-extract`,
   headers: {
     // Authorization: `Bearer ${localStorage.getItem('token')}`
   }
-})
+});
 
 interface props {
-  textList: string[];
+  text: string;
 }
 
 const ingredientExtractionApi = {
-  extraction: async ({textList}: props) => {
-    const res = await PrivateIngredientExtractionApi.post(
-      'ingredient-extract',
-      {
-        textList: textList
-      }
-    );
+  extraction: async (text: string) => {
+    const res = await PublicIngredientExtractionApi.post('', {
+      text: text,
+    });
     return res;
   },
-}
-
+};
 
 export default ingredientExtractionApi;

@@ -51,6 +51,7 @@ const Navigation = () => {
         <Stack.Screen name="MyShare" component={MyShareScreen}/>
         <Stack.Screen name="MyFavorite" component={MyFavoriteScreen}/>
         <Stack.Screen name="HouseAdd" component={HouseAddScreen}/>
+        <Stack.Screen name="TextExtract" component={TextExtractScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
