@@ -21,5 +21,4 @@ public class RecipeRequest {
     private String youtubeUrl;
     private List<RecipeDetailParam> contents;
     private List<RecipeIngredientParam> ingredients;
-    private MultipartFile recipeImage;
 }
