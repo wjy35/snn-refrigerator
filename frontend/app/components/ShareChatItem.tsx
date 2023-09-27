@@ -4,10 +4,16 @@ import {useNavigation} from "@react-navigation/native";
 
 
 interface props {
-  title: string;
-
+  chatRoomId : number,
+  profileImageUrl : string,
+  locationName : string,
+  thumbnailImageUrl : string,
+  nickname : string,
+  content : string,
+  timestamp: number
 }
-const ShareChatItem = ({title}: props) => {
+
+const ShareChatItem = ({chatRoomId,profileImageUrl,locationName,thumbnailImageUrl,nickname,content,timestamp}: props) => {
   const navigation = useNavigation();
 
   return (
@@ -20,17 +26,17 @@ const ShareChatItem = ({title}: props) => {
           <View style={[{flex: 1}]}>
             <View style={[{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}]}>
               <View style={[{}]}>
-                <Text>독버섯 김석주</Text>
+                <Text>{nickname}</Text>
               </View>
               <View style={[{}]}>
-                <Text>역삼동</Text>
+                <Text>{locationName}</Text>
               </View>
               <View style={[{}]}>
-                <Text>10일 전 등록</Text>
+                <Text>{timestamp}</Text>
               </View>
             </View>
             <View style={[{flex: 1}]}>
-              <Text>대충 채팅내용이 이렇습니다.</Text>
+              <Text>{content}</Text>
             </View>
           </View>
           <View style={[{borderWidth: 1, width: 80, height: 80}]}>

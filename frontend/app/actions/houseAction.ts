@@ -1,8 +1,8 @@
-export const toggleVisible = 'toggleVisible';
+export const setHouseCode = 'setHouseCode';
 
-export const toggleVisibleAction = (res: any) => {
-  return {
-    type: toggleVisible,
-    payload: res,
-  }
+export const setHouseCodeAction = (res: any) =>{
+    return {
+        type: setHouseCode,
+        payload: res,
+    }
 }

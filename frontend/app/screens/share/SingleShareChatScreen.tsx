@@ -6,6 +6,9 @@ import BottomChat from "@/components/BottomChat";
 
 
 const SingleShareChatScreen = ({navigation}:any) => {
+  function sendMessage(text: string){
+    console.log(text);
+  }
   return (
     <View style={[styles.layout]}>
       <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
@@ -16,7 +19,7 @@ const SingleShareChatScreen = ({navigation}:any) => {
           {/*/>*/}
         </View>
         <View style={{height: 80}}></View>
-        <BottomChat/>
+        <BottomChat onSubmit={sendMessage}/>
       </ImageBackground>
     </View>
   )

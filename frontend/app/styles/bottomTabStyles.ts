@@ -26,6 +26,6 @@ export const bottomTabStyles = StyleSheet.create({
   },
   tabFontSize: {
     paddingTop: 5,
-    fontSize: 10,
+    fontSize: 15,
   },
 });

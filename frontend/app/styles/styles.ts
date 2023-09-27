@@ -13,7 +13,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    borderWidth: 1,
     width: '100%',
   },
   bg: {
@@ -26,7 +25,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     margin: 10,
-    borderWidth: 1,
     width: '96%',
   },
   marginRowContainer: {
@@ -34,7 +32,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     margin: 10,
-    borderWidth: 1,
     width: '96%'
   },
   smallContainer: {
@@ -55,14 +52,23 @@ export const styles = StyleSheet.create({
     fontFamily: 'BM-HANNA',
     color: '#000000'
   },
+  headerFont: {
+    fontSize : 30,
+    color: '#002055'
+  },
+  subHeaderFont: {
+    fontSize : 23,
+    color: '#002055',
+  },
   flex: {
     flex: 1,
   },
   input: {
-    height: 40,
+    height: 60,
     marginVertical: 12,
     borderWidth: 1,
     padding: 10,
+    borderRadius: 16,
   },
   image: {
     width: 100,

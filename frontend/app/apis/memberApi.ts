@@ -14,15 +14,19 @@ const PrivateMemberApi = axios.create({
 })
 
 interface props {
-  accessToken: any;
-  nickname: string;
-  houseCode: string;
-  idToken: number;
-  address: string;
-  memberId: string;
-  ingredientId: string;
-  followerId: string;
-  followeeId: string;
+  accessToken?: any;
+  nickname?: string;
+  houseCode?: string;
+  idToken?: number;
+  address?: string;
+  memberId?: string;
+  ingredientId?: string;
+  followerId?: string;
+  followeeId?: string;
+  hateIngredientList?: string[];
+  placeInfoList?: string[];
+  email?: string;
+  birthday?: string;
 }
 
 const memberApi = {
@@ -47,14 +51,16 @@ const memberApi = {
     );
     return res;
   },
-  signup: async ({idToken, nickname, address, houseCode}: props) => {
+  signup: async ({memberId, nickname, hateIngredientList, placeInfoList, birthday, email}: props) => {
     const res = await PublicMemberApi.post(
       'signup',
       {
-        idToken: idToken,
+        memberId: memberId,
         nickname: nickname,
-        address: address,
-        houseCode: houseCode,
+        hateIngredientList: hateIngredientList,
+        placeInfoList: placeInfoList,
+        birthday: birthday,
+        email: email,
       }
     );
     return res;

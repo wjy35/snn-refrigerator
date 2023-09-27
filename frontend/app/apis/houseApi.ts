@@ -14,11 +14,11 @@ const PrivateHouseApi = axios.create({
 })
 
 interface props {
-  houseIngredientId: string;
-  storageType: number;
-  lastDate: string;
-  houseId: string;
-  payload: any;
+  houseIngredientId?: string;
+  storageType?: number;
+  lastDate?: string;
+  houseCode?: string;
+  ingredients?: any[];
 }
 
 const houseApi = {
@@ -34,12 +34,12 @@ const houseApi = {
     );
     return res;
   },
-  addIngredient: async ({payload}: props)=> {
+  addIngredient: async ({houseCode, ingredients}: props)=> {
     const res = await PrivateHouseApi.post(
       '',
       {
-        houseSeq: payload.houseSeq,
-        ingredients: payload.ingredients
+        houseCode: houseCode,
+        ingredients: ingredients,
       }
     );
     return res;
@@ -61,9 +61,9 @@ const houseApi = {
     );
     return res;
   },
-  deleteAll: async ({houseId}: props)=> {
+  deleteAll: async ({houseCode}: props)=> {
     const res = await PrivateHouseApi.delete(
-      `house/${houseId}`
+      `house/${houseCode}`
     );
     return res;
   }
