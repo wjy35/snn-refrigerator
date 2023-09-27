@@ -172,7 +172,7 @@ public class RecipeServiceImpl implements RecipeService{
 
         if(recipe.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
 
-        MemberResponse memberResponse = recipeSearchService.getMember(memberId);
+        MemberResponse memberResponse = recipeSearchService.getMember(recipe.get().getMemberId());
 
         List<IngredientParam> ingredientParams = this.getIngredientList(memberId, recipe.get());
 
