@@ -37,10 +37,10 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer(ChatMessageListener chatMessageListener, ChatSessionInfo chatSessionInfo) {
+    public RedisMessageListenerContainer redisMessageListenerContainer(ChatMessageListener chatMessageListener, ChatServerInfo chatServerInfo) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory());
-        container.addMessageListener(chatMessageListener, new ChannelTopic(chatSessionInfo.getId()));
+        container.addMessageListener(chatMessageListener, new ChannelTopic(chatServerInfo.getId()));
         return container;
     }
 
