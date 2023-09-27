@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {View, Text, Image, TouchableWithoutFeedback, ImageBackground} from 'react-native';
 import {recipeStyles} from "@/styles/recipeStyles";
-import RecipeInfo from "@/components/RecipeInfo";
 import {dish, starActive, starDisactive, time, user} from "@/assets/icons/icons";
 import {SvgXml} from "react-native-svg";
 import {styles} from "@/styles/styles";
@@ -37,7 +36,7 @@ const RecipeItem = ({item, navigation}:props) => {
           />
         </View>
         <View style={[recipeStyles.recipeItemImage]}>
-          {item.profileImageUrl&&<ImageBackground source={{uri: item.profileImageUrl}}
+          {item.imageUrl&&<ImageBackground source={{uri: item.imageUrl}}
                            resizeMode={"cover"}
                            style={{width:'100%', height:'100%'}}
                            imageStyle={{borderRadius: 10,}}
@@ -54,10 +53,10 @@ const RecipeItem = ({item, navigation}:props) => {
             <View style={recipeStyles.recipeInfoContainer}>
               <View style={recipeStyles.recipeInfoLineContainer}>
                 <View>
-                  <ImageBackground source={{uri: item.profileImageUrl}}
+                  {item.profileImageUrl&&<ImageBackground source={{uri: item.profileImageUrl}}
                                    style={{width:25, height:25, marginRight:4}}
                                    imageStyle={{borderRadius:99, borderWidth:1, borderColor:TEXT_COLOR}}
-                  />
+                  />}
                 </View>
                 <Text style={[styles.font,{color:TEXT_SUB_COLOR}]}>{item.nickname}</Text>
               </View>
