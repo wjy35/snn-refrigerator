@@ -3,7 +3,10 @@ import {Text, TouchableOpacity, View, Image, PermissionsAndroid} from 'react-nat
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {styles} from "@/styles/styles";
 
-const GetImageFrom = () => {
+interface props {
+  getImage: Function;
+}
+const GetImageFrom = ({getImage}: props) => {
   const [image, setImage] = useState<any>();
 
   const selectFile = () => {
@@ -54,6 +57,10 @@ const GetImageFrom = () => {
     }
   };
 
+  useEffect(() => {
+    // image?.assets[0]?.uri && console.log(image.assets[0].uri)
+    image && getImage(image);
+  }, [image]);
 
   return (
     <>

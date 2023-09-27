@@ -10,12 +10,18 @@ interface props {
   onPressIn?: Function;
   text: string;
   now?: number;
+  onSubmit?: number;
 }
 
-const PlainInput = ({title, placeholder, onChangeText, onPressIn, text, now}: props) => {
+const PlainInput = ({title, placeholder, onChangeText, onPressIn, text, now, onSubmit}: props) => {
 
   function onPressInFunction(){
     onPressIn(now);
+  }
+
+  function onSubmitFunction(newText: string){
+    onChangeText('');
+    onSubmit(text);
   }
 
   return (
@@ -29,6 +35,7 @@ const PlainInput = ({title, placeholder, onChangeText, onPressIn, text, now}: pr
           placeholder={placeholder}
           onChangeText={(newText) => onChangeText(newText)}
           onPressIn={onPressIn&&onPressInFunction}
+          onSubmitEditing={onSubmit&&onSubmitFunction}
           value={text}
         />
       </View>

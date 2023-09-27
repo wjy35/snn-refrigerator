@@ -14,29 +14,39 @@ const PrivateRecipeApi = axios.create({
 })
 
 interface props {
-  recipeId: string;
-  memberId: string;
-  keyword: string;
-  payload: any;
+  recipeId?: string;
+  memberId?: string;
+  keyword?: string;
+  payload?: any;
+  title?: string;
+  youtubeUrl?: string;
+  serving?: string;
+  cookingTime?: string;
+  foodName?: string;
+  contents?: any[];
+  ingredients?: any[];
+  imageUrl?: any;
 }
 
 interface search {
-    memberId: bigint;
+    memberId: string;
     contain: any[];
     remove: any[];
     n: number;
     keyword: string;
-
+    page: number,
+    size: number,
 }
 
 const recipeApi = {
   detail: async ({memberId, recipeId}: props) => {
     const res = await PrivateRecipeApi.post(
-      `recipe`,{
-            memberId: memberId,
-            recipeId: recipeId
+      `recipe`,
+      {
+        memberId: memberId,
+        recipeId: recipeId,
         }
-        
+
     );
     return res;
   },
@@ -72,7 +82,7 @@ const recipeApi = {
     );
     return res;
   },
-  searchRecipe: async ({memberId, contain, remove, n, keyword}: search) => {
+  searchRecipe: async ({memberId, contain, remove, n, keyword, page, size}: search) => {
     const res = await PrivateRecipeApi.post(
       'search/',
         {
@@ -81,6 +91,8 @@ const recipeApi = {
             excludedIngredients: remove,
             missingIngredientCount: n,
             keyword: keyword,
+            page: page,
+            size: size,
         }
 
     );
@@ -109,20 +121,19 @@ const recipeApi = {
     );
     return res;
   },
-  createRecipe: async ({payload}: props) => {
+  createRecipe: async (formdata: any) => {
+    console.log(formdata);
     const res = await PrivateRecipeApi.post(
       '',
+      formdata,
       {
-        memberId: payload.memberId,
-        title: payload.title,
-        // TODO: image 등록
-        youtubeUrl: payload.youtubeUrl,
-        serving: payload.serving,
-        cookingTime: payload.cookingTime,
-        foodName: payload.foodName,
-        contents: payload.contents,
-        ingredients: payload.ingredients,
-      }
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          },
+        // transformRequest: (data, headers) => {
+        //   return data;
+        //   },
+      },
     );
     return res;
   }
