@@ -55,14 +55,12 @@ const HomeScreen = ({navigation}:any) => {
         console.log(res);
         if (res.status === 200) {
           setRecipeList(res.data.data.recipe);
-        } else {
-          console.log(res.data.data.recipe);
         }
       } catch (err) {
+        console.log('여기서 나는거임home');
         console.log(err);
       }
     }
-
     getRecipe();
   }, []);
 
