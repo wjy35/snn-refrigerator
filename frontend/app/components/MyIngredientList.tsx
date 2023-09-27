@@ -3,8 +3,10 @@ import {View} from "react-native";
 import SingleIngredient from "@/components/SingleIngredient";
 import tw from 'twrnc';
 import houseApi from "@/apis/houseApi";
+import {useSelector} from "react-redux";
+import {RootState} from "@/reducers/reducers";
 
-const MyIngredientList = ({children}: any) => {
+const MyIngredientList = ({types,maxDate}:any) => {
   const [ingredients, setIngredients] = useState<
       Array<{
         houseIngredientId : number,
@@ -16,16 +18,21 @@ const MyIngredientList = ({children}: any) => {
       }>
   >([]);
 
-  //TODO : houseID redux에서 불러오기
-  const houseCode : string = "492f9401-c684-4966-936e-56f0941eaffe";
+  const { houseCode } = useSelector((state:RootState) => state.houseReducer)
+
 
   useEffect(() => {
-
+      console.log(houseCode);
     const getIngredients = async() => {
       try{
         let res = await houseApi.houseIngredientList(houseCode);
         // console.log(res);
         if(res.status===200){
+            // console.log(res.data.data.ingredients);
+            res.data.data.ingredients.sort((a: { lastDate: string | number | Date; }, b: { lastDate: string | number | Date; })=>{
+                // @ts-ignore
+                return new Date(a.lastDate) - new Date(b.lastDate)
+            })
             console.log(res.data.data.ingredients);
             setIngredients(res.data.data.ingredients);
         }else{
@@ -41,12 +48,12 @@ const MyIngredientList = ({children}: any) => {
 
 
   return (
-    <View style={tw`w-full flex flex-wrap flex-row min-h-[40]`}>
+    <View style={tw`w-full flex flex-wrap flex-row`}>
       {ingredients.map((i) => {
         return (
             // @ts-ignore
-            // 1+ Math.floor((new Date(i.lastDate).getTime() - new Date()) / (1000 * 60 * 60 * 24))<7&&
-            i.storageType!=1&&
+            1+ Math.floor((new Date(i.lastDate).getTime() - new Date()) / (1000 * 60 * 60 * 24))<maxDate&&
+            types.includes(i.storageType)&&
           <React.Fragment key={`ingredient ${i.houseIngredientId}`}>
             <SingleIngredient
               houseIngredientId={i.houseIngredientId}
