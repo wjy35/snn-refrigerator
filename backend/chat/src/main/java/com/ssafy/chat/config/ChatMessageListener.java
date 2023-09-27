@@ -2,6 +2,8 @@ package com.ssafy.chat.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.chat.api.request.ChatPublish;
+import com.ssafy.chat.api.response.ChatForDetailResponse;
+import com.ssafy.chat.api.response.ChatForListResponse;
 import com.ssafy.chat.api.response.ChatParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.connection.Message;
@@ -21,19 +23,28 @@ public class ChatMessageListener implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         try{
             ChatPublish chatPublish = (ChatPublish)redisTemplate.getValueSerializer().deserialize(message.getBody());
-            ChatParam chatParam = new ChatParam();
-            chatParam.setMemberId(chatPublish.getMemberId());
-            chatParam.setContent(chatPublish.getContent());
-            chatParam.setTimestamp(chatPublish.getTimestamp());
+            ChatForDetailResponse chatForDetailResponse = ChatForDetailResponse
+                    .builder()
+                    .memberId(chatPublish.getMemberId())
+                    .content(chatPublish.getContent())
+                    .timestamp(chatPublish.getTimestamp())
+                    .build();
+
+            ChatForListResponse chatForListResponse = ChatForListResponse
+                    .builder()
+                    .chatRoomId(chatPublish.getChatRoomId())
+                    .content(chatPublish.getContent())
+                    .timestamp(chatPublish.getTimestamp())
+                    .build();
 
             simpMessageSendingOperations.convertAndSend(
                     chatPublish.getChatRoomDetailDestination(),
-                    objectMapper.writeValueAsString(chatParam)
+                    objectMapper.writeValueAsString(chatForDetailResponse)
             );
 
             simpMessageSendingOperations.convertAndSend(
                     chatPublish.getChatRoomListDestination(),
-                    objectMapper.writeValueAsString(chatParam)
+                    objectMapper.writeValueAsString(chatForListResponse)
             );
 
         }catch (Exception e){

@@ -17,6 +17,8 @@ public class WebSocketEventListener {
 
     @EventListener
     void handleSessionConnected(SessionConnectedEvent event){
+        // TODO 기존 연결 체크
+
         String rawMemberId = event.getMessage().getHeaders()
                 .get("simpConnectMessage",GenericMessage.class)
                 .getHeaders()
