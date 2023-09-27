@@ -42,7 +42,8 @@
     "react-native-youtube-iframe": "^2.3.0",
     "react-redux": "^8.1.2",
     "redux": "^4.2.1",
-    "twrnc": "^3.6.4"
+    "twrnc": "^3.6.4",
+    "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
