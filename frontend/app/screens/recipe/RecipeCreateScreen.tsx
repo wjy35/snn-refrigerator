@@ -77,9 +77,11 @@ const RecipeCreateScreen = ({navigation}:any) => {
       uri: image.assets[0].uri,
     };
 
+    // Todo : memberId 가져오기
     const data = {
       ingredients: ingredients,
       contents: contents,
+      imageUrl: imageUrl,
       foodName: recipeInfo.foodName,
       cookingTime: recipeInfo.cookingTime,
       serving: recipeInfo.serving,
@@ -89,13 +91,23 @@ const RecipeCreateScreen = ({navigation}:any) => {
     };
 
     try {
-      // const formdata = new FormData();
-      // formdata.append('recipeRequest', data);
-      // formdata.append('recipeImage', recipeImage);
+      const ImageRequest = {
+        // Todo : memberId 가져오기
+        recipeImage: recipeImage,
+        memberId: 3029548333,
+      }
+      const recipeImageUrl = await recipeApi.createImageUrl(ImageRequest);
+
+      data.imageUrl = recipeImageUrl;
+
+      console.log("가져온 url");
+      console.log(data.imageUrl);
+
       const requestData = {
         recipeImage: recipeImage,
         recipeRequest: data,
       }
+
 
       const res = await recipeApi.createRecipe(requestData);
       if (res.status === 200){
