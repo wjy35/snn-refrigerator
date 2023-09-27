@@ -92,9 +92,8 @@ const RecipeCreateScreen = ({navigation}:any) => {
 
     try {
       const ImageRequest = {
-        // Todo : memberId 가져오기
         recipeImage: recipeImage,
-        memberId: 3029548333,
+        memberId: memberId,
       }
       const recipeImageUrl = await recipeApi.createImageUrl(ImageRequest);
 
