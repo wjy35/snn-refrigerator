@@ -51,10 +51,7 @@ public class RecipeServiceImpl implements RecipeService{
     private final S3helper s3helper;
 
     @Override
-    public void createRecipe(RecipeRequest request, MultipartFile recipeImage) throws IOException {
-        String fileName = s3helper.upload("recipe", String.valueOf(request.getMemberId()), recipeImage);
-        String file = s3helper.getS3ImageUrl(fileName);
-        request.setImageUrl(file);
+    public void createRecipe(RecipeRequest request) throws IOException {
 
         Recipe recipe = recipeMapper.recipeRequestToRecipe(request);
 

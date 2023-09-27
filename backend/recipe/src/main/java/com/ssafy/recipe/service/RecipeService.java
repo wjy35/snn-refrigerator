@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface RecipeService {
-    void createRecipe(RecipeRequest request, MultipartFile recipeImage) throws IOException;
+    void createRecipe(RecipeRequest request) throws IOException;
 
     void updateRecipe(int recipeId, RecipeRequest request);
 
