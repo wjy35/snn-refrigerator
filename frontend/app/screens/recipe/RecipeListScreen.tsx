@@ -38,7 +38,6 @@ const RecipeListScreen = ({navigation}:any) => {
   })
 
   function goToCreate(){
-    console.log('gd')
     navigation.navigate('RecipeCreate')
   }
 

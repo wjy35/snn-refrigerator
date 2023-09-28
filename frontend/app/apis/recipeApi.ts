@@ -129,16 +129,11 @@ const recipeApi = {
         headers: {
           'Content-Type': 'application/json',
           },
-        // transformRequest: (data, headers) => {
-        //   return data;
-        //   },
       },
     );
     return res;
   },
   createImageUrl: async (formdata: any) => {
-      console.log(formdata.recipeImage)
-      console.log(formdata)
       const res = await PrivateRecipeApi.post(
           `image/${formdata.memberId}`,
           formdata,
@@ -146,9 +141,6 @@ const recipeApi = {
               headers: {
                   'Content-Type': 'multipart/form-data',
               },
-              // transformRequest: (data, headers) => {
-              //   return data;
-              //   },
           },
       );
       return res;
