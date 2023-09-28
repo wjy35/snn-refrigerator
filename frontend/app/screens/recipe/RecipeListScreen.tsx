@@ -34,7 +34,7 @@ const RecipeListScreen = ({navigation}:any) => {
     n: 1000,
     keyword: '',
     page:1,
-    size:10,
+    size:3,
   })
 
   function goToCreate(){

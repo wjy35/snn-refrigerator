@@ -122,13 +122,12 @@ const recipeApi = {
     return res;
   },
   createRecipe: async (formdata: any) => {
-    console.log(formdata);
     const res = await PrivateRecipeApi.post(
-      '',
+      '/',
       formdata,
       {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
           },
         // transformRequest: (data, headers) => {
         //   return data;
@@ -138,10 +137,10 @@ const recipeApi = {
     return res;
   },
   createImageUrl: async (formdata: any) => {
-      console.log("이미지생성 api 진입")
-      console.log(formdata);
+      console.log(formdata.recipeImage)
+      console.log(formdata)
       const res = await PrivateRecipeApi.post(
-          '',
+          `image/${formdata.memberId}`,
           formdata,
           {
               headers: {
