@@ -37,8 +37,11 @@ const EditableContent = ({content, deleteContent, index, editContent, addContent
           }}/>
       </View>
       <View style={{flex: 1}}>
-        <Button title='삭제' onPress={()=>{deleteContent(index)}}/>
+        {
+          index > 2 && <Button title='삭제' onPress={()=>{deleteContent(index)}}/>
+        }
       </View>
+
     </View>
   );
 };

@@ -8,6 +8,12 @@ import useInput from "@/hooks/useInput";
 import recipeApi from "@/apis/recipeApi";
 import {useSelector} from "react-redux";
 import {RootState} from "@/reducers/reducers";
+import {Text, ToastAndroid, TouchableWithoutFeedback, View} from "react-native";
+import {closeBlackIcon, closeIcon} from "@/assets/icons/icons";
+import {SvgXml} from "react-native-svg";
+import {MAIN_COLOR} from "@/assets/colors/colors";
+import {styles} from "@/styles/styles";
+import GetImageFrom from "@/components/GetImageFrom";
 
 const RecipeCreateScreen = ({navigation}:any) => {
   const textList = ['기본 정보', '필요한 재료', '조리 과정']
@@ -20,6 +26,15 @@ const RecipeCreateScreen = ({navigation}:any) => {
   const [recipeInfo, setRecipeInfo] = useState<any>({});
   const [image, setImage] = useState<any>();
   const {memberId} = useSelector((state:RootState)=>state.userReducer);
+  const [isVisible, setIsVisible] = useState(false);
+
+  function onToast(text: string){
+    ToastAndroid.showWithGravity(
+      text,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    )
+  }
 
   function addIngredient({ingredientName, amount, ingredientInfoId}: any){
     const _ingredients = [...ingredients, {ingredientName: ingredientName, amount: amount, ingredientInfoId: ingredientInfoId}];
@@ -64,12 +79,57 @@ const RecipeCreateScreen = ({navigation}:any) => {
   }
 
   async function createRecipe(){
+    let flag = 0
     const contents = Array.from(content, (context, idx)=>{
+      if (context === ''){
+        flag = 1
+      }
       return {
         order: idx + 1,
         content: context,
       };
     });
+
+
+    if (!recipeInfo.foodName){
+      onToast('요리 제목을 입력해주세요');
+      return
+    }
+
+    if (!recipeInfo.title){
+      onToast('레시피 제목을 입력해주세요');
+      return
+    }
+
+    if (!recipeInfo.serving){
+      onToast('조리 양을 입력해주세요');
+      return
+    }
+
+    if (!recipeInfo.cookingTime){
+      onToast('조리 시간을 입력해주세요');
+      return
+    }
+
+    if (!image){
+      onToast('음식 사진을 등록해주세요');
+      return
+    }
+
+    if (ingredients.length < 3){
+      onToast('필요한 식재료 개수가 너무 적습니다');
+      return
+    }
+
+    if (ingredients.some((i)=>!i.amount&&true)){
+      onToast('식재료 양을 입력해주세요');
+      return
+    }
+
+    if (flag === 1){
+      onToast('비어있는 조리과정이 있습니다')
+      return
+    }
 
     const recipeImage = {
       name: image.assets[0].fileName,
@@ -110,8 +170,8 @@ const RecipeCreateScreen = ({navigation}:any) => {
     }
   }
 
-  function getImage(uri: string){
-    setImage(uri);
+  function getImage(img: any){
+    setImage(img);
   }
 
   return (
@@ -120,7 +180,8 @@ const RecipeCreateScreen = ({navigation}:any) => {
         <RecipeCreateBasicInfo
           textList={textList}
           setRecipeInfo={changeInfo}
-          getImage={getImage}
+          setIsVisible={()=>setIsVisible(true)}
+          image={image}
         />
         <RecipeCreateIngredientInfo
           textList={textList}
@@ -140,6 +201,12 @@ const RecipeCreateScreen = ({navigation}:any) => {
           recipeInfo={recipeInfo}
         />
       </ProgressPage>
+      {
+        isVisible && (
+          <GetImageFrom getImage={getImage} setIsVisible={()=>setIsVisible(false)}/>
+        )
+      }
+
     </RecipeLayout>
   )
 }
