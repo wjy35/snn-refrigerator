@@ -167,7 +167,7 @@ const SignUpScreen = ({navigation}:any) => {
 
   function trySignup(){
     if (nickNameStatus === 2){
-      signup().then(navigation.navigate('Home'));
+      signup().then(navigation.replace('Home'));
     } else if (nickNameStatus === 0) {
       // TODO: toast로 변경 필요
       console.log('닉네임을 입력해주세요');
