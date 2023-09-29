@@ -34,11 +34,16 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
 
         if(recipe.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
 
+        int favoriteCount = recipe.get().getFavoriteCount();
+
+        recipe.get().setFavoriteCount(favoriteCount+1);
+
         FavoriteRecipe favoriteRecipe = FavoriteRecipe.builder()
                 .recipe(recipe.get())
                 .memberId(memberId)
                 .build();
 
+        recipeRepository.save(recipe.get());
         favoriteRecipeRepository.save(favoriteRecipe);
     }
 
@@ -49,6 +54,16 @@ public class FavoriteRecipeServiceImpl implements FavoriteRecipeService {
         if(favoriteRecipe.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
 
         favoriteRecipeRepository.delete(favoriteRecipe.get());
+
+        Optional<Recipe> recipe = recipeRepository.findById(recipeId);
+
+        if(recipe.isEmpty()) throw new CustomException(ErrorCode.NOT_FOUND_RECIPE);
+
+        int favoriteCount = recipe.get().getFavoriteCount();
+
+        recipe.get().setFavoriteCount(favoriteCount-1);
+
+        recipeRepository.save(recipe.get());
     }
 
     public List<RecipeSearchResponse> getFavoriteResponse(long memberId, Pageable pageable){

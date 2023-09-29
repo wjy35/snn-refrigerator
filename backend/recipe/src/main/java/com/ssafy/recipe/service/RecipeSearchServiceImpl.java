@@ -215,7 +215,8 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
                         ")" +
                         "AND r.title LIKE :keyword " +
                         "GROUP BY r.recipeId " +
-                        "HAVING COUNT(r.recipeId) >= :requiredIngredientsSize", Recipe.class);
+                        "HAVING COUNT(r.recipeId) >= :requiredIngredientsSize " +
+                        "ORDER BY r.recipeId DESC", Recipe.class);
 
         query.setParameter("requiredIngredients", requiredIngredientIds);
         query.setParameter("excludedIngredients", excludedIngredientIds);
