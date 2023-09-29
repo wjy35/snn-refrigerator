@@ -16,30 +16,6 @@ const HomeScreen = ({navigation}:any) => {
   const [recipeList, setRecipeList] = useState([]);
   const { memberId } = useSelector((state:RootState) => state.userReducer)
 
-  const getToken = async () => {
-    try {
-      const value = await AsyncStorage.getItem('my-key');
-      if (value !== null) {
-        console.log(value);
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
-
-  const test = async () => {
-    try {
-      let res = await sampleApi.test();
-      if (res.status === 200) {
-        console.log(res)
-      } else {
-        console.log(res)
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   useEffect(() => {
     const getRecipe = async () => {
       try {
@@ -52,7 +28,6 @@ const HomeScreen = ({navigation}:any) => {
           page:1,
           size:3,
         });
-        console.log(res);
         if (res.status === 200) {
           setRecipeList(res.data.data.recipe);
         }

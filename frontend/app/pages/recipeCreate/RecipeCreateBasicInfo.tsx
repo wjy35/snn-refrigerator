@@ -57,8 +57,10 @@ const RecipeCreateBasicInfo = ({textList, setRecipeInfo, getImage}: props) => {
   });
 
   useEffect(() => {
-    const splitUrl = youtubeUrl.text.split('?v=');
-    setShowUrl(splitUrl[1]);
+    const splitUrl = youtubeUrl.text.split('/',);
+    const targetUrl = splitUrl[3]?.split('?v=');
+    const target = targetUrl?.pop()
+    setShowUrl(target?target.slice(0, 11):'');
   },[youtubeUrl.text])
 
   return (
