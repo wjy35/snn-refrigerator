@@ -42,7 +42,7 @@ const RecipeCreateScreen = ({navigation}:any) => {
     if (idx === 0) {
       _content.push('');
     } else {
-      _content.splice(idx + 1, 0, '');
+      _content.splice(idx-1, 0, '');
     }
     setContent(_content);
   }
@@ -103,6 +103,7 @@ const RecipeCreateScreen = ({navigation}:any) => {
       const res = await recipeApi.createRecipe(inputData);
       if (res.status === 200){
         console.log('성공');
+        navigation.goBack();
       }
     } catch (err) {
       console.log('RecipeCreateScreen',err);
@@ -111,7 +112,6 @@ const RecipeCreateScreen = ({navigation}:any) => {
 
   function getImage(uri: string){
     setImage(uri);
-    console.log(uri);
   }
 
   return (
