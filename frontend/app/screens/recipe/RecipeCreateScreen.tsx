@@ -78,10 +78,10 @@ const RecipeCreateScreen = ({navigation}:any) => {
     };
 
     // Todo : memberId 가져오기
-    const data = {
+    const inputData = {
       ingredients: ingredients,
       contents: contents,
-      imageUrl: imageUrl,
+      imageUrl: '',
       foodName: recipeInfo.foodName,
       cookingTime: recipeInfo.cookingTime,
       serving: recipeInfo.serving,
@@ -91,29 +91,21 @@ const RecipeCreateScreen = ({navigation}:any) => {
     };
 
     try {
-      const ImageRequest = {
-        recipeImage: recipeImage,
-        memberId: memberId,
-      }
-      const recipeImageUrl = await recipeApi.createImageUrl(ImageRequest);
 
-      data.imageUrl = recipeImageUrl;
+      const formData = new FormData();
+      formData.append('recipeImage', recipeImage);
+      formData.append('memberId', memberId);
 
-      console.log("가져온 url");
-      console.log(data.imageUrl);
+      const recipeImageUrl = await recipeApi.createImageUrl(formData);
 
-      const requestData = {
-        recipeImage: recipeImage,
-        recipeRequest: data,
-      }
+      inputData.imageUrl = recipeImageUrl.data.data.imageUrl;
 
-
-      const res = await recipeApi.createRecipe(requestData);
+      const res = await recipeApi.createRecipe(inputData);
       if (res.status === 200){
         console.log('성공');
       }
     } catch (err) {
-      console.log(err);
+      console.log('RecipeCreateScreen',err);
     }
   }
 
