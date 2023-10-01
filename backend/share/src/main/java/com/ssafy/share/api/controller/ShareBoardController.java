@@ -4,6 +4,7 @@ import com.ssafy.share.api.request.ShareBoardUpdateRequest;
 import com.ssafy.share.api.request.ShareBoardWriteRequest;
 import com.ssafy.share.api.request.ShareIngredientRequest;
 import com.ssafy.share.api.response.*;
+import com.ssafy.share.blockchain.BasicService;
 import com.ssafy.share.db.entity.ShareImage;
 import com.ssafy.share.db.entity.ShareIngredient;
 import com.ssafy.share.db.entity.SharePost;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,13 +35,13 @@ public class ShareBoardController {
 
     private final ShareBoardService shareBoardService;
     private final S3Service s3Service;
+    private final BasicService basicService;
     private final TimeUtil timeUtil;
 
     @GetMapping("/{locationId}/{pageNum}/{items}")
     public ResponseEntity<?> getPostList(@PathVariable Short locationId, @PathVariable(required = false) Short pageNum,
                                          @PathVariable(required = false) Short items,
-                                         @RequestParam(required = false) String keyword,
-                                         @PageableDefault(sort = "sharePostId", size = 5, direction = Sort.Direction.DESC) Pageable pageable){ // 게시글 리스트 조회, 키워드 검색 가능
+                                         @RequestParam(required = false) String keyword){ // 게시글 리스트 조회, 키워드 검색 가능
         Response response = new Response();
         String locationName=shareBoardService.getLocationName(locationId);
         List<SharePost> posts=shareBoardService.getPostList(locationId,keyword);
@@ -123,4 +125,8 @@ public class ShareBoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/block")
+    public int getHistroy() throws IOException, ExecutionException, InterruptedException {
+        return 0;
+    }
 }
