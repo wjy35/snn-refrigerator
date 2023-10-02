@@ -1,6 +1,7 @@
 package com.ssafy.recipe.api.controller;
 
 import com.ssafy.recipe.api.request.RecipeRequest;
+import com.ssafy.recipe.api.request.RecipeSearchMemberRequest;
 import com.ssafy.recipe.api.request.RecipeSearchRequest;
 import com.ssafy.recipe.api.response.RecipeSearchResponse;
 import com.ssafy.recipe.api.response.Response;
@@ -27,6 +28,13 @@ public class RecipeSearchController {
     @PostMapping("/")
     public ResponseEntity<?> getAllRecipe (@RequestBody RecipeSearchRequest recipeSearchRequest) {
         Response response  = recipeSearchService.getSearchRecipe(recipeSearchRequest);
+        response.setMessage("OK");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/member")
+    public ResponseEntity<?> getMemberRecipe (@RequestBody RecipeSearchMemberRequest recipeSearchMemberRequest) {
+        Response response  = recipeSearchService.getMemberRecipe(recipeSearchMemberRequest);
         response.setMessage("OK");
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

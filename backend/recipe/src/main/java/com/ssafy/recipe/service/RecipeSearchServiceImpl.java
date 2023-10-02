@@ -1,6 +1,7 @@
 package com.ssafy.recipe.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.recipe.api.request.RecipeSearchMemberRequest;
 import com.ssafy.recipe.api.request.RecipeSearchRequest;
 import com.ssafy.recipe.api.response.HouseIngredientResponse;
 import com.ssafy.recipe.api.response.MemberResponse;
@@ -18,6 +19,8 @@ import com.ssafy.recipe.service.feign.MemberFeign;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -45,6 +48,8 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
     private final RecipeCustomIngredientRepository recipeCustomIngredientRepository;
 
     private final ObjectMapper objectMapper;
+
+    private final RecipeRepository recipeRepository;
 
     private final IngredientInfoRepository ingredientInfoRepository;
 
@@ -117,6 +122,53 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
         return response;
     }
 
+    @Override
+    public Response getMemberRecipe(RecipeSearchMemberRequest recipeSearchMemberRequest) {
+        Response response = new Response();
+
+        Pageable pageable = PageRequest.of(recipeSearchMemberRequest.getPage(), recipeSearchMemberRequest.getSize());
+
+        List<Recipe> recipeList = recipeRepository.findAllByMemberId(recipeSearchMemberRequest.getSearchId(), pageable);
+
+        int totalCount = recipeRepository.countByMemberId(recipeSearchMemberRequest.getSearchId());
+        List<RecipeSearchResponse> result = new ArrayList<>();
+
+
+        for(int i=0; i<recipeList.size(); i++){
+            Recipe recipe = recipeList.get(i);
+            MemberResponse memberResponse = this.getMember(recipe.getMemberId());
+
+            int myIngredients = this.getMyIngredientCnt(recipe, memberResponse.getHouseCode());
+
+            int neededIngredients = this.getNeededIngredientsCnt(recipe);
+
+            boolean isFavorite = this.favoriteCheck(recipeSearchMemberRequest.getMyId(), recipe.getRecipeId());
+
+            RecipeSearchResponse recipeSearchResponse = RecipeSearchResponse.builder()
+                    .recipeId(recipe.getRecipeId())
+                    .title(recipe.getTitle())
+                    .nickname(memberResponse.getNickname())
+                    .profileImageUrl(memberResponse.getProfileImageUrl())
+                    .imageUrl(recipe.getImageUrl())
+                    .cookingTime(recipe.getCookingTime())
+                    .serving(recipe.getServing())
+                    .favoriteCount(recipe.getFavoriteCount())
+                    .foodName(recipe.getFoodName())
+                    .neededIngredients(neededIngredients)
+                    .isFavorite(isFavorite)
+                    .followCount(memberResponse.getFollowCount())
+                    .myIngredients(myIngredients)
+                    .build();
+
+            result.add(recipeSearchResponse);
+        }
+        response.addData("recipe",result);
+        response.addRequest("page", recipeSearchMemberRequest.getPage());
+        response.addRequest("size", recipeSearchMemberRequest.getSize());
+        response.addData("totalCount", totalCount);
+        response.addData("totalPage", (int) Math.ceil((double)totalCount/recipeSearchMemberRequest.getSize()));
+        return response;
+    }
     @Override
     public boolean favoriteCheck(long memberId, int recipeId){
         Optional<FavoriteRecipe> favoriteRecipe = favoriteRecipeRepository.findByRecipeRecipeIdAndMemberId(recipeId, memberId);
