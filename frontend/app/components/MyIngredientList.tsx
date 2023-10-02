@@ -22,7 +22,6 @@ const MyIngredientList = ({types,maxDate}:any) => {
 
 
   useEffect(() => {
-      console.log(houseCode);
     const getIngredients = async() => {
       try{
         let res = await houseApi.houseIngredientList(houseCode);
@@ -33,7 +32,6 @@ const MyIngredientList = ({types,maxDate}:any) => {
                 // @ts-ignore
                 return new Date(a.lastDate) - new Date(b.lastDate)
             })
-            console.log(res.data.data.ingredients);
             setIngredients(res.data.data.ingredients);
         }else{
           console.log(res.data.message);

@@ -1,5 +1,14 @@
-import React, {useState} from 'react';
-import {View, Text, Button, ImageBackground, TouchableWithoutFeedback, Image, ScrollView} from 'react-native';
+import React, {useCallback, useRef, useState} from 'react';
+import {
+  View,
+  Text,
+  Button,
+  ImageBackground,
+  TouchableWithoutFeedback,
+  Image,
+  ScrollView,
+  ToastAndroid
+} from 'react-native';
 import {styles} from "@/styles/styles";
 import PlainInput from "@/components/PlainInput";
 import AutoCompleteInput from "@/components/AutoCompleteInput";
@@ -13,6 +22,7 @@ import memberApi from "@/apis/memberApi";
 import {useDispatch} from "react-redux";
 import {setHouseCodeAction} from "@/actions/houseAction";
 import {setMemberIdAction} from "@/actions/userAction";
+// import Toast from "@/components/Toast";
 
 
 const SignUpScreen = ({navigation}:any) => {
@@ -23,7 +33,8 @@ const SignUpScreen = ({navigation}:any) => {
   const [locations, setLocations] = useState<any[]>([]);
   const [ingredients, setIngredients] = useState<any[]>([]);
   const dispatch = useDispatch();
-  const [nickNameStatus, setNickNameStatus] = useState<number>(0)
+  const [nickNameStatus, setNickNameStatus] = useState<number>(0);
+  // const toastRef = useRef(null);
 
   const checkLocation = async (keyword: string) => {
     try {
@@ -34,6 +45,14 @@ const SignUpScreen = ({navigation}:any) => {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  function onToast(text: string){
+    ToastAndroid.showWithGravity(
+      text,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    )
   }
 
   const checkExcludeIngredient = async (keyword: string) => {
@@ -167,13 +186,13 @@ const SignUpScreen = ({navigation}:any) => {
 
   function trySignup(){
     if (nickNameStatus === 2){
-      signup().then(navigation.navigate('Home'));
+      signup().then(navigation.replace('Home'));
     } else if (nickNameStatus === 0) {
       // TODO: toast로 변경 필요
-      console.log('닉네임을 입력해주세요');
+      onToast('닉네임을 입력해주세요');
     } else if (nickNameStatus === 1) {
       // TODO: toast로 변경 필요
-      console.log('중복된 닉네임은 사용할 수 없습니다');
+      onToast('중복된 닉네임은 사용할 수 없습니다');
     }
   }
 
