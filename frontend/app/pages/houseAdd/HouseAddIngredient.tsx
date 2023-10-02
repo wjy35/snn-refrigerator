@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ScrollView, Text, TextInput, View} from 'react-native';
+import {Button, ScrollView, Text, TextInput, TouchableWithoutFeedback, View} from 'react-native';
 import Progressbar from "@/components/Progressbar";
 import {styles} from "@/styles/styles";
 import GetImageFrom from "@/components/GetImageFrom";
@@ -9,6 +9,7 @@ import AutoCompleteInput from "@/components/AutoCompleteInput";
 import useInput from "@/hooks/useInput";
 import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
 import {closeIcon} from "@/assets/icons/icons";
+import {MAIN_COLOR} from "@/assets/colors/colors";
 
 interface props {
   textList: string[];
@@ -17,9 +18,11 @@ interface props {
   now: number;
   addIngredient: Function;
   deleteIngredient: Function;
+  setIsImageVisible: Function;
+  setIsSpeechVisible: Function;
 }
 
-const HouseAddIngredient = ({textList, ingredients, setNow, now, addIngredient, deleteIngredient}: props) => {
+const HouseAddIngredient = ({textList, ingredients, setNow, now, addIngredient, deleteIngredient, setIsImageVisible, setIsSpeechVisible}: props) => {
   const [autoCompleteIngredientList, setAutoCompleteIngredientList] = useState<any[]>();
   const checkIngredient = async (keyword: string) => {
     try {
@@ -73,27 +76,45 @@ const HouseAddIngredient = ({textList, ingredients, setNow, now, addIngredient, 
           </View>
         )
       }
-      <ScrollView style={{width: '100%'}}>
-        <View style={[{width: '100%'}]}>
-          <AutoCompleteInput {...ingredientText} textList={autoCompleteIngredientList} keyValue='ingredientName' name='ingredientName' onPressIn={onPressIn} onSelect={onSelect} onBlur={onBlur}/>
-          <View style={{justifyContent: 'center', width: '100%', alignItems: 'center'}}>
-            <Text>직접 입력한 식재료는 레시피 추천에서 제외됩니다.</Text>
+      <View style={{flex: 1}}>
+        <ScrollView style={{width: '100%'}}>
+          <View style={[{width: '100%'}]}>
+            <AutoCompleteInput {...ingredientText} textList={autoCompleteIngredientList} keyValue='ingredientName' name='ingredientName' onPressIn={onPressIn} onSelect={onSelect} onBlur={onBlur}/>
+            <View style={{justifyContent: 'center', width: '100%', alignItems: 'center'}}>
+              <Text>직접 입력한 식재료는 레시피 추천에서 제외됩니다.</Text>
+            </View>
           </View>
-        </View>
-        <View style={styles.marginContainer}>
-          <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
-            {
-              ingredients.map((i, idx) => {
-                return (
-                  <React.Fragment key={`${i.ingredientName}${idx}`}>
-                    <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{deleteIngredient(idx)}}/>
-                  </React.Fragment>
-                )
-              })
-            }
+          <View style={styles.marginContainer}>
+            <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+              {
+                ingredients.map((i, idx) => {
+                  return (
+                    <React.Fragment key={`${i.ingredientName}${idx}`}>
+                      <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{deleteIngredient(idx)}}/>
+                    </React.Fragment>
+                  )
+                })
+              }
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
+      {
+        now === 0 && (
+          <View style={{flexDirection: 'row'}}>
+            <TouchableWithoutFeedback onPress={()=>{setIsImageVisible()}}>
+              <View style={[{width: '20%', height: 40, marginTop: 10, borderWidth: 1, backgroundColor: MAIN_COLOR, borderColor: MAIN_COLOR, borderRadius: 16, justifyContent: 'center', alignItems: 'center'}]}>
+                <Text style={[styles.font]}>사진으로 등록</Text>
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={()=>{setIsSpeechVisible()}}>
+              <View style={[{width: '20%', height: 40, marginTop: 10, borderWidth: 1, backgroundColor: MAIN_COLOR, borderColor: MAIN_COLOR, borderRadius: 16, justifyContent: 'center', alignItems: 'center'}]}>
+                <Text style={[styles.font]}>음성으로 등록</Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        )
+      }
     </View>
   )
 }
