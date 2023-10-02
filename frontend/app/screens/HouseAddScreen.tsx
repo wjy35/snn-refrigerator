@@ -8,6 +8,7 @@ import TopNavigator from "@/components/TopNavigator";
 import HouseAddStorage from "@/pages/houseAdd/HouseAddStorage";
 import HouseAddDate from "@/pages/houseAdd/HouseAddDate";
 import houseApi from "@/apis/houseApi";
+import axios from "axios";
 
 
 const HouseAddScreen = ({navigation}:any) => {
@@ -30,7 +31,6 @@ const HouseAddScreen = ({navigation}:any) => {
   }
 
   function onAddIngredient(item: any){
-    console.log(item);
     checkIngredient(item) && setIngredients([...ingredients, {ingredientName: item.ingredientName, ingredientInfoId: item.ingredientInfoId, storageType: 0, lastDate: null}]);
   }
 
@@ -45,14 +45,13 @@ const HouseAddScreen = ({navigation}:any) => {
   }
 
   async function finishAdd(){
-    console.log(ingredients);
     try {
       const res = await houseApi.addIngredient({
         houseCode: '492f9401-c684-4966-936e-56f0941eaffe',
         ingredients: ingredients,
       });
       if (res.status === 200) {
-        console.log('res');
+        navigation.goBack();
       }
     } catch (err){
       console.log(err);
