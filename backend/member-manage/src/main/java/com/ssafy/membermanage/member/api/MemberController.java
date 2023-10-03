@@ -408,7 +408,7 @@ public class MemberController {
 
     @PutMapping("/{memberId}/profile-image")
     @JsonView(ResponseViews.NoRequest.class)
-    public ResponseEntity<Response> modifyProfileImageProfile(@PathVariable Long memberId, @RequestParam MultipartFile profileImage) throws Exception {
+    public ResponseEntity<Response> modifyProfileImageProfile(@PathVariable Long memberId, @RequestParam("profileImage") MultipartFile profileImage) throws Exception {
         Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
         String profileImageFilename = member.getProfileImageFilename();
