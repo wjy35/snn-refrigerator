@@ -221,6 +221,7 @@ public class RecipeServiceImpl implements RecipeService{
             IngredientParam ingredientParam = IngredientParam.builder()
                     .name(recipeCustomIngredient.getIngredientName())
                     .amount(recipeCustomIngredient.getAmount())
+                    .IngredientInfoId((short)0)
                     .build();
 
             ingredientParams.add(ingredientParam);
@@ -238,6 +239,7 @@ public class RecipeServiceImpl implements RecipeService{
             IngredientParam ingredientParam = IngredientParam.builder()
                     .name(recipeIngredient.getIngredientInfo().getIngredientName())
                     .amount(recipeIngredient.getAmount())
+                    .IngredientInfoId(recipeIngredient.getIngredientInfo().getIngredientInfoId())
                     .build();
 
 
