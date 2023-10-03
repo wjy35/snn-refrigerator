@@ -169,7 +169,7 @@ export const recipeStyles = StyleSheet.create({
   recipeDetailLineContainer: {
     justifyContent: 'flex-start',
     alignItems: 'center',
-    height: '33%',
+    // height: '33%',
     width: '100%',
     flexDirection: 'row',
   },
@@ -179,12 +179,12 @@ export const recipeStyles = StyleSheet.create({
 
   },
   recipeDetailBody: {
-    height: 500,
+    // height: 500,
     borderWidth: 1,
     borderTopWidth: 0,
     borderBottomLeftRadius:20,
     borderBottomRightRadius:20,
-    backgroundColor:'white'
+    backgroundColor:'white',
   },
   recipeDetailSingleTab: {
     flex: 1,

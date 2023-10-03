@@ -13,17 +13,12 @@ import {SvgXml} from "react-native-svg";
 import {dish, followIcon, time, user} from "@/assets/icons/icons";
 import ShowYoutube from "@/components/ShowYoutube";
 
-
-interface props {
-}
-
 const RecipeDetailScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
   const {memberId} = useSelector((state:RootState)=>state.userReducer);
   const [activatedTab, setActivatedTab] = useState(0);
-
   const [recipeDetail, setRecipeDetail] = useState({
     recipeId:"",
     nickname:"닉네임 로딩중",
@@ -37,6 +32,7 @@ const RecipeDetailScreen = () => {
     cookingTime:"로딩중",
     serving:2
   });
+  const [youtubeUrl, setYoutubeUrl] = useState('')
 
   useEffect(() => {
     const recipeId = route?.params?.recipeId;
@@ -45,27 +41,27 @@ const RecipeDetailScreen = () => {
         let res = await recipeApi.detail({memberId, recipeId});
         console.log(res.data.data.recipeInfo);
         if(res.status===200){
-          const splitUrl = res.data.data.recipeInfo.youtubeUrl.split('/',);
-          const targetUrl = splitUrl[3]?.split('?v=');
-          const target = targetUrl?.pop();
+          if (res.data.data.recipeInfo.youtubeUrl) {
+            const splitUrl = res.data.data.recipeInfo.youtubeUrl.split('/',);
+            const targetUrl = splitUrl[3]?.split('?v=');
+            const target = targetUrl?.pop();
+            setYoutubeUrl(target?target.slice(0, 11):'');
+          }
           setRecipeDetail({
             ...res.data.data.recipeInfo,
-            youtubeUrl: target?target.slice(0, 11):''
           });
-        }else{
+        } else {
           console.log(res.data.message);
         }
       }catch (e){
         console.log(e);
       }
-
-      console.log("got info")
     }
     getRecipeDetail();
-  },[])
+  },[route?.params?.recipeId])
 
   return (
-    <RecipeLayout title="레시피" optionTitle="수정">
+    <RecipeLayout title="레시피" optionTitle="수정" optionFunction={()=>navigation.navigate('RecipeUpdate', {...recipeDetail, recipeId: route?.params?.recipeId})}>
       <ScrollView style={{width: '100%'}}>
         <View style={recipeStyles.recipeDetailImage}>
           <ImageBackground source={{uri: recipeDetail.imageUrl}}
@@ -180,7 +176,7 @@ const RecipeDetailScreen = () => {
                             marginHorizontal:10,
                             marginVertical:3,
                           }}>
-                            <Text style={[styles.font,{color:ingredient.lastDate?MAIN_COLOR:TEXT_COLOR, fontSize:20, width:'60%'}]}>{`${ingredient.name} ${ingredient.amount}`}</Text>
+                            <Text style={[styles.font,{color:ingredient.lastDate?MAIN_COLOR:TEXT_COLOR, fontSize:20, width:'60%'}]}>{`${ingredient.name} (${ingredient.amount})`}</Text>
                             <Text style={[styles.font,{color:ingredient.lastDate?MAIN_COLOR:TEXT_COLOR, fontSize:20, width:'40%'}]}>{ingredient.lastDate?ingredient.lastDate:'          -'}</Text>
                           </View>
                       ))}
@@ -193,14 +189,14 @@ const RecipeDetailScreen = () => {
             {activatedTab===1&&
                 (recipeDetail.contentResponseList ? (
                     <>
-                      { recipeDetail.youtubeUrl && (
+                      { youtubeUrl && (
                           <View style={{
                             justifyContent: 'flex-start',
                             alignItems: 'center',
                             width: '100%',
                             flexDirection: 'row',
                             margin:10,}}>
-                            <ShowYoutube youtubeId={recipeDetail.youtubeUrl} />
+                            <ShowYoutube youtubeId={youtubeUrl} />
                           </View>
                       )
                       }
