@@ -104,6 +104,7 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
         }
 
         Collections.shuffle(result);
+        result = result.subList(0,7);
         return result;
     }
 
