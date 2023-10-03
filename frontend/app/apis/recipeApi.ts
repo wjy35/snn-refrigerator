@@ -144,7 +144,20 @@ const recipeApi = {
           },
       );
       return res;
-  }
+  },
+  getOthersRecipe : async(searchId : number, myId: number, page: number, size: number) => {
+    const data = {
+      searchId: searchId,
+      myId: myId,
+      page: page,
+      size: size,
+    }
+    const res = await PrivateRecipeApi.post(
+      `search/member`,
+        data
+    );
+    return res;
+  },
 
 
 }
