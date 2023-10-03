@@ -29,15 +29,19 @@ const HouseAddScreen = ({navigation}:any) => {
   function checkIngredient(item: any){
     return (
       ingredients.every((ingredient: any) => {
-        if (ingredient.ingredientName !== item.ingredientName){
+        if (ingredient.name !== item.name){
           return true;
         }
       })
     );
   }
 
-  function onAddIngredient(item: any){
-    checkIngredient(item) && setIngredients([...ingredients, {ingredientName: item.ingredientName, ingredientInfoId: item.ingredientInfoId, storageType: 0, lastDate: null}]);
+  async function onAddIngredient(item: any){
+
+    const newIngredient = {ingredientName: item.name, ingredientInfoId: item.id, storageType: 0, lastDate: null};
+    if(checkIngredient(item)) setIngredients((ingredients) => {
+      return [...ingredients, newIngredient];
+    });
   }
 
   function onChangeIngredients(){
@@ -73,9 +77,9 @@ const HouseAddScreen = ({navigation}:any) => {
       const extractResponse = await ingredientExtractionApi.extraction(
         extractText,
       );
-      extractResponse.data.data.data.forEach((i)=>{
-        onAddIngredient(i);
-      });
+      for (const i of extractResponse.data.data.data) {
+        await onAddIngredient(i.ingredient);
+      }
     } catch (e) {
       console.log('err', e);
     }
