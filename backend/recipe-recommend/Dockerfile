@@ -1,9 +1,9 @@
 FROM gradle:8.2.1-jdk11 as build
 WORKDIR /app
 
-COPY ./backend/recipe/settings.gradle ./
-COPY ./backend/recipe/build.gradle ./
-COPY ./backend/recipe/src ./src
+COPY ./backend/recipe-recommend/settings.gradle ./
+COPY ./backend/recipe-recommend/build.gradle ./
+COPY ./backend/recipe-recommend/src ./src
 
 RUN gradle build -x test --parallel
 
