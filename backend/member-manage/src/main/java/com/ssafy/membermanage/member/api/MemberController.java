@@ -406,7 +406,7 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }//OK
 
-    @PutMapping("/{memberId}/profile-image")
+    @PutMapping(path = "/{memberId}/profile-image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<Response> modifyProfileImageProfile(@PathVariable Long memberId, @RequestParam("profileImage") MultipartFile profileImage) throws Exception {
         Member member = memberService.findByMemberId(memberId)
