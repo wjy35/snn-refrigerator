@@ -13,4 +13,5 @@ public class IngredientParam {
     private String name;
     private String amount;
     private LocalDate lastDate;
+    private short IngredientInfoId;
 }
