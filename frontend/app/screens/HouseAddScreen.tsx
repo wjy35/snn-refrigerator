@@ -39,7 +39,6 @@ const HouseAddScreen = ({navigation}:any) => {
   async function onAddIngredient(item: any){
 
     const newIngredient = {ingredientName: item.name, ingredientInfoId: item.id, storageType: 0, lastDate: null};
-    console.log(newIngredient);
     if(checkIngredient(item)) setIngredients((ingredients) => {
       return [...ingredients, newIngredient];
     });
@@ -78,10 +77,7 @@ const HouseAddScreen = ({navigation}:any) => {
       const extractResponse = await ingredientExtractionApi.extraction(
         extractText,
       );
-      console.log(extractResponse);
-      console.log(extractResponse.data.data.data);
       for (const i of extractResponse.data.data.data) {
-        console.log(i.ingredient);
         await onAddIngredient(i.ingredient);
       }
     } catch (e) {
