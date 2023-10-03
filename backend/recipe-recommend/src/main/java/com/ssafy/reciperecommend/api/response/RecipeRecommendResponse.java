@@ -20,6 +20,6 @@ public class RecipeRecommendResponse {
     private boolean favorite;
     private String foodName;
     private String cookingTime;
-    private short serving;
+    private String serving;
 }
 
