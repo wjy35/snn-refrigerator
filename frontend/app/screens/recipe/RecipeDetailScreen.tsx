@@ -45,13 +45,20 @@ const RecipeDetailScreen = () => {
         let res = await recipeApi.detail({memberId, recipeId});
         console.log(res.data.data.recipeInfo);
         if(res.status===200){
-          const splitUrl = res.data.data.recipeInfo.youtubeUrl.split('/',);
-          const targetUrl = splitUrl[3]?.split('?v=');
-          const target = targetUrl?.pop();
-          setRecipeDetail({
-            ...res.data.data.recipeInfo,
-            youtubeUrl: target?target.slice(0, 11):''
-          });
+          if(res.data.data.recipeInfo.youtubeUrl != null) {
+            const splitUrl = res.data.data.recipeInfo.youtubeUrl.split('/',);
+            const targetUrl = splitUrl[3]?.split('?v=');
+            const target = targetUrl?.pop();
+
+            setRecipeDetail({
+              ...res.data.data.recipeInfo,
+              youtubeUrl: target ? target.slice(0, 11) : ''
+            });
+          }else{
+            setRecipeDetail({
+              ...res.data.data.recipeInfo,
+            });
+          }
         }else{
           console.log(res.data.message);
         }
