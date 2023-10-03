@@ -29,7 +29,8 @@ const HouseAddScreen = ({navigation}:any) => {
   function checkIngredient(item: any){
     return (
       ingredients.every((ingredient: any) => {
-        if (ingredient.name !== item.name){
+        console.log(ingredient.name, item.name);
+        if (ingredient.ingredientName !== item.name){
           return true;
         }
       })
