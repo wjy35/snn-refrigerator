@@ -17,7 +17,7 @@ const ProgressPage = ({children}: any) => {
 
   return (
     <>
-      <Swiper loop={false} showsPagination={false} nextButton={nextButton()} showsButtons={false}>
+      <Swiper loop={false} showsPagination={false} nextButton={nextButton()} showsButtons={false} keyboardShouldPersistTaps='handled'>
         {children}
       </Swiper>
     </>

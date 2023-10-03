@@ -45,7 +45,13 @@ const RecipeDetailScreen = () => {
         let res = await recipeApi.detail({memberId, recipeId});
         console.log(res.data.data.recipeInfo);
         if(res.status===200){
-          setRecipeDetail(res.data.data.recipeInfo);
+          const splitUrl = res.data.data.recipeInfo.youtubeUrl.split('/',);
+          const targetUrl = splitUrl[3]?.split('?v=');
+          const target = targetUrl?.pop();
+          setRecipeDetail({
+            ...res.data.data.recipeInfo,
+            youtubeUrl: target?target.slice(0, 11):''
+          });
         }else{
           console.log(res.data.message);
         }
@@ -74,8 +80,6 @@ const RecipeDetailScreen = () => {
         </View>
 
         <View style={recipeStyles.recipeDetailInfoContainer}>
-
-
           <View style={recipeStyles.recipeDetailInfo}>
             <View style={recipeStyles.recipeDetailUserContainer}>
               <View style={recipeStyles.recipeDetailUserImage}>

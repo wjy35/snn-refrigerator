@@ -9,21 +9,7 @@ import {RootState} from "@/reducers/reducers";
 
 
 const RecipeListScreen = ({navigation}:any) => {
-  const [recipe , setRecipe]= useState<any[]>([
-    {
-      recipeId:"",
-      nickname:"",
-      title:"",
-      imageUrl:"",
-      profileImageUrl:"",
-      favoriteCount: 0,
-      followCount: 0,
-      foodName:"",
-      favorite:false,
-      cookingTime:"",
-      serving:0
-    }
-  ]);
+  const [recipe , setRecipe]= useState<any[]>([]);
 
   const {memberId} = useSelector((state:RootState)=>state.userReducer);
 
@@ -33,47 +19,36 @@ const RecipeListScreen = ({navigation}:any) => {
     remove: [],
     n: 1000,
     keyword: '',
-    page:1,
     size:3,
-  })
+  });
+  const [maxPage, setMaxPage] = useState(1);
+  const [nowPage, setNowPage] = useState(1);
 
   function goToCreate(){
     navigation.navigate('RecipeCreate')
   }
 
-
+  const getRecipe = async () => {
+    try {
+      if (nowPage > maxPage) return
+      const res = await recipeApi.searchRecipe({
+        ...settings,
+        page: nowPage
+      });
+      if (res.status === 200) {
+        setNowPage(nowPage+1);
+        setRecipe([...recipe, ...res.data.data.recipe]);
+        setMaxPage(res.data.data.totalPage);
+      } else {
+        console.log(res.data.data.recipe);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
-    const getRecipe = async () => {
-      try {
-        let res = await recipeApi.searchRecipe(settings);
-        if (res.status === 200) {
-          setRecipe(res.data.data.recipe);
-        } else {
-          console.log(res.data.data.recipe);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    getRecipe();
-  }, []);
-
-  useEffect(() => {
-    const getRecipe = async () => {
-      try {
-        let res = await recipeApi.searchRecipe(settings);
-        if (res.status === 200) {
-          setRecipe(res.data.data.recipe);
-        } else {
-          console.log(res.data.data.recipe);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
+    setNowPage(1)
     getRecipe();
   }, [settings]);
 
@@ -86,7 +61,7 @@ const RecipeListScreen = ({navigation}:any) => {
           {settings.n!==1000&&<Text>미보유 재료 {settings.n}개 이하</Text>}
           <Text>{settings.keyword} 레시피 검색 결과</Text>
         </View>
-        <RecipeList horizontal={false} recipeList={recipe} navigation={navigation}/>
+        <RecipeList horizontal={false} recipeList={recipe} navigation={navigation} callNextPage={getRecipe}/>
       </View>
     </RecipeLayout>
   )
