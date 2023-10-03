@@ -86,6 +86,13 @@ const memberApi = {
     );
     return res;
   },
+  otherDetail: async (memberId: number) => {
+    const url = `${memberId?.id}/others`;
+    const res = await PublicMemberApi.get(
+      url
+    );
+    return res;
+  },
   // TODO: 회원정보 수정 시 프로필 이미지는 따로 처리?
   memberUpdate: async ({memberId}: props) => {
     const res = await PrivateMemberApi.put(
