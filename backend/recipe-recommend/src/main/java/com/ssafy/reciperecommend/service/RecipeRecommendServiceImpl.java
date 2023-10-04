@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -117,15 +114,15 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
 
         List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findAllByRecipe(recipe);
 
-        int cnt = 0;
+        HashSet<Integer> hashSet = new HashSet<>();
         for(int i=0; i<recipeIngredientList.size(); i++){
             int ingredientInfo = recipeIngredientList.get(i).getIngredientInfo().getIngredientInfoId();
 
             for(int j=0; j<houseIngredientResponses.size(); j++){
-                if(houseIngredientResponses.get(j).getIngredientInfoId() == ingredientInfo) cnt++;
+                if(houseIngredientResponses.get(j).getIngredientInfoId() == ingredientInfo) hashSet.add(ingredientInfo);
             }
         }
-        return cnt;
+        return hashSet.size();
     }
 
 
