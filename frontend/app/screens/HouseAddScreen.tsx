@@ -12,6 +12,7 @@ import axios from "axios";
 import GetImageFrom from "@/components/GetImageFrom";
 import ingredientExtractionApi from "@/apis/ingredientExtractionApi";
 import GetSpeechFrom from "@/components/GetSpeechFrom";
+import houseAddScreen from "@/screens/HouseAddScreen";
 
 
 const HouseAddScreen = ({navigation}:any) => {
@@ -29,8 +30,8 @@ const HouseAddScreen = ({navigation}:any) => {
   function checkIngredient(item: any){
     return (
       ingredients.every((ingredient: any) => {
-        console.log(ingredient.name, item.name);
-        if (ingredient.ingredientName !== item.name){
+        // console.log("HouseAddScreen -> checkIngredient",ingredient.ingredientName, item.ingredientName);
+        if (ingredient.ingredientName !== item.ingredientName){
           return true;
         }
       })
@@ -39,7 +40,7 @@ const HouseAddScreen = ({navigation}:any) => {
 
   async function onAddIngredient(item: any){
 
-    const newIngredient = {ingredientName: item.name, ingredientInfoId: item.id, storageType: 0, lastDate: null};
+    const newIngredient = {ingredientName: item.ingredientName, ingredientInfoId: item.ingredientInfoId, storageType: 0, lastDate: null};
     if(checkIngredient(item)) setIngredients((ingredients) => {
       return [...ingredients, newIngredient];
     });
@@ -79,7 +80,8 @@ const HouseAddScreen = ({navigation}:any) => {
         extractText,
       );
       for (const i of extractResponse.data.data.data) {
-        await onAddIngredient(i.ingredient);
+        // console.log("HouseAddScreen -> getIngredient",i.ingredient);
+        await onAddIngredient({ingredientInfoId: i.ingredient.id, ingredientName : i.ingredient.name});
       }
     } catch (e) {
       console.log('err', e);
