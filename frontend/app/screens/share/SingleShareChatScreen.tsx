@@ -5,9 +5,8 @@ import TopNavigator from "@/components/TopNavigator";
 import BottomChat from "@/components/BottomChat";
 import {useSelector} from "react-redux";
 import {RootState} from "@/reducers/reducers";
-import chatRoomApi from "@/apis/chatRoomApi";
 import chatApi from "@/apis/chatApi";
-import {useFocusEffect} from "@react-navigation/native";
+import {useFocusEffect, useRoute} from "@react-navigation/native";
 import * as Stomp from "webstomp-client";
 import {Client} from "webstomp-client";
 
@@ -23,11 +22,14 @@ const SingleShareChatScreen = ({navigation}: any) => {
 
     const [client, setClient] = useState<Client>();
 
-    const chatRoomId = 1;
+    const route = useRoute();
+
+    const chatRoomId = route.params.chatRoomId;
     const receiveMemberId = 3029554590;
 
     const {memberId} = useSelector((state: RootState) => state.userReducer);
     useEffect(() => {
+        console.log("@@@@@@@@@@@CHatRoomId",chatRoomId);
         const getChatList = async () => {
             try {
                 let res = await chatApi.chatList(chatRoomId);
@@ -43,7 +45,12 @@ const SingleShareChatScreen = ({navigation}: any) => {
     }, []);
 
     function onToggle(currentChat) {
-        console.log("current", currentChat)
+        setChatList((prevChatList:any[])=>{
+            prevChatList.shift();
+            const newChatList = [...prevChatList];
+            newChatList.push(currentChat);
+            return newChatList;
+        });
     };
 
     useFocusEffect(
