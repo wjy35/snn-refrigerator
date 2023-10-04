@@ -50,9 +50,9 @@ const recipeApi = {
     );
     return res;
   },
-  memberFavorite: async ({memberId}: props) => {
+  memberFavorite: async (memberId: number, page: number, size: number) => {
     const res = await PrivateRecipeApi.get(
-      `favorite/${memberId}`
+      `favorite/${memberId}?page=${page}&size=${size}`
     );
     return res;
   },
