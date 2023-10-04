@@ -100,7 +100,6 @@ const SignUpScreen = ({navigation}:any) => {
     if (checkDuplicateLocation(item)){
       setLocations([...locations, {...item}]);
     }
-
   }
 
   function onSelectIngredient(item: any){
@@ -219,7 +218,7 @@ const SignUpScreen = ({navigation}:any) => {
       return
     }
     signup().then(navigation.replace('Home'));
-    
+
   }
 
   return (
