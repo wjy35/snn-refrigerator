@@ -41,8 +41,8 @@ const Navigation = () => {
         <Stack.Screen name="RecipeList" component={RecipeListScreen}/>
         <Stack.Screen name="RecipeCreate" component={RecipeCreateScreen}/>
         <Stack.Screen name="RecipeDetail" component={RecipeDetailScreen}/>
-        {/*<Stack.Screen name="RecipeUpdate" component={RecipeUpdateScreen}/>*/}
-        <Stack.Screen name="RecipeUpdate" component={FixScreen}/>
+        <Stack.Screen name="RecipeUpdate" component={RecipeUpdateScreen}/>
+        {/*<Stack.Screen name="RecipeUpdate" component={FixScreen}/>*/}
         {/*<Stack.Screen name="ShareList" component={ShareListScreen}/>*/}
         <Stack.Screen name="ShareList" component={FixScreen}/>
         {/*<Stack.Screen name="ShareDetail" component={ShareDetailScreen}/>*/}

@@ -3,8 +3,9 @@ import {View} from "react-native";
 import SingleIngredient from "@/components/SingleIngredient";
 import tw from 'twrnc';
 import houseApi from "@/apis/houseApi";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/reducers/reducers";
+import {setHouseIngredientsAction} from "@/actions/houseAction";
 
 const MyIngredientList = ({types,maxDate}:any) => {
   const [ingredients, setIngredients] = useState<
@@ -17,56 +18,34 @@ const MyIngredientList = ({types,maxDate}:any) => {
         storageDate : string,
       }>
   >([]);
-    const [changed, setChanged] = useState(false);
+  const { houseCode } = useSelector((state:RootState) => state.houseReducer);
+  const dispatch = useDispatch();
+  const [changed, setChanged] = useState(false);
 
-    const { houseCode } = useSelector((state:RootState) => state.houseReducer)
 
-
-    // useEffect(() => {
-    //     const getIngredients = async() => {
-    //         try{
-    //             let res = await houseApi.houseIngredientList(houseCode);
-    //             // console.log(res);
-    //             if(res.status===200){
-    //                 // console.log(res.data.data.ingredients);
-    //                 res.data.data.ingredients.sort((a: { lastDate: string | number | Date; }, b: { lastDate: string | number | Date; })=>{
-    //                     // @ts-ignore
-    //                     return new Date(a.lastDate) - new Date(b.lastDate)
-    //                 })
-    //                 setIngredients(res.data.data.ingredients);
-    //             }else{
-    //                 console.log(res.data.message);
-    //             }
-    //         }catch (e){
-    //             // console.log(e);
-    //         }
-    //     }
-    //     getIngredients();
-    //
-    // }, []);
-
-    useEffect(() => {
-        setChanged(false);
-        const getIngredients = async() => {
-            try{
-                let res = await houseApi.houseIngredientList(houseCode);
-                // console.log(res);
-                if(res.status===200){
-                    // console.log(res.data.data.ingredients);
-                    res.data.data.ingredients.sort((a: { lastDate: string | number | Date; }, b: { lastDate: string | number | Date; })=>{
-                        // @ts-ignore
-                        return new Date(a.lastDate) - new Date(b.lastDate)
-                    })
-                    setIngredients(res.data.data.ingredients);
-                }else{
-                    console.log(res.data.message);
-                }
-            }catch (e){
-                // console.log(e);
-            }
+  useEffect(() => {
+    setChanged(false);
+    const getIngredients = async() => {
+      try{
+        let res = await houseApi.houseIngredientList(houseCode);
+        // console.log(res);
+        if(res.status===200){
+          // console.log(res.data.data.ingredients);
+          res.data.data.ingredients.sort((a: { lastDate: string | number | Date; }, b: { lastDate: string | number | Date; })=>{
+            // @ts-ignore
+            return new Date(a.lastDate) - new Date(b.lastDate)
+          })
+          dispatch(setHouseIngredientsAction(res.data.data.ingredients));
+          setIngredients(res.data.data.ingredients);
+        }else{
+          console.log(res.data.message);
         }
-        getIngredients();
-    }, [changed]);
+      }catch (e){
+        // console.log(e);
+      }
+    }
+    getIngredients();
+  }, [changed]);
 
 
   return (
