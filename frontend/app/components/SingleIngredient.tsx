@@ -6,7 +6,7 @@ import IngredientIcon from "@/components/IngredientIcon";
 import tw from 'twrnc';
 import Modal from "react-native-modal";
 import BasicBadge from "@/components/BasicBadge";
-import {deleteIcon, modifyIcon} from "@/assets/icons/icons";
+import {backButton, deleteIcon, modifyIcon} from "@/assets/icons/icons";
 import houseApi from "@/apis/houseApi";
 import {Calendar} from "react-native-calendars";
 import {
@@ -17,6 +17,8 @@ import {
   MAIN_COLOR, TEXT_COLOR,
   WARM_COLOR
 } from "@/assets/colors/colors";
+import {topNavStyles} from "@/styles/topNavStyles";
+import {SvgXml} from "react-native-svg";
 
 interface props {
   ingredientName: string;
@@ -35,7 +37,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
   const [text, setText] = useState<any>()
   const [isModalVisible, setModalVisible] = useState(false);
   const [isModifying, setIsModifying] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<string>((formatDate(new Date(storageDate))));
   const [selectedStorageType, setSelectedStorageType] = useState<number>(0);
 
   function padTo2Digits(num: number) {
@@ -48,13 +50,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
           date.getFullYear(),
           padTo2Digits(date.getMonth() + 1),
           padTo2Digits(date.getDate()),
-        ].join('-') +
-        ' ' +
-        [
-          padTo2Digits(date.getHours()),
-          padTo2Digits(date.getMinutes()),
-          padTo2Digits(date.getSeconds()),
-        ].join(':')
+        ].join('-')
     );
   }
 
@@ -64,6 +60,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
     const storage: Date = new Date(storageDate);
     setIsModifying(false);
     setSelectedDate(formatDate(storage));
+    console.log(selectedDate);
     setSelectedStorageType(storageType);
     // @ts-ignore date 계산 관련 ts 에러 무시
     const lastGap: number = 1+ Math.floor((last.getTime() - date) / (1000 * 60 * 60 * 24));
@@ -206,52 +203,69 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
           </View>
         </View>}
         {isModifying&&
-            <View style={[{height:'auto',backgroundColor:'#FFFFFF', alignSelf:'center', padding:20, borderRadius:20, display:'flex', flexDirection:'column'}]}>
-              <Text style={[styles.font, text, {color:TEXT_COLOR}, tw`text-4xl text-center`]}>{ingredientName}</Text>
-                <Calendar
-                    monthFormat={'yyyy MM'}
-                    firstDay={0}
-                    onDayPress={(day) => {setSelectedDate(day.dateString)}}
-                    markedDates={{
-                      [selectedDate]: {
-                        selected: true,
-                        disableTouchEvent: true,
-                        selectedColor: MAIN_COLOR,
-                      },
-                    }}
-                />
-              <View style={[{flexDirection: 'row', justifyContent: "space-around",}]}>
-                <Text style={[styles.font, tw`flex-2 text-2xl text-center mr-2`]}>소비기한</Text>
-                <View style={[{flexDirection: 'row', flex:3, justifyContent: "space-around",}]}>
-                  <Text style={[styles.font, tw`text-lg text-center`]}>{selectedDate}</Text>
+            <View style={[{width:'95%', height:'auto',backgroundColor:'#FFFFFF', alignSelf:'center', padding:20, borderRadius:20, display:'flex', flexDirection:'column'}]}>
+
+              <View style={[{marginTop:15, flexDirection:'row', justifyContent:'center'}]}>
+              <TouchableWithoutFeedback onPress={()=>setIsModifying(false)}>
+                <View style={[topNavStyles.backButton, {flex:1, alignSelf:'center', height:60}]}>
+                  <SvgXml
+                      xml={backButton}
+                      width={19}
+                      height={19}
+                  />
                 </View>
+              </TouchableWithoutFeedback>
+              <Text style={[styles.font, {alignSelf:'center', color:TEXT_COLOR, flex:3}, tw`text-4xl text-center`]}>{ingredientName}</Text>
+                <View style={{flex:1}} />
               </View>
-              <View style={[{flexDirection: 'row', justifyContent: "space-around",}]}>
+
+              <View style={[{flexDirection: 'row', justifyContent: "space-around", marginVertical:10}]}>
                 <Text style={[styles.font, {alignSelf:'center'}, tw`flex-2 text-2xl text-center mr-2`]}>보관방법</Text>
                 <View style={[{flexDirection: 'row', overflow: 'hidden', backgroundColor:LIGHT_BACKGROUND_COLOR, flex:3, justifyContent: "space-around", borderRadius:99, paddingHorizontal:1,height:40}]}>
                   <TouchableWithoutFeedback
                       onPress={()=>{setSelectedStorageType(1)}}
                   >
-                  <View style={[{backgroundColor:selectedStorageType===1?COLD_COLOR:LIGHT_BACKGROUND_COLOR, paddingHorizontal:7, marginRight:2,borderRadius:99, justifyContent:'center', alignItems:'center'}]}>
-                    <Text style={[styles.font, {color:selectedStorageType===1?'#FFFFFF':COLD_COLOR, textAlign:'center'}, tw`text-lg text-center`]}>냉동</Text>
-                  </View>
+                    <View style={[{backgroundColor:selectedStorageType===1?COLD_COLOR:LIGHT_BACKGROUND_COLOR, paddingHorizontal:7, marginRight:2,borderRadius:99, justifyContent:'center', alignItems:'center'}]}>
+                      <Text style={[styles.font, {color:selectedStorageType===1?'#FFFFFF':COLD_COLOR, textAlign:'center'}, tw`text-lg text-center`]}>냉동</Text>
+                    </View>
                   </TouchableWithoutFeedback>
                   <TouchableWithoutFeedback
                       onPress={()=>{setSelectedStorageType(0)}}
                   >
-                  <View style={[{backgroundColor:selectedStorageType===0?COOL_COLOR:LIGHT_BACKGROUND_COLOR, paddingHorizontal:7, marginRight:2,borderRadius:99, justifyContent:'center', alignItems:'center'}]}>
-                    <Text style={[styles.font, {color:selectedStorageType===0?'#FFFFFF':COOL_COLOR, textAlign:'center'}, tw`text-lg text-center`]}>냉장</Text>
-                  </View>
+                    <View style={[{backgroundColor:selectedStorageType===0?COOL_COLOR:LIGHT_BACKGROUND_COLOR, paddingHorizontal:7, marginRight:2,borderRadius:99, justifyContent:'center', alignItems:'center'}]}>
+                      <Text style={[styles.font, {color:selectedStorageType===0?'#FFFFFF':COOL_COLOR, textAlign:'center'}, tw`text-lg text-center`]}>냉장</Text>
+                    </View>
                   </TouchableWithoutFeedback>
                   <TouchableWithoutFeedback
                       onPress={()=>{setSelectedStorageType(2)}}
                   >
-                  <View style={[{backgroundColor:selectedStorageType===2?WARM_COLOR:LIGHT_BACKGROUND_COLOR, paddingHorizontal:7,borderRadius:99, justifyContent:'center', alignItems:'center'}]}>
-                    <Text style={[styles.font, {color:selectedStorageType===2?'#FFFFFF':WARM_COLOR, textAlign:'center'}, tw`text-lg text-center`]}>상온</Text>
-                  </View>
+                    <View style={[{backgroundColor:selectedStorageType===2?WARM_COLOR:LIGHT_BACKGROUND_COLOR, paddingHorizontal:7,borderRadius:99, justifyContent:'center', alignItems:'center'}]}>
+                      <Text style={[styles.font, {color:selectedStorageType===2?'#FFFFFF':WARM_COLOR, textAlign:'center'}, tw`text-lg text-center`]}>상온</Text>
+                    </View>
                   </TouchableWithoutFeedback>
                 </View>
               </View>
+
+              <View style={[{flexDirection: 'row', justifyContent: "space-around", marginVertical:5}]}>
+                <Text style={[styles.font, tw`flex-2 text-2xl text-center mr-2`]}>소비기한</Text>
+                <View style={[{flexDirection: 'row', flex:3, justifyContent: "space-around",}]}>
+                  <Text style={[styles.font, tw`text-lg text-center`]}>{selectedDate}</Text>
+                </View>
+              </View>
+
+              <Calendar
+                  monthFormat={'yyyy MM'}
+                  firstDay={0}
+                  onDayPress={(day) => {setSelectedDate(day.dateString)}}
+                  markedDates={{
+                    [selectedDate]: {
+                      selected: true,
+                      disableTouchEvent: true,
+                      selectedColor: MAIN_COLOR,
+                    },
+                  }}
+              />
+
               <View style={[{marginTop:15, flexDirection:'row', justifyContent:'center'}]}>
                 <View style={[{alignSelf:'flex-end'}]}><BasicBadge leftIcon={modifyIcon} color='#3093EF' name={'수정하기'} onPress={modifyIngredient}/></View>
               </View>
