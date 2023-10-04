@@ -52,13 +52,11 @@ function HateIngredient({memberId}) {
     });
   }
 
-  //TODO: ingredient 등록이 되지 않음.
-
   function onSelectIngredient(item: any) {
     const execute = async () => {
       if (checkDuplicateIngredient(item)) {
         try {
-          const res = await memberApi.addMemberHate(memberId, item.ingredientId);
+          const res = await memberApi.addMemberHate(memberId, item.ingredientInfoId);
           if (res.status === 200) {
             setIngredients([...ingredients, {...item}]);
           }
@@ -73,7 +71,7 @@ function HateIngredient({memberId}) {
   async function removeIngredient(idx: number) {
     try {
       const res = await memberApi.deleteMemberHate(memberId, idx);
-      if (res.status !== 200) {
+      if (res.status === 200) {
         const _ingredients = [...ingredients];
         _ingredients.splice(idx, 1);
         setIngredients(_ingredients);
@@ -83,7 +81,6 @@ function HateIngredient({memberId}) {
       console.log(err);
     }
   }
-  //TODO: onSelectIngredient가 작동을 하지 않음.
   return (
     <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
       <View style={{}}>
