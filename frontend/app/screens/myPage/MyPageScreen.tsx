@@ -7,7 +7,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   Platform,
-  PermissionsAndroid, Pressable
+  PermissionsAndroid, Pressable, TextInput
 } from 'react-native';
 import MyPageLayout from "./MyPageLayout";
 import {myPageStyles} from "@/styles/myPageStyles";
@@ -32,7 +32,9 @@ const MyPageScreen = ({navigation}:any) => {
   const memberId = useSelector((state) => state.userReducer.memberId);
   const [user, setUser] = useState<any>();
   const [userProfile, setUserProfile] = useState('');
+  const [nickname, setNickname] = useState('');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [nickEditing, setNickEditing] = useState<boolean>(false);
 
 
   function goto(t: string){
@@ -54,6 +56,7 @@ const MyPageScreen = ({navigation}:any) => {
       if (res.status === 200) {
         console.log(res.data.data.memberInfo);
         setUser(res.data.data.memberInfo);
+        setNickname(res.data.data.memberInfo.nickname);
       }
     } catch (err) {
       console.log(err);
@@ -95,63 +98,86 @@ const MyPageScreen = ({navigation}:any) => {
     launchImageLibrary(imagePickerOption, onPickImage);
   };
 
-  return (
-    <>
-      <MyPageLayout title="마이 페이지">
-        <ScrollView style={{width: '100%'}}>
-          <View style={[myPageStyles.infoContainer]}>
-            <Pressable
-              style={[myPageStyles.profileImage, {marginTop: 20}]}
-              onPress={() => {
-                modalOpen();
-              }}
-            >
-              {
-                user && <Image source={{uri: user.profileImageUrl}} style={{width: '100%', height: '100%', borderRadius: 100}}/>
-              }
-            </Pressable>
-            <View style={[myPageStyles.profileInfo, {alignItems: 'center', marginTop: 10}]}>
-              <View>
-                <Text style={[styles.font, {fontSize: 36}]}>{user&&user.nickname}</Text>
-              </View>
-              <View style={[{flexDirection: 'row'}]}>
-                <SvgXml
-                  xml={locationIcon}
-                  width={20}
-                  height={20}
-                />
-                <Text style={[styles.font, {color: 'grey', fontSize: 24}]}>서울 역삼동</Text>
-              </View>
-              <TouchableWithoutFeedback onPress={()=>console.log('수정')}>
-                <View>
-                  <Text>수정</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-            <View style={[myPageStyles.profileRowContainer, {height: 100}]}>
+  const saveNickname = async () => {
+    console.log(nickname);
+    console.log(user.memberId);
+    const res = await memberApi.memberUpdate(user.memberId, nickname);
+    if(res.status === 200){
+      setNickEditing(false);
+    }
+  };
 
-            </View>
-          </View>
-          <View style={myPageStyles.optionsContainer}>
+  const changeNickname = () => {
+    setNickEditing(true);
+  }
+
+  return <>
+    <MyPageLayout title="마이 페이지">
+      <ScrollView style={{width: '100%'}}>
+        <View style={[myPageStyles.infoContainer]}>
+          <Pressable
+            style={[myPageStyles.profileImage, {marginTop: 20}]}
+            onPress={() => {
+              modalOpen();
+            }}
+          >
             {
-              settings.map((i) => {
-                return (
-                  <React.Fragment key={`${i.goto}`}>
-                    <SettingContainer name={i.name} goto={i.goto} optionFunc={goto}/>
-                  </React.Fragment>
-                )
-              })
+              user && <Image source={{uri: user.profileImageUrl}} style={{width: '100%', height: '100%', borderRadius: 100}}/>
             }
+          </Pressable>
+          <View style={[myPageStyles.profileInfo, {alignItems: 'center', marginTop: 10}]}>
+              {nickEditing ?
+                <View>
+                  <TextInput
+                    value={nickname}
+                    onChangeText={(text) => setNickname(() => text)}
+                    placeholder="새로운 닉네임을 입력하세요"
+                  />
+                  <Button title="저장" onPress={saveNickname} />
+                </View>
+              : <View>
+                  <Text style={[styles.font, {fontSize: 36}]}>
+                    {nickname}
+                  </Text>
+                </View>
+            }
+
+            <View style={[{flexDirection: 'row'}]}>
+              <SvgXml
+                xml={locationIcon}
+                width={20}
+                height={20}
+              />
+              <Text style={[styles.font, {color: 'grey', fontSize: 24}]}>서울 역삼동</Text>
+            </View>
+            <Button title="닉네임 수정" onPress={changeNickname}/>
+            {/*<TouchableWithoutFeedback onPress={()=>console.log('수정')}>*/}
+            {/*  <View>*/}
+            {/*    <Text>수정</Text>*/}
+            {/*  </View>*/}
+            {/*</TouchableWithoutFeedback>*/}
           </View>
-        </ScrollView>
-      </MyPageLayout>
-      <CameraImageModal
-        visible={modalVisible}
-        onClose={()=>setModalVisible(false)}
-        onLaunchCamera={onLaunchCamera}
-        onLaunchImageLibrary={onLaunchImageLibrary}/>
-    </>
-  )
+          <View style={[myPageStyles.profileRowContainer, {height: 100}]}>
+
+          </View>
+        </View>
+        <View style={myPageStyles.optionsContainer}>
+          {
+            settings.map((i) => {
+              return <React.Fragment key={`${i.goto}`}>
+                  <SettingContainer name={i.name} goto={i.goto} optionFunc={goto}/>
+                </React.Fragment>
+            })
+          }
+        </View>
+      </ScrollView>
+    </MyPageLayout>
+    <CameraImageModal
+      visible={modalVisible}
+      onClose={()=>setModalVisible(false)}
+      onLaunchCamera={onLaunchCamera}
+      onLaunchImageLibrary={onLaunchImageLibrary}/>
+  </>
 }
 
 export default MyPageScreen;

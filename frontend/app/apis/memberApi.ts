@@ -88,9 +88,12 @@ const memberApi = {
     return res;
   },
   // TODO: 회원정보 수정 시 프로필 이미지는 따로 처리?
-  memberUpdate: async ({memberId}: props) => {
+  memberUpdate: async (memberId: number, nickname: string) => {
     const res = await PrivateMemberApi.put(
       `${memberId}`,
+      {
+        nickname: nickname
+      }
     );
     return res;
   },
