@@ -45,12 +45,16 @@ const ShareListScreen = ({navigation}:any) => {
       {/*  onPress={ () => navigation.navigate('SingleShareChat')}*/}
       {/*/>*/}
       <ScrollView keyboardShouldPersistTaps='handled'>
-        <View style={{width: '100%', height: 150, borderWidth: 1}}>
-          <View>
-            <Text>역삼동</Text>
+        <View style={{width: '100%', marginVertical: 20}}>
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{width: '90%'}}>
+              <Text style={[styles.font, {fontSize: 20}]}>역삼동</Text>
+            </View>
           </View>
-          <View style={{width: '80%'}}>
-            <PlainInput {...shareText}/>
+          <View style={{justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{width: '90%'}}>
+              <PlainInput {...shareText}/>
+            </View>
           </View>
         </View>
         <View style={[{width: '100%', justifyContent: 'center', alignItems: 'center'}]}>

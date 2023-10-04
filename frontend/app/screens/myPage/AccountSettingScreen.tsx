@@ -66,8 +66,7 @@ const AccountSettingScreen = ({navigation}:any) => {
               if (i.goto === now){
                 return (
                   <React.Fragment key={`${i.goto}`}>
-                    <SettingDetail name={i.name} goto={i.goto}/>
-                    {content()}
+                    <SettingDetail name={i.name} goto={i.goto} houseCode={houseCode} memberId={memberId}/>
                   </React.Fragment>
                 );
               } else {

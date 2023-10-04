@@ -73,11 +73,10 @@ const PlaceManage = ({memberId}) =>{
       const res = await memberApi.postLocation(memberId, item.locationId);
       if(res.status === 200) setLocations([...locations, {...item}]);
     }
-
   }
 
   return (
-    <View style={{width: '90%'}}>
+    <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
       <AutoCompleteInput {...location} textList={locationList} onPressIn={onPressIn} onBlur={onBlurLocation} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
       <View>
         <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
