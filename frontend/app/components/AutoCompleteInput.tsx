@@ -46,7 +46,7 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
         alignItems: 'flex-start',
         width: '100%',
       }}>
-      <View style={{marginTop: 30, marginHorizontal: 12, width: '100%', justifyContent: 'center'}}>
+      <View style={{marginHorizontal: 12, width: '100%', justifyContent: 'center'}}>
         { title && (
           <View style={[{width: '100%'}]}>
             <Text style={[styles.font, {fontSize: 20}]}>{title}</Text>
