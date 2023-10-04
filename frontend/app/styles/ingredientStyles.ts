@@ -9,12 +9,18 @@ export const ingredientStyles = StyleSheet.create({
     padding: 10,
   },
   singleTop: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'row',
     justifyContent: "space-around",
   },
+  singleMiddle: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: "space-around",
+    verticalAlign:"bottom",
+  },
   singleBottom: {
-    flex: 3,
+    flex: 4,
     flexDirection: 'row',
     justifyContent: "space-around",
     verticalAlign:"bottom",
@@ -27,11 +33,11 @@ export const ingredientStyles = StyleSheet.create({
   },
   nameContainer: {
     flex: 2,
-    marginTop: 3,
+    // marginTop: 3,
   },
   dDayContainer: {
-    flex: 1,
-    marginTop: 10,
+    // flex: 1,
+    // marginTop: 10,
   },
   overContainer: {
     borderWidth: 1,

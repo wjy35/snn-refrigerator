@@ -8,7 +8,7 @@ import BasicBadge from "@/components/BasicBadge";
 import AutoCompleteInput from "@/components/AutoCompleteInput";
 import useInput from "@/hooks/useInput";
 import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
-import {closeIcon} from "@/assets/icons/icons";
+import {closeIcon, eyeIcon, micIcon, pictureIcon} from "@/assets/icons/icons";
 import {MAIN_COLOR} from "@/assets/colors/colors";
 
 interface props {
@@ -90,7 +90,7 @@ const HouseAddIngredient = ({textList, ingredients, setNow, now, addIngredient, 
                 ingredients.map((i, idx) => {
                   return (
                     <React.Fragment key={`${i.ingredientName}${idx}`}>
-                      <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{deleteIngredient(idx)}}/>
+                      <BasicBadge color='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{deleteIngredient(idx)}}/>
                     </React.Fragment>
                   )
                 })
@@ -101,18 +101,10 @@ const HouseAddIngredient = ({textList, ingredients, setNow, now, addIngredient, 
       </View>
       {
         now === 0 && (
-          <View style={{flexDirection: 'row'}}>
-            <TouchableWithoutFeedback onPress={()=>{setIsImageVisible()}}>
-              <View style={[{width: '20%', height: 40, marginTop: 10, borderWidth: 1, backgroundColor: MAIN_COLOR, borderColor: MAIN_COLOR, borderRadius: 16, justifyContent: 'center', alignItems: 'center'}]}>
-                <Text style={[styles.font]}>사진으로 등록</Text>
+              <View style={[{position: 'absolute', bottom: 0, alignSelf:'center', flexDirection:'row', justifyContent:'center'}]}>
+                <BasicBadge leftIcon={pictureIcon} color='#3093EF' name={'사진으로 등록'} onPress={setIsImageVisible}/>
+                <BasicBadge leftIcon={micIcon} color='#3093EF' name={'음성으로 등록'} onPress={setIsSpeechVisible}/>
               </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={()=>{setIsSpeechVisible()}}>
-              <View style={[{width: '20%', height: 40, marginTop: 10, borderWidth: 1, backgroundColor: MAIN_COLOR, borderColor: MAIN_COLOR, borderRadius: 16, justifyContent: 'center', alignItems: 'center'}]}>
-                <Text style={[styles.font]}>음성으로 등록</Text>
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
         )
       }
     </View>
