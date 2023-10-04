@@ -104,19 +104,19 @@ const memberApi = {
     );
     return res;
   },
-  memberHate: async ({memberId}: props) => {
+  memberHate: async (memberId: number) => {
     const res = await PrivateMemberApi.get(
       `${memberId}/hate-ingredient`,
     );
     return res;
   },
-  addMemberHate: async ({memberId, ingredientId}: props) => {
+  addMemberHate: async (memberId: number, ingredientId: number) => {
     const res = await PrivateMemberApi.post(
       `${memberId}/hate-ingredient/${ingredientId}`,
     );
     return res;
   },
-  deleteMemberHate: async ({memberId, ingredientId}: props) => {
+  deleteMemberHate: async (memberId: number, ingredientId: number) => {
     const res = await PrivateMemberApi.delete(
       `${memberId}/hate-ingredient/${ingredientId}`
     );
@@ -148,6 +148,29 @@ const memberApi = {
     return res;
   },
 
+  getLocation: async(memberId: number) => {
+    const res = await PrivateMemberApi.get(
+      `${memberId}/location`
+    );
+    return res;
+  },
+
+  postLocation: async(memberId: number, locationId: number)=> {
+    const res = await PrivateMemberApi.post(
+      `${memberId}/location`,
+      {
+        location:locationId
+      }
+    );
+    return res;
+  },
+
+  deleteLocation: async(memberId: number, locationId: number)=> {
+    const res = await PrivateMemberApi.delete(
+      `${memberId}/location/${locationId}`
+    );
+    return res;
+  },
 }
 
 export default memberApi;

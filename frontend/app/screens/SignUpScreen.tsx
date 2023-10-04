@@ -91,7 +91,7 @@ const SignUpScreen = ({navigation}:any) => {
     setNow(nowNum);
   }
 
-  function onBlurLocation(){
+  function onBlurIngredient(){
     excludeIngredient.reset();
     setExcludeIngredientList([]);
   }
@@ -109,7 +109,7 @@ const SignUpScreen = ({navigation}:any) => {
     }
   }
 
-  function onBlurIngredient(){
+  function onBlurLocation(){
     location.reset();
     setLocationList([]);
   }
@@ -117,7 +117,7 @@ const SignUpScreen = ({navigation}:any) => {
   function removeIngredient(idx: number){
     const _ingredients = [...ingredients];
     _ingredients.splice(idx, 1);
-    setIngredients(ingredients);
+    setIngredients(_ingredients);
   }
 
   function removeLocation(idx: number) {
