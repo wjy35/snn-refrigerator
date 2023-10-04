@@ -21,10 +21,10 @@ public class ChatPublish implements Serializable {
         this.memberId = memberId;
         this.content = content;
         this.timestamp = timestamp;
-    }
+    }å
 
     public String getChatRoomDetailDestination(){
-        return "/topic/"+this.memberId+"/"+this.chatRoomId;
+        return "/topic/"+this.chatRoomId;
     }
 
     public String getChatRoomListDestination(){
