@@ -46,7 +46,7 @@ const memberApi = {
     );
     return res;
   },
-  checkHouse: async ({houseCode}: props) => {
+  checkHouse: async (houseCode: string) => {
     const res = await PublicMemberApi.get(
       `house/${houseCode}`
     );
