@@ -12,7 +12,7 @@ import LoginSwiper from '@/components/LoginSwiper';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import memberApi from '@/apis/memberApi';
 import {useDispatch} from "react-redux";
-import {setMemberIdAction} from "@/actions/userAction";
+import {setLocationsAction, setMemberIdAction} from "@/actions/userAction";
 import {setHouseCodeAction} from "@/actions/houseAction";
 
 interface props {
@@ -44,6 +44,7 @@ const LogInScreen = ({navigation}: any) => {
     try {
       const res = await memberApi.memberDetail(memberId);
       if (res.status === 200) {
+        dispatch(setLocationsAction(res.data.data.placeList));
         dispatch(setHouseCodeAction(res.data.data.memberInfo.houseCode));
         navigation.replace('Home'); //회원 정보 다 저장한 후엔 홈 화면으로.
       } else {

@@ -149,7 +149,7 @@ const HouseAddScreen = ({navigation}:any) => {
         </ProgressPage>
         {
           isImageVisible && (
-            <GetImageFrom getImage={getImage} setIsVisible={()=>setIsImageVisible(false)}/>
+            <GetImageFrom getImage={getImage} setIsVisible={()=>setIsImageVisible(false)} Base64={true}/>
           )
         }
         {
