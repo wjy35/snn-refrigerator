@@ -11,23 +11,28 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class ChatPublish implements Serializable {
     private Integer chatRoomId;
-    private Long memberId;
+    private Long sendMemberId;
+    private Long receiveMemberId;
     private String content;
     private Timestamp timestamp;
-
     @Builder
-    public ChatPublish(Integer chatRoomId, Long memberId, String content, Timestamp timestamp) {
+    public ChatPublish(Integer chatRoomId, Long sendMemberId, Long receiveMemberId, String content, Timestamp timestamp) {
         this.chatRoomId = chatRoomId;
-        this.memberId = memberId;
+        this.sendMemberId = sendMemberId;
+        this.receiveMemberId = receiveMemberId;
         this.content = content;
         this.timestamp = timestamp;
     }
 
+    public String getEchoDestination(){
+        return "/topic/"+this.sendMemberId+"/"+this.chatRoomId;
+    }
+
     public String getChatRoomDetailDestination(){
-        return "/topic/"+this.memberId+"/"+this.chatRoomId;
+        return "/topic/"+this.receiveMemberId+"/"+this.chatRoomId;
     }
 
     public String getChatRoomListDestination(){
-        return "/topic/"+this.memberId;
+        return "/topic/"+this.receiveMemberId;
     }
 }

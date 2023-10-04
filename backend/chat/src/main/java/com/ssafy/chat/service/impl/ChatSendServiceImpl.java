@@ -21,7 +21,7 @@ public class ChatSendServiceImpl implements ChatSendService {
         try {
             ChatForDetailResponse chatForDetailResponse = ChatForDetailResponse
                     .builder()
-                    .memberId(chatPublish.getMemberId())
+                    .memberId(chatPublish.getSendMemberId())
                     .content(chatPublish.getContent())
                     .timestamp(chatPublish.getTimestamp())
                     .build();
@@ -48,6 +48,18 @@ public class ChatSendServiceImpl implements ChatSendService {
             simpMessageSendingOperations.convertAndSend(
                     chatPublish.getChatRoomListDestination(),
                     objectMapper.writeValueAsString(chatForListResponse)
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void sendForEcho(ChatPublish chatPublish) {
+        try {
+            simpMessageSendingOperations.convertAndSend(
+                    chatPublish.getEchoDestination(),
+                    objectMapper.writeValueAsString(chatPublish)
             );
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
