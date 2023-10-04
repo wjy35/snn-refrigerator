@@ -79,7 +79,7 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
             Recipe recipe = recipeList.get(i);
 
             MemberResponse memberResponse1 = this.getMember(recipe.getMemberId());
-            String nickname = memberResponse.getNickname();
+            String nickname = memberResponse1.getNickname();
             int myIngredients = this.getMyIngredientCnt(recipe, memberResponse.getHouseCode());
             int neededIngredients = this.getNeededIngredientsCnt(recipe);
 
