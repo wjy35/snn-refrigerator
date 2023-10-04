@@ -35,6 +35,7 @@ public class ChatSocketController {
         ChatPublish chatPublish = ChatPublish
                 .builder()
                 .chatRoomId(chatPayload.getChatRoomId())
+                .sendMemberId(chatPayload.getSendMemberId())
                 .receiveMemberId(chatPayload.getReceiveMemberId())
                 .content(chatPayload.getContent())
                 .timestamp(chatEntity.getTimestamp())
