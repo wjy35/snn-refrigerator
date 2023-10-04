@@ -17,7 +17,8 @@ const ShareChatListScreen = ({navigation}: any) => {
             thumbnailImageUrl: string,
             nickname: string,
             content: string,
-            timestamp: number
+            timestamp: number,
+            receiveMemberId:number
         }>
     >([]);
 
@@ -96,6 +97,7 @@ const ShareChatListScreen = ({navigation}: any) => {
                                         thumbnailImageUrl={item.thumbnailImageUrl}
                                         timestamp={item.timestamp}
                                         nickname={item.nickname}
+                                        receiveMemberId={item.receiveMemberId}
                                     />
                                 </React.Fragment>
                             )

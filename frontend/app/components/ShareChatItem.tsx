@@ -10,15 +10,16 @@ interface props {
   thumbnailImageUrl : string,
   nickname : string,
   content : string,
-  timestamp: number
+  timestamp: number,
+  receiveMemberId: number,
 }
 
-const ShareChatItem = ({chatRoomId,profileImageUrl,locationName,thumbnailImageUrl,nickname,content,timestamp}: props) => {
+const ShareChatItem = ({chatRoomId,profileImageUrl,locationName,thumbnailImageUrl,nickname,content,timestamp,receiveMemberId}: props) => {
   const navigation = useNavigation();
 
   return (
     <View style={[{width: '90%', borderWidth: 1, height: 80, marginBottom: 10}]}>
-      <TouchableWithoutFeedback onPress={() => navigation.navigate('SingleShareChat')}>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate('SingleShareChat',{chatRoomId:chatRoomId,receiveMemberId:receiveMemberId})}>
         <View style={[{flex: 1, flexDirection: 'row'}]}>
           <View style={[{borderWidth: 1, width: 80, height: 80}]}>
 
