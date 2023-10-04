@@ -68,7 +68,7 @@ const HouseAddStorage = ({textList, ingredients, setNow, now, onChange}: props) 
                           if (i.storageType === 2) {
                             return (
                               <React.Fragment key={`${i.ingredientName}${idx}`}>
-                                <BasicBadge backgroundColor={WARM_COLOR} name={i.ingredientName} onPress={()=>onPress(i, 0)}/>
+                                <BasicBadge color={WARM_COLOR} name={i.ingredientName} onPress={()=>onPress(i, 0)}/>
                               </React.Fragment>
                             )
                           }
@@ -87,7 +87,7 @@ const HouseAddStorage = ({textList, ingredients, setNow, now, onChange}: props) 
                           if (i.storageType === 1) {
                             return (
                               <React.Fragment key={`${i.ingredientName}${idx}`}>
-                                <BasicBadge backgroundColor={COLD_COLOR} name={i.ingredientName} onPress={()=>onPress(i, 0)}/>
+                                <BasicBadge color={COLD_COLOR} name={i.ingredientName} onPress={()=>onPress(i, 0)}/>
                               </React.Fragment>
                             )
                           }
@@ -120,7 +120,7 @@ const HouseAddStorage = ({textList, ingredients, setNow, now, onChange}: props) 
                       if (i.storageType === 0) {
                         return (
                           <React.Fragment key={`${i.ingredientName}${idx}`}>
-                            <BasicBadge backgroundColor={COOL_COLOR} name={i.ingredientName} onPress={()=>onPress(i, isWarm ? 2 : 1)}/>
+                            <BasicBadge color={COOL_COLOR} name={i.ingredientName} onPress={()=>onPress(i, isWarm ? 2 : 1)}/>
                           </React.Fragment>
                         )
                       }

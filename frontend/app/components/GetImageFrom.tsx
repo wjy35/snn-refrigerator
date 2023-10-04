@@ -22,6 +22,7 @@ const GetImageFrom = ({getImage, setIsVisible}: props) => {
       {
         mediaType: 'photo',
         selectionLimit: 1,
+        includeBase64: true,
       },
       (res) => {
         if (res.didCancel) return;
@@ -48,6 +49,7 @@ const GetImageFrom = ({getImage, setIsVisible}: props) => {
         launchCamera(
           {
             mediaType: 'photo',
+            includeBase64: true,
           },
           (res) => {
             if (res.didCancel) return;

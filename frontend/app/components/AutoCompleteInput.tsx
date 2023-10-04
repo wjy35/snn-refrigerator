@@ -71,6 +71,7 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
                   initialNumToRender={5}
                   nestedScrollEnabled
                   data={textList}
+                  // ListHeaderComponent={<Text>헤더</Text>}
                   renderItem={(item) => <AutoCompleteItem item={item} name={name} onSelect={onSelect}/>}
                   keyExtractor={(item) => {
                     return String(item[keyValue])

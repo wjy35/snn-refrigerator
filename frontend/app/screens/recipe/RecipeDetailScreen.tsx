@@ -19,6 +19,7 @@ const RecipeDetailScreen = () => {
 
   const {memberId} = useSelector((state:RootState)=>state.userReducer);
   const [activatedTab, setActivatedTab] = useState(0);
+
   const [recipeDetail, setRecipeDetail] = useState({
     recipeId:"",
     nickname:"닉네임 로딩중",
@@ -30,7 +31,7 @@ const RecipeDetailScreen = () => {
     contentResponseList:[],
     foodName:"로딩중",
     cookingTime:"로딩중",
-    serving:2
+    serving:'로딩중'
   });
   const [youtubeUrl, setYoutubeUrl] = useState('')
 
@@ -79,9 +80,9 @@ const RecipeDetailScreen = () => {
           <View style={recipeStyles.recipeDetailInfo}>
             <View style={recipeStyles.recipeDetailUserContainer}>
               <View style={recipeStyles.recipeDetailUserImage}>
-                <Image source={{uri: recipeDetail.profileImageUrl}}
+                {recipeDetail.profileImageUrl&&<Image source={{uri: recipeDetail.profileImageUrl}}
                                  style={{height:70,width:70,borderRadius:99, borderWidth:1, borderColor:TEXT_COLOR ,marginRight:10}}
-                />
+                />}
               </View>
               <View style={[recipeStyles.recipeDetailUserInfo]}>
                 <Text style={[styles.font,{fontSize:20, color:TEXT_SUB_COLOR, marginVertical:3}]}>{recipeDetail.nickname}</Text>

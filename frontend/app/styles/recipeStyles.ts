@@ -179,7 +179,7 @@ export const recipeStyles = StyleSheet.create({
 
   },
   recipeDetailBody: {
-    // height: 500,
+    minHeight: 300,
     borderWidth: 1,
     borderTopWidth: 0,
     borderBottomLeftRadius:20,

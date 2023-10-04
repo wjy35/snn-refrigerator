@@ -7,7 +7,7 @@ import sampleApi from '@/apis/sampleApi';
 import {homeScreenStyles} from "@/styles/homeScreenStyles";
 import MyIngredientList from "@/components/MyIngredientList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import recipeApi from "@/apis/recipeApi";
+import recipeRecommendApi from "@/apis/recipeRecommendApi";
 import {useSelector} from "react-redux";
 import {RootState} from "@/reducers/reducers";
 
@@ -19,21 +19,15 @@ const HomeScreen = ({navigation}:any) => {
   useEffect(() => {
     const getRecipe = async () => {
       try {
-        let res = await recipeApi.searchRecipe({
+        let res = await recipeRecommendApi.getRecommendList({
           memberId: memberId,
-          contain: [],
-          remove: [],
-          n: 1000,
-          keyword: '',
-          page:1,
-          size:3,
         });
         if (res.status === 200) {
           setRecipeList(res.data.data.recipe);
         }
       } catch (err) {
-        console.log('여기서 나는거임home');
-        console.log(err);
+        console.log(memberId);
+        console.log('HomeScreen.tsx', err);
       }
     }
     getRecipe();
