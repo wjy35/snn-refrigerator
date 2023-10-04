@@ -33,40 +33,16 @@ const AccountSettingScreen = ({navigation}:any) => {
     setHouseCode(res.data.data.memberInfo.houseCode);
   }
 
-  function content (){
-    if (now === '3') {
-      return (
-        <View>
-          <PrintHouseCode houseCode={houseCode} />
-        </View>
-      );
-    }
-    else if (now === '2'){
-      return (
-        <View>
-          <HateIngredient memberId={memberId} />
-        </View>
-      );
-    }
-    else if (now === '1'){
-      return (
-        <View>
-          <PlaceManage memberId={memberId} />
-        </View>
-      )
-    }
-  }
-
   return (
     <MyPageLayout title="계정 설정">
-      <ScrollView style={{width: '100%'}}>
+      <ScrollView style={{width: '100%'}} keyboardShouldPersistTaps='handled' overScrollMode='auto'>
         <View style={myPageStyles.optionsContainer}>
           {
             settings.map((i) => {
               if (i.goto === now){
                 return (
                   <React.Fragment key={`${i.goto}`}>
-                    <SettingDetail name={i.name} goto={i.goto} houseCode={houseCode} memberId={memberId}/>
+                    <SettingDetail name={i.name} goto={i.goto} houseCode={houseCode} memberId={memberId} closeFunc={()=>{setNow('0')}}/>
                   </React.Fragment>
                 );
               } else {

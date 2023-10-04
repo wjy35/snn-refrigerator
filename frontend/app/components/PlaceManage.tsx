@@ -15,8 +15,14 @@ const PlaceManage = ({memberId}) =>{
 
   useEffect(() => {
     const init = async () => {
-      const res = await memberApi.getLocation(memberId);
-      setLocations(res.data.data.location);
+      try {
+        const res = await memberApi.getLocation(memberId);
+        if (res.status === 200){
+          setLocations(res.data.data.location);
+        }
+      } catch (err) {
+        console.log(err)
+      }
     };
     init();
   }, []);
@@ -34,7 +40,6 @@ const PlaceManage = ({memberId}) =>{
 
   const location = useInput({
     placeholder: '검색',
-    title: '우리 동네 등록',
     nowNum: 1,
     onChange: checkLocation,
   });
@@ -50,34 +55,36 @@ const PlaceManage = ({memberId}) =>{
   }
 
   async function removeLocation(idx: number) {
-    const res = await memberApi.postLocation(memberId, idx);
-    if(res.data.data.status){
-      const _locations = [...locations];
-      _locations.splice(idx, 1);
-      setLocationList(_locations);
+    try {
+      const res = await memberApi.postLocation(memberId, idx);
+      if (res?.data?.data?.status){
+        const _locations = [...locations];
+        _locations.splice(idx, 1);
+        setLocationList(_locations);
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 
-  function onPressIn(nowNum: number){
-    setNow(nowNum);
-  }
-
-  function onBlurLocation(){
-    location.reset();
-    setLocationList([]);
-  }
 
   //TODO: ingredient와 동일하게 location 등록이 되지 않음.
   async function onSelectLocation(item: any) {
     if (checkDuplicateLocation(item)){
-      const res = await memberApi.postLocation(memberId, item.locationId);
-      if(res.status === 200) setLocations([...locations, {...item}]);
+      try {
+        const res = await memberApi.postLocation(memberId, item.locationId);
+        if(res.status === 200) setLocations([...locations, {...item}]);
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 
   return (
     <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-      <AutoCompleteInput {...location} textList={locationList} onPressIn={onPressIn} onBlur={onBlurLocation} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
+      <View style={{}}>
+        <AutoCompleteInput {...location} textList={locationList} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
+      </View>
       <View>
         <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
           {

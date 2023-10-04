@@ -13,8 +13,9 @@ interface props {
   goto: string;
   houseCode: string;
   memberId: number;
+  closeFunc: Function;
 }
-const SettingDetail = ({name, goto, houseCode, memberId}: props) => {
+const SettingDetail = ({name, goto, houseCode, memberId, closeFunc}: props) => {
 
   function content (){
     if (goto === '3') {
@@ -26,36 +27,44 @@ const SettingDetail = ({name, goto, houseCode, memberId}: props) => {
     }
     else if (goto === '2'){
       return (
-        <View>
+        <View style={{height: 400}}>
           <HateIngredient memberId={memberId} />
         </View>
       );
     }
     else if (goto === '1'){
       return (
-        <View>
+        <View style={{height: 400}}>
           <PlaceManage memberId={memberId} />
         </View>
       )
     }
   }
 
+  function test(){
+    closeFunc();
+  }
+
   return (
-    <View style={{margin: 5, paddingHorizontal: 25, borderWidth: 1, borderRadius: 16}}>
-      <View style={{justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', height: 60}}>
-        <View style={{marginRight: 10}}>
-          <Text style={[styles.font, {fontSize: 20}]}>{name}</Text>
+    <View style={{margin: 5, paddingHorizontal: 25, borderWidth: 1, borderRadius: 16, flex: 1}}>
+      <TouchableWithoutFeedback onPress={test}>
+        <View>
+          <View style={{justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', height: 60}}>
+            <View style={{marginRight: 10}}>
+              <Text style={[styles.font, {fontSize: 20}]}>{name}</Text>
+            </View>
+            <View style={{transform: [{ rotate: '180deg'}]}} >
+              <SvgXml
+                xml={backButton}
+                width={15}
+                height={15}
+                rotation={90}
+              />
+            </View>
+          </View>
         </View>
-        <View style={{transform: [{ rotate: '180deg'}]}} >
-          <SvgXml
-            xml={backButton}
-            width={15}
-            height={15}
-            rotation={90}
-          />
-        </View>
-      </View>
-      <View style={{height: 200}}>
+      </TouchableWithoutFeedback>
+      <View>
         {content()}
       </View>
     </View>

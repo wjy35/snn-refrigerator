@@ -138,12 +138,10 @@ const SignUpScreen = ({navigation}:any) => {
     }
   }
 
-  async function checkHouseExistance(houseCode: string){
+  async function checkHouseExistence(houseCode: string){
     try{
       const res = await memberApi.checkHouse(houseCode);
-      console.log(res);
       if(res.status === 200){
-        console.log(res.data.data.existance);
         res.data.data.existance?setHouseStatus(2):setHouseStatus(1);
       }
     } catch (err) {
@@ -161,7 +159,7 @@ const SignUpScreen = ({navigation}:any) => {
     placeholder:'(선택) 집 공유 코드 입력',
     title: '이미 좋냉신나를 사용하고 있는 가족이 있나요?',
     nowNum: 1,
-    onChange: checkHouseExistance,
+    onChange: checkHouseExistence,
   });
   const location = useInput({
     placeholder: '검색',
