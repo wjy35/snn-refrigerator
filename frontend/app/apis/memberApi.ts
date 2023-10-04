@@ -8,6 +8,7 @@ const PublicMemberApi = axios.create({
 
 const PrivateMemberApi = axios.create({
   baseURL: `${baseURL}/member-manage`,
+  // baseURL: 'http://localhost:8080',
   headers: {
     // Authorization: `Bearer ${localStorage.getItem('token')}`
   }
@@ -122,7 +123,20 @@ const memberApi = {
       `${followerId}/follow/${followeeId}`
     );
     return res;
-  }
+  },
+  changeProfile: async(memberId: number, formData: any) => {
+    console.log(memberId, formData)
+    const res = await PrivateMemberApi.put(
+      `${memberId}/profile-image`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+    );
+    return res;
+  },
 
 }
 
