@@ -15,7 +15,7 @@ const SettingContainer = ({name, goto, optionFunc}: props) => {
   const navigation = useNavigation();
 
   return (
-    <View style={{margin: 5}}>
+    <View style={{margin: 5, backgroundColor:"#FFFFFF"}}>
       <TouchableWithoutFeedback onPress={(e)=> optionFunc(goto)}>
         <View style={{paddingHorizontal: 25, height: 60, borderWidth: 1, borderRadius: 16, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row'}}>
           <View style={{marginRight: 10}}>

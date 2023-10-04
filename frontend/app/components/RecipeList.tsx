@@ -1,9 +1,7 @@
-import React, {useState} from 'react';
-import {View, Text, Image, ScrollView, FlatList} from 'react-native';
+import React from 'react';
+import {View, FlatList} from 'react-native';
 import {recipeStyles} from "@/styles/recipeStyles";
-import {styles} from "@/styles/styles";
 import RecipeItem from "@/components/RecipeItem";
-import {useFocusEffect} from "@react-navigation/native";
 
 interface props {
   horizontal: boolean;

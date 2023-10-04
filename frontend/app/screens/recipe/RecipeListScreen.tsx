@@ -27,7 +27,7 @@ const RecipeListScreen = ({navigation}:any) => {
     remove: [],
     n: 1000,
     keyword: '',
-    size:3,
+    size:5,
   });
   const [maxPage, setMaxPage] = useState(1);
   const [nowPage, setNowPage] = useState(1);
@@ -51,7 +51,7 @@ const RecipeListScreen = ({navigation}:any) => {
         page: nowPage
       });
       if (res.status === 200) {
-        console.log(res);
+        console.log("RecipeListScreen -> getRecipe",res.data.data);
         if (nowPage === 1){
           setRecipe([...res.data.data.recipe]);
         } else {
