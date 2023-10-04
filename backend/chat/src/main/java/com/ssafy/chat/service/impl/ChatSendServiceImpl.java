@@ -57,9 +57,16 @@ public class ChatSendServiceImpl implements ChatSendService {
     @Override
     public void sendForEcho(ChatPublish chatPublish) {
         try {
+            ChatForDetailResponse chatForDetailResponse = ChatForDetailResponse
+                    .builder()
+                    .memberId(chatPublish.getSendMemberId())
+                    .content(chatPublish.getContent())
+                    .timestamp(chatPublish.getTimestamp())
+                    .build();
+
             simpMessageSendingOperations.convertAndSend(
                     chatPublish.getEchoDestination(),
-                    objectMapper.writeValueAsString(chatPublish)
+                    objectMapper.writeValueAsString(chatForDetailResponse)
             );
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
