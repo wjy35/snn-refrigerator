@@ -1,13 +1,13 @@
 package com.ssafy.share.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ssafy.share.api.request.ShareBoardUpdateRequest;
 import com.ssafy.share.api.request.ShareBoardWriteRequest;
 import com.ssafy.share.api.request.ShareIngredientRequest;
 import com.ssafy.share.api.response.IngredientResponse;
 import com.ssafy.share.api.response.MemberResponse;
-import com.ssafy.share.db.entity.ShareImage;
-import com.ssafy.share.db.entity.ShareIngredient;
 import com.ssafy.share.db.entity.SharePost;
 import com.ssafy.share.db.repository.ShareBoardRepository;
 import com.ssafy.share.db.repository.ShareImageRepository;
@@ -17,13 +17,12 @@ import com.ssafy.share.feign.LocationFeign;
 import com.ssafy.share.feign.MemberFeign;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -80,27 +79,55 @@ public class ShareBoardServiceImpl implements ShareBoardService {
                 .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다. ID: " + shareBoardId));
     }
 
+    @Override
+    @Transactional
+    public SharePost save(SharePost sharePost) {
+        return shareBoardRepository.save(sharePost);
+    }
+
+    @Override
+    public Map<String, Object> convertSharePost(SharePost sharePost){
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        Map<String, Object> mp = objectMapper.convertValue(sharePost, HashMap.class);
+        mp.remove("shareIngredients");
+        mp.remove("shareImages");
+        return objectMapper.convertValue(sharePost, HashMap.class);
+    }
+
 
     @Override
     @Transactional
-    public SharePost save(List<ShareIngredientRequest> shareIngredientRequests,List<String> images,
-                          ShareBoardWriteRequest shareBoardWriteRequest) { // 나눔글 등록
+    public SharePost shareWriteSave(List<ShareIngredientRequest> shareIngredientRequests, List<String> images,
+                                    ShareBoardWriteRequest shareBoardWriteRequest) { // 나눔글 등록
 
         SharePost post=shareBoardWriteRequest.toEntity(); // post 엔티티 생성
         post.setShareIngredients(shareIngredientRequests);
-        post.setShareImages(images);
-
-//        for (String i:images){
-//            ShareImage shareImage=ShareImage.builder().sharePostImageUrl(i).sharePost(post).build();
-//            shareBoardWriteRequest.getShareImages().add(shareImage);
-//        }
-//        for(ShareIngredientRequest s:shareIngredientRequests){
-//            s.setSharePost(post);
-//            ShareIngredient shareIngredient=s.toEntity();
-//            shareBoardWriteRequest.getShareIngredients().add(shareIngredient);
-//        }
+//        post.setShareImages(images);
         return shareBoardRepository.save(post);
     }
+
+//    @Override
+//    @Transactional
+//    public ShareImage shareImageSave(SharePost sharePost, List<String> images){
+//        for(String image: images){
+//            ShareImage shareImage = ShareImage
+//                    .builder()
+//                    .sharePost(sharePost)
+//                    .sharePostImageUrl(image)
+//                    .build();
+//            shareImageRepository.save(shareImage);
+//        }
+//
+//    }
+
+//    @Override
+//    @Transactional
+//    public ShareImage shareProfileSave(SharePost sharePost, String thumbnailUrl){
+//        sharePost.
+//    }
 
     @Override
     @Transactional

@@ -5,11 +5,9 @@ import com.ssafy.share.api.request.ShareBoardWriteRequest;
 import com.ssafy.share.api.request.ShareIngredientRequest;
 import com.ssafy.share.api.response.MemberResponse;
 import com.ssafy.share.db.entity.SharePost;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ShareBoardService {
 
@@ -22,8 +20,13 @@ public interface ShareBoardService {
 
     public SharePost getPostDetail(Long shareBoardId);
 
-    SharePost save(List<ShareIngredientRequest> shareIngredientRequests, List<String> images
+
+    SharePost shareWriteSave(List<ShareIngredientRequest> shareIngredientRequests, List<String> images
             , ShareBoardWriteRequest shareBoardWriteRequest);
+
+    SharePost save(SharePost sharePost);
+
+    Map<String, Object> convertSharePost(SharePost sharePost);
 
     SharePost update(Long shareBoardId,List<ShareIngredientRequest> shareIngredientRequests, List<String> images
             ,ShareBoardUpdateRequest shareBoardUpdateRequest);
