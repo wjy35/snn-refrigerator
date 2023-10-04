@@ -6,10 +6,8 @@ export const bottomTabStyles = StyleSheet.create({
     position: 'absolute',
     width:'100%',
     bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: '#ffffff',
-    shadowColor: '#000000',
+    // marginTop:3,
   },
   tabItemContainer: {
     flex: 1,

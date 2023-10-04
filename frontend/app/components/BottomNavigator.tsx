@@ -15,6 +15,7 @@ import {
   fridgeActive, fridgeDisactive
 } from '@/assets/icons/icons';
 import {SvgXml} from 'react-native-svg';
+import {Shadow} from "react-native-shadow-2";
 
 interface props {
   now: string,
@@ -24,6 +25,9 @@ const BottomNavigator = ({now}: props) => {
 
   return (
     <View style={[bottomTabStyles.tabContainer, {zIndex: 100}]}>
+      <Shadow style={{
+        alignItems: 'center',
+        justifyContent: 'center',}}>
       <View style={[bottomTabStyles.tabItemContainer]}>
         <View style={bottomTabStyles.singleTab}>
           <TouchableWithoutFeedback
@@ -96,6 +100,7 @@ const BottomNavigator = ({now}: props) => {
           </TouchableWithoutFeedback>
         </View>
       </View>
+      </Shadow>
     </View>
   );
 };
