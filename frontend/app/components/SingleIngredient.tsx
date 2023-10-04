@@ -1,14 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Text, TouchableWithoutFeedback, View} from "react-native";
+import {Text, TouchableWithoutFeedback, View} from "react-native";
 import {ingredientStyles} from "@/styles/ingredientStyles";
 import {styles} from "@/styles/styles";
 import IngredientIcon from "@/components/IngredientIcon";
 import tw from 'twrnc';
-import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
 import Modal from "react-native-modal";
 import BasicBadge from "@/components/BasicBadge";
-import {deleteIcon, micIcon, modifyIcon, pictureIcon} from "@/assets/icons/icons";
+import {deleteIcon, modifyIcon} from "@/assets/icons/icons";
 import houseApi from "@/apis/houseApi";
+import {Calendar} from "react-native-calendars";
+import {
+  ALERT_COLOR,
+  COLD_COLOR,
+  COOL_COLOR,
+  LIGHT_BACKGROUND_COLOR,
+  MAIN_COLOR, TEXT_COLOR,
+  WARM_COLOR
+} from "@/assets/colors/colors";
 
 interface props {
   ingredientName: string;
@@ -26,11 +34,37 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
   const [container, setContainer] = useState<any>()
   const [text, setText] = useState<any>()
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isModifying, setIsModifying] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string>('');
+  const [selectedStorageType, setSelectedStorageType] = useState<number>(0);
+
+  function padTo2Digits(num: number) {
+    return num.toString().padStart(2, '0');
+  }
+
+  function formatDate(date: Date) {
+    return (
+        [
+          date.getFullYear(),
+          padTo2Digits(date.getMonth() + 1),
+          padTo2Digits(date.getDate()),
+        ].join('-') +
+        ' ' +
+        [
+          padTo2Digits(date.getHours()),
+          padTo2Digits(date.getMinutes()),
+          padTo2Digits(date.getSeconds()),
+        ].join(':')
+    );
+  }
 
   useEffect(() => {
     const date: Date = new Date;
     const last: Date = new Date(lastDate);
     const storage: Date = new Date(storageDate);
+    setIsModifying(false);
+    setSelectedDate(formatDate(storage));
+    setSelectedStorageType(storageType);
     // @ts-ignore date 계산 관련 ts 에러 무시
     const lastGap: number = 1+ Math.floor((last.getTime() - date) / (1000 * 60 * 60 * 24));
     setLastGap(lastGap)
@@ -52,15 +86,19 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
       setContainer(ingredientStyles.safeContainer)
       setText(ingredientStyles.safeText)
     }
-  })
+  }, [])
+
 
   const toggleModal = () => {
+    if(isModalVisible){
+      onChange();
+    }
     setModalVisible(!isModalVisible);
   };
 
 
   function getDDay(){
-    if(storageType===1) return '냉동';
+    if(selectedStorageType===1) return '냉동';
     return `D${(lastGap<0?'+':'-')+Math.abs(lastGap)}`;
   }
 
@@ -74,9 +112,9 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
   }
 
   function getStorageTypeText(){
-    if(storageType==0) return '냉장';
-    else if(storageType==1) return '냉동';
-    else if(storageType==2) return '상온';
+    if(selectedStorageType==0) return '냉장';
+    else if(selectedStorageType==1) return '냉동';
+    else if(selectedStorageType==2) return '상온';
   }
 
   async function deleteIngredient(){
@@ -93,13 +131,53 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
     }
   }
 
+  async function modifyIngredient(){
+
+    try {
+      const res = await houseApi.updateIngredient({
+        houseIngredientId:houseIngredientId,
+        storageType:selectedStorageType,
+        lastDate:selectedDate,
+      })
+      if (res.status === 200) {
+        console.log(res.data);
+        setIsModifying(false);
+
+
+        const date: Date = new Date;
+        const last: Date = new Date(selectedDate);
+        // @ts-ignore date 계산 관련 ts 에러 무시
+        const lastGap: number = 1+ Math.floor((last.getTime() - date) / (1000 * 60 * 60 * 24));
+        setLastGap(lastGap)
+        if (storageType === 1){
+          setContainer(ingredientStyles.coldContainer)
+          setText(ingredientStyles.coldText)
+        } else if (lastGap < 0){
+          setContainer(ingredientStyles.overContainer)
+          setText(ingredientStyles.overText)
+        } else if (lastGap < 3){
+          setContainer(ingredientStyles.alertContainer)
+          setText(ingredientStyles.alertText)
+        } else if (lastGap < 7){
+          setContainer(ingredientStyles.warnContainer)
+          setText(ingredientStyles.warnText)
+        } else {
+          setContainer(ingredientStyles.safeContainer)
+          setText(ingredientStyles.safeText)
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <View style={[tw`w-[48%] my-[1%] mx-[1%] bg-white`,{aspectRatio:"11/5"}]}>
       {/*모달 시작*/}
       <Modal isVisible={isModalVisible} coverScreen={true} onBackdropPress={toggleModal} animationIn={"fadeIn"} animationOut={"fadeOut"} animationInTiming={100} animationOutTiming={100}>
+      {!isModifying&&
         <View style={[{width:'95%', minHeight:200, aspectRatio:'7/4', backgroundColor:'#FFFFFF', alignSelf:'center', padding:20, borderRadius:20}]}>
           <View style={[ingredientStyles.singleTop,{flex:1}]}>
-
             <View style={[ingredientStyles.nameContainer,{flex:3, alignSelf:'center'}]}>
               <Text style={[styles.font, text, tw`text-5xl`, ]} numberOfLines={1} ellipsizeMode={"tail"} >{ingredientName}</Text>
             </View>
@@ -118,15 +196,67 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
               <Text style={[styles.font, tw`text-sm text-center`]}>커스텀</Text>
             </View>}
             <View style={[tw`flex-wrap self-center ml-1`]}>
-              <IngredientIcon storageType={storageType} ingredientInfoId={1}/>
+              <IngredientIcon storageType={selectedStorageType} ingredientInfoId={1}/>
               <Text style={[styles.font, tw`text-sm text-center`]}>{getStorageTypeText()}</Text>
             </View>
           </View>
           <View style={[ingredientStyles.singleBottom, {flex:1,flexDirection:'row', justifyContent:'center'}]}>
-            <View style={[{alignSelf:'flex-end'}]}><BasicBadge leftIcon={modifyIcon} color='#3093EF' name={'수정하기'} onPress={()=>{}}/></View>
-            <View style={[{alignSelf:'flex-end'}]}><BasicBadge leftIcon={deleteIcon} color='#3093EF' name={'삭제하기'} onPress={deleteIngredient}/></View>
+            <View style={[{alignSelf:'flex-end'}]}><BasicBadge leftIcon={modifyIcon} color='#3093EF' name={'수정하기'} onPress={()=>{setIsModifying(true)}}/></View>
+            <View style={[{alignSelf:'flex-end'}]}><BasicBadge leftIcon={deleteIcon} color={ALERT_COLOR} name={'삭제하기'} onPress={deleteIngredient}/></View>
           </View>
-        </View>
+        </View>}
+        {isModifying&&
+            <View style={[{height:'auto',backgroundColor:'#FFFFFF', alignSelf:'center', padding:20, borderRadius:20, display:'flex', flexDirection:'column'}]}>
+              <Text style={[styles.font, text, {color:TEXT_COLOR}, tw`text-4xl text-center`]}>{ingredientName}</Text>
+                <Calendar
+                    monthFormat={'yyyy MM'}
+                    firstDay={0}
+                    onDayPress={(day) => {setSelectedDate(day.dateString)}}
+                    markedDates={{
+                      [selectedDate]: {
+                        selected: true,
+                        disableTouchEvent: true,
+                        selectedColor: MAIN_COLOR,
+                      },
+                    }}
+                />
+              <View style={[{flexDirection: 'row', justifyContent: "space-around",}]}>
+                <Text style={[styles.font, tw`flex-2 text-2xl text-center mr-2`]}>소비기한</Text>
+                <View style={[{flexDirection: 'row', flex:3, justifyContent: "space-around",}]}>
+                  <Text style={[styles.font, tw`text-lg text-center`]}>{selectedDate}</Text>
+                </View>
+              </View>
+              <View style={[{flexDirection: 'row', justifyContent: "space-around",}]}>
+                <Text style={[styles.font, {alignSelf:'center'}, tw`flex-2 text-2xl text-center mr-2`]}>보관방법</Text>
+                <View style={[{flexDirection: 'row', overflow: 'hidden', backgroundColor:LIGHT_BACKGROUND_COLOR, flex:3, justifyContent: "space-around", borderRadius:99, paddingHorizontal:1,height:40}]}>
+                  <TouchableWithoutFeedback
+                      onPress={()=>{setSelectedStorageType(1)}}
+                  >
+                  <View style={[{backgroundColor:selectedStorageType===1?COLD_COLOR:LIGHT_BACKGROUND_COLOR, paddingHorizontal:7, marginRight:2,borderRadius:99, justifyContent:'center', alignItems:'center'}]}>
+                    <Text style={[styles.font, {color:selectedStorageType===1?'#FFFFFF':COLD_COLOR, textAlign:'center'}, tw`text-lg text-center`]}>냉동</Text>
+                  </View>
+                  </TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback
+                      onPress={()=>{setSelectedStorageType(0)}}
+                  >
+                  <View style={[{backgroundColor:selectedStorageType===0?COOL_COLOR:LIGHT_BACKGROUND_COLOR, paddingHorizontal:7, marginRight:2,borderRadius:99, justifyContent:'center', alignItems:'center'}]}>
+                    <Text style={[styles.font, {color:selectedStorageType===0?'#FFFFFF':COOL_COLOR, textAlign:'center'}, tw`text-lg text-center`]}>냉장</Text>
+                  </View>
+                  </TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback
+                      onPress={()=>{setSelectedStorageType(2)}}
+                  >
+                  <View style={[{backgroundColor:selectedStorageType===2?WARM_COLOR:LIGHT_BACKGROUND_COLOR, paddingHorizontal:7,borderRadius:99, justifyContent:'center', alignItems:'center'}]}>
+                    <Text style={[styles.font, {color:selectedStorageType===2?'#FFFFFF':WARM_COLOR, textAlign:'center'}, tw`text-lg text-center`]}>상온</Text>
+                  </View>
+                  </TouchableWithoutFeedback>
+                </View>
+              </View>
+              <View style={[{marginTop:15, flexDirection:'row', justifyContent:'center'}]}>
+                <View style={[{alignSelf:'flex-end'}]}><BasicBadge leftIcon={modifyIcon} color='#3093EF' name={'수정하기'} onPress={modifyIngredient}/></View>
+              </View>
+            </View>
+        }
       </Modal>
       {/*모달 끝*/}
 
@@ -139,7 +269,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
               <Text style={[styles.font, tw`text-sm`]}>{getDateGapText(storageGap)} 등록</Text>
             </View>
             <View style={[tw`flex-wrap`]}>
-              <IngredientIcon storageType={storageType} ingredientInfoId={ingredientInfoId}/>
+              <IngredientIcon storageType={selectedStorageType} ingredientInfoId={ingredientInfoId}/>
             </View>
           </View>
           <View style={[ingredientStyles.singleBottom]}>
