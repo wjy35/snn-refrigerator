@@ -23,9 +23,6 @@ const MyFavoriteScreen = ({navigation}:any) => {
     init();
   }, [memberId]);
 
-  useEffect(() => {
-
-  }, [recipes, page, totalPage]);
   const getFavoriteRecipe = async (memberId: number, page: number, size: number) => {
     const res = await recipeApi.memberFavorite(memberId, page, size);
     console.log(res.data);
