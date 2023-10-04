@@ -34,7 +34,7 @@ const ShareListScreen = ({navigation}:any) => {
   }
 
   useFocusEffect(()=>{
-    getShareList()
+    getShareList();
   })
 
   return (
