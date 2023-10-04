@@ -238,13 +238,25 @@ export const followIcon: string = `
 
 export const minusIcon: string = `
   <svg width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M12 -0.000244141H0V1.99977H12V-0.000244141Z" fill="white"/>
+    <path d="M12 -0.000244141H0V1.99977H12V-0.000244141Z" fill="white"/>
+  </svg>
+`
+
+export const blackMinusIcon: string = `
+  <svg width="12" height="2" viewBox="0 0 12 2" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 -0.000244141H0V1.99977H12V-0.000244141Z" fill="black"/>
   </svg>
 `
 
 export const plusIcon: string = `
   <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M7 5V0H5V5H0V7H5V12H7V7H12V5H7Z" fill="white"/>
+    <path d="M7 5V0H5V5H0V7H5V12H7V7H12V5H7Z" fill="white"/>
+  </svg>
+`
+
+export const blackPlusIcon: string = `
+  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M7 5V0H5V5H0V7H5V12H7V7H12V5H7Z" fill="black"/>
   </svg>
 `
 
@@ -260,4 +272,11 @@ export const deleteIcon: string = `
         <path d="M5.5 4.99976H4.5V8.99975H5.5V4.99976Z" fill="white"/>
         <path d="M7.50016 4.99976H6.50015V8.99975H7.50016V4.99976Z" fill="white"/>
     </svg>
+`
+
+export const cameraIcon: string = `
+  <svg width="35" height="39" viewBox="0 0 35 39" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M14.4131 4.24808C13.7503 4.24808 13.1443 4.70263 12.8479 5.42222L12.1576 7.09779C11.2683 9.25656 9.45043 10.6202 7.46188 10.6202H5.25C4.2835 10.6202 3.5 11.5712 3.5 12.7443V31.8606C3.5 33.0337 4.2835 33.9847 5.25 33.9847H29.75C30.7165 33.9847 31.5 33.0337 31.5 31.8606V12.7443C31.5 11.5712 30.7165 10.6202 29.75 10.6202H27.5381C25.5496 10.6202 23.7317 9.25656 22.8424 7.09779L22.1521 5.42223C21.8557 4.70263 21.2497 4.24808 20.5869 4.24808H14.4131ZM9.71738 3.52242C10.6067 1.36365 12.4246 0 14.4131 0H20.5869C22.5754 0 24.3933 1.36365 25.2826 3.52242L25.9729 5.19799C26.2693 5.91758 26.8753 6.37213 27.5381 6.37213H29.75C32.6495 6.37213 35 9.22503 35 12.7443V31.8606C35 35.3799 32.6495 38.2328 29.75 38.2328H5.25C2.3505 38.2328 0 35.3799 0 31.8606V12.7443C0 9.22502 2.35051 6.37213 5.25 6.37213H7.46188C8.12473 6.37213 8.73069 5.91758 9.02713 5.19798L9.71738 3.52242Z" fill="white"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M17.5 14.8684C14.6005 14.8684 12.25 17.7213 12.25 21.2406C12.25 24.7598 14.6005 27.6127 17.5 27.6127C20.3995 27.6127 22.75 24.7598 22.75 21.2406C22.75 17.7213 20.3995 14.8684 17.5 14.8684ZM8.75 21.2406C8.75 15.3752 12.6675 10.6204 17.5 10.6204C22.3325 10.6204 26.25 15.3752 26.25 21.2406C26.25 27.106 22.3325 31.8608 17.5 31.8608C12.6675 31.8608 8.75 27.106 8.75 21.2406Z" fill="white"/>
+  </svg>
 `

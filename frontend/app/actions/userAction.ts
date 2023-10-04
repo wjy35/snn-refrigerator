@@ -1,4 +1,5 @@
 export const setMemberId = 'setMemberId';
+export const setLocations = 'setLocations';
 
 export const setMemberIdAction = (res: any) =>{
   return {
@@ -6,3 +7,10 @@ export const setMemberIdAction = (res: any) =>{
     payload: res,
   };
 };
+
+export const setLocationsAction = (res: any) => {
+  return {
+    type: setLocations,
+    payload: res,
+  }
+}

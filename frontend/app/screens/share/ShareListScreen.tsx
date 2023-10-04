@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Button, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import {styles} from "@/styles/styles";
 import ShareLayout from "@/screens/share/ShareLayout";
@@ -7,6 +7,8 @@ import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
 import PlainInput from "@/components/PlainInput";
 import useInput from "@/hooks/useInput";
 import ShareItem from "@/components/ShareItem";
+import shareApi from "@/apis/shareApi";
+import {useFocusEffect} from "@react-navigation/native";
 
 const ShareListScreen = ({navigation}:any) => {
   const shareText = useInput({
@@ -20,6 +22,21 @@ const ShareListScreen = ({navigation}:any) => {
     navigation.navigate('ShareCreate')
   }
 
+  async function getShareList(){
+    try {
+      const res = await shareApi.getShareList({locationId: 1, items: 5, pageNum: 1, keyword: ''})
+      if (res.status === 200){
+        console.log(res)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useFocusEffect(()=>{
+    getShareList()
+  })
+
   return (
     <ShareLayout title="나눔" optionTitle='등록' optionFunction={goShareCreate}>
       {/*<Text>ShareListScreen</Text>*/}
@@ -32,7 +49,7 @@ const ShareListScreen = ({navigation}:any) => {
           <View>
             <Text>역삼동</Text>
           </View>
-          <View>
+          <View style={{width: '80%'}}>
             <PlainInput {...shareText}/>
           </View>
         </View>
