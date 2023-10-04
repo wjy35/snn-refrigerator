@@ -1,6 +1,7 @@
 package com.ssafy.share.service;
 
 import com.ssafy.share.db.entity.ShareImage;
+import com.ssafy.share.db.entity.SharePost;
 import com.ssafy.share.db.repository.ShareImageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,11 @@ public class ShareImageServiceImpl implements ShareImageService{
     @Override
     public ShareImage save(ShareImage shareImage){
         return shareImageRepository.save(shareImage);
+    }
+
+    @Override
+    public void deleteBySharePost(SharePost sharePost){
+        shareImageRepository.deleteBySharePost(sharePost);
     }
 
     @Override

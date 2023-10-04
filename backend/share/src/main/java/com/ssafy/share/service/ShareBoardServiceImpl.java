@@ -1,8 +1,6 @@
 package com.ssafy.share.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ssafy.share.api.request.ShareBoardUpdateRequest;
 import com.ssafy.share.api.request.ShareBoardWriteRequest;
 import com.ssafy.share.api.request.ShareIngredientRequest;
@@ -101,6 +99,15 @@ public class ShareBoardServiceImpl implements ShareBoardService {
         return mp;
     }
 
+
+    @Override
+    public SharePost updatePost(SharePost sharePost, ShareBoardWriteRequest postRequest){
+        sharePost.setMemberId(postRequest.getMemberId());
+        sharePost.setLocationId(postRequest.getLocationId());
+        sharePost.setTitle(postRequest.getTitle());
+        sharePost.setContent(postRequest.getContent());
+        return shareBoardRepository.save(sharePost);
+    }
 
     @Override
     @Transactional

@@ -165,30 +165,94 @@ public class ShareBoardController {
         sharePost.setThumbnail(imageUrl);
         shareBoardService.save(sharePost);
         response.setMessage("OK");
-        log.info(sharePost.toString());
         response.addData("sharePost", shareBoardService.convertSharePost(sharePost));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PatchMapping("/{shareBoardId}")
-    public ResponseEntity<?> updatePost(@PathVariable Long shareBoardId,@RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles,
-                                @RequestPart(value = "shareIngredients") List<ShareIngredientRequest> shareIngredientRequests,
-                                @RequestPart(value = "shareBoardUpdateRequest") ShareBoardUpdateRequest shareBoardUpdateRequest, HttpServletRequest request) throws IOException {
-        log.info("shareIngredientRequests = {}",shareIngredientRequests);
+    @PatchMapping("/image/shareboard/{shareBoardId}")
+    public ResponseEntity<?> updatePost(@PathVariable Long shareBoardId, @RequestBody WritePostRequest request) throws IOException, IllegalAccessException {
         Response response = new Response();
-        List<String> images=new ArrayList<>();
+
+        //속성 분리
+
+        ShareBoardWriteRequest postRequest = request.getShareBoardWriteRequest();
+        List<ShareIngredientRequest> ingredientRequests = request.getShareIngredients();
+
+        //sharePost 얻기
+        SharePost sharePost = shareBoardService.findById(shareBoardId).orElseThrow();
+
+        //sharePost 수정
+        sharePost = shareBoardService.updatePost(sharePost, postRequest);
+
+        //해당 sharePost의 shareIngredient 삭제
+        shareIngredientService.deleteBySharePost(sharePost);
+
+        //해당 ShareIngredient 세팅
+
+        List<ShareIngredient> ingredients = new ArrayList<>();
+
+        for(ShareIngredientRequest ingredientRequest : ingredientRequests){
+            ShareIngredient ingredient = ShareIngredient
+                    .builder()
+                    .ingredientInfoId(ingredientRequest.getIngredientInfoId())
+                    .amount(ingredientRequest.getAmount())
+                    .sharePost(sharePost)
+                    .build();
+            ingredient = shareIngredientService.save(ingredient);
+            ingredients.add(ingredient);
+        }
+
+        response.setMessage("OK");
+        response.addData("ingredientList", shareIngredientService.convertIngredients(ingredients));
+        response.addData("sharePost", shareBoardService.convertSharePost(sharePost));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PatchMapping("/image/shareboard/{shareBoardId}")
+    public ResponseEntity<?> ImagePatch(@PathVariable Long shareBoardId, @RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles) throws IOException {
+        Response response = new Response();
+        List<String> imageUrls = new ArrayList<>();
         if(imageFiles != null) {
             for (MultipartFile m : imageFiles) {
-                images.add(s3Service.upload("share", m.getOriginalFilename(), m));
+                imageUrls.add(s3Service.upload("share", m.getOriginalFilename(), m));
             }
         }
-        shareBoardService.update(shareBoardId,shareIngredientRequests,images,shareBoardUpdateRequest);
+
+        SharePost sharePost = shareBoardService.findById(shareBoardId).orElseThrow();
+
+        //기존의 이미지 삭제
+        shareImageService.deleteBySharePost(sharePost);
+
+        List<ShareImage> images = new ArrayList<>();
+
+        for(String image: imageUrls) {
+            ShareImage shareImage = ShareImage
+                    .builder()
+                    .sharePostImageUrl(image)
+                    .sharePost(sharePost)
+                    .build();
+            images.add(shareImageService.save(shareImage));
+        }
         response.setMessage("OK");
+        response.addData("images", shareImageService.convertShareImages(images));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PatchMapping("/thumbnail/shareboard/{shareBoardId}")
+    public ResponseEntity<?> ThumbnailPatch(@PathVariable Long shareBoardId, @RequestPart(value = "thumbnail",required = false) MultipartFile thumbnail) throws IOException, IllegalAccessException {
+        Response response = new Response();
+        String imageUrl = s3Service.upload("share/thumbnail", thumbnail.getOriginalFilename(), thumbnail);
+        SharePost sharePost = shareBoardService.findById(shareBoardId).orElseThrow();
+
+        sharePost.setThumbnail(imageUrl);
+        shareBoardService.save(sharePost);
+        response.setMessage("OK");
+        response.addData("sharePost", shareBoardService.convertSharePost(sharePost));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/detail/{shareBoardId}")
-    public ResponseEntity<?> updatePost(@PathVariable Long shareBoardId,HttpServletRequest request){
+    public ResponseEntity<?> deletePost(@PathVariable Long shareBoardId,HttpServletRequest request){
         Response response = new Response();
         shareBoardService.delete(shareBoardId);
         response.setMessage("OK");

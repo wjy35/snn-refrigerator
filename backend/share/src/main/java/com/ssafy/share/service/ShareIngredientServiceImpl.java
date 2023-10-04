@@ -1,9 +1,7 @@
 package com.ssafy.share.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ssafy.share.db.entity.ShareIngredient;
+import com.ssafy.share.db.entity.SharePost;
 import com.ssafy.share.db.repository.ShareIngredientRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,5 +38,10 @@ public class ShareIngredientServiceImpl implements ShareIngredientService{
             result.add(mp);
         }
         return result;
+    }
+
+    @Override
+    public void deleteBySharePost(SharePost sharePost){
+        shareIngredientRepository.deleteBySharePost(sharePost);
     }
 }

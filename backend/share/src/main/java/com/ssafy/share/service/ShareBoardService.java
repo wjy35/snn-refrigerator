@@ -24,6 +24,8 @@ public interface ShareBoardService {
     public SharePost getPostDetail(Long shareBoardId);
 
 
+    SharePost updatePost(SharePost sharePost, ShareBoardWriteRequest postRequest);
+
     SharePost shareWriteSave(List<ShareIngredientRequest> shareIngredientRequests, List<String> images
             , ShareBoardWriteRequest shareBoardWriteRequest);
 
