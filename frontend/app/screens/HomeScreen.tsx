@@ -26,8 +26,8 @@ const HomeScreen = ({navigation}:any) => {
           setRecipeList(res.data.data.recipe);
         }
       } catch (err) {
-        console.log('여기서 나는거임home');
-        console.log(err);
+        console.log(memberId);
+        console.log('HomeScreen.tsx', err);
       }
     }
     getRecipe();
