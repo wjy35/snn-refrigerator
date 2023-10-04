@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,11 @@ public class ShareBoardServiceImpl implements ShareBoardService {
     private final LocationFeign locationFeign;
     private final IngredientFeign ingredientFeign;
     private final ObjectMapper objectMapper;
+
+    @Override
+    public Optional<SharePost> findById(Long id){
+        return shareBoardRepository.findById(id);
+    }
 
     @Override
     public MemberResponse getMember(Long memberId){
@@ -86,15 +92,13 @@ public class ShareBoardServiceImpl implements ShareBoardService {
     }
 
     @Override
-    public Map<String, Object> convertSharePost(SharePost sharePost){
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
-        Map<String, Object> mp = objectMapper.convertValue(sharePost, HashMap.class);
-        mp.remove("shareIngredients");
-        mp.remove("shareImages");
-        return objectMapper.convertValue(sharePost, HashMap.class);
+    public Map<String, Object> convertSharePost(SharePost sharePost) throws IllegalAccessException {
+        Map<String, Object> mp = new HashMap<>();
+        for(Field field : sharePost.getClass().getFields()){
+            if(field.getName() == "shareIngredients" || field.getName() == "shareImages") continue;
+            mp.put(field.getName(), field.get(sharePost));
+        }
+        return mp;
     }
 
 

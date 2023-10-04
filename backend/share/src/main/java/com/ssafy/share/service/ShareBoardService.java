@@ -8,8 +8,11 @@ import com.ssafy.share.db.entity.SharePost;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface ShareBoardService {
+
+    Optional<SharePost> findById(Long id);
 
     public MemberResponse getMember(Long memberId);
     public String getLocationName(Short locationId);
@@ -26,7 +29,7 @@ public interface ShareBoardService {
 
     SharePost save(SharePost sharePost);
 
-    Map<String, Object> convertSharePost(SharePost sharePost);
+    Map<String, Object> convertSharePost(SharePost sharePost) throws IllegalAccessException;
 
     SharePost update(Long shareBoardId,List<ShareIngredientRequest> shareIngredientRequests, List<String> images
             ,ShareBoardUpdateRequest shareBoardUpdateRequest);

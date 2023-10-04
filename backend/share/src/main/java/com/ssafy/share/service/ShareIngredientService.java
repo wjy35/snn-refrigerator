@@ -7,5 +7,5 @@ import java.util.Map;
 
 public interface ShareIngredientService {
     ShareIngredient save(ShareIngredient shareIngredient);
-    List<Map<String, Object>> convertIngredients(List<ShareIngredient> ingredients);
+    List<Map<String, Object>> convertIngredients(List<ShareIngredient> ingredients) throws IllegalAccessException;
 }

@@ -11,6 +11,7 @@ import com.ssafy.share.db.entity.ShareIngredient;
 import com.ssafy.share.db.entity.SharePost;
 import com.ssafy.share.service.S3Service;
 import com.ssafy.share.service.ShareBoardService;
+import com.ssafy.share.service.ShareImageService;
 import com.ssafy.share.service.ShareIngredientService;
 import com.ssafy.share.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,7 @@ import java.util.Map;
 public class ShareBoardController {
 
     private final ShareBoardService shareBoardService;
+    private final ShareImageService shareImageService;
     private final ShareIngredientService shareIngredientService;
     private final S3Service s3Service;
     private final TimeUtil timeUtil;
@@ -87,7 +89,7 @@ public class ShareBoardController {
     }
 
     @PostMapping("/content")
-    public ResponseEntity<?> writePost(@RequestBody WritePostRequest request) throws IOException {
+    public ResponseEntity<?> writePost(@RequestBody WritePostRequest request) throws IOException, IllegalAccessException {
         Response response = new Response();
         ObjectMapper mapper = new ObjectMapper();
 
@@ -128,14 +130,44 @@ public class ShareBoardController {
     }
 
     @PostMapping("/image/shareboard/{shareBoardId}")
-    public ResponseEntity<?> ImagePost(@PathVariable @RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles){
-        List<String> images = new ArrayList<>();
+    public ResponseEntity<?> ImagePost(@PathVariable Long shareBoardId, @RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles) throws IOException {
+        Response response = new Response();
+        List<String> imageUrls = new ArrayList<>();
         if(imageFiles != null) {
             for (MultipartFile m : imageFiles) {
-                images.add(s3Service.upload("share", m.getOriginalFilename(), m));
+                imageUrls.add(s3Service.upload("share", m.getOriginalFilename(), m));
             }
         }
-        return
+
+        SharePost sharePost = shareBoardService.findById(shareBoardId).orElseThrow();
+
+        List<ShareImage> images = new ArrayList<>();
+
+        for(String image: imageUrls) {
+            ShareImage shareImage = ShareImage
+                    .builder()
+                    .sharePostImageUrl(image)
+                    .sharePost(sharePost)
+                    .build();
+            images.add(shareImageService.save(shareImage));
+        }
+        response.setMessage("OK");
+        response.addData("images", shareImageService.convertShareImages(images));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/thumbnail/shareboard/{shareBoardId}")
+    public ResponseEntity<?> ThumbnailPost(@PathVariable Long shareBoardId, @RequestPart(value = "thumbnail",required = false) MultipartFile thumbnail) throws IOException, IllegalAccessException {
+        Response response = new Response();
+        String imageUrl = s3Service.upload("share/thumbnail", thumbnail.getOriginalFilename(),thumbnail);
+        SharePost sharePost = shareBoardService.findById(shareBoardId).orElseThrow();
+
+        sharePost.setThumbnail(imageUrl);
+        shareBoardService.save(sharePost);
+        response.setMessage("OK");
+        log.info(sharePost.toString());
+        response.addData("sharePost", shareBoardService.convertSharePost(sharePost));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PatchMapping("/{shareBoardId}")
@@ -155,11 +187,12 @@ public class ShareBoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{shareBoardId}")
+    @DeleteMapping("/detail/{shareBoardId}")
     public ResponseEntity<?> updatePost(@PathVariable Long shareBoardId,HttpServletRequest request){
         Response response = new Response();
         shareBoardService.delete(shareBoardId);
         response.setMessage("OK");
+        response.addData("status", true);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

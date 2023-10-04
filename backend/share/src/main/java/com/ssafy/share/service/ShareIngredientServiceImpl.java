@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,16 +27,16 @@ public class ShareIngredientServiceImpl implements ShareIngredientService{
     }
 
     @Override
-    public List<Map<String, Object>> convertIngredients(List<ShareIngredient> ingredients) {
+    public List<Map<String, Object>> convertIngredients(List<ShareIngredient> ingredients) throws IllegalAccessException {
 
         List<Map<String, Object>> result = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         for(ShareIngredient ingredient: ingredients){
-            Map<String, Object> mp = objectMapper.convertValue(ingredient, HashMap.class);
-            mp.remove("sharePost");
+            Map<String, Object> mp = new HashMap<>();
+            for(Field field : ingredient.getClass().getFields()){
+                if(field.getName() == "sharePost") continue;
+                mp.put(field.getName(), field.get(ingredient));
+            }
             result.add(mp);
         }
         return result;
