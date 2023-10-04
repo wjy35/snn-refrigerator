@@ -37,7 +37,8 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
   const [text, setText] = useState<any>()
   const [isModalVisible, setModalVisible] = useState(false);
   const [isModifying, setIsModifying] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string>(formatDate(new Date()));
+  const [isModified, setIsModified] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string>(formatDate(storageType===1?new Date():new Date(lastDate)));
   const [selectedStorageType, setSelectedStorageType] = useState<number>(0);
 
   function padTo2Digits(num: number) {
@@ -54,6 +55,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
     );
   }
 
+
   useEffect(() => {
     const date: Date = new Date;
     const last: Date = new Date(lastDate);
@@ -66,6 +68,18 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
     setLastGap(lastGap)
     // @ts-ignore date 계산 관련 ts 에러 무시
     setStorageGap(1+ Math.floor((date-storage.getTime()) / (1000 * 60 * 60 * 24)));
+    setIsModified(true);
+  }, [])
+
+  useEffect(() => {
+    setIsModified(false);
+    const date: Date = new Date;
+    const last: Date = new Date(selectedDate);
+    setSelectedDate(formatDate(selectedStorageType===1?date:last));
+    // @ts-ignore date 계산 관련 ts 에러 무시
+    const lastGap: number = 1+ Math.floor((last.getTime() - date) / (1000 * 60 * 60 * 24));
+    setLastGap(lastGap)
+    // @ts-ignore date 계산 관련 ts 에러 무시
     if (storageType === 1){
       setContainer(ingredientStyles.coldContainer)
       setText(ingredientStyles.coldText)
@@ -82,14 +96,14 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
       setContainer(ingredientStyles.safeContainer)
       setText(ingredientStyles.safeText)
     }
-  }, [])
+  }, [isModified])
 
 
   const toggleModal = () => {
-    if(isModalVisible){
-      onChange();
-    }
     setModalVisible(!isModalVisible);
+    if(isModalVisible&&isModified){
+      setTimeout(()=>{onChange(); setIsModified(false);},500);
+    }
   };
 
 
@@ -118,12 +132,12 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
     try {
       const res = await houseApi.deleteIngredient({houseIngredientId: houseIngredientId})
       if (res.status === 200) {
-        console.log(res.data);
+        // console.log(res.data);
         onChange();
         toggleModal();
       }
     } catch (err) {
-      console.log(err);
+      console.log("SingleIngredient -> deleteIngredient",err);
     }
   }
 
@@ -136,34 +150,12 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
         lastDate:selectedDate,
       })
       if (res.status === 200) {
-        console.log(res.data);
+        // console.log(res.data);
         setIsModifying(false);
-
-
-        const date: Date = new Date;
-        const last: Date = new Date(selectedDate);
-        // @ts-ignore date 계산 관련 ts 에러 무시
-        const lastGap: number = 1+ Math.floor((last.getTime() - date) / (1000 * 60 * 60 * 24));
-        setLastGap(lastGap)
-        if (storageType === 1){
-          setContainer(ingredientStyles.coldContainer)
-          setText(ingredientStyles.coldText)
-        } else if (lastGap < 0){
-          setContainer(ingredientStyles.overContainer)
-          setText(ingredientStyles.overText)
-        } else if (lastGap < 3){
-          setContainer(ingredientStyles.alertContainer)
-          setText(ingredientStyles.alertText)
-        } else if (lastGap < 7){
-          setContainer(ingredientStyles.warnContainer)
-          setText(ingredientStyles.warnText)
-        } else {
-          setContainer(ingredientStyles.safeContainer)
-          setText(ingredientStyles.safeText)
-        }
+        setIsModified(true);
       }
     } catch (err) {
-      console.log(err);
+      console.log("SingleIngredient -> modifyIngredient",err);
     }
   }
 
@@ -174,6 +166,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
         if (isModifying) {
           setSelectedDate(formatDate(storageType === 1 ? new Date() : new Date(lastDate)));
           setSelectedStorageType(storageType);
+          setIsModifying(false);
         }
         toggleModal()
       }} animationIn={"fadeIn"} animationOut={"fadeOut"} animationInTiming={100} animationOutTiming={100}>
@@ -187,7 +180,6 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
               <Text style={[styles.font, text, tw`text-right text-2xl mx-1`]}>{getDDay()}</Text>
             </View>
           </View>
-
 
           <View style={[ingredientStyles.singleMiddle]}>
             <View style={[ingredientStyles.dateContainer, {alignSelf:'center'},tw`mr-1`]}>
