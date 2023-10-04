@@ -90,7 +90,7 @@ const HouseAddIngredient = ({textList, ingredients, setNow, now, addIngredient, 
                 ingredients.map((i, idx) => {
                   return (
                     <React.Fragment key={`${i.ingredientName}${idx}`}>
-                      <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{deleteIngredient(idx)}}/>
+                      <BasicBadge color='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{deleteIngredient(idx)}}/>
                     </React.Fragment>
                   )
                 })
