@@ -72,6 +72,7 @@ const PlaceManage = ({memberId}) =>{
   async function onSelectLocation(item: any) {
     if (checkDuplicateLocation(item)){
       try {
+        console.log(item.locationId, memberId);
         const res = await memberApi.postLocation(memberId, item.locationId);
         if(res.status === 200) setLocations([...locations, {...item}]);
       } catch (err) {
