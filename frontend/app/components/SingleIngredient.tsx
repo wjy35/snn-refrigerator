@@ -37,7 +37,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
   const [text, setText] = useState<any>()
   const [isModalVisible, setModalVisible] = useState(false);
   const [isModifying, setIsModifying] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<string>((formatDate(new Date(storageDate))));
+  const [selectedDate, setSelectedDate] = useState<string>(formatDate(new Date()));
   const [selectedStorageType, setSelectedStorageType] = useState<number>(0);
 
   function padTo2Digits(num: number) {
@@ -59,8 +59,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
     const last: Date = new Date(lastDate);
     const storage: Date = new Date(storageDate);
     setIsModifying(false);
-    setSelectedDate(formatDate(storage));
-    console.log(selectedDate);
+    setSelectedDate(formatDate(storageType===1?date:last));
     setSelectedStorageType(storageType);
     // @ts-ignore date 계산 관련 ts 에러 무시
     const lastGap: number = 1+ Math.floor((last.getTime() - date) / (1000 * 60 * 60 * 24));
@@ -171,7 +170,13 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
   return (
     <View style={[tw`w-[48%] my-[1%] mx-[1%] bg-white`,{aspectRatio:"11/5"}]}>
       {/*모달 시작*/}
-      <Modal isVisible={isModalVisible} coverScreen={true} onBackdropPress={toggleModal} animationIn={"fadeIn"} animationOut={"fadeOut"} animationInTiming={100} animationOutTiming={100}>
+      <Modal isVisible={isModalVisible} coverScreen={true} onBackdropPress={()=> {
+        if (isModifying) {
+          setSelectedDate(formatDate(storageType === 1 ? new Date() : new Date(lastDate)));
+          setSelectedStorageType(storageType);
+        }
+        toggleModal()
+      }} animationIn={"fadeIn"} animationOut={"fadeOut"} animationInTiming={100} animationOutTiming={100}>
       {!isModifying&&
         <View style={[{width:'95%', minHeight:200, aspectRatio:'7/4', backgroundColor:'#FFFFFF', alignSelf:'center', padding:20, borderRadius:20}]}>
           <View style={[ingredientStyles.singleTop,{flex:1}]}>
@@ -206,7 +211,10 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
             <View style={[{width:'95%', height:'auto',backgroundColor:'#FFFFFF', alignSelf:'center', padding:20, borderRadius:20, display:'flex', flexDirection:'column'}]}>
 
               <View style={[{marginTop:15, flexDirection:'row', justifyContent:'center'}]}>
-              <TouchableWithoutFeedback onPress={()=>setIsModifying(false)}>
+              <TouchableWithoutFeedback onPress={()=>{
+                setSelectedDate(formatDate(storageType === 1 ? new Date() : new Date(lastDate)));
+                setSelectedStorageType(storageType);
+                setIsModifying(false)}}>
                 <View style={[topNavStyles.backButton, {flex:1, alignSelf:'center', height:60}]}>
                   <SvgXml
                       xml={backButton}
@@ -246,7 +254,8 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
                 </View>
               </View>
 
-              <View style={[{flexDirection: 'row', justifyContent: "space-around", marginVertical:5}]}>
+              {selectedStorageType!==1&&
+                <><View style={[{flexDirection: 'row', justifyContent: "space-around", marginVertical:5}]}>
                 <Text style={[styles.font, tw`flex-2 text-2xl text-center mr-2`]}>소비기한</Text>
                 <View style={[{flexDirection: 'row', flex:3, justifyContent: "space-around",}]}>
                   <Text style={[styles.font, tw`text-lg text-center`]}>{selectedDate}</Text>
@@ -254,7 +263,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
               </View>
 
               <Calendar
-                  monthFormat={'yyyy MM'}
+                  monthFormat={'yyyy년 MM월'}
                   firstDay={0}
                   onDayPress={(day) => {setSelectedDate(day.dateString)}}
                   markedDates={{
@@ -264,7 +273,8 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
                       selectedColor: MAIN_COLOR,
                     },
                   }}
-              />
+              /></>
+            }
 
               <View style={[{marginTop:15, flexDirection:'row', justifyContent:'center'}]}>
                 <View style={[{alignSelf:'flex-end'}]}><BasicBadge leftIcon={modifyIcon} color='#3093EF' name={'수정하기'} onPress={modifyIngredient}/></View>
