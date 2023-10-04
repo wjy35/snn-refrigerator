@@ -32,24 +32,22 @@ public class ChatSocketController {
                 .build();
 
         chatSaveService.save(chatPayload.getChatRoomId(), chatEntity);
+        ChatPublish chatPublish = ChatPublish
+                .builder()
+                .chatRoomId(chatPayload.getChatRoomId())
+                .receiveMemberId(chatPayload.getReceiveMemberId())
+                .content(chatPayload.getContent())
+                .timestamp(chatEntity.getTimestamp())
+                .build();
+        chatSendService.sendForEcho(chatPublish);
+
         Optional.ofNullable(chatServerManageService.getChatServerIdByMemberId(chatPayload.getReceiveMemberId()))
                 .ifPresentOrElse((chatServerId)->{
-                    ChatPublish chatPublish = ChatPublish
-                            .builder()
-                            .chatRoomId(chatPayload.getChatRoomId())
-                            .memberId(chatPayload.getReceiveMemberId())
-                            .content(chatPayload.getContent())
-                            .timestamp(chatEntity.getTimestamp())
-                            .build();
-
                     redisTemplate.convertAndSend(
                             chatServerId,
                             chatPublish
                     );
-
-                    chatPublish.setMemberId(chatPayload.getSendMemberId());
-                    chatSendService.sendForDetail(chatPublish);
-                }
+               }
                 ,()->{
                     // TODO RabbitMQ 를 통해 Chat Alert Server 로 전송
                 });

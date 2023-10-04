@@ -5,4 +5,6 @@ import com.ssafy.chat.api.request.ChatPublish;
 public interface ChatSendService {
     void sendForDetail(ChatPublish chatPublish);
     void sendForList(ChatPublish chatPublish);
+
+    void sendForEcho(ChatPublish chatPublish);
 }
