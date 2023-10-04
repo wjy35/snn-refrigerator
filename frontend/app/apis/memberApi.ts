@@ -155,11 +155,11 @@ const memberApi = {
     return res;
   },
 
-  postLocation: async(memberId: number, locationId: number)=> {
+  postLocation: async (memberId: number, locationId: number) => {
     const res = await PrivateMemberApi.post(
       `${memberId}/location`,
       {
-        location:locationId
+        location:locationId,
       }
     );
     return res;
