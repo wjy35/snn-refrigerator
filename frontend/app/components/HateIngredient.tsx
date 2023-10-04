@@ -53,6 +53,8 @@ function HateIngredient({memberId}) {
     setNow(nowNum);
   }
 
+  //TODO: ingredient 등록이 되지 않음.
+
   function onSelectIngredient(item: any) {
     console.log(item);
     const execute = async () => {
