@@ -1,38 +1,27 @@
-package com.ssafy.chat.config;
+package com.ssafy.chat.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.chat.api.request.ChatPublish;
 import com.ssafy.chat.api.response.ChatForDetailResponse;
 import com.ssafy.chat.api.response.ChatForListResponse;
-import com.ssafy.chat.api.response.ChatParam;
+import com.ssafy.chat.service.ChatSendService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.connection.Message;
-import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ChatMessageListener implements MessageListener {
+public class ChatSendServiceImpl implements ChatSendService {
     private final ObjectMapper objectMapper;
-    private final RedisTemplate redisTemplate;
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
     @Override
-    public void onMessage(Message message, byte[] pattern) {
-        try{
-            ChatPublish chatPublish = (ChatPublish)redisTemplate.getValueSerializer().deserialize(message.getBody());
+    public void sendForDetail(ChatPublish chatPublish) {
+        try {
             ChatForDetailResponse chatForDetailResponse = ChatForDetailResponse
                     .builder()
                     .memberId(chatPublish.getMemberId())
-                    .content(chatPublish.getContent())
-                    .timestamp(chatPublish.getTimestamp())
-                    .build();
-
-            ChatForListResponse chatForListResponse = ChatForListResponse
-                    .builder()
-                    .chatRoomId(chatPublish.getChatRoomId())
                     .content(chatPublish.getContent())
                     .timestamp(chatPublish.getTimestamp())
                     .build();
@@ -41,15 +30,27 @@ public class ChatMessageListener implements MessageListener {
                     chatPublish.getChatRoomDetailDestination(),
                     objectMapper.writeValueAsString(chatForDetailResponse)
             );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void sendForList(ChatPublish chatPublish) {
+        try {
+            ChatForListResponse chatForListResponse = ChatForListResponse
+                    .builder()
+                    .chatRoomId(chatPublish.getChatRoomId())
+                    .content(chatPublish.getContent())
+                    .timestamp(chatPublish.getTimestamp())
+                    .build();
 
             simpMessageSendingOperations.convertAndSend(
                     chatPublish.getChatRoomListDestination(),
                     objectMapper.writeValueAsString(chatForListResponse)
             );
-
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
-
 }
