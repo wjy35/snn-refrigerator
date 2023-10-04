@@ -51,7 +51,7 @@ const RecipeListScreen = ({navigation}:any) => {
         page: nowPage
       });
       if (res.status === 200) {
-        console.log(res);
+        console.log("RecipeListScreen -> getRecipe",res.data.data);
         if (nowPage === 1){
           setRecipe([...res.data.data.recipe]);
         } else {
