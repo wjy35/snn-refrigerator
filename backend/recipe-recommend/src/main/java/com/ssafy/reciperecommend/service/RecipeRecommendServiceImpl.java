@@ -175,8 +175,8 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
 
         for (int i = 0; i < ingredientsArray.length(); i++) {
             JSONObject ingredientObject = ingredientsArray.getJSONObject(i);
-
-            int ingredientInfoId = ingredientObject.getInt("ingredientInfoId");
+            System.out.println(ingredientObject.toString());
+            int ingredientInfoId = ingredientObject.getInt("ingredientId");
 
             String ingredientName = ingredientObject.getString("ingredientName");
 
