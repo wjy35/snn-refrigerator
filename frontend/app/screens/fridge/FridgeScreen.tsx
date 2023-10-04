@@ -17,6 +17,7 @@ import {
 import FridgeLayout from "@/screens/fridge/FridgeLayout";
 import {COLD_COLOR, COOL_COLOR, TEXT_COLOR, WARM_COLOR} from "@/assets/colors/colors";
 import {SvgXml} from "react-native-svg";
+import {Shadow} from "react-native-shadow-2";
 
 interface props {
   title?: string;
@@ -78,13 +79,13 @@ const FridgeScreen = ({navigation}:any) => {
         </View>
 
 
-          <View style={[{position: 'absolute', bottom: 80, alignSelf:'flex-end', flexDirection:'row', justifyContent:'center', paddingRight:10, paddingBottom:10}]}>
+          <View style={[{position: 'absolute', bottom: 80, alignSelf:'flex-end', flexDirection:'row', justifyContent:'center', paddingRight:20, paddingBottom:20}]}>
               <TouchableWithoutFeedback
                   onPress={()=>{navigation.navigate('HouseAdd')}}
               >
-              <View style={[{backgroundColor:'#3093EF', height:70,width:70,borderRadius:99, justifyContent:'center'}]}>
+              <Shadow distance={4} offset={[2,2]} style={[{backgroundColor:'#3093EF', height:70,width:70,borderRadius:99, justifyContent:'center'}]}>
                   <Text style={[styles.font, {color: '#FFFFFF', fontSize:25, textAlign:'center'}]}>추가</Text>
-              </View>
+              </Shadow>
               </TouchableWithoutFeedback>
           </View>
       </FridgeLayout>
