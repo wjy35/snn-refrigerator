@@ -35,7 +35,7 @@ const RecipeDetailScreen = () => {
     contentResponseList:[],
     foodName:"로딩중",
     cookingTime:"로딩중",
-    serving:2
+    serving:'로딩중'
   });
 
   useEffect(() => {
@@ -45,15 +45,27 @@ const RecipeDetailScreen = () => {
         let res = await recipeApi.detail({memberId, recipeId});
         console.log(res.data.data.recipeInfo);
         if(res.status===200){
-          setRecipeDetail(res.data.data.recipeInfo);
+          if(res.data.data.recipeInfo.youtubeUrl != null) {
+            const splitUrl = res.data.data.recipeInfo.youtubeUrl.split('/',);
+            const targetUrl = splitUrl[3]?.split('?v=');
+            const target = targetUrl?.pop();
+
+            setRecipeDetail({
+              ...res.data.data.recipeInfo,
+              youtubeUrl: target ? target.slice(0, 11) : ''
+            });
+          }else{
+            setRecipeDetail({
+              ...res.data.data.recipeInfo,
+            });
+          }
         }else{
           console.log(res.data.message);
         }
       }catch (e){
-        console.log(e);
+        console.log(memberId,recipeId)
+        console.log('RecipeDetailScreen',e);
       }
-
-      console.log("got info")
     }
     getRecipeDetail();
   },[])
@@ -74,14 +86,12 @@ const RecipeDetailScreen = () => {
         </View>
 
         <View style={recipeStyles.recipeDetailInfoContainer}>
-
-
           <View style={recipeStyles.recipeDetailInfo}>
             <View style={recipeStyles.recipeDetailUserContainer}>
               <View style={recipeStyles.recipeDetailUserImage}>
-                <Image source={{uri: recipeDetail.profileImageUrl}}
+                {recipeDetail.profileImageUrl&&<Image source={{uri: recipeDetail.profileImageUrl}}
                                  style={{height:70,width:70,borderRadius:99, borderWidth:1, borderColor:TEXT_COLOR ,marginRight:10}}
-                />
+                />}
               </View>
               <View style={[recipeStyles.recipeDetailUserInfo]}>
                 <Text style={[styles.font,{fontSize:20, color:TEXT_SUB_COLOR, marginVertical:3}]}>{recipeDetail.nickname}</Text>

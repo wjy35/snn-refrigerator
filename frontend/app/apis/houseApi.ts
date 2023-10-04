@@ -3,11 +3,11 @@ import {baseURL} from '@/apis/BASEURL'
 
 
 const PublicHouseApi = axios.create({
-  baseURL: `${baseURL}/house-ingredient`,
+  baseURL: `${baseURL}/house-ingredient/`,
 })
 
 const PrivateHouseApi = axios.create({
-  baseURL: `${baseURL}/house-ingredient`,
+  baseURL: `${baseURL}/house-ingredient/`,
   headers: {
     // Authorization: `Bearer ${localStorage.getItem('token')}`
   }
@@ -40,6 +40,11 @@ const houseApi = {
       {
         houseCode: houseCode,
         ingredients: ingredients,
+      },
+      {
+        headers: {
+          "Content-Type": 'application/json'
+        }
       }
     );
     return res;
@@ -51,7 +56,8 @@ const houseApi = {
         houseIngredientId: houseIngredientId,
         storageType: storageType,
         lastDate: lastDate,
-      }
+      },
+
     );
     return res;
   },
