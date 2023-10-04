@@ -117,7 +117,7 @@ const SignUpScreen = ({navigation}:any) => {
   function removeIngredient(idx: number){
     const _ingredients = [...ingredients];
     _ingredients.splice(idx, 1);
-    setIngredients(ingredients);
+    setIngredients(_ingredients);
   }
 
   function removeLocation(idx: number) {

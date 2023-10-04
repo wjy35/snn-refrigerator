@@ -206,7 +206,6 @@ const RecipeCreateScreen = ({navigation}:any) => {
           <GetImageFrom getImage={getImage} setIsVisible={()=>setIsVisible(false)}/>
         )
       }
-
     </RecipeLayout>
   )
 }

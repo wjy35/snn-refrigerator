@@ -8,6 +8,8 @@ import AutoCompleteInput from "@/components/AutoCompleteInput";
 import PlainInput from "@/components/PlainInput";
 import useInput from "@/hooks/useInput";
 import {MAIN_COLOR} from "@/assets/colors/colors";
+import ingredientExtractionApi from '@/apis/ingredientExtractionApi'
+
 
 interface props {
   textList: string[];
