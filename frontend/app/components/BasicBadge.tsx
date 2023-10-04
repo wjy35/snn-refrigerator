@@ -6,13 +6,14 @@ import {styles} from "@/styles/styles";
 
 
 interface props {
-  backgroundColor: string;
+  color: string;
   name: string;
   onPress: Function;
   icon? : string,
   leftIcon? : string,
+  fill? : boolean,
 }
-const BasicBadge = ({backgroundColor, name, onPress, icon, leftIcon}: props) => {
+const BasicBadge = ({color, name, onPress, icon, leftIcon, fill=true}: props) => {
 
   function onPressFunction(){
     onPress();
@@ -25,7 +26,7 @@ const BasicBadge = ({backgroundColor, name, onPress, icon, leftIcon}: props) => 
   return (
     <View style={{margin: 5}}>
       <TouchableWithoutFeedback onPress={onPressFunction}>
-        <View style={{padding: 10, height: 40, backgroundColor: backgroundColor, borderRadius: 100, justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}}>
+        <View style={[{padding: 5, height: 40,borderRadius: 100, justifyContent: 'center', alignItems: 'center', flexDirection: 'row'}, fill?{ backgroundColor: color, }:{borderColor:color, borderWidth:1}]}>
           {leftIcon&&(<SvgXml
               xml={leftIcon}
               width={15}
@@ -33,7 +34,7 @@ const BasicBadge = ({backgroundColor, name, onPress, icon, leftIcon}: props) => 
               style={{marginLeft:6}}
           />)}
           <View style={{marginHorizontal:6}}>
-            <Text style={[styles.font, {color: '#ffffff', fontSize: 20}]}>{name}</Text>
+            <Text style={[styles.font, {fontSize: 20, color: fill?'#ffffff':color, }]}>{name}</Text>
           </View>
           {icon&&(<View>
             <TouchableWithoutFeedback onPress={onPressCloseFunction}>

@@ -257,7 +257,7 @@ const SignUpScreen = ({navigation}:any) => {
                       locations.map((i, idx) => {
                         return (
                           <React.Fragment key={`${i.locationName}${idx}`}>
-                            <BasicBadge backgroundColor='#3093EF' name={i.locationName} icon={closeIcon} onPress={()=>{removeLocation(idx)}}/>
+                            <BasicBadge color='#3093EF' name={i.locationName} icon={closeIcon} onPress={()=>{removeLocation(idx)}}/>
                           </React.Fragment>
                         )
                       })
@@ -273,7 +273,7 @@ const SignUpScreen = ({navigation}:any) => {
                       ingredients.map((i, idx) => {
                         return (
                           <React.Fragment key={`${i.ingredientName}${idx}`}>
-                            <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{removeIngredient(idx)}}/>
+                            <BasicBadge color='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{removeIngredient(idx)}}/>
                           </React.Fragment>
                         )
                       })

@@ -23,12 +23,14 @@ const IngredientIcon = ({storageType, ingredientInfoId}: props) => {
           height={SIZE}
         />
       )}
-      <SvgXml
-          xml={storageType === 0?cool:(storageType === 1?cold:warm)}
-          width={SIZE}
-          height={SIZE}
-          style={[tw`ml-1`]}
-      />
+    {storageType !== -1 && (
+        <SvgXml
+            xml={storageType === 0?cool:(storageType === 1?cold:warm)}
+            width={SIZE}
+            height={SIZE}
+            style={[tw`ml-1`]}
+        />
+    )}
     </>
   );
 };
