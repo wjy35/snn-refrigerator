@@ -18,9 +18,7 @@ import PlainInput from "@/components/PlainInput";
 
 const RecipeListScreen = ({navigation}:any) => {
   const [recipe , setRecipe]= useState<any[]>([]);
-
   const {memberId} = useSelector((state:RootState)=>state.userReducer);
-
   const [settings, setSettings] = useState({
     memberId: memberId,
     contain: [],
@@ -83,6 +81,7 @@ const RecipeListScreen = ({navigation}:any) => {
         ingredients.push({ingredientName: item.ingredientName, ingredientInfoId: item.ingredientInfoId, include: false});
       }
     })
+    setIngredients([...ingredients])
   }, [houseIngredients])
 
   useEffect(() => {
@@ -198,13 +197,13 @@ const RecipeListScreen = ({navigation}:any) => {
                             if (i.include){
                               return (
                                 <React.Fragment key={`${i.ingredientName}${idx}`}>
-                                  <BasicBadge backgroundColor={MAIN_COLOR} name={i.ingredientName} icon={minusIcon} onPress={()=>{toggleIngredient(idx)}}/>
+                                  <BasicBadge color={MAIN_COLOR} name={i.ingredientName} icon={minusIcon} onPress={()=>{toggleIngredient(idx)}}/>
                                 </React.Fragment>
                               )
                             } else {
                               return (
                                 <React.Fragment key={`${i.ingredientName}${idx}`}>
-                                  <BasicBadge backgroundColor='grey' name={i.ingredientName} icon={plusIcon} onPress={()=>{toggleIngredient(idx)}}/>
+                                  <BasicBadge color='grey' name={i.ingredientName} icon={plusIcon} onPress={()=>{toggleIngredient(idx)}}/>
                                 </React.Fragment>
                               )
                             }
