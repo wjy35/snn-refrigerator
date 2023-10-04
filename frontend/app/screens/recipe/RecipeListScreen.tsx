@@ -27,7 +27,7 @@ const RecipeListScreen = ({navigation}:any) => {
     remove: [],
     n: 1000,
     keyword: '',
-    size:3,
+    size:5,
   });
   const [maxPage, setMaxPage] = useState(1);
   const [nowPage, setNowPage] = useState(1);
