@@ -25,11 +25,10 @@ const SingleShareChatScreen = ({navigation}: any) => {
     const route = useRoute();
 
     const chatRoomId = route.params.chatRoomId;
-    const receiveMemberId = 3029554590;
+    const receiveMemberId = route.params.receiveMemberId;
 
     const {memberId} = useSelector((state: RootState) => state.userReducer);
     useEffect(() => {
-        console.log("@@@@@@@@@@@CHatRoomId",chatRoomId);
         const getChatList = async () => {
             try {
                 let res = await chatApi.chatList(chatRoomId);
