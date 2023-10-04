@@ -181,15 +181,19 @@ const SignUpScreen = ({navigation}:any) => {
   async function signup(){
     const hateIngredientList = Array.from(ingredients, (i) => i.ingredientInfoId);
     const placeInfoList = Array.from(locations, (i) => i.locationId);
-    try {
-      const res = await memberApi.signup({
+    const inputData = {
         nickname: nickName.text,
         memberId: route.params.id,
         hateIngredientList: hateIngredientList,
         placeInfoList: placeInfoList,
         birthday: route.params.birthday,
         email: route.params.email,
-      });
+      }
+    if (houseCode === 2){
+      inputData[houseCode] = houseCode.text
+    }
+    try {
+      const res = await memberApi.signup(inputData);
       if (res.status === 200) {
         dispatch(setHouseCodeAction(res.data.data.houseCode));
       }
@@ -200,15 +204,22 @@ const SignUpScreen = ({navigation}:any) => {
   }
 
   function trySignup(){
-    if (nickNameStatus === 2){
-      signup().then(navigation.replace('Home'));
-    } else if (nickNameStatus === 0) {
+    if (nickNameStatus === 0) {
       // TODO: toast로 변경 필요
       onToast('닉네임을 입력해주세요');
-    } else if (nickNameStatus === 1) {
+      return
+    }
+    if (nickNameStatus === 1) {
       // TODO: toast로 변경 필요
       onToast('중복된 닉네임은 사용할 수 없습니다');
+      return
     }
+    if (houseStatus === 1){
+      onToast('존재하지 않는 집 코드 입니다');
+      return
+    }
+    signup().then(navigation.replace('Home'));
+    
   }
 
   return (
