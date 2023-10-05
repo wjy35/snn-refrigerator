@@ -7,6 +7,7 @@ import AutoCompleteInput from '@/components/AutoCompleteInput';
 import useInput from '@/hooks/useInput';
 import ingredientAutocompleteApi from '@/apis/ingredientAutocompleteApi';
 import memberApi from '@/apis/memberApi';
+import {ALERT_COLOR, WARN_COLOR} from "@/assets/colors/colors";
 
 function HateIngredient({memberId}) {
   const [excludeIngredientList, setExcludeIngredientList] = useState<any[]>([]);
@@ -97,7 +98,7 @@ function HateIngredient({memberId}) {
               return (
                 <React.Fragment key={`${i.ingredientName}${idx}`}>
                   <BasicBadge
-                    color="#3093EF"
+                    color='red'
                     name={i.ingredientName}
                     icon={closeIcon}
                     onPress={() => {

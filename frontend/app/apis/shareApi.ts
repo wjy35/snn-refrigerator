@@ -22,8 +22,8 @@ interface props {
   pageNum?: number;
   items?: number;
   keyword?: string;
-  shareIngredients: any[];
-  shareBoardWriteRequest: any;
+  shareIngredients?: any[];
+  shareBoardWriteRequest?: any;
 }
 
 // TODO: 나눔 api 작성해야함
@@ -111,6 +111,13 @@ const shareApi = {
     );
     return res;
   },
+
+  getShareDetail: async ({sharePostId}: props) => {
+    const res = await PrivateShareApi.get(
+      `/detail/${sharePostId}`
+    )
+    return res;
+  }
 }
 
 export default shareApi;

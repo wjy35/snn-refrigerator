@@ -104,7 +104,7 @@ const RecipeCreateBasicInfo = ({textList, setRecipeInfo, setIsVisible, image}: p
                 </View>
                 <TouchableWithoutFeedback onPress={()=>{setIsVisible()}}>
                   <View style={[{width: '100%', height: 40, marginTop: 10, borderWidth: 1, backgroundColor: MAIN_COLOR, borderColor: MAIN_COLOR, borderRadius: 16, justifyContent: 'center', alignItems: 'center'}]}>
-                    <Text style={[styles.font]}>레시피 사진 등록하기</Text>
+                    <Text style={[styles.font, {color: 'white'}]}>레시피 사진 등록하기</Text>
                   </View>
                 </TouchableWithoutFeedback>
               </View>
