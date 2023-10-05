@@ -17,9 +17,7 @@ const ShareListScreen = ({navigation}:any) => {
   const shareText = useInput({
     placeholder: '검색어 입력',
   })
-  const [shareList, setShareList] = useState<any[]>([
-    {name: '감자 한박스 나눔합니다'}, {name: '양파 나눔이요'}, {name: '방금 캔 파 나눔 합니다'}, {name: '정말 정말 정말 정말 정말 정말 긴 바나나 나눔 합니다'}, {name: '5'},{name: '6'}, {name: '7'}, {name: '8'},
-  ])
+  const [shareList, setShareList] = useState<any[]>([])
   const [isVisible, setIsVisible] = useState(true);
   const [nowLocation, setNowLocation] = useState<any>()
 
