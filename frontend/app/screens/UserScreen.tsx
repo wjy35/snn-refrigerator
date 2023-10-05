@@ -57,7 +57,6 @@ const UserScreen = ({title = '김석주', optionTitle, optionFunction}: props) =
   useEffect(() => {
     async function setMemberId() {
       await setId(route.params.id);
-      console.log('send', route.params);
       const memberInfoRequest = await memberApi.otherDetail(route.params);
       const response = memberInfoRequest.data;
       setFollower(response.data.memberInfo.followCount);
@@ -73,7 +72,6 @@ const UserScreen = ({title = '김석주', optionTitle, optionFunction}: props) =
 
   async function getRecipes(newPage: number) {
     const recipeRequest = await recipeApi.getOthersRecipe(id, memberId, newPage, size);
-    console.log('recipes', recipeRequest.data);
     return recipeRequest;
   }
 
@@ -91,7 +89,6 @@ const UserScreen = ({title = '김석주', optionTitle, optionFunction}: props) =
   }, [page]);
 
   const pageIsValid = (request: any, targetPage: number) => {
-    console.log(targetPage, totalPage);
     if(totalPage > targetPage && targetPage >= 0) return true;
     return false;
   }

@@ -53,8 +53,6 @@ const RecipeDetailScreen = () => {
     const getRecipeDetail = async() => {
       try{
         let res = await recipeApi.detail({memberId, recipeId});
-        console.log(memberId, recipeId);
-        console.log(res.data.data.recipeInfo);
         if(res.status===200){
           if (res.data.data.recipeInfo.youtubeUrl) {
             const splitUrl = res.data.data.recipeInfo.youtubeUrl.split('/',);
