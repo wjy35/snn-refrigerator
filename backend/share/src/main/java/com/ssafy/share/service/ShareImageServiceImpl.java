@@ -29,13 +29,9 @@ public class ShareImageServiceImpl implements ShareImageService{
     }
 
     @Override
-    public List<Map<String, Object>> convertShareImages(List<ShareImage> shareImages){
-        List<Map<String, Object>> result = new ArrayList<>();
-        for(ShareImage shareImage : shareImages){
-            Map<String, Object> mp = new HashMap<>();
-            mp.put("imageUrl", shareImage.getSharePostImageUrl());
-            result.add(mp);
-        }
+    public Map<String, Object> convertShareImage(ShareImage shareImage){
+        Map<String, Object> result = new HashMap<>();
+        result.put("imageUrl", shareImage.getSharePostImageUrl());
         return result;
     }
 }

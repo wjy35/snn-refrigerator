@@ -11,5 +11,5 @@ public interface ShareImageService {
 
     void deleteBySharePost(SharePost sharePost);
 
-    List<Map<String, Object>> convertShareImages(List<ShareImage> shareImages);
+    Map<String, Object> convertShareImage(ShareImage shareImage);
 }

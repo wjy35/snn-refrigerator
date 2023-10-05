@@ -132,33 +132,24 @@ public class ShareBoardController {
     }
 
     @PostMapping("/image/shareboard/{shareBoardId}")
-    public ResponseEntity<?> ImagePost(@PathVariable Long shareBoardId, @RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles) throws IOException {
+    public ResponseEntity<?> ImagePost(@PathVariable Long shareBoardId, @RequestPart(value = "imageFiles",required = false) MultipartFile imageFile) throws IOException {
         Response response = new Response();
-        List<String> imageUrls = new ArrayList<>();
-        if(imageFiles != null) {
-            for (MultipartFile m : imageFiles) {
-                imageUrls.add(s3Service.upload("share", m.getOriginalFilename(), m));
-            }
-        }
-
+        String imageUrl = s3Service.upload("share", imageFile.getOriginalFilename(), imageFile);
         SharePost sharePost = shareBoardService.findById(shareBoardId).orElseThrow();
-        String thumbnailUrl = imageUrls.get(0);
+        String thumbnailUrl = imageUrl;
 
         sharePost.setThumbnail(thumbnailUrl);
         shareBoardService.save(sharePost);
 
-        List<ShareImage> images = new ArrayList<>();
+        ShareImage shareImage = ShareImage
+                .builder()
+                .sharePostImageUrl(imageUrl)
+                .sharePost(sharePost)
+                .build();
+        shareImageService.save(shareImage);
 
-        for(String image: imageUrls) {
-            ShareImage shareImage = ShareImage
-                    .builder()
-                    .sharePostImageUrl(image)
-                    .sharePost(sharePost)
-                    .build();
-            images.add(shareImageService.save(shareImage));
-        }
         response.setMessage("OK");
-        response.addData("images", shareImageService.convertShareImages(images));
+        response.addData("images", shareImageService.convertShareImage(shareImage));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -215,17 +206,12 @@ public class ShareBoardController {
     }
 
     @PatchMapping("/image/shareboard/{shareBoardId}")
-    public ResponseEntity<?> ImagePatch(@PathVariable Long shareBoardId, @RequestPart(value = "imageFiles",required = false) List<MultipartFile> imageFiles) throws IOException {
+    public ResponseEntity<?> ImagePatch(@PathVariable Long shareBoardId, @RequestPart(value = "imageFiles",required = false) MultipartFile imageFile) throws IOException {
         Response response = new Response();
-        List<String> imageUrls = new ArrayList<>();
-        if(imageFiles != null) {
-            for (MultipartFile m : imageFiles) {
-                imageUrls.add(s3Service.upload("share", m.getOriginalFilename(), m));
-            }
-        }
+        String imageUrl = s3Service.upload("share",imageFile.getOriginalFilename(), imageFile);
 
         SharePost sharePost = shareBoardService.findById(shareBoardId).orElseThrow();
-        String thumbnailUrl = imageUrls.get(0);
+        String thumbnailUrl = imageUrl;
 
         sharePost.setThumbnail(thumbnailUrl);
         shareBoardService.save(sharePost);
@@ -233,18 +219,16 @@ public class ShareBoardController {
         //기존의 이미지 삭제
         shareImageService.deleteBySharePost(sharePost);
 
-        List<ShareImage> images = new ArrayList<>();
 
-        for(String image: imageUrls) {
-            ShareImage shareImage = ShareImage
-                    .builder()
-                    .sharePostImageUrl(image)
-                    .sharePost(sharePost)
-                    .build();
-            images.add(shareImageService.save(shareImage));
-        }
+        ShareImage shareImage = ShareImage
+                .builder()
+                .sharePostImageUrl(imageUrl)
+                .sharePost(sharePost)
+                .build();
+
+        shareImageService.save(shareImage);
         response.setMessage("OK");
-        response.addData("images", shareImageService.convertShareImages(images));
+        response.addData("images", shareImageService.convertShareImage(shareImage));
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
