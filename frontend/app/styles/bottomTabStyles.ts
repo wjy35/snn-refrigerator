@@ -4,8 +4,7 @@ export const bottomTabStyles = StyleSheet.create({
   tabContainer: {
     height: 80,
     position: 'absolute',
-    left: 0,
-    right: 0,
+    width:'100%',
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
