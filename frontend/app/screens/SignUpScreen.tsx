@@ -302,7 +302,7 @@ const SignUpScreen = ({navigation}:any) => {
         </View>
       </ImageBackground>
     </View>
-  )
-}
+  );
+};
 
 export default SignUpScreen;
