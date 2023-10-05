@@ -1,5 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, ScrollView, ImageBackground, Image, TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  ScrollView,
+  ImageBackground,
+  Image,
+  TouchableWithoutFeedback,
+  TouchableOpacity
+} from 'react-native';
 import RecipeLayout from '@/screens/recipe/RecipeLayout';
 import {useFocusEffect, useNavigation, useRoute} from "@react-navigation/native";
 import {recipeStyles} from "@/styles/recipeStyles";
@@ -10,8 +19,9 @@ import {useSelector} from "react-redux";
 import {RootState} from "@/reducers/reducers";
 import {MAIN_COLOR, TEXT_COLOR, TEXT_DEACTIVATED_COLOR, TEXT_SUB_COLOR} from "@/assets/colors/colors";
 import {SvgXml} from "react-native-svg";
-import {dish, followIcon, time, user} from "@/assets/icons/icons";
+import {dish, filledfollowIcon, followIcon, time, user} from "@/assets/icons/icons";
 import ShowYoutube from "@/components/ShowYoutube";
+import memberApi from "@/apis/memberApi";
 
 const RecipeDetailScreen = () => {
   const navigation = useNavigation();
@@ -34,12 +44,16 @@ const RecipeDetailScreen = () => {
     serving:'로딩중'
   });
   const [youtubeUrl, setYoutubeUrl] = useState('')
+  const [like, setLike] = useState(false);
+  const [chefId, setChefId] = useState(0);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
     const recipeId = route?.params?.recipeId;
     const getRecipeDetail = async() => {
       try{
         let res = await recipeApi.detail({memberId, recipeId});
+        console.log(memberId, recipeId);
         console.log(res.data.data.recipeInfo);
         if(res.status===200){
           if (res.data.data.recipeInfo.youtubeUrl) {
@@ -51,6 +65,17 @@ const RecipeDetailScreen = () => {
           setRecipeDetail({
             ...res.data.data.recipeInfo,
           });
+
+          let nickname = res.data.data.recipeInfo.nickname;
+
+          const memberIdres = await memberApi.getMemberIdFromNick(nickname);
+          setChefId(memberIdres.data.data.memberId);
+
+          const followRes = await memberApi.toggleFollow( memberId, memberIdres.data.data.memberId);
+          setLike(!followRes.data.data.flag);
+          console.log(!followRes.data.data.flag);
+          await memberApi.toggleFollow( memberId, memberIdres.data.data.memberId);
+
         } else {
           console.log(res.data.message);
         }
@@ -59,7 +84,15 @@ const RecipeDetailScreen = () => {
       }
     }
     getRecipeDetail();
-  },[route?.params?.recipeId])
+  },[route?.params?.recipeId]);
+
+  const pressAfter = async () => {
+    setIsDisabled(pre => true);
+    const followRes = await memberApi.toggleFollow( memberId, chefId );
+    setLike(followRes.data.data.flag);
+    console.log(followRes.data.data.flag);
+    setIsDisabled(pre => false);
+  }
 
   return (
     <RecipeLayout title="레시피" optionTitle="수정" optionFunction={()=>navigation.navigate('RecipeUpdate', {...recipeDetail, recipeId: route?.params?.recipeId})}>
@@ -84,11 +117,17 @@ const RecipeDetailScreen = () => {
               <View style={[recipeStyles.recipeDetailUserInfo]}>
                 <Text style={[styles.font,{fontSize:20, color:TEXT_SUB_COLOR, marginVertical:3}]}>{recipeDetail.nickname}</Text>
                 <View style={{ flexDirection:'row', justifyContent:'center', marginVertical:3}}>
-                  <SvgXml
+                  <TouchableOpacity onPress={pressAfter} disabled={isDisabled}>
+                    {like ? <SvgXml
+                      xml={filledfollowIcon}
+                      width={20}
+                      height={20}
+                    />:<SvgXml
                       xml={followIcon}
                       width={20}
                       height={20}
-                  />
+                    />}
+                  </TouchableOpacity>
                   <Text style={[styles.font,{fontSize:20, color:TEXT_SUB_COLOR}]}>{recipeDetail.favoriteCount}</Text>
                 </View>
               </View>
