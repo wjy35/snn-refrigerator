@@ -44,7 +44,7 @@ const shareApi = {
     )
     return res;
   },
-  postShareImage: async ({sharePostId}: props, formData: any) => {
+  postShareImage: async (sharePostId : number, formData: any) => {
     const res = await PrivateShareApi.post(
     `/image/shareboard/${sharePostId}`,
       formData,
