@@ -233,6 +233,10 @@ public class ShareBoardController {
         }
 
         SharePost sharePost = shareBoardService.findById(shareBoardId).orElseThrow();
+        String thumbnailUrl = imageUrls.get(0);
+
+        sharePost.setThumbnail(thumbnailUrl);
+        shareBoardService.save(sharePost);
 
         //기존의 이미지 삭제
         shareImageService.deleteBySharePost(sharePost);
