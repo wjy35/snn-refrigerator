@@ -116,6 +116,7 @@ public class ShareBoardController {
 
         //ShareIngredient 세팅
         for(ShareIngredientRequest ingredientRequest : ingredientRequests){
+            log.info(String.valueOf(ingredientRequest.getIngredientInfoId()));
             ShareIngredient ingredient = ShareIngredient
                     .builder()
                     .ingredientInfoId(ingredientRequest.getIngredientInfoId())

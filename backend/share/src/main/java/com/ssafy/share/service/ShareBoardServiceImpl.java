@@ -92,10 +92,13 @@ public class ShareBoardServiceImpl implements ShareBoardService {
     @Override
     public Map<String, Object> convertSharePost(SharePost sharePost) throws IllegalAccessException {
         Map<String, Object> mp = new HashMap<>();
-        for(Field field : sharePost.getClass().getFields()){
-            if(field.getName().equals("shareIngredients") || field.getName().equals("shareImages")) continue;
-            mp.put(field.getName(), field.get(sharePost));
-        }
+        mp.put("sharePostId", sharePost.getSharePostId());
+        mp.put("locationId", sharePost.getLocationId());
+        mp.put("title", sharePost.getTitle());
+        mp.put("content", sharePost.getContent());
+        mp.put("thumbnail", sharePost.getThumbnail());
+        mp.put("modifiedDate", sharePost.getModifiedDate());
+        mp.put("createdDate", sharePost.getCreateDate());
         return mp;
     }
 
