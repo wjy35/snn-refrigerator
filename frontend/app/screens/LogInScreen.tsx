@@ -14,6 +14,8 @@ import memberApi from '@/apis/memberApi';
 import {useDispatch} from "react-redux";
 import {setLocationsAction, setMemberIdAction} from "@/actions/userAction";
 import {setHouseCodeAction} from "@/actions/houseAction";
+import messaging from "@react-native-firebase/messaging";
+import alarmApi from "@/apis/alarmApi";
 
 interface props {
   accessToken: string;
@@ -27,7 +29,16 @@ const LogInScreen = ({navigation}: any) => {
     try {
       const res = await memberApi.getKaKaoInfo(token);
       if (res.status === 200) {
-        dispatch(setMemberIdAction(res.data.data.kakaoMemberInfo.id));
+        const memberId = res.data.data.kakaoMemberInfo.id;
+        const memberFcmToken = await messaging().getToken();
+        dispatch(setMemberIdAction(memberId));
+        const saveRes = await alarmApi.saveMemberFcmToken({memberId,memberFcmToken});
+        if(saveRes.status === 200){
+          console.log("[Device Save Response]",saveRes);
+          console.log("[memberId]",memberId);
+          console.log("[memberFcmToken]",memberFcmToken);
+        }
+
         setPrivateInfo({
           email: res.data.data.kakaoMemberInfo.email,
           birthday: res.data.data.kakaoMemberInfo.birthday,
