@@ -15,10 +15,12 @@ import SettingContainer from "@/components/SettingContainer";
 import memberApi from "@/apis/memberApi";
 import {useSelector} from "react-redux";
 import {styles} from "@/styles/styles";
-import {locationIcon} from "@/assets/icons/icons";
+import {appendIcon, locationIcon, micIcon, settingIcon} from "@/assets/icons/icons";
 import {SvgXml} from "react-native-svg";
 import CameraImageModal from '@/components/modal/CameraImageModal';
 import { launchImageLibrary, launchCamera } from "react-native-image-picker";
+import BasicBadge from "@/components/BasicBadge";
+import {MAIN_COLOR, TEXT_DEACTIVATED_COLOR, WARN_COLOR} from "@/assets/colors/colors";
 
 const imagePickerOption = {
   mediaType: 'photo',
@@ -50,11 +52,11 @@ const MyPageScreen = ({navigation}:any) => {
   }, [user]);
 
   async function getUserDetail(){
-    console.log(memberId);
+    // console.log(memberId);
     try {
       const res = await memberApi.memberDetail(memberId);
       if (res.status === 200) {
-        console.log(res.data.data.memberInfo);
+        // console.log(res.data.data.memberInfo);
         setUser(res.data.data.memberInfo);
         setNickname(res.data.data.memberInfo.nickname);
       }
@@ -72,7 +74,7 @@ const MyPageScreen = ({navigation}:any) => {
       return;
     }
     //console.log('PickImage', res);
-    console.log('user: ', user);
+    // console.log('user: ', user);
     const memberId = user.memberId;
     const formData = new FormData();
 
@@ -99,10 +101,16 @@ const MyPageScreen = ({navigation}:any) => {
   };
 
   const saveNickname = async () => {
-    console.log(nickname);
-    console.log(user.memberId);
-    const res = await memberApi.memberUpdate(user.memberId, nickname);
-    if(res.status === 200){
+    // console.log(nickname);
+    // console.log(user.memberId);
+
+    try {
+      const res = await memberApi.memberUpdate(user.memberId, nickname);
+      if (res.status === 200) {
+        setNickEditing(false);
+      }
+    } catch (err) {
+      console.log(err);
       setNickEditing(false);
     }
   };
@@ -115,28 +123,37 @@ const MyPageScreen = ({navigation}:any) => {
     <MyPageLayout title="마이 페이지">
       <ScrollView style={{width: '100%'}}>
         <View style={[myPageStyles.infoContainer]}>
-          <Pressable
+          <View
             style={[myPageStyles.profileImage, {marginTop: 20}]}
-            onPress={() => {
-              modalOpen();
-            }}
           >
             {
-              user && <Image source={{uri: user.profileImageUrl}} style={{width: '100%', height: '100%', borderRadius: 100}}/>
+              user && <>
+                <Image source={{uri: user.profileImageUrl}} style={{width: '100%', height: '100%', borderRadius: 100}}/>
+
+                  <TouchableWithoutFeedback onPress={modalOpen}>
+                    <View style={{position:'absolute', right:'7%', top: '7%',alignItems:'center', flexDirection:'row', justifyContent:'center', width: 35, height: 35, borderRadius: 100, borderWidth:1, borderColor:TEXT_DEACTIVATED_COLOR, backgroundColor:'#FFFFFF'}}>
+                      <SvgXml
+                          xml={settingIcon}
+                          width={24}
+                          height={24}
+                      />
+                    </View>
+                  </TouchableWithoutFeedback>
+                </>
             }
-          </Pressable>
+          </View>
           <View style={[myPageStyles.profileInfo, {alignItems: 'center', marginTop: 10}]}>
               {nickEditing ?
-                <View>
+                <View style={{flexDirection:'row', justifyContent:'center'}}>
                   <TextInput
                     value={nickname}
                     onChangeText={(text) => setNickname(() => text)}
                     placeholder="새로운 닉네임을 입력하세요"
+                    style={[styles.input, styles.font, {fontSize: 25, width:200, height:46}]}
                   />
-                  <Button title="저장" onPress={saveNickname} />
                 </View>
-              : <View>
-                  <Text style={[styles.font, {fontSize: 36}]}>
+              : <View style={{margin:14}}>
+                  <Text style={[styles.font, {fontSize: 45}]}>
                     {nickname}
                   </Text>
                 </View>
@@ -148,14 +165,10 @@ const MyPageScreen = ({navigation}:any) => {
                 width={20}
                 height={20}
               />
-              <Text style={[styles.font, {color: 'grey', fontSize: 24}]}>서울 역삼동</Text>
+              <Text style={[styles.font, {color: 'grey', fontSize: 20}]}>서울 역삼동</Text>
             </View>
-            <Button title="닉네임 수정" onPress={changeNickname}/>
-            {/*<TouchableWithoutFeedback onPress={()=>console.log('수정')}>*/}
-            {/*  <View>*/}
-            {/*    <Text>수정</Text>*/}
-            {/*  </View>*/}
-            {/*</TouchableWithoutFeedback>*/}
+
+            <BasicBadge color={nickEditing?WARN_COLOR:MAIN_COLOR} fill={false} name={nickEditing?' 저장 ':' 수정 '} onPress={nickEditing?saveNickname:changeNickname}/>
           </View>
           <View style={[myPageStyles.profileRowContainer, {height: 100}]}>
 

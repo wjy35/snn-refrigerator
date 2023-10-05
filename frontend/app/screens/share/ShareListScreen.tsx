@@ -9,6 +9,7 @@ import useInput from "@/hooks/useInput";
 import ShareItem from "@/components/ShareItem";
 import shareApi from "@/apis/shareApi";
 import {useFocusEffect} from "@react-navigation/native";
+import {Shadow} from "react-native-shadow-2";
 
 const ShareListScreen = ({navigation}:any) => {
   const shareText = useInput({
@@ -69,9 +70,16 @@ const ShareListScreen = ({navigation}:any) => {
           }
         </View>
       </ScrollView>
-      <View style={[{width: 50, height: 50, position: 'absolute', bottom: 80, right: 50}]}>
-        <Button title='채팅' onPress={() => navigation.navigate('ShareChatList')}></Button>
-      </View>
+      <TouchableWithoutFeedback
+          onPress={()=>{navigation.navigate('ShareChatList')}}
+      >
+        <View style={[{position: 'absolute', bottom: 80, alignSelf:'flex-end', flexDirection:'row', justifyContent:'center', paddingRight:20, paddingBottom:20}]}>
+
+          <Shadow distance={4} offset={[2,2]} style={[{backgroundColor:'#3093EF', height:70,width:70,borderRadius:99, justifyContent:'center'}]}>
+            <Text style={[styles.font, {color: '#FFFFFF', fontSize:25, textAlign:'center'}]}>채팅</Text>
+          </Shadow>
+        </View>
+      </TouchableWithoutFeedback>
     </ShareLayout>
   );
 };
