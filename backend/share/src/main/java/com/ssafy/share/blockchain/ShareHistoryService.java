@@ -7,7 +7,6 @@ import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Utf8String;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import reactor.util.function.Tuple3;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -18,10 +17,10 @@ import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @Service
-public class BasicService {
+public class ShareHistoryService {
     private EthereumService ethereumService;
 
-    public BasicService(EthereumService ethereumService)
+    public ShareHistoryService(EthereumService ethereumService)
     {
         this.ethereumService = ethereumService;
     }
@@ -66,7 +65,10 @@ public class BasicService {
                 Arrays.asList(new Utf8String(giver),new Utf8String(taker),new Utf8String(LocalDateTime.now().toString())),
                 Collections.emptyList());
 
-        sendTxAndGetReceipt(function);
+        String txHash = ethereumService.ethSendTransaction(function);
+
+        TransactionReceipt receipt = ethereumService.getReceipt(txHash);
+        System.out.println("receipt = " + receipt);
     }
 
     public int getShareCount(String giver) throws IOException, ExecutionException, InterruptedException {

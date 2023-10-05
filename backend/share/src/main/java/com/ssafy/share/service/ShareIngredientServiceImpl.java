@@ -20,6 +20,10 @@ public class ShareIngredientServiceImpl implements ShareIngredientService{
     private final ShareIngredientRepository shareIngredientRepository;
 
     @Override
+    public ShareIngredient findShareIngredient(Short ingredientInfoId,SharePost sharePost){
+        return shareIngredientRepository.findByIngredientInfoIdAndSharePost(ingredientInfoId,sharePost);
+    }
+    @Override
     public ShareIngredient save(ShareIngredient shareIngredient) {
         return shareIngredientRepository.save(shareIngredient);
     }

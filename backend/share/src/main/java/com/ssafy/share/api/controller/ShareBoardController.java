@@ -3,7 +3,7 @@ package com.ssafy.share.api.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.share.api.request.*;
 import com.ssafy.share.api.response.*;
-import com.ssafy.share.blockchain.BasicService;
+import com.ssafy.share.blockchain.ShareHistoryService;
 import com.ssafy.share.db.entity.ShareHistory;
 import com.ssafy.share.db.entity.ShareImage;
 import com.ssafy.share.db.entity.ShareIngredient;
@@ -16,9 +16,6 @@ import com.ssafy.share.service.ShareIngredientService;
 import com.ssafy.share.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -43,7 +39,7 @@ public class ShareBoardController {
     private final ShareImageService shareImageService;
     private final ShareIngredientService shareIngredientService;
     private final S3Service s3Service;
-    private final BasicService basicService;
+    private final ShareHistoryService shareHistoryService;
     private final TimeUtil timeUtil;
 
     @GetMapping("/{locationId}/{pageNum}/{items}")
@@ -274,12 +270,20 @@ public class ShareBoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/reserve-share")
-    public ResponseEntity<?> reserveSharing(@RequestBody ShareRequest shareRequest){
+    @PostMapping("{shareBoardId}/reserve-share")
+    public ResponseEntity<?> reserveSharing(@PathVariable Long shareBoardId,@RequestBody ShareRequest shareRequest){
         Response response = new Response();
+
+        SharePost sharePost = shareBoardService.findById(shareBoardId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 나눔글입니다."));
+        for(Short key : shareRequest.getIngredients().keySet()){
+            log.info("{} {}",key,sharePost.getSharePostId());
+            shareIngredientService.findShareIngredient(key,sharePost).reserveShare(shareRequest.getIngredients().get(key));
+        }
         ShareHistory shareHistory=shareHistoryRepository.save(ShareHistory.builder()
                 .giverId(shareRequest.getGiverId())
                 .takerId(shareRequest.getTakerId()).build());
+
         response.setMessage("OK");
         response.addRequest("giverId",shareRequest.getGiverId());
         response.addRequest("takerId",shareRequest.getTakerId());
@@ -288,13 +292,13 @@ public class ShareBoardController {
     }
 
 
-    @PatchMapping("/complete-share/{shareHistoryId}")
+    @PatchMapping("{shareBoardId}/complete-share/{shareHistoryId}")
     @Transactional
-    public ResponseEntity<?> completeSharing(@PathVariable Long shareHistoryId){
+    public ResponseEntity<?> completeSharing(@PathVariable Long shareBoardId,@PathVariable Long shareHistoryId){
         Response response = new Response();
         ShareHistory shareHistory = shareHistoryRepository.findById(shareHistoryId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 약속입니다."));
-        if(shareHistory.getIsCompleted()==true){
+        if(shareHistory.getIsCompleted()){
             throw new IllegalArgumentException("이미 완료된 나눔입니다.");
         }
         shareHistory.complete();
@@ -304,13 +308,33 @@ public class ShareBoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PatchMapping("{shareBoardId}/cancel-share/{shareHistoryId}")
+    @Transactional
+    public ResponseEntity<?> cancelSharing(@PathVariable Long shareBoardId,@PathVariable Long shareHistoryId,@RequestBody ShareRequest shareRequest){
+        Response response = new Response();
+        SharePost sharePost = shareBoardService.findById(shareBoardId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 나눔글입니다."));
+        ShareHistory shareHistory = shareHistoryRepository.findById(shareHistoryId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 약속입니다."));
+        if(shareHistory.getIsCompleted()){
+            throw new IllegalArgumentException("이미 완료된 나눔입니다.");
+        }
+        for(Short key : shareRequest.getIngredients().keySet()){
+            shareIngredientService.findShareIngredient(key,sharePost).cancelShare(shareRequest.getIngredients().get(key));
+        }
+        response.setMessage("OK");
+        response.addRequest("shareHistoryId",shareHistoryId);
+        response.addData("response", new ShareCompleteResponse(shareHistory.getShareHistoryId(),shareHistory.getIsCompleted(),shareHistory.getCompletedTime()));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/get-share-count/{giverId}")
     public int getShareCount(@PathVariable Long giverId) throws IOException, ExecutionException, InterruptedException {
-        return basicService.getShareCount(shareBoardService.getMember(giverId).getNickname());
+        return shareHistoryService.getShareCount(shareBoardService.getMember(giverId).getNickname());
     }
     @GetMapping("/get-take-count/{takerId}")
     public int getTakeCount(@PathVariable Long takerId) throws IOException, ExecutionException, InterruptedException {
-        return basicService.getTakeCount(shareBoardService.getMember(takerId).getNickname());
+        return shareHistoryService.getTakeCount(shareBoardService.getMember(takerId).getNickname());
     }
     @GetMapping("/get-share-history/{type}/{memberId}/{pageNum}/{items}")
     public ResponseEntity<?> getShareHistory(@PathVariable String type,@PathVariable Long memberId,@PathVariable(required = false) Short pageNum,
@@ -335,10 +359,5 @@ public class ShareBoardController {
         response.addRequest("type",type);
         response.addData("response", result);
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-    @GetMapping("/get-take-record/{memberId}/{pageNum}/{items}")
-    public void getTakeHistory(@PathVariable Long memberId,@PathVariable(required = false) Short pageNum,
-                               @PathVariable(required = false) Short items){
-
     }
 }
