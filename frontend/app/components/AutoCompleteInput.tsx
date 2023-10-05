@@ -65,7 +65,7 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
           </TextInput>
           {
             isVisible && (
-              <View style={{maxHeight: 200}}>
+              <View style={[{maxHeight: 230}, textList?.length>0?{ borderTopWidth:1.5, borderBottomWidth:1.5}:{borderWidth:0}]}>
                 <FlatList
                   windowSize={2}
                   initialNumToRender={5}

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, ImageBackground} from 'react-native';
+import {View, Text, Button, ImageBackground, Alert} from 'react-native';
 import BottomNavigator from "@/components/BottomNavigator";
 import {styles} from "@/styles/styles";
 import ProgressPage from "@/components/ProgressPage";
@@ -13,6 +13,8 @@ import GetImageFrom from "@/components/GetImageFrom";
 import ingredientExtractionApi from "@/apis/ingredientExtractionApi";
 import GetSpeechFrom from "@/components/GetSpeechFrom";
 import houseAddScreen from "@/screens/HouseAddScreen";
+import {useSelector} from "react-redux";
+import {RootState} from "@/reducers/reducers";
 
 
 const HouseAddScreen = ({navigation}:any) => {
@@ -22,6 +24,7 @@ const HouseAddScreen = ({navigation}:any) => {
   const [isImageVisible, setIsImageVisible] = useState(false);
   const [image, setImage] = useState<any>();
   const [isSpeechVisible, setIsSpeechVisible] = useState(false);
+  const {houseCode} = useSelector((state:RootState) => state.houseReducer);
 
   function changeNow(newNum: number) {
     setNow(newNum);
@@ -58,8 +61,15 @@ const HouseAddScreen = ({navigation}:any) => {
 
   async function finishAdd(){
     try {
+      for(let ingredient of ingredients){
+        if(ingredient.lastDate==null && ingredient.storageType!==1){
+
+          Alert.alert('소비기한을 설정해주세요');
+          return;
+        }
+      }
       const res = await houseApi.addIngredient({
-        houseCode: '492f9401-c684-4966-936e-56f0941eaffe',
+        houseCode: houseCode,
         ingredients: ingredients,
       });
       if (res.status === 200) {

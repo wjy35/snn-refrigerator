@@ -78,16 +78,16 @@ const FridgeScreen = ({navigation}:any) => {
             </ScrollView>
         </View>
 
-
+          <TouchableWithoutFeedback
+              onPress={()=>{navigation.navigate('HouseAdd')}}
+          >
           <View style={[{position: 'absolute', bottom: 80, alignSelf:'flex-end', flexDirection:'row', justifyContent:'center', paddingRight:20, paddingBottom:20}]}>
-              <TouchableWithoutFeedback
-                  onPress={()=>{navigation.navigate('HouseAdd')}}
-              >
+
               <Shadow distance={4} offset={[2,2]} style={[{backgroundColor:'#3093EF', height:70,width:70,borderRadius:99, justifyContent:'center'}]}>
                   <Text style={[styles.font, {color: '#FFFFFF', fontSize:25, textAlign:'center'}]}>추가</Text>
               </Shadow>
-              </TouchableWithoutFeedback>
           </View>
+      </TouchableWithoutFeedback>
       </FridgeLayout>
   )
 }

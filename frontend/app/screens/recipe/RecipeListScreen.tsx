@@ -10,10 +10,22 @@ import AutoCompleteInput from "@/components/AutoCompleteInput";
 import useInput from "@/hooks/useInput";
 import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
 import BasicBadge from "@/components/BasicBadge";
-import {closeIcon, minusIcon, plusIcon} from "@/assets/icons/icons";
-import {MAIN_COLOR} from "@/assets/colors/colors";
+import {
+  appendIcon,
+  backButton,
+  closeIcon,
+  foldIcon,
+  micIcon,
+  minusIcon,
+  pictureIcon,
+  plusIcon, searchIcon
+} from "@/assets/icons/icons";
+import {MAIN_COLOR, TEXT_COLOR} from "@/assets/colors/colors";
 import Slider from '@react-native-community/slider';
 import PlainInput from "@/components/PlainInput";
+import {topNavStyles} from "@/styles/topNavStyles";
+import {SvgXml} from "react-native-svg";
+import {Shadow} from "react-native-shadow-2";
 
 
 const RecipeListScreen = ({navigation}:any) => {
@@ -165,31 +177,72 @@ const RecipeListScreen = ({navigation}:any) => {
       <View style={styles.container}>
         {
           now === 0 && (
-            <>
-              <View style={styles.centerContainer}>
-                {settings.contain.length>0&&<Text>{settings.contain.map(i => i.ingredientName).join(', ')}를 포함</Text>}
-                {settings.remove.length>0&&<Text>{settings.remove.map(i => i.ingredientName).join(', ')}를 제외</Text>}
-                {settings.n!==1000&&<Text>미보유 재료 {settings.n}개 이하</Text>}
-                <Text>{settings.keyword} 레시피 검색 결과</Text>
-              </View>
-              <View>
+            <View style={{width:'100%'}}>
                 <TouchableWithoutFeedback onPress={()=>{setNow(1)}}>
-                  <Text>상세설정</Text>
+                  <View style={[{alignSelf:'center', flexDirection:'row', justifyContent:'center', marginBottom:5}]}>
+                  <Text style={[styles.font, {color: TEXT_COLOR, fontSize:25, textAlign:'center'}]}>검색 상세설정</Text>
+                  <View style={{
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderWidth: 2,
+                    height: 30,
+                    width: 30,
+                    marginLeft: 10,
+                    borderRadius: 999,
+                    borderColor: '#E9F1FF',
+                  }}>
+                    <SvgXml
+                        xml={appendIcon}
+                        width={19}
+                        height={19}
+                    />
+                  </View>
+                  </View>
                 </TouchableWithoutFeedback>
+
+              <View style={styles.centerContainer}>
+                {settings.contain.length>0&&<Text>{settings.contain.map(i => i.ingredientName).join(', ')}을(를) 포함한</Text>}
+                {settings.remove.length>0&&<Text>{settings.remove.map(i => i.ingredientName).join(', ')}을(를) 제외한</Text>}
+                {(settings.n!==1000&&settings.n!==100)&&<Text>미보유 재료 {settings.n}개 이하인</Text>}
+                {(settings.contain.length>0||settings.remove.length>0||(settings.n!==1000&&settings.n!==100))&&<Text>{settings.keyword} 레시피 검색 결과</Text>}
               </View>
-            </>
+            </View>
 
           )
         }
         {
           now !== 0 && (
-            <View style={{flex: 2, padding: 10}}>
+
+            <View style={{flex: 2}}>
               <ScrollView
                 showsHorizontalScrollIndicator={false}
               >
+
                 {
                   now === 1 && (
-                    <View>
+                      <>
+                        <TouchableWithoutFeedback onPress={()=>{setNow(0)}}>
+                          <View style={[{alignSelf:'center', flexDirection:'row', justifyContent:'center', marginBottom:5}]}>
+                            <Text style={[styles.font, {color: TEXT_COLOR, fontSize:25, textAlign:'center'}]}>검색 상세설정</Text>
+                            <View style={{
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              borderWidth: 2,
+                              height: 30,
+                              width: 30,
+                              marginLeft: 10,
+                              borderRadius: 999,
+                              borderColor: '#E9F1FF',
+                            }}>
+                              <SvgXml
+                                  xml={foldIcon}
+                                  width={19}
+                                  height={19}
+                              />
+                            </View>
+                          </View>
+                        </TouchableWithoutFeedback>
+                    <View style={{padding:10}}>
                       <Text style={[styles.font, {fontSize: 20}]}>필수 식재료 설정</Text>
                       <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
                         {
@@ -210,10 +263,10 @@ const RecipeListScreen = ({navigation}:any) => {
                           })
                         }
                       </View>
-                    </View>
+                    </View></>
                   )
                 }
-                <View style={{}}>
+                <View style={{padding:10}}>
                   <AutoCompleteInput
                     {...excludeIngredient}
                     textList={excludeIngredientList}
@@ -236,7 +289,7 @@ const RecipeListScreen = ({navigation}:any) => {
                 </View>
                 {
                   now === 1 && (
-                    <View style={{marginTop: 10}}>
+                    <View style={{marginTop: 10, padding:10}}>
                       <Text style={[styles.font, {fontSize: 20}]}>
                         <Text>없는 재료  </Text>
                         <Text>{range}</Text>
@@ -258,19 +311,22 @@ const RecipeListScreen = ({navigation}:any) => {
                 }
                 {
                   now === 1 && (
-                    <>
+                    <View style={{padding:10}}>
                       <PlainInput {...keyWord}/>
-                    </>
+                    </View>
                   )
                 }
 
-                <View style={{marginTop: 10}}>
-                  <Button title='검색하기' onPress={setSearch}/>
+
+                <View style={[{alignSelf:'center', flexDirection:'row', justifyContent:'center'}]}>
+                  <BasicBadge leftIcon={searchIcon} color='#3093EF' name={'  검색하기  '} onPress={setSearch}/>
                 </View>
               </ScrollView>
             </View>
           )
         }
+
+
         {
           now === 0 && <RecipeList horizontal={false} recipeList={recipe} navigation={navigation} callNextPage={getRecipe}/>
         }
