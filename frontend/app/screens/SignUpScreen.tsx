@@ -21,7 +21,8 @@ import {closeIcon} from "@/assets/icons/icons";
 import memberApi from "@/apis/memberApi";
 import {useDispatch} from "react-redux";
 import {setHouseCodeAction} from "@/actions/houseAction";
-import {setMemberIdAction} from "@/actions/userAction";
+import {setHatesAction, setLocationsAction, setMemberIdAction} from "@/actions/userAction";
+import {MAIN_COLOR} from "@/assets/colors/colors";
 // import Toast from "@/components/Toast";
 
 
@@ -87,13 +88,16 @@ const SignUpScreen = ({navigation}:any) => {
     );
   }
 
-  function onPressIn(nowNum: number){
+  function onPressInLocation(nowNum: number){
     setNow(nowNum);
-  }
-
-  function onBlurIngredient(){
     excludeIngredient.reset();
     setExcludeIngredientList([]);
+  }
+
+  function onPressInIngredient(nowNum: number){
+    setNow(nowNum);
+    location.reset();
+    setLocationList([]);
   }
 
   function onSelectLocation(item: any) {
@@ -108,11 +112,6 @@ const SignUpScreen = ({navigation}:any) => {
     }
   }
 
-  function onBlurLocation(){
-    location.reset();
-    setLocationList([]);
-  }
-
   function removeIngredient(idx: number){
     const _ingredients = [...ingredients];
     _ingredients.splice(idx, 1);
@@ -122,7 +121,7 @@ const SignUpScreen = ({navigation}:any) => {
   function removeLocation(idx: number) {
     const _locations = [...locations];
     _locations.splice(idx, 1);
-    setLocationList(_locations);
+    setLocations(_locations);
   }
 
   async function checkDuplicateNickname(nickname: string){
@@ -193,7 +192,9 @@ const SignUpScreen = ({navigation}:any) => {
       const res = await memberApi.signup(inputData);
       if (res.status === 200) {
         dispatch(setHouseCodeAction(res.data.data.houseCode));
-        navigation.replace('Home')
+        dispatch(setLocationsAction(locations));
+        dispatch(setHatesAction(ingredients));
+        navigation.replace('Home');
       }
     } catch (err) {
       console.log('여기서 에러나는거임signup');
@@ -246,7 +247,7 @@ const SignUpScreen = ({navigation}:any) => {
                 }
               </View>
               <View style={{width: '90%'}}>
-                <AutoCompleteInput {...location} textList={locationList} onPressIn={onPressIn} onBlur={onBlurLocation} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
+                <AutoCompleteInput {...location} textList={locationList} onPressIn={onPressInLocation} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
                 <View>
                   <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
                     {
@@ -263,7 +264,7 @@ const SignUpScreen = ({navigation}:any) => {
                 </View>
               </View>
               <View style={{width: '90%'}}>
-                <AutoCompleteInput {...excludeIngredient} textList={excludeIngredientList} onPressIn={onPressIn} onBlur={onBlurIngredient} keyValue='ingredientInfoId' name='ingredientName' onSelect={onSelectIngredient}/>
+                <AutoCompleteInput {...excludeIngredient} textList={excludeIngredientList} onPressIn={onPressInIngredient} keyValue='ingredientInfoId' name='ingredientName' onSelect={onSelectIngredient}/>
                 <View>
                   <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
                     {
@@ -296,12 +297,12 @@ const SignUpScreen = ({navigation}:any) => {
         </View>
         <View style={[{width: '100%', justifyContent: 'center', alignItems: 'center', height: '10%'}]}>
           <View style={[{width: '70%'}]}>
-            <Button title='회원가입' onPress={trySignup}></Button>
+            <BasicBadge color={MAIN_COLOR} fill={false} name='회원가입' onPress={trySignup}/>
           </View>
         </View>
       </ImageBackground>
     </View>
-  )
-}
+  );
+};
 
 export default SignUpScreen;
