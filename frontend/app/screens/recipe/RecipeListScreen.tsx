@@ -26,6 +26,7 @@ import PlainInput from "@/components/PlainInput";
 import {topNavStyles} from "@/styles/topNavStyles";
 import {SvgXml} from "react-native-svg";
 import {Shadow} from "react-native-shadow-2";
+import memberApi from "@/apis/memberApi";
 
 
 const RecipeListScreen = ({navigation}:any) => {
@@ -99,6 +100,21 @@ const RecipeListScreen = ({navigation}:any) => {
   useEffect(() => {
     getRecipe();
   }, [settings]);
+
+  async function getHate(){
+    try {
+      const res = await memberApi.memberHate(memberId);
+      if (res.status === 200) {
+        setRemove(() => res.data.data.ingredient);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(()=>{
+    getHate();
+  },[])
 
   const checkExcludeIngredient = async (keyword: string) => {
     try {
@@ -281,7 +297,7 @@ const RecipeListScreen = ({navigation}:any) => {
                     remove && remove.map((i, idx) => {
                       return (
                         <React.Fragment key={`${i.ingredientName}${idx}`}>
-                          <BasicBadge backgroundColor='red' name={i.ingredientName} icon={closeIcon} onPress={()=>{removeIngredient(idx)}}/>
+                          <BasicBadge color='red' name={i.ingredientName} icon={closeIcon} onPress={()=>{removeIngredient(idx)}}/>
                         </React.Fragment>
                       )
                     })
@@ -317,8 +333,7 @@ const RecipeListScreen = ({navigation}:any) => {
                   )
                 }
 
-
-                <View style={[{alignSelf:'center', flexDirection:'row', justifyContent:'center'}]}>
+                <View style={[{alignSelf:'center', flexDirection:'row', justifyContent:'center', marginBottom: 20}]}>
                   <BasicBadge leftIcon={searchIcon} color='#3093EF' name={'  검색하기  '} onPress={setSearch}/>
                 </View>
               </ScrollView>
