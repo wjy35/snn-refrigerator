@@ -53,8 +53,6 @@ const RecipeDetailScreen = () => {
     const getRecipeDetail = async() => {
       try{
         let res = await recipeApi.detail({memberId, recipeId});
-        console.log(memberId, recipeId);
-        console.log(res.data.data.recipeInfo);
         if(res.status===200){
           if (res.data.data.recipeInfo.youtubeUrl) {
             const splitUrl = res.data.data.recipeInfo.youtubeUrl.split('/',);
@@ -70,14 +68,9 @@ const RecipeDetailScreen = () => {
 
           const memberIdres = await memberApi.getMemberIdFromNick(nickname);
           setChefId(memberIdres.data.data.memberId);
-
           const followRes = await memberApi.toggleFollow( memberId, memberIdres.data.data.memberId);
           setLike(!followRes.data.data.flag);
-          console.log(!followRes.data.data.flag);
           await memberApi.toggleFollow( memberId, memberIdres.data.data.memberId);
-
-        } else {
-          console.log(res.data.message);
         }
       }catch (e){
         console.log(e);
@@ -90,18 +83,20 @@ const RecipeDetailScreen = () => {
     setIsDisabled(pre => true);
     const followRes = await memberApi.toggleFollow( memberId, chefId );
     setLike(followRes.data.data.flag);
-    console.log(followRes.data.data.flag);
     setIsDisabled(pre => false);
   }
 
   return (
-    <RecipeLayout title="레시피" optionTitle="수정" optionFunction={()=>navigation.navigate('RecipeUpdate', {...recipeDetail, recipeId: route?.params?.recipeId})}>
+    <RecipeLayout
+      title="레시피"
+      optionTitle={memberId === chefId ? '수정' : ''}
+      optionFunction={memberId === chefId ? ()=>navigation.navigate('RecipeUpdate', {...recipeDetail, recipeId: route?.params?.recipeId}) : ()=>{}}>
       <ScrollView style={{width: '100%'}}>
         <View style={recipeStyles.recipeDetailImage}>
-          <ImageBackground source={{uri: recipeDetail.imageUrl}}
-                           resizeMode={'cover'}
-                           style={{width:'100%', height:'100%'}}
-          />
+          {
+            recipeDetail?.imageUrl && <ImageBackground source={{uri: recipeDetail.imageUrl}} resizeMode={'cover'} style={{width:'100%', height:'100%'}}/>
+          }
+
         </View>
         <View>
           <Text style={[styles.font, recipeStyles.recipeDetailTitleText]}>{recipeDetail.title}</Text>
@@ -110,9 +105,9 @@ const RecipeDetailScreen = () => {
           <View style={recipeStyles.recipeDetailInfo}>
             <View style={recipeStyles.recipeDetailUserContainer}>
               <View style={recipeStyles.recipeDetailUserImage}>
-                {recipeDetail.profileImageUrl&&<Image source={{uri: recipeDetail.profileImageUrl}}
-                                 style={{height:70,width:70,borderRadius:99, borderWidth:1, borderColor:TEXT_COLOR ,marginRight:10}}
-                />}
+                {
+                  recipeDetail?.profileImageUrl && <Image source={{uri: recipeDetail.profileImageUrl}} style={{height:70,width:70,borderRadius:99, borderWidth:1, borderColor:TEXT_COLOR ,marginRight:10}}/>
+                }
               </View>
               <View style={[recipeStyles.recipeDetailUserInfo]}>
                 <Text style={[styles.font,{fontSize:20, color:TEXT_SUB_COLOR, marginVertical:3}]}>{recipeDetail.nickname}</Text>
