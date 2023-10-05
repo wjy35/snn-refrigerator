@@ -5,7 +5,7 @@ import {
   Button,
   ScrollView,
   Image,
-  ImageBackground,
+  ImageBackground, TouchableOpacity,
 } from 'react-native';
 import BottomNavigator from '@/components/BottomNavigator';
 import {styles} from '@/styles/styles';
@@ -15,6 +15,11 @@ import RecipeItem from '@/components/RecipeItem';
 import {useRoute} from '@react-navigation/native';
 import memberApi from '@/apis/memberApi';
 import recipeApi from '@/apis/recipeApi';
+import {useSelector} from "react-redux";
+import {RootState} from "@/reducers/reducers";
+import {SvgXml} from "react-native-svg";
+import {filledfollowIcon, followIcon} from "@/assets/icons/icons";
+import {TEXT_SUB_COLOR} from "@/assets/colors/colors";
 
 interface props {
   title?: string;
@@ -32,16 +37,18 @@ const UserScreen = ({title = '김석주', optionTitle, optionFunction}: props) =
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
   const [size, setSize] = useState(5);
+  const [like, setLike] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const navigation = useNavigation();
   const route = useRoute();
+  const memberId = useSelector((state: RootState) => state.userReducer.memberId);
 
 
   // 이 페이지로 넘겨준 데이터 형식
   /*
   const data = {
     id: parseInt(memberId.text),
-    myId: parseInt('3029554590'),
   };
   */
 
@@ -56,13 +63,16 @@ const UserScreen = ({title = '김석주', optionTitle, optionFunction}: props) =
       setFollower(response.data.memberInfo.followCount);
       setNickname(response.data.memberInfo.nickname);
       setProfileUrl(response.data.memberInfo.profileImageUrl);
+
+      const followRes = await memberApi.toggleFollow( memberId, route.params.id);
+      setLike(!followRes.data.data.flag);
+      await memberApi.toggleFollow( memberId, route.params.id);
     }
     setMemberId();
   }, []);
 
   async function getRecipes(newPage: number) {
-    const myId = route.params.myId; //TODO: 실제 로그인 아이디로 바꿔줘야 함.
-    const recipeRequest = await recipeApi.getOthersRecipe(id, myId, newPage, size);
+    const recipeRequest = await recipeApi.getOthersRecipe(id, memberId, newPage, size);
     console.log('recipes', recipeRequest.data);
     return recipeRequest;
   }
@@ -102,6 +112,17 @@ const UserScreen = ({title = '김석주', optionTitle, optionFunction}: props) =
     await changePage(page + 1);
   }
 
+  const pressAfter = async () => {
+    setIsDisabled(pre => true);
+    const followRes = await memberApi.toggleFollow( memberId, id );
+    setLike(followRes.data.data.flag);
+    setIsDisabled(pre => false);
+
+    const memberInfoRequest = await memberApi.otherDetail(route.params);
+    const response = memberInfoRequest.data;
+    setFollower(response.data.memberInfo.followCount);
+  };
+
   return (
     <View style={styles.layout}>
       {/*<MyHouseModal/>*/}
@@ -128,12 +149,25 @@ const UserScreen = ({title = '김석주', optionTitle, optionFunction}: props) =
               />
             </View>
             <View style={{flex: 1, borderWidth: 1}}>
-              <View style={{flex: 1}}>
-                <Text>팔로워 수</Text>
-                <Text>{follower}</Text>
+              <View style={{flex: 1, marginLeft: 5, marginTop: 5}}>
+                <Text style={styles.font}>팔로워 수</Text>
+                <View style={{ flexDirection:'row', justifyContent:'center', marginVertical:3}}>
+                  <TouchableOpacity onPress={pressAfter} disabled={isDisabled}>
+                    {like ? <SvgXml
+                      xml={filledfollowIcon}
+                      width={20}
+                      height={20}
+                    />:<SvgXml
+                      xml={followIcon}
+                      width={20}
+                      height={20}
+                    />}
+                  </TouchableOpacity>
+                  <Text style={[styles.font,{fontSize:20, color:TEXT_SUB_COLOR}]}>{follower}</Text>
+                </View>
               </View>
-              <View style={{flex: 1}}>
-                <Text>나눔</Text>
+              <View style={{flex: 1, marginLeft: 5, marginTop: 5}}>
+                <Text style={styles.font}>나눔</Text>
               </View>
             </View>
           </View>
@@ -149,16 +183,16 @@ const UserScreen = ({title = '김석주', optionTitle, optionFunction}: props) =
               </React.Fragment>
             );
           })}
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 10, marginBottom: 10, marginLeft: 10, marginRight: 10}}>
             <Button
-              title="beforePage"
+              title="이전"
               onPress={beforePage}
             />
-            <Text>
+            <Text style={styles.font}>
               페이지 : {page + 1}/{totalPage}
             </Text>
             <Button
-              title="nextPage"
+              title="다음"
               onPress={nextPage}
             />
           </View>

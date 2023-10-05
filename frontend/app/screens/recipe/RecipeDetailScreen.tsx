@@ -73,7 +73,6 @@ const RecipeDetailScreen = () => {
 
           const followRes = await memberApi.toggleFollow( memberId, memberIdres.data.data.memberId);
           setLike(!followRes.data.data.flag);
-          console.log(!followRes.data.data.flag);
           await memberApi.toggleFollow( memberId, memberIdres.data.data.memberId);
 
         } else {
@@ -90,8 +89,13 @@ const RecipeDetailScreen = () => {
     setIsDisabled(pre => true);
     const followRes = await memberApi.toggleFollow( memberId, chefId );
     setLike(followRes.data.data.flag);
-    console.log(followRes.data.data.flag);
     setIsDisabled(pre => false);
+  }
+
+  const moveToUserPage = async () => {
+    navigation.navigate('User', {
+      id: chefId
+    });
   }
 
   return (
@@ -109,13 +113,17 @@ const RecipeDetailScreen = () => {
         <View style={recipeStyles.recipeDetailInfoContainer}>
           <View style={recipeStyles.recipeDetailInfo}>
             <View style={recipeStyles.recipeDetailUserContainer}>
-              <View style={recipeStyles.recipeDetailUserImage}>
-                {recipeDetail.profileImageUrl&&<Image source={{uri: recipeDetail.profileImageUrl}}
-                                 style={{height:70,width:70,borderRadius:99, borderWidth:1, borderColor:TEXT_COLOR ,marginRight:10}}
-                />}
-              </View>
+              <TouchableOpacity onPress={moveToUserPage}>
+                <View style={recipeStyles.recipeDetailUserImage}>
+                  {recipeDetail.profileImageUrl&&<Image source={{uri: recipeDetail.profileImageUrl}}
+                                   style={{height:70,width:70,borderRadius:99, borderWidth:1, borderColor:TEXT_COLOR ,marginRight:10}}
+                  />}
+                </View>
+              </TouchableOpacity>
               <View style={[recipeStyles.recipeDetailUserInfo]}>
-                <Text style={[styles.font,{fontSize:20, color:TEXT_SUB_COLOR, marginVertical:3}]}>{recipeDetail.nickname}</Text>
+                <TouchableOpacity onPress={moveToUserPage}>
+                  <Text style={[styles.font,{fontSize:20, color:TEXT_SUB_COLOR, marginVertical:3}]}>{recipeDetail.nickname}</Text>
+                </TouchableOpacity>
                 <View style={{ flexDirection:'row', justifyContent:'center', marginVertical:3}}>
                   <TouchableOpacity onPress={pressAfter} disabled={isDisabled}>
                     {like ? <SvgXml
