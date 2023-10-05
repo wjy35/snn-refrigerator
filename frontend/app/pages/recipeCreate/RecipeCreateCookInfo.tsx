@@ -4,6 +4,8 @@ import Progressbar from "@/components/Progressbar";
 import {styles} from "@/styles/styles";
 import EditableIngredients from "@/components/EditableIngredients";
 import EditableContent from "@/components/EditableContent";
+import {MAIN_COLOR} from "@/assets/colors/colors";
+import BasicBadge from "@/components/BasicBadge";
 
 interface props {
   textList: string[];
@@ -38,7 +40,7 @@ const RecipeCreateCookInfo = ({textList, content, editContent, deleteContent, ad
               )
             })
           }
-          <Button title='추가하기' onPress={()=>addContent(0)}/>
+          <BasicBadge color={MAIN_COLOR} fill={false} name={'추가하기'} onPress={()=>addContent(0)}/>
         </View>
       </ScrollView>
     </View>

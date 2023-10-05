@@ -252,9 +252,10 @@ const SignUpScreen = ({navigation}:any) => {
                   <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
                     {
                       locations.map((i, idx) => {
+                        const name = i.locationName.split(' ');
                         return (
                           <React.Fragment key={`${i.locationName}${idx}`}>
-                            <BasicBadge color='#3093EF' name={i.locationName} icon={closeIcon} onPress={()=>{removeLocation(idx)}}/>
+                            <BasicBadge color='#3093EF' name={name[name.length-1]} icon={closeIcon} onPress={()=>{removeLocation(idx)}}/>
                           </React.Fragment>
                         )
                       })
@@ -270,7 +271,7 @@ const SignUpScreen = ({navigation}:any) => {
                       ingredients.map((i, idx) => {
                         return (
                           <React.Fragment key={`${i.ingredientName}${idx}`}>
-                            <BasicBadge color='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{removeIngredient(idx)}}/>
+                            <BasicBadge color='red' name={i.ingredientName} icon={closeIcon} onPress={()=>{removeIngredient(idx)}}/>
                           </React.Fragment>
                         )
                       })

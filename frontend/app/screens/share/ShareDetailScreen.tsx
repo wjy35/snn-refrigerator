@@ -4,6 +4,7 @@ import ShareLayout from "@/screens/share/ShareLayout";
 import {styles} from "@/styles/styles";
 import {MAIN_COLOR, TEXT_COLOR} from "@/assets/colors/colors";
 import ShareIngredientItem from "@/components/ShareIngredientItem";
+import BasicBadge from "@/components/BasicBadge";
 
 const ShareDetailScreen = ({navigation}:any) => {
   const profileImageUrl = ''
@@ -59,11 +60,7 @@ const ShareDetailScreen = ({navigation}:any) => {
           </View>
         </ScrollView>
         <View style={{position: 'absolute', bottom: 10, justifyContent: 'center', alignItems: 'center', width: '100%'}}>
-          <TouchableWithoutFeedback>
-            <View style={{borderWidth: 2, borderColor: MAIN_COLOR, padding: 10, width: 100, borderRadius: 16}}>
-              <Text style={[styles.font, {fontSize: 20}]}>나눔 예약</Text>
-            </View>
-          </TouchableWithoutFeedback>
+          <BasicBadge color={MAIN_COLOR} fill={false} name={'나눔 예약'} onPress={()=>{}}/>
         </View>
       </View>
     </ShareLayout>

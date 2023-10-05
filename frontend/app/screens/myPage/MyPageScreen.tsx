@@ -129,7 +129,6 @@ const MyPageScreen = ({navigation}:any) => {
             {
               user && <>
                 <Image source={{uri: user.profileImageUrl}} style={{width: '100%', height: '100%', borderRadius: 100}}/>
-
                   <TouchableWithoutFeedback onPress={modalOpen}>
                     <View style={{position:'absolute', right:'7%', top: '7%',alignItems:'center', flexDirection:'row', justifyContent:'center', width: 35, height: 35, borderRadius: 100, borderWidth:1, borderColor:TEXT_DEACTIVATED_COLOR, backgroundColor:'#FFFFFF'}}>
                       <SvgXml
