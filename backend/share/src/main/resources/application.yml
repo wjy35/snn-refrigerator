@@ -22,6 +22,8 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+  config:
+    import: env.yml
 
 logging:
   level:
@@ -47,5 +49,12 @@ cloud:
 
 metamask:
   WALLET_ADDRESS: "0x015093bAf428F1813Dc02dEFEf8c93A95e9CA769" # 지갑 주소
-  CONTRACT_ADDRESS: "0x49F2c4a5e5561867E1F55F067857b218A32C2158" # 통신할 스마트컨트랙트 주소
+  CONTRACT_ADDRESS: "0xe21dD501e12b23b6929D88E1FE62405739AC24d2" # 통신할 스마트컨트랙트 주소
   PRIVATE_KEY: "3e3411017c28c00d47bbfc21550c5f99a240ba6ba54e0d4002587ed6a3b57297" # 지갑 private key
+
+ethereum:
+  server:
+    ip: localhost
+    port: 8545
+  contract:
+    address: "0x1e0de843cf81303fde693018bd25e6626db90f50"
