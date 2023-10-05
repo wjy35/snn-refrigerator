@@ -1,15 +1,14 @@
 package com.ssafy.share.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.share.api.request.ShareBoardUpdateRequest;
-import com.ssafy.share.api.request.ShareBoardWriteRequest;
-import com.ssafy.share.api.request.ShareIngredientRequest;
-import com.ssafy.share.api.request.WritePostRequest;
+import com.ssafy.share.api.request.*;
 import com.ssafy.share.api.response.*;
 import com.ssafy.share.blockchain.BasicService;
+import com.ssafy.share.db.entity.ShareHistory;
 import com.ssafy.share.db.entity.ShareImage;
 import com.ssafy.share.db.entity.ShareIngredient;
 import com.ssafy.share.db.entity.SharePost;
+import com.ssafy.share.db.repository.ShareHistoryRepository;
 import com.ssafy.share.service.S3Service;
 import com.ssafy.share.service.ShareBoardService;
 import com.ssafy.share.service.ShareImageService;
@@ -26,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +39,7 @@ import java.util.Map;
 public class ShareBoardController {
 
     private final ShareBoardService shareBoardService;
+    private final ShareHistoryRepository shareHistoryRepository;
     private final ShareImageService shareImageService;
     private final ShareIngredientService shareIngredientService;
     private final S3Service s3Service;
@@ -262,8 +263,71 @@ public class ShareBoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/block")
-    public int getHistroy() throws IOException, ExecutionException, InterruptedException {
-        return 0;
+    @PostMapping("/reserve-share")
+    public ResponseEntity<?> reserveSharing(@RequestBody ShareRequest shareRequest){
+        Response response = new Response();
+        ShareHistory shareHistory=shareHistoryRepository.save(ShareHistory.builder()
+                .giverId(shareRequest.getGiverId())
+                .takerId(shareRequest.getTakerId()).build());
+        response.setMessage("OK");
+        response.addRequest("giverId",shareRequest.getGiverId());
+        response.addRequest("takerId",shareRequest.getTakerId());
+        response.addData("response", new ShareReserveResponse(shareHistory.getShareHistoryId()));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+    @PatchMapping("/complete-share/{shareHistoryId}")
+    @Transactional
+    public ResponseEntity<?> completeSharing(@PathVariable Long shareHistoryId){
+        Response response = new Response();
+        ShareHistory shareHistory = shareHistoryRepository.findById(shareHistoryId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 약속입니다."));
+        if(shareHistory.getIsCompleted()==true){
+            throw new IllegalArgumentException("이미 완료된 나눔입니다.");
+        }
+        shareHistory.complete();
+        response.setMessage("OK");
+        response.addRequest("shareHistoryId",shareHistoryId);
+        response.addData("response", new ShareCompleteResponse(shareHistory.getShareHistoryId(),shareHistory.getIsCompleted(),shareHistory.getCompletedTime()));
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-share-count/{giverId}")
+    public int getShareCount(@PathVariable Long giverId) throws IOException, ExecutionException, InterruptedException {
+        return basicService.getShareCount(shareBoardService.getMember(giverId).getNickname());
+    }
+    @GetMapping("/get-take-count/{takerId}")
+    public int getTakeCount(@PathVariable Long takerId) throws IOException, ExecutionException, InterruptedException {
+        return basicService.getTakeCount(shareBoardService.getMember(takerId).getNickname());
+    }
+    @GetMapping("/get-share-history/{type}/{memberId}/{pageNum}/{items}")
+    public ResponseEntity<?> getShareHistory(@PathVariable String type,@PathVariable Long memberId,@PathVariable(required = false) Short pageNum,
+                                @PathVariable(required = false) Short items) {
+        Response response = new Response();
+        List<ShareHistory> shareHistories=new ArrayList<>();
+        if(type.equals("give")){ //
+            shareHistories=shareHistoryRepository.findByGiverId(memberId);
+        }
+        if(type.equals("take")){
+            shareHistories=shareHistoryRepository.findByTakerId(memberId);
+        }
+        List<ShareHistoryResponse> result=new ArrayList<>();
+        for(int i=pageNum*items;i<pageNum*items+items;i++){
+            ShareHistory s=shareHistories.get(i);
+            result.add(new ShareHistoryResponse(s.getShareHistoryId(),
+                    shareBoardService.getMember(s.getGiverId()).getNickname(),
+                    shareBoardService.getMember(s.getTakerId()).getNickname(),s.getIsCompleted(),s.getCompletedTime()));
+        }
+        response.setMessage("OK");
+        response.addRequest("memberId",memberId);
+        response.addRequest("type",type);
+        response.addData("response", result);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/get-take-record/{memberId}/{pageNum}/{items}")
+    public void getTakeHistory(@PathVariable Long memberId,@PathVariable(required = false) Short pageNum,
+                               @PathVariable(required = false) Short items){
+
     }
 }
