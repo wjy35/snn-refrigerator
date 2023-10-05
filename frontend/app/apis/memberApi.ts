@@ -159,7 +159,7 @@ const memberApi = {
     const res = await PrivateMemberApi.post(
       `${memberId}/location`,
       {
-        location:locationId,
+        locationId:locationId,
       }
     );
     return res;
