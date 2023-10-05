@@ -17,34 +17,56 @@ const MyIngredientList = ({types,maxDate}:any) => {
         storageDate : string,
       }>
   >([]);
+    const [changed, setChanged] = useState(false);
 
-  const { houseCode } = useSelector((state:RootState) => state.houseReducer)
+    const { houseCode } = useSelector((state:RootState) => state.houseReducer)
 
 
-  useEffect(() => {
-      console.log(houseCode);
-    const getIngredients = async() => {
-      try{
-        let res = await houseApi.houseIngredientList(houseCode);
-        // console.log(res);
-        if(res.status===200){
-            // console.log(res.data.data.ingredients);
-            res.data.data.ingredients.sort((a: { lastDate: string | number | Date; }, b: { lastDate: string | number | Date; })=>{
-                // @ts-ignore
-                return new Date(a.lastDate) - new Date(b.lastDate)
-            })
-            console.log(res.data.data.ingredients);
-            setIngredients(res.data.data.ingredients);
-        }else{
-          console.log(res.data.message);
+    // useEffect(() => {
+    //     const getIngredients = async() => {
+    //         try{
+    //             let res = await houseApi.houseIngredientList(houseCode);
+    //             // console.log(res);
+    //             if(res.status===200){
+    //                 // console.log(res.data.data.ingredients);
+    //                 res.data.data.ingredients.sort((a: { lastDate: string | number | Date; }, b: { lastDate: string | number | Date; })=>{
+    //                     // @ts-ignore
+    //                     return new Date(a.lastDate) - new Date(b.lastDate)
+    //                 })
+    //                 setIngredients(res.data.data.ingredients);
+    //             }else{
+    //                 console.log(res.data.message);
+    //             }
+    //         }catch (e){
+    //             // console.log(e);
+    //         }
+    //     }
+    //     getIngredients();
+    //
+    // }, []);
+
+    useEffect(() => {
+        setChanged(false);
+        const getIngredients = async() => {
+            try{
+                let res = await houseApi.houseIngredientList(houseCode);
+                // console.log(res);
+                if(res.status===200){
+                    // console.log(res.data.data.ingredients);
+                    res.data.data.ingredients.sort((a: { lastDate: string | number | Date; }, b: { lastDate: string | number | Date; })=>{
+                        // @ts-ignore
+                        return new Date(a.lastDate) - new Date(b.lastDate)
+                    })
+                    setIngredients(res.data.data.ingredients);
+                }else{
+                    console.log(res.data.message);
+                }
+            }catch (e){
+                // console.log(e);
+            }
         }
-      }catch (e){
-        // console.log(e);
-      }
-    }
-    getIngredients();
-
-  }, []);
+        getIngredients();
+    }, [changed]);
 
 
   return (
@@ -62,6 +84,7 @@ const MyIngredientList = ({types,maxDate}:any) => {
               storageType={i.storageType}
               lastDate={i.lastDate}
               storageDate={i.storageDate}
+              onChange={()=>{setChanged(true)}}
             />
           </React.Fragment>
         )

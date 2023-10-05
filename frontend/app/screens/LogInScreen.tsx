@@ -45,9 +45,9 @@ const LogInScreen = ({navigation}: any) => {
       const res = await memberApi.memberDetail(memberId);
       if (res.status === 200) {
         dispatch(setHouseCodeAction(res.data.data.memberInfo.houseCode));
-        navigation.navigate('Home'); //회원 정보 다 저장한 후엔 홈 화면으로.
+        navigation.replace('Home'); //회원 정보 다 저장한 후엔 홈 화면으로.
       } else {
-        navigation.navigate('Signup', {...privateInfo}); //아니라면 회원가입.
+        navigation.replace('Signup', {...privateInfo}); //아니라면 회원가입.
       }
     } catch (err) {
       console.log(err);
@@ -100,7 +100,7 @@ const LogInScreen = ({navigation}: any) => {
               resizeMode={'contain'}
             />
           </TouchableWithoutFeedback>
-          <Button title='홈으로(test)' onPress={()=>navigation.navigate('Home')}/>
+          <Button title='홈으로(test)' onPress={()=>navigation.replace('Home')}/>
         </View>
       </ImageBackground>
     </View>

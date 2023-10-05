@@ -5,7 +5,6 @@ import java.util.HashMap;
 public class Response {
     private String message;
 
-    // todo: ConcurrentHashMap으로 바꿔보자
     private HashMap<String,Object> request, data;
 
     public Response() {
