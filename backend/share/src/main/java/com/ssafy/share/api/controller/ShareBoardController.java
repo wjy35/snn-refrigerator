@@ -54,7 +54,7 @@ public class ShareBoardController {
         String locationName=shareBoardService.getLocationName(locationId);
         List<SharePost> posts=shareBoardService.getPostList(locationId,keyword);
         List<SharePostResponse> sharePostResponses=new ArrayList<>();
-        for(int i=pageNum*items;i<pageNum*items+items;i++){
+        for(int i = pageNum*items; i < pageNum*items+items && i < posts.size(); i++){
             MemberResponse memberResponse=shareBoardService.getMember(posts.get(i).getMemberId());
             String nickname=memberResponse.getNickname();
             String userProfileImageUrl=memberResponse.getProfileImageUrl();
