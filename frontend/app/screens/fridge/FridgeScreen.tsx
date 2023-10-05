@@ -1,9 +1,19 @@
 import React, {useState} from 'react';
-import {View, Text, Button, ScrollView, ImageBackground} from 'react-native';
+import {View, Text, Button, ScrollView, ImageBackground, TouchableWithoutFeedback} from 'react-native';
 import {styles} from "@/styles/styles";
 import MyIngredientList from "@/components/MyIngredientList";
 import BasicBadge from "@/components/BasicBadge";
-import {cold, coldWhite, cool, coolWhite, eyeIcon, eyeSlashIcon, warm, warmWhite} from "@/assets/icons/icons";
+import {
+    cold,
+    coldWhite,
+    cool,
+    coolWhite,
+    eyeIcon,
+    eyeSlashColdIcon, eyeSlashCoolIcon,
+    eyeSlashWarmIcon,
+    warm,
+    warmWhite
+} from "@/assets/icons/icons";
 import FridgeLayout from "@/screens/fridge/FridgeLayout";
 import {COLD_COLOR, COOL_COLOR, TEXT_COLOR, WARM_COLOR} from "@/assets/colors/colors";
 import {SvgXml} from "react-native-svg";
@@ -22,9 +32,9 @@ const FridgeScreen = ({navigation}:any) => {
       <FridgeLayout title="냉장고">
         <View style={styles.container}>
             <View style={{flexDirection:'row'}}>
-                <BasicBadge leftIcon={coldWhite} icon={visibleCold?eyeIcon:eyeSlashIcon} backgroundColor='#00D1FF' name={'냉동'} onPress={()=>{setVisibleCold(prev=>!prev)}}/>
-                <BasicBadge leftIcon={coolWhite} icon={visibleCool?eyeIcon:eyeSlashIcon} backgroundColor='#3093EF' name={'냉장'} onPress={()=>{setVisibleCool(prev=>!prev)}}/>
-                <BasicBadge leftIcon={warmWhite} icon={visibleWarm?eyeIcon:eyeSlashIcon} backgroundColor='#FF9A03' name={'상온'} onPress={()=>{setVisibleWarm(prev=>!prev)}}/>
+                <BasicBadge leftIcon={visibleCold?coldWhite:cold} icon={visibleCold?eyeIcon:eyeSlashColdIcon} fill={visibleCold} color='#00D1FF' name={'냉동'} onPress={()=>{setVisibleCold(prev=>!prev)}}/>
+                <BasicBadge leftIcon={visibleCool?coolWhite:cool} icon={visibleCool?eyeIcon:eyeSlashCoolIcon} fill={visibleCool} color='#3093EF' name={'냉장'} onPress={()=>{setVisibleCool(prev=>!prev)}}/>
+                <BasicBadge leftIcon={visibleWarm?warmWhite:warm} icon={visibleWarm?eyeIcon:eyeSlashWarmIcon} fill={visibleWarm} color='#FF9A03' name={'상온'} onPress={()=>{setVisibleWarm(prev=>!prev)}}/>
             </View>
             <ScrollView style={{width: '100%'}}>
                 {visibleCold&&(<><View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 10}}>
@@ -67,9 +77,15 @@ const FridgeScreen = ({navigation}:any) => {
             </ScrollView>
         </View>
 
-          <View style={[{position: 'absolute', bottom: 80, alignSelf:'center', flexDirection:'row', justifyContent:'center'}]}>
-              <BasicBadge leftIcon={coldWhite} backgroundColor='#3093EF' name={'추가하기'} onPress={()=>{navigation.navigate('HouseAdd')}}/>
-              <BasicBadge leftIcon={coldWhite} backgroundColor='#3093EF' name={'수정하기'} onPress={()=>{}}/>
+
+          <View style={[{position: 'absolute', bottom: 80, alignSelf:'flex-end', flexDirection:'row', justifyContent:'center', paddingRight:10, paddingBottom:10}]}>
+              <TouchableWithoutFeedback
+                  onPress={()=>{navigation.navigate('HouseAdd')}}
+              >
+              <View style={[{backgroundColor:'#3093EF', height:70,width:70,borderRadius:99, justifyContent:'center'}]}>
+                  <Text style={[styles.font, {color: '#FFFFFF', fontSize:25, textAlign:'center'}]}>추가</Text>
+              </View>
+              </TouchableWithoutFeedback>
           </View>
       </FridgeLayout>
   )

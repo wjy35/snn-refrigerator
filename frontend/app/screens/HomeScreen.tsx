@@ -7,7 +7,7 @@ import sampleApi from '@/apis/sampleApi';
 import {homeScreenStyles} from "@/styles/homeScreenStyles";
 import MyIngredientList from "@/components/MyIngredientList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import recipeApi from "@/apis/recipeApi";
+import recipeRecommendApi from "@/apis/recipeRecommendApi";
 import {useSelector} from "react-redux";
 import {RootState} from "@/reducers/reducers";
 
@@ -16,49 +16,18 @@ const HomeScreen = ({navigation}:any) => {
   const [recipeList, setRecipeList] = useState([]);
   const { memberId } = useSelector((state:RootState) => state.userReducer)
 
-  const getToken = async () => {
-    try {
-      const value = await AsyncStorage.getItem('my-key');
-      if (value !== null) {
-        console.log(value);
-      }
-    } catch (e) {
-      // error reading value
-    }
-  };
-
-  const test = async () => {
-    try {
-      let res = await sampleApi.test();
-      if (res.status === 200) {
-        console.log(res)
-      } else {
-        console.log(res)
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   useEffect(() => {
     const getRecipe = async () => {
       try {
-        let res = await recipeApi.searchRecipe({
+        let res = await recipeRecommendApi.getRecommendList({
           memberId: memberId,
-          contain: [],
-          remove: [],
-          n: 1000,
-          keyword: '',
-          page:1,
-          size:3,
         });
-        console.log(res);
         if (res.status === 200) {
           setRecipeList(res.data.data.recipe);
         }
       } catch (err) {
-        console.log('여기서 나는거임home');
-        console.log(err);
+        console.log(memberId);
+        console.log('HomeScreen.tsx', err);
       }
     }
     getRecipe();
