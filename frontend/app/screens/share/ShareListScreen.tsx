@@ -9,14 +9,18 @@ import useInput from "@/hooks/useInput";
 import ShareItem from "@/components/ShareItem";
 import shareApi from "@/apis/shareApi";
 import {useFocusEffect} from "@react-navigation/native";
+import {backButton, blackLocationIcon, settingIcon} from "@/assets/icons/icons";
+import {SvgXml} from "react-native-svg";
 
 const ShareListScreen = ({navigation}:any) => {
   const shareText = useInput({
-    placeholder: '검색',
+    placeholder: '검색어 입력',
   })
   const [shareList, setShareList] = useState<any[]>([
-    {name: '1'}, {name: '2'}, {name: '3'}, {name: '4'}, {name: '5'},{name: '6'}, {name: '7'}, {name: '8'},
+    {name: '감자 한박스 나눔합니다'}, {name: '양파 나눔이요'}, {name: '방금 캔 파 나눔 합니다'}, {name: '정말 정말 정말 정말 정말 정말 긴 바나나 나눔 합니다'}, {name: '5'},{name: '6'}, {name: '7'}, {name: '8'},
   ])
+  const [isVisible, setIsVisible] = useState(true);
+  const [nowLocation, setNowLocation] = useState<any>()
 
   function goShareCreate(){
     navigation.navigate('ShareCreate')
@@ -26,7 +30,7 @@ const ShareListScreen = ({navigation}:any) => {
     try {
       const res = await shareApi.getShareList({locationId: 1, items: 5, pageNum: 1, keyword: ''})
       if (res.status === 200){
-        console.log(res)
+        console.log(res);
       }
     } catch (err) {
       console.log(err)
@@ -34,8 +38,54 @@ const ShareListScreen = ({navigation}:any) => {
   }
 
   useFocusEffect(()=>{
-    getShareList()
+    // getShareList()
   })
+
+  function locationItem(){
+    return (
+      <TouchableWithoutFeedback onPress={()=>{console.log('click')}}>
+        <View style={{}}>
+          <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 5}}>
+            <View style={{marginRight: 5}}>
+              <SvgXml
+                xml={blackLocationIcon}
+                width={22}
+                height={22}
+                style={{alignSelf:'center'}}
+              />
+            </View>
+            <View>
+              <Text style={[styles.font, {fontSize: 22}]}>역삼동</Text>
+            </View>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    )
+  }
+
+  function locationSetting(){
+    return (
+      <>
+        <TouchableWithoutFeedback onPress={()=>{console.log('click')}}>
+          <View style={{}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 5}}>
+              <View style={{marginRight: 5}}>
+                <SvgXml
+                  xml={settingIcon}
+                  width={22}
+                  height={22}
+                  style={{alignSelf:'center'}}
+                />
+              </View>
+              <View>
+                <Text style={[styles.font, {fontSize: 22}]}>내 동네 설정</Text>
+              </View>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </>
+    )
+  }
 
   return (
     <ShareLayout title="나눔" optionTitle='등록' optionFunction={goShareCreate}>
@@ -47,8 +97,70 @@ const ShareListScreen = ({navigation}:any) => {
       <ScrollView keyboardShouldPersistTaps='handled'>
         <View style={{width: '100%', marginVertical: 20}}>
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <View style={{width: '90%'}}>
-              <Text style={[styles.font, {fontSize: 20}]}>역삼동</Text>
+            <View style={{width: '90%', flexDirection: 'row'}}>
+              {
+                isVisible ? (
+                  <View style={{flexDirection: 'row', alignItems: 'center', padding: 10}}>
+                    <View style={{marginRight: 5}}>
+                      <SvgXml
+                        xml={blackLocationIcon}
+                        width={25}
+                        height={25}
+                        style={{alignSelf:'center'}}
+                      />
+                    </View>
+                    <View>
+                      <Text style={[styles.font, {fontSize: 25}]}>역삼동</Text>
+                    </View>
+                    <TouchableWithoutFeedback onPress={()=>setIsVisible(false)}>
+                      <View>
+                        <View style={{transform: [{ rotate: '180deg'}], marginLeft: 10, borderRadius: 999, borderWidth: 1, width: 25, height: 25, justifyContent: 'center', alignItems: 'center', borderColor: '#B2CFFF'}} >
+                          <SvgXml
+                            xml={backButton}
+                            width={15}
+                            height={15}
+                            rotation={90}
+                          />
+                        </View>
+                      </View>
+                    </TouchableWithoutFeedback>
+                  </View>
+                ) : (
+                  <View style={{borderWidth: 1, padding: 10, borderRadius: 16, borderColor: '#B2CFFF'}}>
+                    <View style={{}}>
+                      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <View style={{marginRight: 5}}>
+                          <SvgXml
+                            xml={blackLocationIcon}
+                            width={25}
+                            height={25}
+                            style={{alignSelf:'center'}}
+                          />
+                        </View>
+                        <View>
+                          <Text style={[styles.font, {fontSize: 25}]}>역삼동</Text>
+                        </View>
+                        <TouchableWithoutFeedback onPress={()=>setIsVisible(true)}>
+                          <View>
+                            <View style={{marginLeft: 10, borderRadius: 999, borderWidth: 1, width: 25, height: 25, justifyContent: 'center', alignItems: 'center', borderColor: '#B2CFFF'}} >
+                              <SvgXml
+                                xml={backButton}
+                                width={15}
+                                height={15}
+                                rotation={90}
+                              />
+                            </View>
+                          </View>
+                        </TouchableWithoutFeedback>
+                      </View>
+                      {locationItem()}
+                      {locationItem()}
+                      {locationSetting()}
+                    </View>
+                  </View>
+                )
+              }
+              <View style={{flex: 1}}></View>
             </View>
           </View>
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
