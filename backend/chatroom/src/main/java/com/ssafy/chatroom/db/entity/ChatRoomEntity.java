@@ -1,20 +1,22 @@
 package com.ssafy.chatroom.db.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "chatroom")
 @IdClass(ChatRoomEntityPK.class)
+@ToString
 public class ChatRoomEntity {
     @Column(name = "chat_room_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @org.hibernate.annotations.Generated(GenerationTime.INSERT)
     private Integer chatRoomId;
 
     @Id

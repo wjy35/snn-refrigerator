@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ChatRoomCreateRequest {
-    private final Integer sharePostId;
-    private final Integer senderMemberId;
+    Integer sharePostId;
+    Long senderMemberId;
+    Long receiverMemberId;
 }
