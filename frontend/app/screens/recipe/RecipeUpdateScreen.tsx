@@ -25,6 +25,7 @@ import AutoCompleteInput from "@/components/AutoCompleteInput";
 import ingredientAutocompleteApi from "@/apis/ingredientAutocompleteApi";
 import PlainInput from "@/components/PlainInput";
 import recipeApi from "@/apis/recipeApi";
+import BasicBadge from "@/components/BasicBadge";
 
 const RecipeUpdateScreen = ({navigation}:any) => {
   const route = useRoute();
@@ -82,6 +83,12 @@ const RecipeUpdateScreen = ({navigation}:any) => {
     }
   }
 
+  function removeIngredient(idx: number) {
+    const _ingredients = [...ingredients];
+    _ingredients.splice(idx, 1);
+    setIngredients(_ingredients);
+  }
+
   function checkDuplicate(item: any){
     return (
       ingredients.every((ingredient: any) => {
@@ -116,6 +123,12 @@ const RecipeUpdateScreen = ({navigation}:any) => {
       content: '',
       order: 0,
     });
+    setContents(_contents);
+  }
+
+  function removeContent(idx: number){
+    const _contents = [...contents];
+    _contents.splice(idx, 1);
     setContents(_contents);
   }
 
@@ -215,12 +228,10 @@ const RecipeUpdateScreen = ({navigation}:any) => {
 
     if (image.assets[0].uri !== recipeDetail.imageUrl){
       const res = await getImageUrl();
-      console.log(res);
       inputData.imageUrl = res;
     }
     try {
       const res = await recipeApi.updateRecipe(inputData);
-      console.log(res);
     } catch (err){
       console.log(err);
     }
@@ -343,7 +354,7 @@ const RecipeUpdateScreen = ({navigation}:any) => {
                               <TextInput placeholder={ingredient.amount} style={{borderWidth: 0.2}} onChangeText={(newText: string)=>{onChangeAmount(index, newText)}}/>
                             </View>
                             <View style={{flex: 1, alignItems: 'flex-end'}}>
-                              <TouchableWithoutFeedback onPress={()=>{}}>
+                              <TouchableWithoutFeedback onPress={()=>{removeIngredient(index)}}>
                                 <SvgXml
                                   xml={closeBlackIcon}
                                   width={15}
@@ -405,15 +416,27 @@ const RecipeUpdateScreen = ({navigation}:any) => {
                             placeholder={content.content}
                             onChangeText={(newText)=>{content.content=newText}}/>
                         </View>
-                        {/*<Text style={[styles.font,{color:TEXT_COLOR, fontSize:20, width:'100%'}]}>{`${ingredient.order}. ${ingredient.content}`}</Text>*/}
+                        <View style={{flex: 1, alignItems: 'flex-end'}}>
+                          <TouchableWithoutFeedback onPress={()=>{removeContent(index)}}>
+                            <SvgXml
+                              xml={closeBlackIcon}
+                              width={15}
+                              height={15}
+                            />
+                          </TouchableWithoutFeedback>
+                        </View>
                       </View>
                     ))}
+                    <BasicBadge color={MAIN_COLOR} fill={false} name={'추가하기'} onPress={addContent}/>
                   </>)
                 : (
-                  <Text>내용 정보가 없습니다.</Text>
+                  <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+                    <Text>내용 정보가 없습니다.</Text>
+                    <BasicBadge color={MAIN_COLOR} fill={false} name={'추가하기'} onPress={addContent}/>
+                  </View>
                 ))
             }
-            <Button title='추가하기' onPress={addContent}/>
+
           </View>
         </View>
 
