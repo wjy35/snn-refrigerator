@@ -37,6 +37,7 @@ public class ShareBoardServiceImpl implements ShareBoardService {
     private final LocationFeign locationFeign;
     private final IngredientFeign ingredientFeign;
     private final ObjectMapper objectMapper;
+    private final S3Service s3Service;
 
     @Override
     public Optional<SharePost> findById(Long id){
@@ -96,7 +97,7 @@ public class ShareBoardServiceImpl implements ShareBoardService {
         mp.put("locationId", sharePost.getLocationId());
         mp.put("title", sharePost.getTitle());
         mp.put("content", sharePost.getContent());
-        mp.put("thumbnail", sharePost.getThumbnail());
+        mp.put("thumbnail", s3Service.getS3ImageUrl(sharePost.getThumbnail()));
         mp.put("modifiedDate", sharePost.getModifiedDate());
         mp.put("createdDate", sharePost.getCreateDate());
         return mp;
