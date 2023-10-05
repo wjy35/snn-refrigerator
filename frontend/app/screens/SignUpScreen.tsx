@@ -187,12 +187,13 @@ const SignUpScreen = ({navigation}:any) => {
         email: route.params.email,
       }
     if (houseCode === 2){
-      inputData[houseCode] = houseCode.text
+      inputData['houseCode'] = houseCode.text
     }
     try {
       const res = await memberApi.signup(inputData);
       if (res.status === 200) {
         dispatch(setHouseCodeAction(res.data.data.houseCode));
+        navigation.replace('Home')
       }
     } catch (err) {
       console.log('여기서 에러나는거임signup');
@@ -202,12 +203,10 @@ const SignUpScreen = ({navigation}:any) => {
 
   function trySignup(){
     if (nickNameStatus === 0) {
-      // TODO: toast로 변경 필요
       onToast('닉네임을 입력해주세요');
       return
     }
     if (nickNameStatus === 1) {
-      // TODO: toast로 변경 필요
       onToast('중복된 닉네임은 사용할 수 없습니다');
       return
     }
@@ -215,7 +214,7 @@ const SignUpScreen = ({navigation}:any) => {
       onToast('존재하지 않는 집 코드 입니다');
       return
     }
-    signup().then(navigation.replace('Home'));
+    signup();
 
   }
 
