@@ -44,8 +44,8 @@ const MyIngredientList = ({types,maxDate}:any) => {
     }
 
   useEffect(() => {
+  if(changed) getIngredients();
     setChanged(false);
-    getIngredients();
   }, [changed]);
 
 
