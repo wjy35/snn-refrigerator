@@ -10,6 +10,8 @@ public interface MemberService {
     Optional<Member> findByMemberId(Long id);
 
     boolean existsByNickname(String nickname);
+
+    Optional<Member> findByNickname(String nickname);
     Member save(Member member);
 
     boolean existsByHouseCode(String houseCode);
