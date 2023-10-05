@@ -42,4 +42,11 @@ public class ShareIngredient {
         this.ingredientInfoId = request.getIngredientInfoId();
         this.amount = request.getAmount();
     }
+
+    public void reserveShare(int amount){
+        this.amount-=amount;
+    }
+    public void cancelShare(int amount){
+        this.amount+=amount;
+    }
 }
