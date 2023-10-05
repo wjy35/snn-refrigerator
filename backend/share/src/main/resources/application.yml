@@ -22,8 +22,8 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-  config:
-    import: env.yml
+#  config:
+#    import: env.yml
 
 logging:
   level:
