@@ -22,8 +22,8 @@ public class ViewCurrentChatAspect {
         }catch (Throwable e){
             chatDto = ChatDto
                     .builder()
-                    .content("default")
-                    .timestamp(new Timestamp(0l))
+                    .content("채팅이 시작되었습니다!")
+                    .timestamp(new Timestamp(System.currentTimeMillis()))
                     .build();
         }
 
