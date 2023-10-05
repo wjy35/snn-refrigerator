@@ -37,6 +37,7 @@ public class ShareBoardServiceImpl implements ShareBoardService {
     private final LocationFeign locationFeign;
     private final IngredientFeign ingredientFeign;
     private final ObjectMapper objectMapper;
+    private final S3Service s3Service;
 
     @Override
     public Optional<SharePost> findById(Long id){
@@ -92,10 +93,13 @@ public class ShareBoardServiceImpl implements ShareBoardService {
     @Override
     public Map<String, Object> convertSharePost(SharePost sharePost) throws IllegalAccessException {
         Map<String, Object> mp = new HashMap<>();
-        for(Field field : sharePost.getClass().getFields()){
-            if(field.getName() == "shareIngredients" || field.getName() == "shareImages") continue;
-            mp.put(field.getName(), field.get(sharePost));
-        }
+        mp.put("sharePostId", sharePost.getSharePostId());
+        mp.put("locationId", sharePost.getLocationId());
+        mp.put("title", sharePost.getTitle());
+        mp.put("content", sharePost.getContent());
+        mp.put("thumbnail", s3Service.getS3ImageUrl(sharePost.getThumbnail()));
+        mp.put("modifiedDate", sharePost.getModifiedDate());
+        mp.put("createdDate", sharePost.getCreateDate());
         return mp;
     }
 

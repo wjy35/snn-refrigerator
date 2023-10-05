@@ -75,6 +75,8 @@ public class ShareBoardController {
         Response response = new Response();
         SharePost post=shareBoardService.getPostDetail(shareBoardId);
         String nickname=shareBoardService.getMember(post.getMemberId()).getNickname();
+        String thumbnailUrl = s3Service.getS3ImageUrl(post.getThumbnail());
+//        SharePostDetailResponse sharePostDetailResponse=new SharePostDetailResponse(post,nickname,timeUtil.dateTypeFormatter(post.getCreateDate()), thumbnailUrl);
         SharePostDetailResponse sharePostDetailResponse=new SharePostDetailResponse(post,nickname,timeUtil.dateTypeFormatter(post.getCreateDate()));
         for (ShareIngredient s:post.getShareIngredients()){
             String ingredientName= shareBoardService.getIngredientInfoName(s.getIngredientInfoId());
@@ -115,6 +117,7 @@ public class ShareBoardController {
 
         //ShareIngredient 세팅
         for(ShareIngredientRequest ingredientRequest : ingredientRequests){
+            log.info(String.valueOf(ingredientRequest.getIngredientInfoId()));
             ShareIngredient ingredient = ShareIngredient
                     .builder()
                     .ingredientInfoId(ingredientRequest.getIngredientInfoId())
