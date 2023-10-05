@@ -46,7 +46,6 @@ const HouseAddScreen = ({navigation}:any) => {
   }
 
   async function onAddIngredient(item: any){
-
     const newIngredient = {ingredientName: item.ingredientName, ingredientInfoId: item.ingredientInfoId, storageType: 0, lastDate: null};
     if(checkIngredient(item)) setIngredients((ingredients) => {
       return [...ingredients, newIngredient];
@@ -66,7 +65,6 @@ const HouseAddScreen = ({navigation}:any) => {
   async function finishAdd(){
     for(let ingredient of ingredients){
       if(ingredient.lastDate==null && ingredient.storageType!==1){
-
         Alert.alert('소비기한을 설정해주세요');
         return;
       }
@@ -92,21 +90,22 @@ const HouseAddScreen = ({navigation}:any) => {
   }
 
   async function getIngredient(extractText: string) {
+    setSubLoading(true);
     try {
       const extractResponse = await ingredientExtractionApi.extraction(
         extractText,
       );
       for (const i of extractResponse.data.data.data) {
-        // console.log("HouseAddScreen -> getIngredient",i.ingredient);
         await onAddIngredient({ingredientInfoId: i.ingredient.id, ingredientName : i.ingredient.name});
       }
+      setSubLoading(false);
     } catch (e) {
+      setSubLoading(false);
       console.log('err', e);
     }
   }
 
   const callGoogleVisionApi = async (base64: String) => {
-    setSubLoading(true);
     const url: string = 'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyC6QBRMhadBvm7vfy00XFPpWuoGK1WboXA';
     await fetch(url, {
       method: 'POST',
@@ -123,17 +122,16 @@ const HouseAddScreen = ({navigation}:any) => {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         let res = data.responses[0]?.fullTextAnnotation?.text;
         if (!res) {
-          setSubLoading(false);
           return;
         }
         res.replace(/\n|\r|\s*/g, '');
         getIngredient(res);
-        setSubLoading(false);
       })
-      .catch(err => console.log('error : ', err));
+      .catch((err) => {
+        console.log('error : ', err);
+      });
   };
 
   useEffect(()=>{
