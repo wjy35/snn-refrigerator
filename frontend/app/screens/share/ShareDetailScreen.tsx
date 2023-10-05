@@ -27,6 +27,17 @@ const ShareDetailScreen = ({navigation}:any) => {
     }
   }
 
+  async function deletePost(){
+    try {
+      const res = await shareApi.deletePost({sharePostId: route.params.sharePostId});
+      if (res.status === 200) {
+        navigation.goBack();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   useEffect(()=>{
     getDetail();
   }, [])

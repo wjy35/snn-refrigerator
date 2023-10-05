@@ -262,7 +262,6 @@ const RecipeDetailScreen = () => {
             }
           </View>
         </View>
-
       </ScrollView>
     </RecipeLayout>
   )
