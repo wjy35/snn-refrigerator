@@ -500,4 +500,21 @@ public class MemberController {
                 build();
         return ResponseEntity.ok(response);
     }//OK
+
+    @GetMapping("/nickname/{nickname}")
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<Response> getMemberIdFromNickname(@PathVariable String nickname){
+        Map<String, Object> data = new HashMap<>();
+
+        Member member = memberService.findByNickname(nickname).orElseThrow();
+
+        data.put("memberId", member.getMemberId());
+
+        Response response = Response.
+                builder().
+                message("OK").
+                data(data).
+                build();
+        return ResponseEntity.ok(response);
+    }
 }

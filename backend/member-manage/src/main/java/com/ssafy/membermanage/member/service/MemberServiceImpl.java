@@ -38,6 +38,8 @@ public class MemberServiceImpl {
         return memberRepository.existsByNickname(nickname);
     }
 
+    public Optional<Member> findByNickname(String nickname){ return memberRepository.findByNickname(nickname);}
+
     public Member save(Member member){
         return memberRepository.save(member);
     }
