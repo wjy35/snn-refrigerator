@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, Button, ImageBackground, ScrollView} from 'react-native';
+import {View, Text, Button, ImageBackground, ScrollView, FlatList} from 'react-native';
 import {styles} from "@/styles/styles";
 import TopNavigator from "@/components/TopNavigator";
 import BottomChat from "@/components/BottomChat";
@@ -9,6 +9,7 @@ import chatApi from "@/apis/chatApi";
 import {useFocusEffect, useRoute} from "@react-navigation/native";
 import * as Stomp from "webstomp-client";
 import {Client} from "webstomp-client";
+import SingleChatContent from "@/components/SingleChatContent";
 
 
 const SingleShareChatScreen = ({navigation}: any) => {
@@ -23,7 +24,6 @@ const SingleShareChatScreen = ({navigation}: any) => {
     const route = useRoute();
     const chatRoomId = route.params.chatRoomId;
     const receiveMemberId = route.params.receiveMemberId;
-
     const {memberId} = useSelector((state: RootState) => state.userReducer);
     useEffect(() => {
         const getChatList = async () => {
@@ -79,10 +79,8 @@ const SingleShareChatScreen = ({navigation}: any) => {
             }
         }, []));
 
-
-
-
     function sendMessage(text: string) {
+        if (!text) return;
         const chatPayload = {
             "chatRoomId": `${chatRoomId}`,
             "sendMemberId": `${memberId}`,
@@ -96,15 +94,19 @@ const SingleShareChatScreen = ({navigation}: any) => {
         <View style={[styles.layout]}>
             <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
                 <TopNavigator title={'독버섯 김석주'}/>
-                <View style={[{flex: 1, borderWidth: 1, flexDirection: 'column-reverse'}]}>
-                    {
-                        chatList.map((chat, idx) => {
-                            console.log(chat);
-                            return (
-                              <></>
-                            )
-                        })
-                    }
+                <View
+                  style={[{flex: 1, borderWidth: 1, flexDirection: 'column-reverse'}]}
+                >
+                    <FlatList
+                      inverted={true}
+                      data={chatList}
+                      windowSize={4}
+                      initialNumToRender={10}
+                      renderItem={(item) => <SingleChatContent item={item.item} memberId={memberId}/>}
+                      keyExtractor={(item) => String(item.timestamp)+String(item.memberId)}
+                      onEndReachedThreshold={0.1}
+                      contentContainerStyle={{paddingHorizontal: 10}}
+                    />
                 </View>
                 <View style={{height: 80}}></View>
                 <BottomChat onSubmit={sendMessage}/>
