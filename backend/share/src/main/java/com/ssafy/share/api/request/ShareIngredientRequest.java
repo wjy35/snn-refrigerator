@@ -1,8 +1,5 @@
 package com.ssafy.share.api.request;
 
-import com.ssafy.share.db.entity.ShareIngredient;
-import com.ssafy.share.db.entity.SharePost;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
