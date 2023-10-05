@@ -1,5 +1,14 @@
-import React, {useState} from 'react';
-import {View, Text, Button, ImageBackground, TouchableWithoutFeedback, Image, ScrollView} from 'react-native';
+import React, {useCallback, useRef, useState} from 'react';
+import {
+  View,
+  Text,
+  Button,
+  ImageBackground,
+  TouchableWithoutFeedback,
+  Image,
+  ScrollView,
+  ToastAndroid
+} from 'react-native';
 import {styles} from "@/styles/styles";
 import PlainInput from "@/components/PlainInput";
 import AutoCompleteInput from "@/components/AutoCompleteInput";
@@ -13,6 +22,7 @@ import memberApi from "@/apis/memberApi";
 import {useDispatch} from "react-redux";
 import {setHouseCodeAction} from "@/actions/houseAction";
 import {setMemberIdAction} from "@/actions/userAction";
+// import Toast from "@/components/Toast";
 
 
 const SignUpScreen = ({navigation}:any) => {
@@ -23,7 +33,9 @@ const SignUpScreen = ({navigation}:any) => {
   const [locations, setLocations] = useState<any[]>([]);
   const [ingredients, setIngredients] = useState<any[]>([]);
   const dispatch = useDispatch();
-  const [nickNameStatus, setNickNameStatus] = useState<number>(0)
+  const [nickNameStatus, setNickNameStatus] = useState<number>(0);
+  const [houseStatus, setHouseStatus] = useState<number>(0);
+  // const toastRef = useRef(null);
 
   const checkLocation = async (keyword: string) => {
     try {
@@ -34,6 +46,14 @@ const SignUpScreen = ({navigation}:any) => {
     } catch (err) {
       console.log(err);
     }
+  }
+
+  function onToast(text: string){
+    ToastAndroid.showWithGravity(
+      text,
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    )
   }
 
   const checkExcludeIngredient = async (keyword: string) => {
@@ -71,7 +91,7 @@ const SignUpScreen = ({navigation}:any) => {
     setNow(nowNum);
   }
 
-  function onBlurLocation(){
+  function onBlurIngredient(){
     excludeIngredient.reset();
     setExcludeIngredientList([]);
   }
@@ -89,7 +109,7 @@ const SignUpScreen = ({navigation}:any) => {
     }
   }
 
-  function onBlurIngredient(){
+  function onBlurLocation(){
     location.reset();
     setLocationList([]);
   }
@@ -97,7 +117,7 @@ const SignUpScreen = ({navigation}:any) => {
   function removeIngredient(idx: number){
     const _ingredients = [...ingredients];
     _ingredients.splice(idx, 1);
-    setIngredients(ingredients);
+    setIngredients(_ingredients);
   }
 
   function removeLocation(idx: number) {
@@ -119,6 +139,19 @@ const SignUpScreen = ({navigation}:any) => {
     }
   }
 
+  async function checkHouseExistance(houseCode: string){
+    try{
+      const res = await memberApi.checkHouse(houseCode);
+      console.log(res);
+      if(res.status === 200){
+        console.log(res.data.data.existance);
+        res.data.data.existance?setHouseStatus(2):setHouseStatus(1);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   const nickName = useInput({
     placeholder:'닉네임',
     title: '닉네임',
@@ -129,6 +162,7 @@ const SignUpScreen = ({navigation}:any) => {
     placeholder:'(선택) 집 공유 코드 입력',
     title: '이미 좋냉신나를 사용하고 있는 가족이 있나요?',
     nowNum: 1,
+    onChange: checkHouseExistance,
   });
   const location = useInput({
     placeholder: '검색',
@@ -147,15 +181,19 @@ const SignUpScreen = ({navigation}:any) => {
   async function signup(){
     const hateIngredientList = Array.from(ingredients, (i) => i.ingredientInfoId);
     const placeInfoList = Array.from(locations, (i) => i.locationId);
-    try {
-      const res = await memberApi.signup({
+    const inputData = {
         nickname: nickName.text,
         memberId: route.params.id,
         hateIngredientList: hateIngredientList,
         placeInfoList: placeInfoList,
         birthday: route.params.birthday,
         email: route.params.email,
-      });
+      }
+    if (houseCode === 2){
+      inputData[houseCode] = houseCode.text
+    }
+    try {
+      const res = await memberApi.signup(inputData);
       if (res.status === 200) {
         dispatch(setHouseCodeAction(res.data.data.houseCode));
       }
@@ -166,15 +204,22 @@ const SignUpScreen = ({navigation}:any) => {
   }
 
   function trySignup(){
-    if (nickNameStatus === 2){
-      signup().then(navigation.navigate('Home'));
-    } else if (nickNameStatus === 0) {
+    if (nickNameStatus === 0) {
       // TODO: toast로 변경 필요
-      console.log('닉네임을 입력해주세요');
-    } else if (nickNameStatus === 1) {
-      // TODO: toast로 변경 필요
-      console.log('중복된 닉네임은 사용할 수 없습니다');
+      onToast('닉네임을 입력해주세요');
+      return
     }
+    if (nickNameStatus === 1) {
+      // TODO: toast로 변경 필요
+      onToast('중복된 닉네임은 사용할 수 없습니다');
+      return
+    }
+    if (houseStatus === 1){
+      onToast('존재하지 않는 집 코드 입니다');
+      return
+    }
+    signup().then(navigation.replace('Home'));
+    
   }
 
   return (
@@ -212,7 +257,7 @@ const SignUpScreen = ({navigation}:any) => {
                       locations.map((i, idx) => {
                         return (
                           <React.Fragment key={`${i.locationName}${idx}`}>
-                            <BasicBadge backgroundColor='#3093EF' name={i.locationName} icon={closeIcon} onPress={()=>{removeLocation(idx)}}/>
+                            <BasicBadge color='#3093EF' name={i.locationName} icon={closeIcon} onPress={()=>{removeLocation(idx)}}/>
                           </React.Fragment>
                         )
                       })
@@ -228,7 +273,7 @@ const SignUpScreen = ({navigation}:any) => {
                       ingredients.map((i, idx) => {
                         return (
                           <React.Fragment key={`${i.ingredientName}${idx}`}>
-                            <BasicBadge backgroundColor='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{removeIngredient(idx)}}/>
+                            <BasicBadge color='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{removeIngredient(idx)}}/>
                           </React.Fragment>
                         )
                       })
@@ -238,6 +283,16 @@ const SignUpScreen = ({navigation}:any) => {
               </View>
               <View style={[{width: '90%', marginTop: 20}]}>
                 <PlainInput {...houseCode}/>
+                {
+                  houseStatus === 1 && (
+                    <Text style={[styles.font, {color: 'red'}]}>잘못된 집 코드입니다.</Text>
+                  )
+                }
+                {
+                  houseStatus === 2 && (
+                    <Text style={[styles.font, {color: 'blue'}]}>사용 가능한 집 코드 입니다.</Text>
+                  )
+                }
               </View>
             </View>
           </ScrollView>

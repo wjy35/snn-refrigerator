@@ -52,7 +52,7 @@ public class SharePost extends BaseTimeEntity{
     public SharePost(Long memberId,Short locationId,List<ShareImage> shareImages,
                      List<ShareIngredient> shareIngredients, String title, String content, String thumbnail) {
         this.memberId = memberId;
-        this.locationId=locationId;
+        this.locationId = locationId;
         this.shareImages = shareImages;
         this.shareIngredients = shareIngredients;
         this.title = title;
@@ -77,5 +77,35 @@ public class SharePost extends BaseTimeEntity{
         this.content=request.getContent();
 //        this.shareImages=request.getShareImages();
 //        this.shareIngredients=request.getShareIngredients();
+    }
+
+    public void setThumbnail(String thumbnail){
+        this.thumbnail=thumbnail;
+    }
+
+    @Override
+    public String toString(){
+        String str = String.format("seq = %d\n"+
+                "memberId = %d\n" +
+                "locationId = %d\n"+
+                "title = %s\n"+
+                "content = %s\n", this.sharePostId, this.memberId, this.locationId, this.title, this.content);
+        return str;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId=memberId;
+    }
+
+    public void setLocationId(Short locationId) {
+        this.locationId = locationId;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }
