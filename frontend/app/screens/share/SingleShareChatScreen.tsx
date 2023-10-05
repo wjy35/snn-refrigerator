@@ -19,11 +19,8 @@ const SingleShareChatScreen = ({navigation}: any) => {
             timestamp: number,
         }>
     >([]);
-
     const [client, setClient] = useState<Client>();
-
     const route = useRoute();
-
     const chatRoomId = route.params.chatRoomId;
     const receiveMemberId = route.params.receiveMemberId;
 
@@ -100,9 +97,14 @@ const SingleShareChatScreen = ({navigation}: any) => {
             <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
                 <TopNavigator title={'독버섯 김석주'}/>
                 <View style={[{flex: 1, borderWidth: 1, flexDirection: 'column-reverse'}]}>
-                    {/*채팅 내용 넣기*/}
-                    {/*<FlatList*/}
-                    {/*/>*/}
+                    {
+                        chatList.map((chat, idx) => {
+                            console.log(chat);
+                            return (
+                              <></>
+                            )
+                        })
+                    }
                 </View>
                 <View style={{height: 80}}></View>
                 <BottomChat onSubmit={sendMessage}/>

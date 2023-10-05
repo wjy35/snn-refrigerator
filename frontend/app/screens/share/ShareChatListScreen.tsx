@@ -84,25 +84,27 @@ const ShareChatListScreen = ({navigation}: any) => {
     <ShareLayout title="나눔 채팅">
       <View>
         <ScrollView>
-          {
-            chatRoomList.map((item, index) => {
-              return (
-                <React.Fragment key={`chatRoom${index}`}>
-                  <ShareChatItem
-                    index={index}
-                    chatRoomId={item.chatRoomId}
-                    content={item.content}
-                    profileImageUrl={item.profileImageUrl}
-                    locationName={item.locationName}
-                    thumbnailImageUrl={item.thumbnailImageUrl}
-                    timestamp={item.timestamp}
-                    nickname={item.nickname}
-                    receiveMemberId={item.receiveMemberId}
-                  />
-                </React.Fragment>
-              )
-            })
-          }
+          <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
+            {
+              chatRoomList.map((item, index) => {
+                return (
+                  <React.Fragment key={`chatRoom${index}`}>
+                    <ShareChatItem
+                      index={index}
+                      chatRoomId={item.chatRoomId}
+                      content={item.content}
+                      profileImageUrl={item.profileImageUrl}
+                      locationName={item.locationName}
+                      thumbnailImageUrl={item.thumbnailImageUrl}
+                      timestamp={item.timestamp}
+                      nickname={item.nickname}
+                      receiveMemberId={item.receiveMemberId}
+                    />
+                  </React.Fragment>
+                )
+              })
+            }
+          </View>
         </ScrollView>
       </View>
     </ShareLayout>

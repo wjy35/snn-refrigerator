@@ -29,17 +29,18 @@ const ShareListScreen = ({navigation}:any) => {
 
   async function getShareList(){
     try {
-      const res = await shareApi.getShareList({locationId: 1, items: 5, pageNum: 1, keyword: ''})
+
+      const res = await shareApi.getShareList({locationId: 1, items: 5, pageNum: 0, keyword: ''});
       if (res.status === 200){
-        console.log(res);
+        setShareList(res.data.data.response.sharePostResponses);
       }
     } catch (err) {
       console.log(err)
     }
   }
 
-  useFocusEffect(()=>{
-    // getShareList()
+  useEffect(()=>{
+    getShareList();
   })
 
   function locationItem(){
@@ -175,7 +176,7 @@ const ShareListScreen = ({navigation}:any) => {
             shareList.map((i, idx) => {
               return (
                 <React.Fragment key={`share${idx}`}>
-                  <ShareItem title={i.name}/>
+                  <ShareItem item={i}/>
                 </React.Fragment>
               )
             })
