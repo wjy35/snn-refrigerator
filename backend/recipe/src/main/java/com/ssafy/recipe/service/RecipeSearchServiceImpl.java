@@ -84,12 +84,12 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
 
         List<RecipeSearchResponse> result = new ArrayList<>();
 
-
+        MemberResponse my = this.getMember(recipeSearchRequest.getMemberId());
         for(int i=0; i<recipeList.size(); i++){
             Recipe recipe = recipeList.get(i);
             MemberResponse memberResponse = this.getMember(recipe.getMemberId());
 
-            int myIngredients = this.getMyIngredientCnt(recipe, memberResponse.getHouseCode());
+            int myIngredients = this.getMyIngredientCnt(recipe, my.getHouseCode());
 
             int neededIngredients = this.getNeededIngredientsCnt(recipe);
 
@@ -134,12 +134,12 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
         int totalCount = recipeRepository.countByMemberId(recipeSearchMemberRequest.getSearchId());
         List<RecipeSearchResponse> result = new ArrayList<>();
 
-
+        MemberResponse my = this.getMember(recipeSearchMemberRequest.getMyId());
         for(int i=0; i<recipeList.size(); i++){
             Recipe recipe = recipeList.get(i);
             MemberResponse memberResponse = this.getMember(recipe.getMemberId());
 
-            int myIngredients = this.getMyIngredientCnt(recipe, memberResponse.getHouseCode());
+            int myIngredients = this.getMyIngredientCnt(recipe, my.getHouseCode());
 
             int neededIngredients = this.getNeededIngredientsCnt(recipe);
 
@@ -193,7 +193,12 @@ public class RecipeSearchServiceImpl implements RecipeSearchService {
     public int getMyIngredientCnt(Recipe recipe, String houseCode){
         List<HouseIngredientResponse> houseIngredientResponses= this.getHouseIngredientResponse(houseCode);
 
+        System.out.println("houseIngredientResponses = " + houseIngredientResponses.size());
+
         List<RecipeIngredient> recipeIngredientList = recipeIngredientRepository.findAllByRecipe(recipe);
+
+        System.out.println("recipeIngredientList = " + recipeIngredientList.size());
+
 
         HashSet<Integer> hashSet = new HashSet<>();
         for(int i=0; i<recipeIngredientList.size(); i++){
