@@ -53,6 +53,8 @@ const memberApi = {
     return res;
   },
   signup: async ({memberId, nickname, hateIngredientList, placeInfoList, birthday, email}: props) => {
+    console.log('여기여기');
+    console.log(memberId, nickname);
     const res = await PublicMemberApi.post(
       'signup',
       {
