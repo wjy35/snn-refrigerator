@@ -20,7 +20,7 @@ import {SvgXml} from "react-native-svg";
 import CameraImageModal from '@/components/modal/CameraImageModal';
 import { launchImageLibrary, launchCamera } from "react-native-image-picker";
 import BasicBadge from "@/components/BasicBadge";
-import {MAIN_COLOR, TEXT_DEACTIVATED_COLOR, WARN_COLOR} from "@/assets/colors/colors";
+import {ALERT_COLOR, MAIN_COLOR, TEXT_DEACTIVATED_COLOR, WARN_COLOR} from "@/assets/colors/colors";
 
 const imagePickerOption = {
   mediaType: 'photo',
@@ -168,7 +168,12 @@ const MyPageScreen = ({navigation}:any) => {
               <Text style={[styles.font, {color: 'grey', fontSize: 20}]}>서울 역삼동</Text>
             </View>
 
-            <BasicBadge color={nickEditing?WARN_COLOR:MAIN_COLOR} fill={false} name={nickEditing?' 저장 ':' 수정 '} onPress={nickEditing?saveNickname:changeNickname}/>
+            <View style={[{alignSelf:'center', flexDirection:'row', justifyContent:'center'}]}>
+              {nickEditing&&
+                <BasicBadge color={ALERT_COLOR} fill={false} name={' 취소 '} onPress={()=>{setNickEditing(false)}}/>
+              }
+              <BasicBadge color={MAIN_COLOR} fill={false} name={nickEditing?' 완료 ':' 수정 '} onPress={nickEditing?saveNickname:changeNickname}/>
+            </View>
           </View>
           <View style={[myPageStyles.profileRowContainer, {height: 100}]}>
 
