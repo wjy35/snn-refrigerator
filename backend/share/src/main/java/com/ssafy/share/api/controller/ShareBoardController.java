@@ -76,7 +76,8 @@ public class ShareBoardController {
         SharePost post=shareBoardService.getPostDetail(shareBoardId);
         String nickname=shareBoardService.getMember(post.getMemberId()).getNickname();
         String thumbnailUrl = s3Service.getS3ImageUrl(post.getThumbnail());
-        SharePostDetailResponse sharePostDetailResponse=new SharePostDetailResponse(post,nickname,timeUtil.dateTypeFormatter(post.getCreateDate()), thumbnailUrl);
+//        SharePostDetailResponse sharePostDetailResponse=new SharePostDetailResponse(post,nickname,timeUtil.dateTypeFormatter(post.getCreateDate()), thumbnailUrl);
+        SharePostDetailResponse sharePostDetailResponse=new SharePostDetailResponse(post,nickname,timeUtil.dateTypeFormatter(post.getCreateDate()));
         for (ShareIngredient s:post.getShareIngredients()){
             String ingredientName= shareBoardService.getIngredientInfoName(s.getIngredientInfoId());
             sharePostDetailResponse.getShareIngredients().add(new ShareIngredientResponse(ingredientName,s.getAmount()));

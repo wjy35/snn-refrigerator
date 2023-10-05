@@ -16,15 +16,16 @@ public class SharePostDetailResponse {
     private String content;
     private List<String> shareImages=new ArrayList<>(); // url들 들어갈거임
     private List<ShareIngredientResponse> shareIngredients=new ArrayList<>();
-    private String thumbnailUrl;
+//    private String thumbnailUrl;
     private String createdTime;
 
 
-    public SharePostDetailResponse(SharePost entity,String nickname,String createdTime, String thumbnailUrl) {
+//    public SharePostDetailResponse(SharePost entity,String nickname,String createdTime, String thumbnailUrl) {
+    public SharePostDetailResponse(SharePost entity,String nickname,String createdTime) {
         this.title = entity.getTitle();
         this.nickname=nickname;
         this.content = entity.getContent();
         this.createdTime=createdTime;
-        this.thumbnailUrl = thumbnailUrl;
+//        this.thumbnailUrl = thumbnailUrl;
     }
 }
