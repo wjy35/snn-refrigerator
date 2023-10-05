@@ -1,8 +1,9 @@
 import React from 'react';
-import {View, Text, Button, ScrollView, Image} from 'react-native';
+import {View, Text, Button, ScrollView, Image, TouchableWithoutFeedback} from 'react-native';
 import ShareLayout from "@/screens/share/ShareLayout";
 import {styles} from "@/styles/styles";
-import {TEXT_COLOR} from "@/assets/colors/colors";
+import {MAIN_COLOR, TEXT_COLOR} from "@/assets/colors/colors";
+import ShareIngredientItem from "@/components/ShareIngredientItem";
 
 const ShareDetailScreen = ({navigation}:any) => {
   const profileImageUrl = ''
@@ -11,8 +12,8 @@ const ShareDetailScreen = ({navigation}:any) => {
     <ShareLayout title="나눔">
       <View style={{flex: 1}}>
         <ScrollView>
-          <View style={[{width: '100%', borderWidth: 1, padding: 15}]}>
-            <View style={[{width: '100%', borderWidth: 1, marginBottom: 10}]}>
+          <View style={[{width: '100%', padding: 15}]}>
+            <View style={[{width: '100%', marginBottom: 10}]}>
               <View style={[{marginVertical: 10}]}>
                 <Text style={[styles.font, {fontSize: 22}]}>역삼동</Text>
               </View>
@@ -22,7 +23,7 @@ const ShareDetailScreen = ({navigation}:any) => {
             </View>
             <View style={[{flexDirection: 'row', justifyContent: 'space-between'}]}>
               <View style={[{flexDirection: 'row', }]}>
-                <View style={{borderWidth: 1, height: 50, width: 50}}>
+                <View style={{borderWidth: 1, height: 50, width: 50, marginRight: 5}}>
                   {profileImageUrl&&<Image source={{uri: profileImageUrl}}
                                            style={{height:70,width:70,borderRadius:99, borderWidth:1, borderColor:TEXT_COLOR ,marginRight:10}}
                   />}
@@ -42,11 +43,7 @@ const ShareDetailScreen = ({navigation}:any) => {
               <View>
                 <Text style={[styles.font, {fontSize: 14}]}>등록이미지</Text>
               </View>
-              <View style={{flexDirection: 'row'}}>
-                <View style={{borderWidth: 1, height: 70, width: 70, margin: 5}}>
-                </View>
-                <View style={{borderWidth: 1, height: 70, width: 70, margin: 5}}>
-                </View>
+              <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
                 <View style={{borderWidth: 1, height: 70, width: 70, margin: 5}}>
                 </View>
               </View>
@@ -55,9 +52,19 @@ const ShareDetailScreen = ({navigation}:any) => {
               <View>
                 <Text style={[styles.font, {fontSize: 14}]}>나눔 목록</Text>
               </View>
+              <View>
+                <ShareIngredientItem name='감자' onPressPlus={()=>{}} amount={1} onPressMinus={()=>{}} remain={3}/>
+              </View>
             </View>
           </View>
         </ScrollView>
+        <View style={{position: 'absolute', bottom: 10, justifyContent: 'center', alignItems: 'center', width: '100%'}}>
+          <TouchableWithoutFeedback>
+            <View style={{borderWidth: 2, borderColor: MAIN_COLOR, padding: 10, width: 100, borderRadius: 16}}>
+              <Text style={[styles.font, {fontSize: 20}]}>나눔 예약</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
       </View>
     </ShareLayout>
   )
