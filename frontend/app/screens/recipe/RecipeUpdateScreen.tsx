@@ -228,12 +228,10 @@ const RecipeUpdateScreen = ({navigation}:any) => {
 
     if (image.assets[0].uri !== recipeDetail.imageUrl){
       const res = await getImageUrl();
-      console.log(res);
       inputData.imageUrl = res;
     }
     try {
       const res = await recipeApi.updateRecipe(inputData);
-      console.log(res);
     } catch (err){
       console.log(err);
     }
