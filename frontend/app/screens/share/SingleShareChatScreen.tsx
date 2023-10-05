@@ -10,6 +10,9 @@ import {useFocusEffect, useRoute} from "@react-navigation/native";
 import * as Stomp from "webstomp-client";
 import {Client} from "webstomp-client";
 import SingleChatContent from "@/components/SingleChatContent";
+import ShareItem from "@/components/ShareItem";
+import BasicBadge from "@/components/BasicBadge";
+import {ALERT_COLOR, MAIN_COLOR} from "@/assets/colors/colors";
 
 
 const SingleShareChatScreen = ({navigation}: any) => {
@@ -25,6 +28,7 @@ const SingleShareChatScreen = ({navigation}: any) => {
     const chatRoomId = route.params.chatRoomId;
     const receiveMemberId = route.params.receiveMemberId;
     const {memberId} = useSelector((state: RootState) => state.userReducer);
+    const type = 2
     useEffect(() => {
         const getChatList = async () => {
             try {
@@ -79,6 +83,7 @@ const SingleShareChatScreen = ({navigation}: any) => {
             }
         }, []));
 
+
     function sendMessage(text: string) {
         if (!text) return;
         const chatPayload = {
@@ -94,6 +99,50 @@ const SingleShareChatScreen = ({navigation}: any) => {
         <View style={[styles.layout]}>
             <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
                 <TopNavigator title={'독버섯 김석주'}/>
+                <View style={{borderWidth: 1, width: '100%'}}>
+                    <View>
+                        {/*<ShareItem item={shareDetail}/>*/}
+                    </View>
+                    {
+                        type === 0 && (
+                            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                <View style={{paddingHorizontal: 5}}>
+                                    <Text style={[styles.font, {fontSize: 14}]}>상대방이 나눔 확정을 기다리는 중입니다</Text>
+                                </View>
+                                <View>
+                                    <BasicBadge color={MAIN_COLOR} fill={false} name={'나눔 확정'} onPress={()=>{}}/>
+                                </View>
+                                <View>
+                                    <BasicBadge color={ALERT_COLOR} fill={false} name={'거절'} onPress={()=>{}}/>
+                                </View>
+                            </View>
+                      )
+                    }
+                    {
+                        type === 1 && (
+                            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                <View style={{paddingHorizontal: 5}}>
+                                    <Text style={[styles.font, {fontSize: 14}]}>나눔이 완료되면 나눔완료 버튼을 눌러주세요</Text>
+                                </View>
+                                <View>
+                                    <BasicBadge color={MAIN_COLOR} fill={false} name={'나눔 완료'} onPress={()=>{}}/>
+                                </View>
+                            </View>
+                      )
+                    }
+                    {
+                        type === 2 && (
+                        <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                            <View style={{paddingHorizontal: 5}}>
+                                <Text style={[styles.font, {fontSize: 16}]}>상대방의 나눔 확정을 기다리는 중입니다</Text>
+                            </View>
+                            <View>
+                                <BasicBadge color={ALERT_COLOR} fill={false} name={'나눔 취소'} onPress={()=>{}}/>
+                            </View>
+                        </View>
+                      )
+                    }
+                </View>
                 <View
                   style={[{flex: 1, borderWidth: 1, flexDirection: 'column-reverse'}]}
                 >
