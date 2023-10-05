@@ -83,16 +83,17 @@ const PlaceManage = ({memberId}) =>{
 
   return (
     <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-      <View style={{}}>
+      <View style={{height: 310}}>
         <AutoCompleteInput {...location} textList={locationList} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
       </View>
       <View>
         <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
           {
             locations.map((i, idx) => {
+              const name: string[] = i.locationName.split(' ');
               return (
                 <React.Fragment key={`${i.locationName}${idx}`}>
-                  <BasicBadge color='#3093EF' name={i.locationName} icon={closeIcon} onPress={()=>{removeLocation(idx)}}/>
+                  <BasicBadge color='#3093EF' name={name[name.length-1]} icon={closeIcon} onPress={()=>{removeLocation(idx)}}/>
                 </React.Fragment>
               )
             })

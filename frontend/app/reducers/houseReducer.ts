@@ -1,8 +1,9 @@
-import {setHouseCode, setHouseIngredients} from "@/actions/houseAction";
+import {setHouseCode, setHouseIngredients, setChanged} from "@/actions/houseAction";
 
 const houseState = {
-    houseCode: "492f9401-c684-4966-936e-56f0941eaffe",
-    houseIngredients: []
+  houseCode: "492f9401-c684-4966-936e-56f0941eaffe",
+  houseIngredients: [],
+  changed: true,
 }
 
 const houseReducer = (state=houseState, action: any) => {
@@ -14,9 +15,16 @@ const houseReducer = (state=houseState, action: any) => {
       };
     }
     case setHouseIngredients: {
+      const _houseIngredients = [...action.payload]
       return {
         ...state,
-        houseIngredients: [...action.payload]
+        houseIngredients: _houseIngredients
+      }
+    }
+    case setChanged: {
+      return {
+        ...state,
+        changed: action.payload
       }
     }
     default:

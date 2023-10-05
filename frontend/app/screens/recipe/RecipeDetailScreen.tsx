@@ -70,12 +70,9 @@ const RecipeDetailScreen = () => {
                            style={{width:'100%', height:'100%'}}
           />
         </View>
-
-
         <View>
           <Text style={[styles.font, recipeStyles.recipeDetailTitleText]}>{recipeDetail.title}</Text>
         </View>
-
         <View style={recipeStyles.recipeDetailInfoContainer}>
           <View style={recipeStyles.recipeDetailInfo}>
             <View style={recipeStyles.recipeDetailUserContainer}>
@@ -177,7 +174,7 @@ const RecipeDetailScreen = () => {
                             marginHorizontal:10,
                             marginVertical:3,
                           }}>
-                            <Text style={[styles.font,{color:ingredient.lastDate?MAIN_COLOR:TEXT_COLOR, fontSize:20, width:'60%'}]}>{`${ingredient.name} (${ingredient.amount})`}</Text>
+                            <Text style={[styles.font,{color:ingredient.lastDate?MAIN_COLOR:TEXT_COLOR, fontSize:20, width:'60%'}]}>{`${ingredient.name} ${ingredient.amount&&`(${ingredient.amount})`}`}</Text>
                             <Text style={[styles.font,{color:ingredient.lastDate?MAIN_COLOR:TEXT_COLOR, fontSize:20, width:'40%'}]}>{ingredient.lastDate?ingredient.lastDate:'          -'}</Text>
                           </View>
                       ))}
