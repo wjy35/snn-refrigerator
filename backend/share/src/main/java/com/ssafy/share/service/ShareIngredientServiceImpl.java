@@ -32,7 +32,7 @@ public class ShareIngredientServiceImpl implements ShareIngredientService{
         for(ShareIngredient ingredient: ingredients){
             Map<String, Object> mp = new HashMap<>();
             for(Field field : ingredient.getClass().getFields()){
-                if(field.getName() == "sharePost") continue;
+                if(field.getName().equals("sharePost")) continue;
                 mp.put(field.getName(), field.get(ingredient));
             }
             result.add(mp);
