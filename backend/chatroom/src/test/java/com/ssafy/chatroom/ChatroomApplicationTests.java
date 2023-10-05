@@ -11,6 +11,7 @@ import com.ssafy.chatroom.db.entity.ChatRoomEntity;
 import com.ssafy.chatroom.db.repository.ChatRoomRepository;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.ssafy.chatroom.db.repository.ShareStatusRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ class ChatroomApplicationTests {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    ShareStatusRepository shareStatusRepository;
 
     @Test
     void contextLoads() {
@@ -133,11 +137,16 @@ class ChatroomApplicationTests {
     @Test
     void testShareBoardOpenFeign(){
         // given
-        Integer shareBoardId = 3;
+        Integer shareBoardId = 8;
 
         ShareBoardDto shareBoardDto = objectMapper.convertValue(shareBoardOpenFeign.getShareBoardDto(3).getData().get("response"),ShareBoardDto.class);
 
         System.out.println("shareBoardDto = " + shareBoardDto);
+    }
+
+    @Test
+    void testShareStatusRepo(){
+        shareStatusRepository.findAllByChatRoomIdAndShareStatusIsTrue(1);
     }
 
 }

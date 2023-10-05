@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class ChatRoomSearchServiceImpl implements ChatRoomSearchService {
     }
 
     @Override
-    public ChatRoomEntity searchBySharePostIdAndSenderMemberId(Integer sharePostId, Long senderMemberId) {
-        return chatRoomRepository.findChatRoomEntityBySharePostIdAndAndSenderMemberId(sharePostId, senderMemberId).get();
+    public Optional<ChatRoomEntity> searchBySharePostIdAndSenderMemberId(Integer sharePostId, Long senderMemberId) {
+        return chatRoomRepository.findChatRoomEntityBySharePostIdAndAndSenderMemberId(sharePostId, senderMemberId);
     }
 }
