@@ -171,7 +171,7 @@ public class ShareBoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PatchMapping("/image/shareboard/{shareBoardId}")
+    @PatchMapping("/content/{shareBoardId}")
     public ResponseEntity<?> updatePost(@PathVariable Long shareBoardId, @RequestBody WritePostRequest request) throws IOException, IllegalAccessException {
         Response response = new Response();
 
