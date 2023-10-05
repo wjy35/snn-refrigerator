@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, Image, TouchableWithoutFeedback, ImageBackground} from 'react-native';
 import {recipeStyles} from "@/styles/recipeStyles";
 import {dish, starActive, starDisactive, time, user} from "@/assets/icons/icons";
@@ -22,18 +22,28 @@ interface props {
 const RecipeItem = ({item, navigation}:props) => {
   const {memberId} = useSelector((state:RootState) => state.userReducer)
   const [isFavorite, setIsFavorite] = useState(item.favorite);
+  const [isDisabled, setIsDisabled] = useState(false);
   function toDetail() {
     navigation.navigate('RecipeDetail', {recipeId: item.recipeId});
   }
 
   async function toggleFavorite(){
-    console.log(item)
     try {
-      const res = await recipeApi.addFavorite({recipeId: item.recipeId, memberId: memberId});
+      setIsDisabled(() => true);
+      const res = !isFavorite
+        ? await recipeApi.addFavorite({
+            recipeId: item.recipeId,
+            memberId: memberId,
+          })
+        : await recipeApi.deleteFavorite({
+            recipeId: item.recipeId,
+            memberId: memberId,
+          });
       if (res.status === 200){
         console.log(res.data);
         setIsFavorite(!isFavorite);
       }
+      setIsDisabled(false);
     } catch (err) {
       console.log(err);
     }
@@ -45,7 +55,7 @@ const RecipeItem = ({item, navigation}:props) => {
     >
       <View style={[recipeStyles.recipeItemContainer, { height: 200, aspectRatio:"9/5"}
       ]}>
-        <TouchableWithoutFeedback onPress={toggleFavorite}>
+        <TouchableWithoutFeedback onPress={toggleFavorite} disabled={isDisabled}>
           <View style={recipeStyles.recipeFavoriteContainer}>
             {
               isFavorite ? (
