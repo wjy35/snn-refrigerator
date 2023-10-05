@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, Button, ImageBackground, ScrollView, FlatList} from 'react-native';
+import {View, Text, Button, ImageBackground, ScrollView, FlatList, ToastAndroid} from 'react-native';
 import {styles} from "@/styles/styles";
 import TopNavigator from "@/components/TopNavigator";
 import BottomChat from "@/components/BottomChat";
@@ -12,7 +12,9 @@ import {Client} from "webstomp-client";
 import SingleChatContent from "@/components/SingleChatContent";
 
 
+
 const SingleShareChatScreen = ({navigation}: any) => {
+
     const [chatList, setChatList] = useState<
         Array<{
             memberId: number,
@@ -31,7 +33,7 @@ const SingleShareChatScreen = ({navigation}: any) => {
                 let res = await chatApi.chatList(chatRoomId);
                 if (res.status === 200) {
                     console.log("res", res);
-                    setChatList(res.data.data.chatList);
+                    setChatList(res.data.data.chatList.reverse());
                 }
             } catch (e) {
                 console.log(e);
@@ -42,9 +44,9 @@ const SingleShareChatScreen = ({navigation}: any) => {
 
     function onToggle(currentChat) {
         setChatList((prevChatList:any[])=>{
-            prevChatList.shift();
+            prevChatList.pop();
             const newChatList = [...prevChatList];
-            newChatList.push(currentChat);
+            newChatList.unshift(currentChat);
             return newChatList;
         });
     };
