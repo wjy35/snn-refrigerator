@@ -7,6 +7,9 @@ import {styles} from "@/styles/styles";
 import KoreanWordWrap from "@/components/KoreanWordWrap";
 import CircularPercent from "@/components/CircularPercent";
 import {TEXT_COLOR, TEXT_SUB_COLOR} from "@/assets/colors/colors";
+import recipeApi from "@/apis/recipeApi";
+import {useSelector} from "react-redux";
+import {RootState} from "@/reducers/reducers";
 
 
 interface props {
@@ -17,8 +20,23 @@ interface props {
 }
 
 const RecipeItem = ({item, navigation}:props) => {
+  const {memberId} = useSelector((state:RootState) => state.userReducer)
+  const [isFavorite, setIsFavorite] = useState(item.favorite);
   function toDetail() {
-    navigation.navigate('RecipeDetail', {recipeId: item.recipeId})
+    navigation.navigate('RecipeDetail', {recipeId: item.recipeId});
+  }
+
+  async function toggleFavorite(){
+    console.log(item)
+    try {
+      const res = await recipeApi.addFavorite({recipeId: item.recipeId, memberId: memberId});
+      if (res.status === 200){
+        console.log(res.data);
+        setIsFavorite(!isFavorite);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
@@ -27,14 +45,28 @@ const RecipeItem = ({item, navigation}:props) => {
     >
       <View style={[recipeStyles.recipeItemContainer, { height: 200, aspectRatio:"9/5"}
       ]}>
-        <View style={recipeStyles.recipeFavoriteContainer}>
-          <SvgXml
-              xml={starDisactive}
-              width={25}
-              height={25}
-              style={{alignSelf:'center'}}
-          />
-        </View>
+        <TouchableWithoutFeedback onPress={toggleFavorite}>
+          <View style={recipeStyles.recipeFavoriteContainer}>
+            {
+              isFavorite ? (
+                <SvgXml
+                  xml={starActive}
+                  width={25}
+                  height={25}
+                  style={{alignSelf:'center'}}
+                />
+              ) : (
+                <SvgXml
+                  xml={starDisactive}
+                  width={25}
+                  height={25}
+                  style={{alignSelf:'center'}}
+                />
+              )
+            }
+
+          </View>
+        </TouchableWithoutFeedback>
         <View style={[recipeStyles.recipeItemImage]}>
           {item.imageUrl&&<ImageBackground source={{uri: item.imageUrl}}
                            resizeMode={"cover"}
@@ -42,8 +74,6 @@ const RecipeItem = ({item, navigation}:props) => {
                            imageStyle={{borderRadius: 10,}}
           />}
         </View>
-
-
         <View style={recipeStyles.recipeItemInfo}>
           <View style={recipeStyles.recipeItemTitleContainer}>
             <KoreanWordWrap str={item.title} textStyle={[styles.font, recipeStyles.recipeItemTitle, {textAlign:'center'}]}/>

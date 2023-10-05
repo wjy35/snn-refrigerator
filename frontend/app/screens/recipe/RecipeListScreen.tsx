@@ -183,7 +183,7 @@ const RecipeListScreen = ({navigation}:any) => {
       remove: remove,
       n: range,
       keyword: keyWord.text,
-      size:3,
+      size:5,
     })
     setNow(0);
   }

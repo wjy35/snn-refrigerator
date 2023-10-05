@@ -132,7 +132,6 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
     try {
       const res = await houseApi.deleteIngredient({houseIngredientId: houseIngredientId})
       if (res.status === 200) {
-        // console.log(res.data);
         onChange();
         toggleModal();
       }
@@ -151,6 +150,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
       })
       if (res.status === 200) {
         // console.log(res.data);
+        onChange();
         setIsModifying(false);
         setIsModified(true);
       }
