@@ -68,13 +68,9 @@ const RecipeDetailScreen = () => {
 
           const memberIdres = await memberApi.getMemberIdFromNick(nickname);
           setChefId(memberIdres.data.data.memberId);
-
           const followRes = await memberApi.toggleFollow( memberId, memberIdres.data.data.memberId);
           setLike(!followRes.data.data.flag);
           await memberApi.toggleFollow( memberId, memberIdres.data.data.memberId);
-
-        } else {
-          console.log(res.data.message);
         }
       }catch (e){
         console.log(e);
@@ -97,13 +93,16 @@ const RecipeDetailScreen = () => {
   }
 
   return (
-    <RecipeLayout title="레시피" optionTitle="수정" optionFunction={()=>navigation.navigate('RecipeUpdate', {...recipeDetail, recipeId: route?.params?.recipeId})}>
+    <RecipeLayout
+      title="레시피"
+      optionTitle={memberId === chefId ? '수정' : ''}
+      optionFunction={memberId === chefId ? ()=>navigation.navigate('RecipeUpdate', {...recipeDetail, recipeId: route?.params?.recipeId}) : ()=>{}}>
       <ScrollView style={{width: '100%'}}>
         <View style={recipeStyles.recipeDetailImage}>
-          <ImageBackground source={{uri: recipeDetail.imageUrl}}
-                           resizeMode={'cover'}
-                           style={{width:'100%', height:'100%'}}
-          />
+          {
+            recipeDetail?.imageUrl && <ImageBackground source={{uri: recipeDetail.imageUrl}} resizeMode={'cover'} style={{width:'100%', height:'100%'}}/>
+          }
+
         </View>
         <View>
           <Text style={[styles.font, recipeStyles.recipeDetailTitleText]}>{recipeDetail.title}</Text>
@@ -273,7 +272,6 @@ const RecipeDetailScreen = () => {
             }
           </View>
         </View>
-
       </ScrollView>
     </RecipeLayout>
   )

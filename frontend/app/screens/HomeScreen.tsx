@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, ScrollView, ImageBackground} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  ScrollView,
+  ImageBackground,
+  ActivityIndicator,
+  TouchableWithoutFeedback, TouchableHighlight
+} from 'react-native';
 import BottomNavigator from 'components/BottomNavigator';
 import {styles} from '@/styles/styles';
 import RecipeList from '@/components/RecipeList';
@@ -16,10 +24,10 @@ import houseApi from "@/apis/houseApi";
 const HomeScreen = ({navigation}:any) => {
   const [recipeList, setRecipeList] = useState([]);
   const { memberId } = useSelector((state:RootState) => state.userReducer)
-
   const { houseCode, changed } = useSelector((state:RootState) => state.houseReducer);
   const houseIngredients = useSelector((state:RootState) => state.houseReducer.houseIngredients)
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   function setChanged(bool: boolean){
     dispatch(setChangedAction(bool))
@@ -52,18 +60,21 @@ const HomeScreen = ({navigation}:any) => {
 
   useEffect(() => {
     const getRecipe = async () => {
+      setLoading(true)
       try {
         let res = await recipeRecommendApi.getRecommendList({
           memberId: memberId,
         });
         if (res.status === 200) {
           setRecipeList(res.data.data.recipe);
+          setLoading(false);
         }
       } catch (err) {
+        setLoading(false);
         console.log(memberId);
         console.log('HomeScreen.tsx', err);
       }
-    }
+    };
     getRecipe();
   }, []);
 
@@ -80,19 +91,45 @@ const HomeScreen = ({navigation}:any) => {
               <View style={{margin: 10}}>
                 <Text style={[styles.font, {fontSize: 20}]}>추천 레시피</Text>
               </View>
-              <View style={homeScreenStyles.homeRecipeListContainer}>
-                <RecipeList horizontal={true} recipeList={recipeList} navigation={navigation} width={250}/>
+              <View style={[homeScreenStyles.homeRecipeListContainer, {width: '100%'}]}>
+                {
+                  loading ? (
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%'}}>
+                      <View>
+                        <ActivityIndicator size="large"/>
+                      </View>
+                    </View>
+                  ) : (
+                    <RecipeList horizontal={true} recipeList={recipeList} navigation={navigation} width={250}/>
+                  )
+                }
               </View>
             </View>
             <View style={homeScreenStyles.ingredientContainer}>
-              <View style={{margin: 10}}>
-                <Text style={[styles.font, {fontSize: 20}]}>빨리 소비해야 해요</Text>
-              </View>
-              <View>
-                <MyIngredientList types={[0,2]} maxDate={7} houseIngredients={houseIngredients}/>
-              </View>
+              {
+                houseIngredients.length > 0 ? (
+                  <>
+                    <View style={{margin: 10}}>
+                      <Text style={[styles.font, {fontSize: 20}]}>빨리 소비해야 해요</Text>
+                    </View>
+                    <View>
+                      <MyIngredientList types={[0,2]} maxDate={7} houseIngredients={houseIngredients}/>
+                    </View>
+                  </>
+                ) : (
+                  <>
+                    <View style={{margin: 10}}>
+                      <Text style={[styles.font, {fontSize: 20}]}>내 냉장고를 채워주세요</Text>
+                    </View>
+                    <View style={{alignItems: 'center', justifyContent: 'center', width: '100%', height: '50%'}}>
+                      <TouchableWithoutFeedback onPress={()=>{navigation.navigate('HouseAdd')}}>
+                        <Text style={[styles.font, {fontSize: 15}]}>냉장고 채우러 가기</Text>
+                      </TouchableWithoutFeedback>
+                    </View>
+                  </>
+                )
+              }
             </View>
-            {/*<Button onPress={test} title={'fdasfdsa'}></Button>*/}
             <View style={{height: 80}}></View>
           </View>
         </ScrollView>
