@@ -159,8 +159,6 @@ const ShareCreateScreen = ({navigation}:any) => {
       }
     })
 
-    console.log(postId, formData);
-
     try{
       const res = await shareApi.postShareImage(postId, formData);
       console.log('res', res);
@@ -220,12 +218,15 @@ const ShareCreateScreen = ({navigation}:any) => {
         navigation.navigate('ShareList');
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   }
 
   return (
-    <ShareLayout title="나눔글 쓰기" optionTitle="등록" optionFunction={tryShare}>
+    <ShareLayout
+      title="나눔글 쓰기"
+      optionTitle="등록"
+      optionFunction={tryShare}>
       <View style={{flex: 1}}>
         <ScrollView>
           <View style={[{width: '100%', padding: 15}]}>
