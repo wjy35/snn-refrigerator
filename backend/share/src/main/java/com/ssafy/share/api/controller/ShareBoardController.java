@@ -146,6 +146,14 @@ public class ShareBoardController {
         }
 
         SharePost sharePost = shareBoardService.findById(shareBoardId).orElseThrow();
+        String thumbnailUrl = imageUrls.get(0);
+
+        sharePost.setThumbnail(thumbnailUrl);
+        shareBoardService.save(sharePost);
+
+        imageUrls = imageUrls.subList(1, imageUrls.size());
+
+        SharePost sharePost = shareBoardService.findById(shareBoardId).orElseThrow();
 
         List<ShareImage> images = new ArrayList<>();
 
