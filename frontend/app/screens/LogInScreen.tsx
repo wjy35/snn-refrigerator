@@ -59,7 +59,9 @@ const LogInScreen = ({navigation}: any) => {
         navigation.replace('Home'); //회원 정보 다 저장한 후엔 홈 화면으로.
       }
     } catch (err) {
-      navigation.replace('SignUp', {...info}); //아니라면 회원가입.
+      if (err.response.status === 404) {
+        navigation.replace('SignUp', {...info});
+      }
     }
   }
 
