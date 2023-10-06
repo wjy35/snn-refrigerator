@@ -12,6 +12,9 @@ import {useFocusEffect} from "@react-navigation/native";
 import {backButton, blackLocationIcon, settingIcon} from "@/assets/icons/icons";
 import {SvgXml} from "react-native-svg";
 import {Shadow} from "react-native-shadow-2";
+import {useSelector} from "react-redux";
+import {RootState} from "@/reducers/reducers";
+import {TEXT_SUB_COLOR} from "@/assets/colors/colors";
 
 const ShareListScreen = ({navigation}:any) => {
   const shareText = useInput({
@@ -19,31 +22,44 @@ const ShareListScreen = ({navigation}:any) => {
   })
   const [shareList, setShareList] = useState<any[]>([])
   const [isVisible, setIsVisible] = useState(true);
-  const [nowLocation, setNowLocation] = useState<any>()
+  const {memberId} = useSelector((state:RootState)=>state.userReducer);
+  const locations = useSelector((state: RootState)=>state.userReducer.locations);
+  const [nowLocation, setNowLocation] = useState<any>();
+  const items = 5;
+  const [page, setPage] = useState(0);
 
   function goShareCreate(){
-    navigation.navigate('ShareCreate')
+    navigation.navigate('ShareCreate');
   }
 
   async function getShareList(){
+    if (!nowLocation) return
     try {
-
-      const res = await shareApi.getShareList({locationId: 1, items: 5, pageNum: 0, keyword: ''});
+      const res = await shareApi.getShareList({ locationId: nowLocation.locationId, items: items, pageNum: page, keyword: shareText.text});
       if (res.status === 200){
+        console.log(res);
         setShareList(res.data.data.response.sharePostResponses);
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   }
 
   useEffect(()=>{
     getShareList();
-  })
+  }, [nowLocation]);
 
-  function locationItem(){
+  useEffect(()=>{
+    setNowLocation(locations[0]);
+  }, [locations])
+
+  function locationItem(location: any){
+    const shortName = location.locationName.split(' ')
     return (
-      <TouchableWithoutFeedback onPress={()=>{console.log('click')}}>
+      <TouchableWithoutFeedback onPress={()=>{
+        setIsVisible(true);
+        setNowLocation(location)}
+      }>
         <View style={{}}>
           <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 5}}>
             <View style={{marginRight: 5}}>
@@ -55,7 +71,7 @@ const ShareListScreen = ({navigation}:any) => {
               />
             </View>
             <View>
-              <Text style={[styles.font, {fontSize: 22}]}>역삼동</Text>
+              <Text style={[styles.font, {fontSize: 22}]}>{shortName[shortName.length-1]}</Text>
             </View>
           </View>
         </View>
@@ -66,7 +82,7 @@ const ShareListScreen = ({navigation}:any) => {
   function locationSetting(){
     return (
       <>
-        <TouchableWithoutFeedback onPress={()=>{console.log('click')}}>
+        <TouchableWithoutFeedback onPress={()=>{navigation.navigate('AccountSetting')}}>
           <View style={{}}>
             <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 5}}>
               <View style={{marginRight: 5}}>
@@ -87,102 +103,131 @@ const ShareListScreen = ({navigation}:any) => {
     )
   }
 
+  function nowShortName(){
+    const shortName = nowLocation.locationName.split(' ');
+    return (
+      <Text style={[styles.font, {fontSize: 25}]}>{shortName[shortName.length-1]}</Text>
+    )
+  }
+
   return (
-    <ShareLayout title="나눔" optionTitle='등록' optionFunction={goShareCreate}>
-      {/*<Text>ShareListScreen</Text>*/}
-      {/*<Button*/}
-      {/*  title="개별나눔채팅"*/}
-      {/*  onPress={ () => navigation.navigate('SingleShareChat')}*/}
-      {/*/>*/}
-      <ScrollView keyboardShouldPersistTaps='handled'>
-        <View style={{width: '100%', marginVertical: 20}}>
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <View style={{width: '90%', flexDirection: 'row'}}>
-              {
-                isVisible ? (
-                  <View style={{flexDirection: 'row', alignItems: 'center', padding: 10}}>
-                    <View style={{marginRight: 5}}>
-                      <SvgXml
-                        xml={blackLocationIcon}
-                        width={25}
-                        height={25}
-                        style={{alignSelf:'center'}}
-                      />
-                    </View>
-                    <View>
-                      <Text style={[styles.font, {fontSize: 25}]}>역삼동</Text>
-                    </View>
-                    <TouchableWithoutFeedback onPress={()=>setIsVisible(false)}>
-                      <View>
-                        <View style={{transform: [{ rotate: '180deg'}], marginLeft: 10, borderRadius: 999, borderWidth: 1, width: 25, height: 25, justifyContent: 'center', alignItems: 'center', borderColor: '#B2CFFF'}} >
-                          <SvgXml
-                            xml={backButton}
-                            width={15}
-                            height={15}
-                            rotation={90}
-                          />
-                        </View>
-                      </View>
-                    </TouchableWithoutFeedback>
-                  </View>
-                ) : (
-                  <View style={{borderWidth: 1, padding: 10, borderRadius: 16, borderColor: '#B2CFFF'}}>
-                    <View style={{}}>
-                      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={{marginRight: 5}}>
-                          <SvgXml
-                            xml={blackLocationIcon}
-                            width={25}
-                            height={25}
-                            style={{alignSelf:'center'}}
-                          />
-                        </View>
-                        <View>
-                          <Text style={[styles.font, {fontSize: 25}]}>역삼동</Text>
-                        </View>
-                        <TouchableWithoutFeedback onPress={()=>setIsVisible(true)}>
-                          <View>
-                            <View style={{marginLeft: 10, borderRadius: 999, borderWidth: 1, width: 25, height: 25, justifyContent: 'center', alignItems: 'center', borderColor: '#B2CFFF'}} >
-                              <SvgXml
-                                xml={backButton}
-                                width={15}
-                                height={15}
-                                rotation={90}
-                              />
-                            </View>
+    <ShareLayout title="나눔" optionTitle={nowLocation ? '등록' : ''} optionFunction={nowLocation?goShareCreate:()=>{}}>
+      {
+        nowLocation ? (
+          <>
+            <ScrollView keyboardShouldPersistTaps='handled'>
+              <View style={{width: '100%', marginVertical: 20}}>
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                  <View style={{width: '90%', flexDirection: 'row'}}>
+                    {
+                      isVisible ? (
+                        <View style={{flexDirection: 'row', alignItems: 'center', padding: 10}}>
+                          <View style={{marginRight: 5}}>
+                            <SvgXml
+                              xml={blackLocationIcon}
+                              width={25}
+                              height={25}
+                              style={{alignSelf:'center'}}
+                            />
                           </View>
-                        </TouchableWithoutFeedback>
-                      </View>
-                      {locationItem()}
-                      {locationItem()}
-                      {locationSetting()}
-                    </View>
+                          <View>
+                            {nowShortName()}
+                          </View>
+                          <TouchableWithoutFeedback onPress={()=>setIsVisible(false)}>
+                            <View>
+                              <View style={{transform: [{ rotate: '180deg'}], marginLeft: 10, borderRadius: 999, borderWidth: 1, width: 25, height: 25, justifyContent: 'center', alignItems: 'center', borderColor: '#B2CFFF'}} >
+                                <SvgXml
+                                  xml={backButton}
+                                  width={15}
+                                  height={15}
+                                  rotation={90}
+                                />
+                              </View>
+                            </View>
+                          </TouchableWithoutFeedback>
+                        </View>
+                      ) : (
+                        <View style={{borderWidth: 1, padding: 10, borderRadius: 16, borderColor: '#B2CFFF'}}>
+                          <View style={{}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                              <View style={{marginRight: 5}}>
+                                <SvgXml
+                                  xml={blackLocationIcon}
+                                  width={25}
+                                  height={25}
+                                  style={{alignSelf:'center'}}
+                                />
+                              </View>
+                              <View>
+                                {nowShortName()}
+                              </View>
+                              <TouchableWithoutFeedback onPress={()=>setIsVisible(true)}>
+                                <View>
+                                  <View style={{marginLeft: 10, borderRadius: 999, borderWidth: 1, width: 25, height: 25, justifyContent: 'center', alignItems: 'center', borderColor: '#B2CFFF'}} >
+                                    <SvgXml
+                                      xml={backButton}
+                                      width={15}
+                                      height={15}
+                                      rotation={90}
+                                    />
+                                  </View>
+                                </View>
+                              </TouchableWithoutFeedback>
+                            </View>
+                            {
+                              locations.map((location, index)=>{
+                                return (
+                                  <React.Fragment key={`location${index}`}>
+                                    {locationItem(location)}
+                                  </React.Fragment>
+                                )
+                              })
+                            }
+                            {locationSetting()}
+                          </View>
+                        </View>
+                      )
+                    }
+                    <View style={{flex: 1}}></View>
                   </View>
-                )
-              }
-              <View style={{flex: 1}}></View>
+                </View>
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                  <View style={{width: '90%'}}>
+                    <PlainInput {...shareText} onPressIn={()=>{setIsVisible(false)}}/>
+                  </View>
+                </View>
+              </View>
+              <View style={[{width: '100%', justifyContent: 'center', alignItems: 'center'}]}>
+                {
+                  shareList.map((i, idx) => {
+                    return (
+                      <React.Fragment key={`share${idx}`}>
+                        <ShareItem item={i}/>
+                      </React.Fragment>
+                    )
+                  })
+                }
+              </View>
+            </ScrollView>
+          </>
+        ) : (
+          <View style={{width: '100%', height: '80%', justifyContent: 'center', alignItems: 'center'}}>
+            <View>
+              <View style={{padding: 20}}>
+                <Text style={[styles.font, {fontSize: 20}]}>내가 사는 지역을 등록해야 이용이 가능합니다</Text>
+              </View>
+              <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <TouchableWithoutFeedback onPress={()=>{console.log(locations)}}>
+                  <Text style={[styles.font, {fontSize: 14, color: TEXT_SUB_COLOR}]}>지역 등록하러 가기</Text>
+                </TouchableWithoutFeedback>
+              </View>
             </View>
           </View>
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <View style={{width: '90%'}}>
-              <PlainInput {...shareText}/>
-            </View>
-          </View>
-        </View>
-        <View style={[{width: '100%', justifyContent: 'center', alignItems: 'center'}]}>
-          {
-            shareList.map((i, idx) => {
-              return (
-                <React.Fragment key={`share${idx}`}>
-                  <ShareItem item={i}/>
-                </React.Fragment>
-              )
-            })
-          }
-        </View>
-      </ScrollView>
+        )
+      }
+
       <TouchableWithoutFeedback
-          onPress={()=>{navigation.navigate('ShareChatList')}}
+        onPress={()=>{navigation.navigate('ShareChatList')}}
       >
         <View style={[{position: 'absolute', bottom: 80, alignSelf:'flex-end', flexDirection:'row', justifyContent:'center', paddingRight:20, paddingBottom:20}]}>
 

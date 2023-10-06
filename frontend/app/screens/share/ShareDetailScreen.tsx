@@ -7,20 +7,36 @@ import ShareIngredientItem from "@/components/ShareIngredientItem";
 import BasicBadge from "@/components/BasicBadge";
 import {useRoute} from "@react-navigation/native";
 import shareApi from "@/apis/shareApi";
+import memberApi from "@/apis/memberApi";
+import {useSelector} from "react-redux";
+import {RootState} from "@/reducers/reducers";
 
 const ShareDetailScreen = ({navigation}:any) => {
   const profileImageUrl = ''
   const route = useRoute();
   const [shareDetail, setShareDetail] = useState<any>();
-  const userProfileImageUrl = route?.params?.userProfileImageUrl
+  const userProfileImageUrl = route?.params?.userProfileImageUrl;
+  const [shareUserId, setShareUserId] = useState(0);
+  const {memberId} = useSelector((state: RootState) => state.userReducer)
 
   async function getDetail(){
     if (!route?.params?.sharePostId) return
     try {
       const res = await shareApi.getShareDetail({sharePostId: route.params.sharePostId});
       if (res.status === 200) {
-        // console.log(res.data.data);
         setShareDetail(res.data.data.response);
+        await getUserId(res.data.data.response.nickname);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function getUserId(nickname: string){
+    try {
+      const res = await memberApi.getMemberIdFromNick(nickname);
+      if (res.status === 200) {
+        setShareUserId(res.data.data.memberId);
       }
     } catch (err) {
       console.log(err);
@@ -43,7 +59,11 @@ const ShareDetailScreen = ({navigation}:any) => {
   }, [])
 
   return (
-    <ShareLayout title="나눔">
+    <ShareLayout
+      title="나눔"
+      optionTitle={shareUserId === memberId ? '삭제' : ''}
+      optionFunction={shareUserId === memberId ? () => {deletePost()} : ()=>{}}
+    >
       <View style={{flex: 1}}>
         <ScrollView>
           <View style={[{width: '100%', padding: 15}]}>
