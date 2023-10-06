@@ -56,7 +56,8 @@ const PlaceManage = ({memberId}) =>{
 
   async function removeLocation(idx: number) {
     try {
-      const res = await memberApi.postLocation(memberId, idx);
+      const res = await memberApi.deleteLocation(memberId, idx);
+      console.log(res);
       if (res?.data?.data?.status){
         const _locations = [...locations];
         _locations.splice(idx, 1);

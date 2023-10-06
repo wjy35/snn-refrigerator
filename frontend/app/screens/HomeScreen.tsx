@@ -23,11 +23,12 @@ import houseApi from "@/apis/houseApi";
 
 const HomeScreen = ({navigation}:any) => {
   const [recipeList, setRecipeList] = useState([]);
-  const { memberId } = useSelector((state:RootState) => state.userReducer)
+  const { memberId } = useSelector((state:RootState) => state.userReducer);
   const { houseCode, changed } = useSelector((state:RootState) => state.houseReducer);
-  const houseIngredients = useSelector((state:RootState) => state.houseReducer.houseIngredients)
+  const houseIngredients = useSelector((state:RootState) => state.houseReducer.houseIngredients);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState(0);
 
   function setChanged(bool: boolean){
     dispatch(setChangedAction(bool))
@@ -46,7 +47,7 @@ const HomeScreen = ({navigation}:any) => {
         dispatch(setHouseIngredientsAction(res.data.data.ingredients));
         // setIngredients(res.data.data.ingredients);
       }else{
-        console.log(res.data.message);
+        // console.log(res.data.message);
       }
     }catch (e){
       console.log(e);
@@ -71,7 +72,7 @@ const HomeScreen = ({navigation}:any) => {
         }
       } catch (err) {
         setLoading(false);
-        console.log(memberId);
+        // console.log(memberId);
         console.log('HomeScreen.tsx', err);
       }
     };
@@ -109,12 +110,30 @@ const HomeScreen = ({navigation}:any) => {
               {
                 houseIngredients.length > 0 ? (
                   <>
-                    <View style={{margin: 10}}>
-                      <Text style={[styles.font, {fontSize: 20}]}>빨리 소비해야 해요</Text>
-                    </View>
-                    <View>
-                      <MyIngredientList types={[0,2]} maxDate={7} houseIngredients={houseIngredients}/>
-                    </View>
+                    {
+                      status === 0 ? (
+                        <>
+                          <View style={{margin: 10}}>
+                            <Text style={[styles.font, {fontSize: 20}]}>빨리 소비해야 해요</Text>
+                          </View>
+                          <View>
+                            <MyIngredientList types={[0,2]} maxDate={7} houseIngredients={houseIngredients} optionalFunc={(num: number)=>{setStatus(num)}}/>
+                          </View>
+                        </>
+                      ) : (
+                        <>
+                          <View style={{margin: 10}}>
+                            <Text style={[styles.font, {fontSize: 20}]}>소비기한이 임박한 식재료가 없어요</Text>
+                          </View>
+                          <View style={{alignItems: 'center', justifyContent: 'center', width: '100%', height: '50%'}}>
+                            <TouchableWithoutFeedback onPress={()=>{navigation.navigate('RecipeList')}}>
+                              <Text style={[styles.font, {fontSize: 24}]}>레시피 추천 받으러 가기</Text>
+                            </TouchableWithoutFeedback>
+                          </View>
+                        </>
+                      )
+                    }
+
                   </>
                 ) : (
                   <>
@@ -123,7 +142,7 @@ const HomeScreen = ({navigation}:any) => {
                     </View>
                     <View style={{alignItems: 'center', justifyContent: 'center', width: '100%', height: '50%'}}>
                       <TouchableWithoutFeedback onPress={()=>{navigation.navigate('HouseAdd')}}>
-                        <Text style={[styles.font, {fontSize: 15}]}>냉장고 채우러 가기</Text>
+                        <Text style={[styles.font, {fontSize: 24}]}>냉장고 채우러 가기</Text>
                       </TouchableWithoutFeedback>
                     </View>
                   </>

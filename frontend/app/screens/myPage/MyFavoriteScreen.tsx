@@ -13,7 +13,7 @@ const MyFavoriteScreen = ({navigation}:any) => {
   const memberId = useSelector((state: RootState) => state.userReducer.memberId);
 
   useEffect(() => {
-    console.log(recipes);
+    // console.log(recipes);
     getFavoriteRecipe();
   }, [memberId]);
 

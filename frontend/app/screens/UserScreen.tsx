@@ -68,7 +68,7 @@ const UserScreen = ({title = '김석주', optionTitle, optionFunction}: props) =
   }, []);
 
   async function getRecipes() {
-    console.log(page, totalPage);
+    // console.log(page, totalPage);
     try {
       if (page > totalPage) return
       const res = await recipeApi.getOthersRecipe(id, memberId, page, size);

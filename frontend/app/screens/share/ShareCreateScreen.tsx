@@ -152,7 +152,7 @@ const ShareCreateScreen = ({navigation}:any) => {
           type: image.type,
           uri: image.uri,
         };
-        console.log(imageForm);
+        // console.log(imageForm);
         formData.append('imageFiles', imageForm);
       } catch (err) {
         console.log(err)
@@ -161,7 +161,7 @@ const ShareCreateScreen = ({navigation}:any) => {
 
     try{
       const res = await shareApi.postShareImage(postId, formData);
-      console.log('res', res);
+      // console.log('res', res);
       return res.data.data;
     } catch (err) {
       console.log(err);
@@ -211,10 +211,10 @@ const ShareCreateScreen = ({navigation}:any) => {
     try {
       const res = await shareApi.createShareWrite(inputData);
       if (res.status === 200){
-        console.log(res.data.data.sharePost);
+        // console.log(res.data.data.sharePost);
         const postId = res.data.data.sharePost.sharePostId;
         const imageRes = await getImageUrl(postId);
-        console.log('imageUrl', imageRes);
+        // console.log('imageUrl', imageRes);
         navigation.navigate('ShareList');
       }
     } catch (err) {

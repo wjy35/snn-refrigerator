@@ -40,7 +40,7 @@ const RecipeItem = ({item, navigation}:props) => {
             memberId: memberId,
           });
       if (res.status === 200){
-        console.log(res.data);
+        // console.log(res.data);
         setIsFavorite(!isFavorite);
       }
       setIsDisabled(false);

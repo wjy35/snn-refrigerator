@@ -40,7 +40,7 @@ const ShareChatListScreen = ({navigation}: any) => {
   }, []);
 
   function onToggle(currentChat){
-    console.log("current",currentChat)
+    // console.log("current",currentChat)
     setchatRoomList((prevChatRoomList:any[])=>{
       const newChatRoomList = [];
       prevChatRoomList.map((chatRoom) =>{
@@ -75,7 +75,7 @@ const ShareChatListScreen = ({navigation}: any) => {
         });
           return ()=>{
             client.disconnect(()=>{
-                console.log("disconnect")
+                // console.log("disconnect")
             })
           }
       }, []))

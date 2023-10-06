@@ -22,7 +22,7 @@ function CameraButton() {
       return;
     }
     //console.log('PickImage', res);
-    console.log('!');
+    // console.log('!');
     setResponse(res);
     setImageFile(res.assets[0].base64);
   };
@@ -43,9 +43,9 @@ function CameraButton() {
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         launchCamera(imagePickerOption, onPickImage);
-        console.log('Camera permission given');
+        // console.log('Camera permission given');
       } else {
-        console.log('Camera permission denied');
+        // console.log('Camera permission denied');
       }
     } catch (err) {
       console.warn(err);
@@ -65,8 +65,8 @@ function CameraButton() {
   const callGoogleVIsionApi = async (base64: String) => {
     let url: string =
       'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyC6QBRMhadBvm7vfy00XFPpWuoGK1WboXA';
-    console.log(url);
-    console.log(base64.substring(0, 20));
+    // console.log(url);
+    // console.log(base64.substring(0, 20));
     await fetch(url, {
       method: 'POST',
       body: JSON.stringify({
@@ -93,12 +93,12 @@ function CameraButton() {
     async function getIngredient() {
       if (extractText !== '') {
         try {
-          console.log('Trying to send');
+          // console.log('Trying to send');
           let extractResponse = await ingredientExtractionApi.extraction(
             extractText,
           );
           setIngredientList(extractResponse.data.data.data);
-          console.log(extractResponse.data.data.data);
+          // console.log(extractResponse.data.data.data);
         } catch (e) {
           console.log('err', e);
         }
