@@ -7,12 +7,19 @@ import ShareIngredientItem from "@/components/ShareIngredientItem";
 import BasicBadge from "@/components/BasicBadge";
 import {useRoute} from "@react-navigation/native";
 import shareApi from "@/apis/shareApi";
+import chatApi from "@/apis/chatApi";
+import chatRoomApi from "@/apis/chatRoomApi";
+import memberApi from "@/apis/memberApi";
+import {useSelector} from "react-redux";
+import {RootState} from "@/reducers/reducers";
 
 const ShareDetailScreen = ({navigation}:any) => {
   const profileImageUrl = ''
   const route = useRoute();
   const [shareDetail, setShareDetail] = useState<any>();
-  const userProfileImageUrl = route?.params?.userProfileImageUrl
+  const userProfileImageUrl = route?.params?.userProfileImageUrl;
+  const { memberId } = useSelector((state:RootState) => state.userReducer);
+  let [receiverMemberId,setReceiverMemberId] = useState<number>();
 
   async function getDetail(){
     if (!route?.params?.sharePostId) return
@@ -21,6 +28,7 @@ const ShareDetailScreen = ({navigation}:any) => {
       if (res.status === 200) {
         // console.log(res.data.data);
         setShareDetail(res.data.data.response);
+
       }
     } catch (err) {
       console.log(err);
@@ -34,6 +42,26 @@ const ShareDetailScreen = ({navigation}:any) => {
         navigation.goBack();
       }
     } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function moveSingleShareChatScreen(){
+    try{
+      const memberIdRes = await memberApi.getMemberIdFromNick(shareDetail.nickname);
+      const checkRes = await chatRoomApi.checkChatRoom(route.params.sharePostId,memberId);
+
+      if(checkRes.status == 200){
+        const chatRoomId = checkRes.data.data.chatRoom.chatRoomId;
+        navigation.navigate('SingleShareChat', {chatRoomId:chatRoomId});
+      }else if(checkRes.status == 202){
+        const res = await chatRoomApi.addChatRoom(route.params.sharePostId,memberId,memberIdRes.data.data.memberId);
+        if(res.status==201){
+          const chatRoomId = res.data.data.chatRoomId;
+          navigation.navigate('SingleShareChat', {chatRoomId:chatRoomId});
+        }
+      }
+    }catch (err){
       console.log(err);
     }
   }
@@ -126,7 +154,9 @@ const ShareDetailScreen = ({navigation}:any) => {
           </View>
         </ScrollView>
         <View style={{position: 'absolute', bottom: 10, justifyContent: 'center', alignItems: 'center', width: '100%'}}>
-          <BasicBadge color={MAIN_COLOR} fill={false} name={'나눔 예약'} onPress={()=>{}}/>
+          <BasicBadge color={MAIN_COLOR} fill={false} name={'나눔 채팅'} onPress={()=>{
+            moveSingleShareChatScreen();
+          }}/>
         </View>
       </View>
     </ShareLayout>
