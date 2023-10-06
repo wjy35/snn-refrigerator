@@ -69,7 +69,7 @@ const SingleShareChatScreen = ({navigation}: any) => {
             try {
                 let res = await chatApi.chatList(chatRoomId);
                 if (res.status === 200) {
-                    console.log("res", res);
+                    // console.log("res", res);
                     setChatList(res.data.data.chatList.reverse());
                 }
             } catch (e) {
@@ -119,7 +119,7 @@ const SingleShareChatScreen = ({navigation}: any) => {
 
             return () => {
                 stompClient.disconnect(() => {
-                    console.log("disconnect")
+                    // console.log("disconnect")
                 })
             }
         }, []));

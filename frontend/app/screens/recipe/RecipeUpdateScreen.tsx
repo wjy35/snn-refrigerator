@@ -114,7 +114,7 @@ const RecipeUpdateScreen = ({navigation}:any) => {
 
   function onChangeAmount(idx: number, newText: string){
     ingredients[idx].amount = newText;
-    console.log(ingredients);
+    // console.log(ingredients);
   }
 
   function addContent(){

@@ -25,7 +25,7 @@ const ShareListScreen = ({navigation}:any) => {
   const {memberId} = useSelector((state:RootState)=>state.userReducer);
   const locations = useSelector((state: RootState)=>state.userReducer.locations);
   const [nowLocation, setNowLocation] = useState<any>();
-  const items = 5;
+  const items = 20;
   const [page, setPage] = useState(0);
 
   function goShareCreate(){
@@ -37,7 +37,7 @@ const ShareListScreen = ({navigation}:any) => {
     try {
       const res = await shareApi.getShareList({ locationId: nowLocation.locationId, items: items, pageNum: page, keyword: shareText.text});
       if (res.status === 200){
-        console.log(res);
+        // console.log(res);
         setShareList(res.data.data.response.sharePostResponses);
       }
     } catch (err) {
@@ -217,7 +217,7 @@ const ShareListScreen = ({navigation}:any) => {
                 <Text style={[styles.font, {fontSize: 20}]}>내가 사는 지역을 등록해야 이용이 가능합니다</Text>
               </View>
               <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                <TouchableWithoutFeedback onPress={()=>{console.log(locations)}}>
+                <TouchableWithoutFeedback onPress={()=>{navigation.navigate('AccountSetting')}}>
                   <Text style={[styles.font, {fontSize: 14, color: TEXT_SUB_COLOR}]}>지역 등록하러 가기</Text>
                 </TouchableWithoutFeedback>
               </View>

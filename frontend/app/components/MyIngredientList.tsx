@@ -5,20 +5,39 @@ import tw from 'twrnc';
 import {useDispatch, useSelector} from "react-redux";
 import {setChangedAction, setHouseIngredientsAction} from "@/actions/houseAction";
 
-const MyIngredientList = ({types,maxDate,houseIngredients}:any) => {
+interface props {
+  types: any,
+  maxDate: any,
+  houseIngredients: any,
+  optionalFunc?: Function,
+}
+
+const MyIngredientList = ({types,maxDate,houseIngredients, optionalFunc}:props) => {
   const dispatch = useDispatch();
+  const filteredList = houseIngredients.filter((i)=>{
+    // @ts-ignore
+    if (1+ Math.floor((new Date(i.lastDate).getTime() - new Date()) / (1000 * 60 * 60 * 24))<maxDate&&
+      types.includes(i.storageType)){
+      return i
+    }
+  })
 
   function setChanged(bool: boolean){
     dispatch(setChangedAction(bool))
   }
 
+  useEffect(()=>{
+    if (filteredList.length === 0) {
+      optionalFunc&&optionalFunc(1);
+    } else {
+      optionalFunc&&optionalFunc(0);
+    }
+  }, [filteredList])
+
   return (
     <View style={tw`w-full flex flex-wrap flex-row`}>
-      {houseIngredients.map((i) => {
+      {filteredList.map((i) => {
         return (
-            // @ts-ignore
-            1+ Math.floor((new Date(i.lastDate).getTime() - new Date()) / (1000 * 60 * 60 * 24))<maxDate&&
-            types.includes(i.storageType)&&
           <React.Fragment key={`ingredient ${i.houseIngredientId}`}>
             <SingleIngredient
               houseIngredientId={i.houseIngredientId}
