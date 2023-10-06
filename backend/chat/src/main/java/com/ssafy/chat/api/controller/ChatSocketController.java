@@ -30,8 +30,10 @@ public class ChatSocketController {
                 .memberId(chatPayload.getSendMemberId())
                 .content(chatPayload.getContent())
                 .build();
+        if(!chatPayload.getContent().equals("")){
+            chatSaveService.save(chatPayload.getChatRoomId(), chatEntity);
+        }
 
-        chatSaveService.save(chatPayload.getChatRoomId(), chatEntity);
         ChatPublish chatPublish = ChatPublish
                 .builder()
                 .chatRoomId(chatPayload.getChatRoomId())
