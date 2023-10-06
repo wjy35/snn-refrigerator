@@ -406,9 +406,9 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }//OK
 
-    @PutMapping("/{memberId}/profile-image")
+    @PutMapping(path = "/{memberId}/profile-image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     @JsonView(ResponseViews.NoRequest.class)
-    public ResponseEntity<Response> modifyProfileImageProfile(@PathVariable Long memberId, @RequestParam MultipartFile profileImage) throws Exception {
+    public ResponseEntity<Response> modifyProfileImageProfile(@PathVariable Long memberId, @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) throws Exception {
         Member member = memberService.findByMemberId(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
         String profileImageFilename = member.getProfileImageFilename();
@@ -500,4 +500,21 @@ public class MemberController {
                 build();
         return ResponseEntity.ok(response);
     }//OK
+
+    @GetMapping("/nickname/{nickname}")
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<Response> getMemberIdFromNickname(@PathVariable String nickname){
+        Map<String, Object> data = new HashMap<>();
+
+        Member member = memberService.findByNickname(nickname).orElseThrow();
+
+        data.put("memberId", member.getMemberId());
+
+        Response response = Response.
+                builder().
+                message("OK").
+                data(data).
+                build();
+        return ResponseEntity.ok(response);
+    }
 }
