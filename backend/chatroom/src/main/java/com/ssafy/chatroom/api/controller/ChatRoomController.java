@@ -61,12 +61,11 @@ public class ChatRoomController {
 
         for(ChatRoomEntity chatRoomEntity : chatRoomEntityList){
             ChatDto chatDto = viewCurrentChatService.viewByChatRoomId(chatRoomEntity.getChatRoomId());
-            System.out.println("chatDto = " + chatDto);
             chatRoomSearchParamList.add(ChatRoomMapper.INSTANCE.toChatRoomSearchParam(
                     chatRoomEntity,
                     chatDto,
                     chatShareBoardSearchService.searchByShareBoardId(chatRoomEntity.getSharePostId()),
-                    chatMemberSearchService.searchByMemberId(memberId==chatRoomEntity.getReceiverMemberId()? chatRoomEntity.getSenderMemberId(): chatRoomEntity.getSenderMemberId())
+                    chatMemberSearchService.searchByMemberId(memberId==chatRoomEntity.getReceiverMemberId()? chatRoomEntity.getSenderMemberId(): chatRoomEntity.getReceiverMemberId())
             ));
         }
 
