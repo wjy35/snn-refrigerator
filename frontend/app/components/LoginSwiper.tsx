@@ -1,6 +1,6 @@
 import React from 'react';
 import Swiper from 'react-native-swiper';
-import {StyleSheet, Text, View} from "react-native";
+import {Image, StyleSheet, Text, View} from "react-native";
 import {styles} from "@/styles/styles";
 
 const loginStyles = StyleSheet.create({
@@ -23,6 +23,8 @@ const loginStyles = StyleSheet.create({
   },
   imageContainer: {
     flex: 3,
+    flexDirection:'row',
+    alignItems:'flex-end'
   },
   itemContainer: {
     width: '100%',
@@ -41,7 +43,11 @@ const LoginSwiper = () => {
     <>
       <Swiper loop={true} showsPagination={false} autoplay={true}>
         <View style={loginStyles.itemContainer}>
-          <View style={loginStyles.imageContainer}>
+          <View style={[loginStyles.imageContainer]}>
+            <Image
+                source={require('@/assets/images/swipe1.png')}
+                style={{flex:1,marginHorizontal:30,aspectRatio:'1/1',}}
+            />
           </View>
           <View style={loginStyles.bodyContainer}>
             <Text style={[styles.font, loginStyles.title]}>식재료 유통기한 관리</Text>
@@ -55,6 +61,10 @@ const LoginSwiper = () => {
         </View>
         <View style={loginStyles.itemContainer}>
           <View style={loginStyles.imageContainer}>
+            <Image
+                source={require('@/assets/images/swipe2.png')}
+                style={{flex:1,marginHorizontal:30,aspectRatio:'1/1',}}
+            />
           </View>
           <View style={loginStyles.bodyContainer}>
             <Text style={[styles.font, loginStyles.title]}>레시피 추천</Text>
@@ -68,6 +78,10 @@ const LoginSwiper = () => {
         </View>
         <View style={loginStyles.itemContainer}>
           <View style={loginStyles.imageContainer}>
+            <Image
+                source={require('@/assets/images/swipe3.png')}
+                style={{flex:1,marginHorizontal:30,aspectRatio:'1/1',}}
+            />
           </View>
           <View style={loginStyles.bodyContainer}>
             <Text style={[styles.font, loginStyles.title]}>환경을 위한 나눔</Text>
