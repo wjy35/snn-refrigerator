@@ -13,6 +13,8 @@ import SingleChatContent from "@/components/SingleChatContent";
 import ShareItem from "@/components/ShareItem";
 import BasicBadge from "@/components/BasicBadge";
 import {ALERT_COLOR, MAIN_COLOR} from "@/assets/colors/colors";
+import shareStatusApi from "@/apis/shareStatusApi";
+import chatRoomApi from "@/apis/chatRoomApi";
 
 
 
@@ -30,7 +32,38 @@ const SingleShareChatScreen = ({navigation}: any) => {
     const chatRoomId = route.params.chatRoomId;
     const receiveMemberId = route.params.receiveMemberId;
     const {memberId} = useSelector((state: RootState) => state.userReducer);
-    const type = 2
+    const [shareStatus,setShareStatus] = useState<number>();
+
+    const getShareStatus = async () => {
+        try{
+            let res = await shareStatusApi.shareStatus({chatRoomId,memberId});
+            if (res.status === 200){
+                console.log("res", res);
+                setShareStatus(res.data.data.shareStatus);
+            }
+        }catch (e){
+            console.log(e);
+        }
+    }
+
+    const updateShareStatus = async (shareStatus) => {
+        try{
+            let res = await shareStatusApi.updateShareStatus({chatRoomId,memberId,shareStatus});
+            if (res.status === 200){
+                const chatPayload = {
+                    "chatRoomId": `${chatRoomId}`,
+                    "sendMemberId": `${memberId}`,
+                    "receiveMemberId": `${receiveMemberId}`,
+                    "content":""
+                };
+                client.send(`/`,JSON.stringify(chatPayload));
+            }
+        }catch (e){
+            console.log(e);
+        }
+    }
+
+
     useEffect(() => {
         const getChatList = async () => {
             try {
@@ -43,6 +76,7 @@ const SingleShareChatScreen = ({navigation}: any) => {
                 console.log(e);
             }
         }
+        getShareStatus();
         getChatList();
     }, []);
 
@@ -69,7 +103,12 @@ const SingleShareChatScreen = ({navigation}: any) => {
                         `/topic/${memberId}/${chatRoomId}`,
                         (res) => {
                             let currentChat = JSON.parse(res.body);
-                            onToggle(currentChat);
+                            console.log("@@@@@@@2CheckPoint",currentChat);
+                            if(currentChat.content){
+                                onToggle(currentChat);
+                            }else{
+                                getShareStatus();
+                            }
                         });
                 },
                 (error) => {
@@ -97,6 +136,7 @@ const SingleShareChatScreen = ({navigation}: any) => {
         client.send(`/`,JSON.stringify(chatPayload));
     }
 
+
     return (
         <View style={[styles.layout]}>
             <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
@@ -106,43 +146,59 @@ const SingleShareChatScreen = ({navigation}: any) => {
                         {/*<ShareItem item={shareDetail}/>*/}
                     </View>
                     {
-                        type === 0 && (
+                        shareStatus === 0 && (
                             <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                                 <View style={{paddingHorizontal: 5}}>
-                                    <Text style={[styles.font, {fontSize: 14}]}>상대방이 나눔 확정을 기다리는 중입니다</Text>
+                                    <Text style={[styles.font, {fontSize: 14}]}>나눔 확정 0/2</Text>
                                 </View>
                                 <View>
-                                    <BasicBadge color={MAIN_COLOR} fill={false} name={'나눔 확정'} onPress={()=>{}}/>
+                                    <BasicBadge color={MAIN_COLOR} fill={false} name={'확정'} onPress={()=>{
+                                        updateShareStatus(true);
+                                    }}/>
                                 </View>
                                 <View>
                                     <BasicBadge color={ALERT_COLOR} fill={false} name={'거절'} onPress={()=>{}}/>
                                 </View>
                             </View>
-                      )
+                        )
                     }
                     {
-                        type === 1 && (
-                            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                                <View style={{paddingHorizontal: 5}}>
-                                    <Text style={[styles.font, {fontSize: 14}]}>나눔이 완료되면 나눔완료 버튼을 눌러주세요</Text>
-                                </View>
-                                <View>
-                                    <BasicBadge color={MAIN_COLOR} fill={false} name={'나눔 완료'} onPress={()=>{}}/>
-                                </View>
-                            </View>
-                      )
-                    }
-                    {
-                        type === 2 && (
+                        shareStatus === 1 && (
                         <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                             <View style={{paddingHorizontal: 5}}>
-                                <Text style={[styles.font, {fontSize: 16}]}>상대방의 나눔 확정을 기다리는 중입니다</Text>
+                                <Text style={[styles.font, {fontSize: 16}]}>나눔 확정 1/2</Text>
                             </View>
                             <View>
-                                <BasicBadge color={ALERT_COLOR} fill={false} name={'나눔 취소'} onPress={()=>{}}/>
+                                <BasicBadge color={ALERT_COLOR} fill={false} name={'취소'} onPress={()=>{
+                                    updateShareStatus(false);
+                                }}/>
                             </View>
                         </View>
                       )
+                    }
+                    {
+                        shareStatus === 2 && (
+                            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                <View style={{paddingHorizontal: 5}}>
+                                    <Text style={[styles.font, {fontSize: 16}]}>나눔 확정 1/2</Text>
+                                </View>
+                                <View>
+                                    <BasicBadge color={MAIN_COLOR} fill={false} name={'확정'} onPress={()=>{updateShareStatus(true)}}/>
+                                </View>
+                                <View>
+                                    <BasicBadge color={ALERT_COLOR} fill={false} name={'거절'} onPress={()=>{}}/>
+                                </View>
+                            </View>
+                        )
+                    }
+                    {
+                        shareStatus === 3 && (
+                            <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                                <View style={{paddingHorizontal: 5}}>
+                                    <Text style={[styles.font, {fontSize: 14}]}>나눔 확정 완료</Text>
+                                </View>
+                            </View>
+                        )
                     }
                 </View>
                 <View
