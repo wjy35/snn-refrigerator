@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import {FlatList, ScrollView, Text, TextInput, TouchableWithoutFeedback, View} from 'react-native';
 import Progressbar from "@/components/Progressbar";
 import CalendarComponent from "@/components/CalendarComponent";
+import {styles} from "@/styles/styles";
+import {TEXT_COLOR, TEXT_SUB_COLOR} from "@/assets/colors/colors";
 
 
 interface props {
@@ -26,6 +28,7 @@ const HouseAddDate = ({textList, ingredients, setNow, now, onChange}: props) => 
       _selected[i.lastDate] = {dots: [cool]};
     });
     setSelected(_selected);
+    // console.log(ingredients);
   }, [ingredients])
 
   return (
@@ -37,23 +40,35 @@ const HouseAddDate = ({textList, ingredients, setNow, now, onChange}: props) => 
             <Progressbar progress={3} total={3} textList={textList}/>
           </View>
         </View>
+        <Text style={[styles.font, {color: TEXT_COLOR, fontSize:20, textAlign:'center', width:'100%', marginVertical:15}]}>날짜를 선택하세요</Text>
         <View>
           <CalendarComponent selectedList={selected} selectedDate={selectedDate} setSelectedDate={(newDate)=>setSelectedDate(newDate)}/>
         </View>
-        <View style={{flex: 1, marginTop: 20}}>
+        <View style={{flex: 1}}>
           <View style={{flexDirection: 'row'}}>
-            <View style={{width: '60%'}}>
-              <Text>전체</Text>
-            </View>
-            <View style={{width: '40%'}}>
-              <Text>{selectedDate}</Text>
-            </View>
+
+            {
+                selectedDate&&(
+                    <Text style={[styles.font, {color: TEXT_COLOR, fontSize:20, textAlign:'center', width:'100%', marginVertical:10}]}>소비기한이 {selectedDate}인 재료를 선택하세요</Text>
+                )
+            }
           </View>
           <View style={{flexDirection: 'row', flex: 1}}>
-            <View style={{width: '60%'}}>
+            <View style={{width: '100%'}}>
+              <View style={[{borderWidth:1,borderTopLeftRadius:20,borderTopRightRadius:20,width: 'auto', height: 35, alignItems:'center', marginHorizontal:10, flexDirection: 'row', justifyContent: 'space-between'}]}>
+
+                <View style={{flex:3}}>
+                  <Text style={[styles.font, {color: TEXT_COLOR, fontSize:25, textAlign:'center', width:'100%'}]}>재료명</Text>
+                </View>
+                <View style={{flex:1}}>
+                </View>
+                <View style={{flex:3}}>
+                  <Text style={[styles.font, {color: TEXT_COLOR, fontSize:25, textAlign:'center', width:'100%'}]}>소비기한</Text>
+                </View>
+              </View>
               <FlatList
                 nestedScrollEnabled
-                data={ingredients}
+                data={ingredients.filter((item)=>item.storageType!==1)}
                 renderItem={(item)=>(
                   <TouchableWithoutFeedback onPress={()=>{
                     if (selectedDate !== ''){
@@ -61,12 +76,14 @@ const HouseAddDate = ({textList, ingredients, setNow, now, onChange}: props) => 
                     }
                     onChange();
                   }}>
-                    <View style={[{borderWidth: 1, width: '100%', height: 30, flexDirection: 'row', justifyContent: 'space-between'}]}>
-                      <View>
-                        <Text>{item.item.ingredientName}</Text>
+                    <View style={[{borderWidth: 1, borderTopWidth: 0,borderBottomColor:TEXT_SUB_COLOR, width: 'auto', height: 35, alignItems:'center', marginHorizontal:10, flexDirection: 'row', justifyContent: 'space-between'}]}>
+                      <View style={{flex:3}}>
+                        <Text style={[styles.font, {color: TEXT_COLOR, fontSize:20, textAlign:'center', width:'100%'}]}>{item.item.ingredientName}</Text>
                       </View>
-                      <View>
-                        <Text>{item.item.lastDate}</Text>
+                      <View style={{flex:1}}>
+                      </View>
+                      <View style={{flex:3}}>
+                        <Text style={[styles.font, {color: TEXT_COLOR, fontSize:20, textAlign:'center', width:'100%'}]}>{item.item.lastDate}</Text>
                       </View>
                     </View>
                   </TouchableWithoutFeedback>
@@ -74,32 +91,12 @@ const HouseAddDate = ({textList, ingredients, setNow, now, onChange}: props) => 
                 keyExtractor={(item)=>{
                   return String(item.ingredientName);
                 }}
+                ListFooterComponent={
+                  <View style={[{margin:0,borderWidth:1,borderBottomLeftRadius:20,borderBottomRightRadius:20,width: 'auto', height: 5, alignItems:'center', marginHorizontal:10, flexDirection: 'row', justifyContent: 'space-between'}]}>
+                  </View>}
               />
             </View>
-            {
-              selectedDate&&(
-                <View style={{width: '40%'}}>
-                  <FlatList
-                    nestedScrollEnabled
-                    data={ingredients}
-                    renderItem={(item)=>{
-                      if (item.item.lastDate === selectedDate){
-                        return (
-                          <View style={{borderWidth: 1, width: '100%', height: 30}}>
-                            <Text>
-                              <Text>{item.item.ingredientName}</Text>
-                            </Text>
-                          </View>
-                        );
-                      }
-                    }}
-                    keyExtractor={(item)=>{
-                      return String(item.ingredientName);
-                    }}
-                  />
-                </View>
-              )
-            }
+
           </View>
         </View>
       {/*</ScrollView>*/}

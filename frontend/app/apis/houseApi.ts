@@ -14,7 +14,7 @@ const PrivateHouseApi = axios.create({
 })
 
 interface props {
-  houseIngredientId?: string;
+  houseIngredientId?: number;
   storageType?: number;
   lastDate?: string;
   houseCode?: string;

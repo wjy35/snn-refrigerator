@@ -12,8 +12,10 @@ import LoginSwiper from '@/components/LoginSwiper';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import memberApi from '@/apis/memberApi';
 import {useDispatch} from "react-redux";
-import {setMemberIdAction} from "@/actions/userAction";
+import {setHatesAction, setLocationsAction, setMemberIdAction} from "@/actions/userAction";
 import {setHouseCodeAction} from "@/actions/houseAction";
+import messaging from "@react-native-firebase/messaging";
+import alarmApi from "@/apis/alarmApi";
 
 interface props {
   accessToken: string;
@@ -21,36 +23,46 @@ interface props {
 
 const LogInScreen = ({navigation}: any) => {
   const dispatch = useDispatch();
-  const [privateInfo, setPrivateInfo] = useState({});
 
   async function getKakaoId(token: string){
     try {
       const res = await memberApi.getKaKaoInfo(token);
       if (res.status === 200) {
         dispatch(setMemberIdAction(res.data.data.kakaoMemberInfo.id));
-        setPrivateInfo({
+        const memberId = res.data.data.kakaoMemberInfo.id;
+        const memberFcmToken = await messaging().getToken();
+        dispatch(setMemberIdAction(memberId));
+        const saveRes = await alarmApi.saveMemberFcmToken({memberId,memberFcmToken});
+        if(saveRes.status === 200){
+          // console.log("[Device Save Response]",saveRes);
+          // console.log("[memberId]",memberId);
+          // console.log("[memberFcmToken]",memberFcmToken);
+        }
+        return {
           email: res.data.data.kakaoMemberInfo.email,
           birthday: res.data.data.kakaoMemberInfo.birthday,
           id: res.data.data.kakaoMemberInfo.id,
-        });
-        return res.data.data.kakaoMemberInfo.id;
+        };
       }
     } catch (err) {
       console.log(err);
     }
   }
 
-  async function checkMemberExists(memberId : bigint){
+  async function checkMemberExists(info: any){
     try {
-      const res = await memberApi.memberDetail(memberId);
+      const res = await memberApi.memberDetail(info.id);
       if (res.status === 200) {
+        dispatch(setLocationsAction(res.data.data.memberInfo.placeList));
+        // console.log(res.data.data.placeList);
         dispatch(setHouseCodeAction(res.data.data.memberInfo.houseCode));
+        dispatch(setHatesAction(res.data.data.memberInfo.hateIngredientList));
         navigation.replace('Home'); //회원 정보 다 저장한 후엔 홈 화면으로.
-      } else {
-        navigation.replace('Signup', {...privateInfo}); //아니라면 회원가입.
       }
     } catch (err) {
-      console.log(err);
+      if (err.response.status === 404) {
+        navigation.replace('SignUp', {...info});
+      }
     }
   }
 
@@ -61,8 +73,8 @@ const LogInScreen = ({navigation}: any) => {
           // await AsyncStorage.setItem('accessToken', result.accessToken);
           // await AsyncStorage.setItem('idToken', result.idToken);
           // await AsyncStorage.setItem('refreshToken', result.refreshToken);
-          const id = await getKakaoId(result.accessToken);
-          await checkMemberExists(id);
+          const privateInfo = await getKakaoId(result.accessToken);
+          await checkMemberExists(privateInfo);
         })
         .catch(error => {
           if (error.code === 'E_CANCELLED_OPERATION') {
@@ -100,7 +112,7 @@ const LogInScreen = ({navigation}: any) => {
               resizeMode={'contain'}
             />
           </TouchableWithoutFeedback>
-          <Button title='홈으로(test)' onPress={()=>navigation.replace('Home')}/>
+          {/*<Button title='홈으로(test)' onPress={()=>navigation.replace('Home')}/>*/}
         </View>
       </ImageBackground>
     </View>

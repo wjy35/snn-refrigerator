@@ -12,7 +12,7 @@ import {
 import {styles} from "@/styles/styles";
 import {MAIN_COLOR} from "@/assets/colors/colors";
 import {SvgXml} from "react-native-svg";
-import {closeBlackIcon} from "@/assets/icons/icons";
+import {closeBlackIcon, playIcon, stopIcon} from "@/assets/icons/icons";
 import RNFS from 'react-native-fs';
 import AudioRecord from 'react-native-audio-record';
 
@@ -141,16 +141,36 @@ const GetSpeechFrom = ({setIsVisible, getIngredient}: props) => {
               />
             </TouchableWithoutFeedback>
           </View>
-          <TouchableWithoutFeedback onPress={startRecording}>
-            <View style={{height: 60, marginHorizontal: 12, marginTop: 20, borderWidth: 1, padding: 10, borderRadius: 16, justifyContent: 'center'}}>
-              <Text style={[styles.font]}>음성 녹화 시작하기</Text>
-            </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback onPress={stopRecording}>
-            <View style={{height: 60, marginHorizontal: 12, marginTop: 5, borderWidth: 1, padding: 10, borderRadius: 16, justifyContent: 'center'}}>
-              <Text style={[styles.font]}>음성 녹화 종료하기</Text>
-            </View>
-          </TouchableWithoutFeedback>
+          {
+            isRecording ? (
+
+              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <TouchableWithoutFeedback onPress={stopRecording}>
+                  <SvgXml
+                    xml={stopIcon}
+                    width={50}
+                    height={50}
+                  />
+                </TouchableWithoutFeedback>
+                <View style={{padding: 10}}>
+                  <Text style={[styles.font, {fontSize: 20}]}>녹음 종료하기</Text>
+                </View>
+              </View>
+            ) : (
+              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <TouchableWithoutFeedback onPress={startRecording}>
+                  <SvgXml
+                    xml={playIcon}
+                    width={50}
+                    height={50}
+                  />
+                </TouchableWithoutFeedback>
+                <View style={{padding: 10}}>
+                  <Text style={[styles.font, {fontSize: 20}]}>녹음 시작하기</Text>
+                </View>
+              </View>
+            )
+          }
         </View>
       </View>
     </>

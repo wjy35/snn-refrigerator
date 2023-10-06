@@ -7,6 +7,7 @@ import AutoCompleteInput from '@/components/AutoCompleteInput';
 import useInput from '@/hooks/useInput';
 import ingredientAutocompleteApi from '@/apis/ingredientAutocompleteApi';
 import memberApi from '@/apis/memberApi';
+import {ALERT_COLOR, WARN_COLOR} from "@/assets/colors/colors";
 
 function HateIngredient({memberId}) {
   const [excludeIngredientList, setExcludeIngredientList] = useState<any[]>([]);
@@ -15,10 +16,14 @@ function HateIngredient({memberId}) {
 
   useEffect(() => {
     const init = async () => {
-      console.log(memberId);
-      const res = await memberApi.memberHate(memberId);
-      console.log(res.data.data);
-      setIngredients(() => res.data.data.ingredient);
+      try {
+        const res = await memberApi.memberHate(memberId);
+        if (res.status === 200) {
+          setIngredients(() => res.data.data.ingredient);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     };
     init();
   }, []);
@@ -35,8 +40,7 @@ function HateIngredient({memberId}) {
   };
 
   const excludeIngredient = useInput({
-    placeholder: '검색',
-    title: '제외 식재료 관리',
+    placeholder: '식재료 검색',
     nowNum: 3,
     onChange: checkExcludeIngredient,
   });
@@ -49,69 +53,62 @@ function HateIngredient({memberId}) {
     });
   }
 
-  function onPressIn(nowNum: number) {
-    setNow(nowNum);
-  }
-
-  //TODO: ingredient 등록이 되지 않음.
-
   function onSelectIngredient(item: any) {
-    console.log(item);
     const execute = async () => {
       if (checkDuplicateIngredient(item)) {
-        const ingredientId = item.ingredientId;
-        const res = await memberApi.addMemberHate(memberId, ingredientId);
-        console.log(res.data.data);
-        if (res.status === 200) {
-          setIngredients([...ingredients, {...item}]);
+        try {
+          const res = await memberApi.addMemberHate(memberId, item.ingredientInfoId);
+          if (res.status === 200) {
+            setIngredients([...ingredients, {...item}]);
+          }
+        } catch (err) {
+          console.log(err);
         }
       }
     };
     execute();
   }
 
-  function onBlurIngredient() {
-    excludeIngredient.reset();
-    setExcludeIngredientList([]);
-  }
-
   async function removeIngredient(idx: number) {
-    const res = await memberApi.deleteMemberHate(memberId, idx);
-    if (res.status !== 200) {
-      return;
+    try {
+      const res = await memberApi.deleteMemberHate(memberId, idx);
+      if (res.status === 200) {
+        const _ingredients = [...ingredients];
+        _ingredients.splice(idx, 1);
+        setIngredients(_ingredients);
+        return;
+      }
+    } catch (err) {
+      console.log(err);
     }
-    const _ingredients = [...ingredients];
-    _ingredients.splice(idx, 1);
-    setIngredients(_ingredients);
   }
-  //TODO: onSelectIngredient가 작동을 하지 않음.
   return (
-    <View style={{width: '90%'}}>
-      <AutoCompleteInput
-        {...excludeIngredient}
-        textList={excludeIngredientList}
-        onPressIn={onPressIn}
-        onBlur={onBlurIngredient}
-        keyValue="ingredientInfoId"
-        name="ingredientName"
-        onSelect={onSelectIngredient}
-      />
-      <View>
-        <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
-          {ingredients.map((i, idx) => {
-            return (
-              <React.Fragment key={`${i.ingredientName}${idx}`}>
-                <BasicBadge
-                  color="#3093EF"
-                  name={i.ingredientName}
-                  icon={closeIcon}
-                  onPress={() => {
-                    removeIngredient(idx);
-                  }}
-                />
-              </React.Fragment>
-            );
-          })}
+    <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{}}>
+        <AutoCompleteInput
+          {...excludeIngredient}
+          textList={excludeIngredientList}
+          keyValue="ingredientInfoId"
+          name="ingredientName"
+          onSelect={onSelectIngredient}
+        />
+        <View>
+          <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+            {ingredients.map((i, idx) => {
+              return (
+                <React.Fragment key={`${i.ingredientName}${idx}`}>
+                  <BasicBadge
+                    color='red'
+                    name={i.ingredientName}
+                    icon={closeIcon}
+                    onPress={() => {
+                      removeIngredient(idx);
+                    }}
+                  />
+                </React.Fragment>
+              );
+            })}
+          </View>
         </View>
       </View>
     </View>

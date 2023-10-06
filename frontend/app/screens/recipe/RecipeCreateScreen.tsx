@@ -8,7 +8,7 @@ import useInput from "@/hooks/useInput";
 import recipeApi from "@/apis/recipeApi";
 import {useSelector} from "react-redux";
 import {RootState} from "@/reducers/reducers";
-import {Text, ToastAndroid, TouchableWithoutFeedback, View} from "react-native";
+import {ActivityIndicator, Text, ToastAndroid, TouchableWithoutFeedback, View} from "react-native";
 import {closeBlackIcon, closeIcon} from "@/assets/icons/icons";
 import {SvgXml} from "react-native-svg";
 import {MAIN_COLOR} from "@/assets/colors/colors";
@@ -27,6 +27,7 @@ const RecipeCreateScreen = ({navigation}:any) => {
   const [image, setImage] = useState<any>();
   const {memberId} = useSelector((state:RootState)=>state.userReducer);
   const [isVisible, setIsVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function onToast(text: string){
     ToastAndroid.showWithGravity(
@@ -151,7 +152,7 @@ const RecipeCreateScreen = ({navigation}:any) => {
     };
 
     try {
-
+      setLoading(true);
       const formData = new FormData();
       formData.append('recipeImage', recipeImage);
       formData.append('memberId', memberId);
@@ -162,10 +163,11 @@ const RecipeCreateScreen = ({navigation}:any) => {
 
       const res = await recipeApi.createRecipe(inputData);
       if (res.status === 200){
-        console.log('성공');
+        setLoading(false);
         navigation.goBack();
       }
     } catch (err) {
+      setLoading(false);
       console.log('RecipeCreateScreen',err);
     }
   }
@@ -176,37 +178,46 @@ const RecipeCreateScreen = ({navigation}:any) => {
 
   return (
     <RecipeLayout title="레시피" optionTitle="등록" optionFunction={createRecipe}>
-      <ProgressPage>
-        <RecipeCreateBasicInfo
-          textList={textList}
-          setRecipeInfo={changeInfo}
-          setIsVisible={()=>setIsVisible(true)}
-          image={image}
-        />
-        <RecipeCreateIngredientInfo
-          textList={textList}
-          ingredients={ingredients}
-          addIngredient={addIngredient}
-          deleteIngredient={deleteIngredient}
-          foodName={recipeInfo.foodName&&recipeInfo.foodName}
-          serving={recipeInfo.serving&&recipeInfo.serving}
-          editIngredient={editIngredientAmount}
-        />
-        <RecipeCreateCookInfo
-          textList={textList}
-          content={content}
-          addContent={addContent}
-          deleteContent={deleteContent}
-          editContent={editContent}
-          recipeInfo={recipeInfo}
-        />
-      </ProgressPage>
       {
-        isVisible && (
-          <GetImageFrom getImage={getImage} setIsVisible={()=>setIsVisible(false)}/>
+        loading ? (
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ActivityIndicator size="large"/>
+          </View>
+        ) : (
+          <>
+            <ProgressPage>
+              <RecipeCreateBasicInfo
+                textList={textList}
+                setRecipeInfo={changeInfo}
+                setIsVisible={()=>setIsVisible(true)}
+                image={image}
+              />
+              <RecipeCreateIngredientInfo
+                textList={textList}
+                ingredients={ingredients}
+                addIngredient={addIngredient}
+                deleteIngredient={deleteIngredient}
+                foodName={recipeInfo.foodName&&recipeInfo.foodName}
+                serving={recipeInfo.serving&&recipeInfo.serving}
+                editIngredient={editIngredientAmount}
+              />
+              <RecipeCreateCookInfo
+                textList={textList}
+                content={content}
+                addContent={addContent}
+                deleteContent={deleteContent}
+                editContent={editContent}
+                recipeInfo={recipeInfo}
+              />
+            </ProgressPage>
+            {
+              isVisible && (
+                <GetImageFrom getImage={getImage} setIsVisible={()=>setIsVisible(false)}/>
+              )
+            }
+          </>
         )
       }
-
     </RecipeLayout>
   )
 }
