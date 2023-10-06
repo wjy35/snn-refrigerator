@@ -61,7 +61,7 @@ function STT() {
       };
       AudioRecord.init(options);
       AudioRecord.start();
-      console.log('start');
+      // console.log('start');
       setIsRecording(true);
     });
   };
@@ -73,7 +73,7 @@ function STT() {
     }
     try{
       const result = await AudioRecord.stop();
-      console.log('stopResult: ', result);
+      // console.log('stopResult: ', result);
       const content = await RNFS.readFile(result, 'base64');
       let url: string =
         'https://speech.googleapis.com/v1/speech:recognize?key=AIzaSyDGj0_W2O-kfEaWX6uEdDf8UrqY8wjG-yk';
@@ -100,7 +100,7 @@ function STT() {
         body: JSON.stringify(request),
       })
         .then(res => {
-          console.log(res);
+          // console.log(res);
           return res.json();
         })
         .then(data => {
@@ -117,12 +117,12 @@ function STT() {
     async function getIngredient() {
       if (extractText !== '') {
         try {
-          console.log('Trying to send');
+          // console.log('Trying to send');
           let extractResponse = await ingredientExtractionApi.extraction(
             extractText,
           );
           setIngredientList(extractResponse.data.data.data);
-          console.log(extractResponse.data.data.data);
+          // console.log(extractResponse.data.data.data);
         } catch (e) {
           console.log('err', e);
         }

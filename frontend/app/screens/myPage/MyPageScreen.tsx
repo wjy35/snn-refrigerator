@@ -30,7 +30,7 @@ const imagePickerOption = {
 
 const MyPageScreen = ({navigation}:any) => {
   const settings = [
-    {name: '계정 설정', goto: 'AccountSetting'},{name: '알림 설정', goto: 'AlarmSetting'},{name: '내 나눔 내역', goto: 'MyShare'},{name: '즐겨찾기 레시피', goto: 'MyFavorite'}, {name:'임시 회원가입용', goto: 'SignUp'}, {name: '유저페이지', goto: 'User'}
+    {name: '계정 설정', goto: 'AccountSetting'},{name: '즐겨찾기 레시피', goto: 'MyFavorite'}
   ];
   const memberId = useSelector((state) => state.userReducer.memberId);
   const [user, setUser] = useState<any>();
@@ -50,7 +50,7 @@ const MyPageScreen = ({navigation}:any) => {
   });
 
   useEffect(() => {
-    console.log(user);
+    // console.log(user);
   }, [user]);
 
   async function getUserDetail(){
@@ -160,16 +160,6 @@ const MyPageScreen = ({navigation}:any) => {
                   </Text>
                 </View>
             }
-
-            <View style={[{flexDirection: 'row'}]}>
-              <SvgXml
-                xml={locationIcon}
-                width={20}
-                height={20}
-              />
-              <Text style={[styles.font, {color: 'grey', fontSize: 20}]}>서울 역삼동</Text>
-            </View>
-
             <View style={[{alignSelf:'center', flexDirection:'row', justifyContent:'center'}]}>
               {nickEditing&&
                 <BasicBadge color={ALERT_COLOR} fill={false} name={' 취소 '} onPress={()=>{setNickEditing(false)}}/>

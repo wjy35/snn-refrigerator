@@ -73,7 +73,7 @@ const RecipeCreateBasicInfo = ({textList, setRecipeInfo, setIsVisible, image}: p
         <Progressbar progress={1} total={3} textList={textList}/>
       </View>
       <ScrollView overScrollMode="never" style={{width: '100%'}} keyboardShouldPersistTaps='handled'>
-        <TouchableWithoutFeedback onPress={()=>console.log('click')}>
+        <TouchableWithoutFeedback>
           <>
             <View style={styles.marginContainer}>
               <View style={[styles.smallContainer, {marginTop: 20}]}>

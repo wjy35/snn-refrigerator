@@ -55,7 +55,7 @@ const FridgeScreen = ({navigation}:any) => {
         dispatch(setHouseIngredientsAction(res.data.data.ingredients));
         // setIngredients(res.data.data.ingredients);
       }else{
-        console.log(res.data.message);
+        // console.log(res.data.message);
       }
     }catch (e){
       console.log(e);
