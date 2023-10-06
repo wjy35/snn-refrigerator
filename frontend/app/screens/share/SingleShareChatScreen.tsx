@@ -31,6 +31,8 @@ const SingleShareChatScreen = ({navigation}: any) => {
     const route = useRoute();
     const chatRoomId = route.params.chatRoomId;
     const receiveMemberId = route.params.receiveMemberId;
+    const nickname = route.params.nickname;
+
     const {memberId} = useSelector((state: RootState) => state.userReducer);
     const [shareStatus,setShareStatus] = useState<number>();
 
@@ -140,7 +142,7 @@ const SingleShareChatScreen = ({navigation}: any) => {
     return (
         <View style={[styles.layout]}>
             <ImageBackground source={require('@/assets/images/background1.png')} resizeMode="cover" style={styles.bg}>
-                <TopNavigator title={'독버섯 김석주'}/>
+                <TopNavigator title={nickname}/>
                 <View style={{borderWidth: 1, width: '100%'}}>
                     <View>
                         {/*<ShareItem item={shareDetail}/>*/}
