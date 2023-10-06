@@ -41,11 +41,12 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={{
-        flexGrow: 1,
+        // flexGrow: 1,
         justifyContent: 'center',
+        alignItems: 'flex-start',
         width: '100%',
       }}>
-      <View style={{marginTop: 30, marginHorizontal: 12, width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{marginHorizontal: 12, width: '100%', justifyContent: 'center'}}>
         { title && (
           <View style={[{width: '100%'}]}>
             <Text style={[styles.font, {fontSize: 20}]}>{title}</Text>
@@ -64,12 +65,13 @@ const AutoCompleteInput = ({placeholder, onChangeText, onPressIn, now, text, tex
           </TextInput>
           {
             isVisible && (
-              <View style={{maxHeight: 200}}>
+              <View style={[{maxHeight: 230}, textList?.length>0?{ borderTopWidth:1.5, borderBottomWidth:1.5}:{borderWidth:0}]}>
                 <FlatList
                   windowSize={2}
                   initialNumToRender={5}
                   nestedScrollEnabled
                   data={textList}
+                  // ListHeaderComponent={<Text>헤더</Text>}
                   renderItem={(item) => <AutoCompleteItem item={item} name={name} onSelect={onSelect}/>}
                   keyExtractor={(item) => {
                     return String(item[keyValue])
