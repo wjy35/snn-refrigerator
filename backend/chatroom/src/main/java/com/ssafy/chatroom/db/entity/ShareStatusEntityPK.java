@@ -11,8 +11,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatRoomEntityPK implements Serializable {
-    Integer sharePostId;
-    Long senderMemberId;
-    Long receiverMemberId;
+public class ShareStatusEntityPK implements Serializable {
+    Long memberId;
+    Integer chatRoomId;
 }
