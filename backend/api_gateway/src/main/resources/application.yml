@@ -74,6 +74,18 @@ spring:
             - Path=/chatroom/**
           filters:
             - RewritePath=/chatroom/(?<path>.*),/$\{path}
+        - id: recipe-recommend
+          uri: lb://RECIPE-RECOMMEND/
+          predicates:
+            - Path=/recipe-recommend/**
+          filters:
+            - RewritePath=/recipe-recommend/(?<path>.*),/$\{path}
+        - id: alarm
+          uri: lb://ALARM/
+          predicates:
+            - Path=/alarm/**
+          filters:
+            - RewritePath=/alarm/(?<path>.*),/$\{path}
 
 
         
