@@ -66,7 +66,7 @@ public class ChatRoomController {
                     chatRoomEntity,
                     chatDto,
                     chatShareBoardSearchService.searchByShareBoardId(chatRoomEntity.getSharePostId()),
-                    chatMemberSearchService.searchByMemberId(chatDto.getMemberId()==null? memberId:chatDto.getMemberId())
+                    chatMemberSearchService.searchByMemberId(memberId==chatRoomEntity.getReceiverMemberId()? chatRoomEntity.getSenderMemberId(): chatRoomEntity.getSenderMemberId())
             ));
         }
 
