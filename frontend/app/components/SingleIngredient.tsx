@@ -114,7 +114,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
 
   function getDateGapText(dateGap:number){
 
-    if(dateGap==0) return '오늘';
+    if(dateGap<=1) return '오늘';
     else if(dateGap<7) return dateGap+'일 전'
     else if(dateGap<27) return Math.floor(dateGap/7)+'주 전'
     else if(dateGap<365) return Math.floor(dateGap/30)+'개월 전'
