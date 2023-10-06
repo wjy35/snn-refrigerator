@@ -58,14 +58,19 @@ public class ChatRoomController {
     ResponseEntity<Response> view(@PathVariable Long memberId){
         List<ChatRoomSearchParam> chatRoomSearchParamList = new ArrayList<>();
         List<ChatRoomEntity> chatRoomEntityList = chatRoomSearchService.searchByMemberId(memberId);
-
+        Long searchMemberId=null;
         for(ChatRoomEntity chatRoomEntity : chatRoomEntityList){
             ChatDto chatDto = viewCurrentChatService.viewByChatRoomId(chatRoomEntity.getChatRoomId());
+            if(chatRoomEntity.getReceiverMemberId().equals(memberId)){
+                searchMemberId = chatRoomEntity.getSenderMemberId();
+            }else{
+                searchMemberId = chatRoomEntity.getReceiverMemberId();
+            }
             chatRoomSearchParamList.add(ChatRoomMapper.INSTANCE.toChatRoomSearchParam(
                     chatRoomEntity,
                     chatDto,
                     chatShareBoardSearchService.searchByShareBoardId(chatRoomEntity.getSharePostId()),
-                    chatMemberSearchService.searchByMemberId(memberId==chatRoomEntity.getReceiverMemberId()? chatRoomEntity.getSenderMemberId(): chatRoomEntity.getReceiverMemberId())
+                    chatMemberSearchService.searchByMemberId(searchMemberId)
             ));
         }
 
