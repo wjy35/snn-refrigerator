@@ -30,29 +30,6 @@ const ShareIngredientItem = ({ name, amount, onPressMinus, onPressPlus, onPressC
             }
           </Text>
         </View>
-        <View style={{flexDirection: 'row'}}>
-          <TouchableWithoutFeedback onPress={()=>onPressMinus()}>
-            <View style={{backgroundColor: 'skyblue', width: 25, height: 25, justifyContent: 'center', alignItems: 'center', borderBottomLeftRadius: 100, borderTopLeftRadius: 100, borderWidth: 1, borderColor: MAIN_COLOR}}>
-              <SvgXml
-                xml={blackMinusIcon}
-                width={15}
-                height={15}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-          <View style={{backgroundColor: 'white', width: 25, height: 25, justifyContent: 'center', alignItems: 'center', borderTopWidth: 1, borderBottomWidth: 1, borderColor: MAIN_COLOR}}>
-            <Text style={[styles.font, {fontSize: 20}]}>{amount}</Text>
-          </View>
-          <TouchableWithoutFeedback onPress={()=>onPressPlus()}>
-            <View style={{backgroundColor: 'skyblue', width: 25, height: 25, justifyContent: 'center', alignItems: 'center', borderBottomRightRadius: 100, borderTopRightRadius: 100, borderWidth: 1, borderColor: MAIN_COLOR}}>
-              <SvgXml
-                xml={blackPlusIcon}
-                width={15}
-                height={15}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
       </View>
       {
         onPressClose && (
