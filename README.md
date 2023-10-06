@@ -2,7 +2,7 @@
 # 좋은 냉장고, 신선한 나눔 - 좋냉신나
 - 냉장고 식자재 관리 및 나눔 서비스 
 - [apk 다운로드](https://1drv.ms/u/s!AkrJpxi-ZmutiPNutUjyN42GvDJ0_A?e=c2RFwU)
-- ![메인화면](screenshots/Screenshot_20231006-113354_좋냉신나.png)
+<img src="screenshots/Screenshot_20231006-113354_좋냉신나.png" width="250"/>
 
 ## 팀원 소개
 
@@ -25,13 +25,21 @@
 
 ## 기능
 ### 레시피 추천 & 소비기한 임박 재료 알림
-- ![스크린샷](screenshots/Screenshot_20231006-113415_좋냉신나.png)
+
+<img src="screenshots/Screenshot_20231006-113415_좋냉신나.png" width="250"/>
+
 ### 레시피 상세 검색
-- ![스크린샷](screenshots/Screenshot_20231006-113422_좋냉신나.png)
+
+<img src="screenshots/Screenshot_20231006-113422_좋냉신나.png" width="250"/>
+
 ### 남는 식재료 나눔
-- ![스크린샷](screenshots/Screenshot_20231006-113502_좋냉신나.png)
+
+<img src="screenshots/Screenshot_20231006-113502_좋냉신나.png" width="250"/>
+
 ### 식재료 자동완성/OCR/STT 일괄 등록
-- ![스크린샷](screenshots/Screenshot_20231006-113645_좋냉신나.png)
+
+<img src="screenshots/Screenshot_20231006-113645_좋냉신나.png" width="250"/>
+
 
 ## 개발 환경 및 IDE
 ### FrontEnd
