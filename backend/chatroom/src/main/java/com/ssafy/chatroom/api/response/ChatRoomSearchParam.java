@@ -12,4 +12,5 @@ public class ChatRoomSearchParam {
     private String nickname;
     private String content;
     private Timestamp timestamp;
+    private Long receiveMemberId;
 }

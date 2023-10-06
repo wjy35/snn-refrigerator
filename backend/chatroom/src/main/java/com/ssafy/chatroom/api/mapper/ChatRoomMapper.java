@@ -24,6 +24,7 @@ public interface ChatRoomMapper {
     ChatRoomEntity requestToEntity(ChatRoomCreateRequest chatRoomCreateRequest);
 
     @Mapping(target="thumbnailImageUrl", expression = "java(shareBoardDto.getShareImages().get(0))")
+    @Mapping(source = "chatRoomEntity.receiverMemberId", target = "receiveMemberId")
     ChatRoomSearchParam toChatRoomSearchParam(
             ChatRoomEntity chatRoomEntity,
             ChatDto chatDto,
