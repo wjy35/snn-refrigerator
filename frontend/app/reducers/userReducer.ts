@@ -19,13 +19,13 @@ const userReducer = (state=userState, action: any) => {
     case setLocations: {
       return {
         ...state,
-        locations: action.payload,
+        locations: [...action.payload],
       };
     }
     case setHates: {
       return {
         ...state,
-        hates: action.payload,
+        hates: [...action.payload],
       };
     }
     default:

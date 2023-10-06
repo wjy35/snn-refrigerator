@@ -129,9 +129,7 @@ const HouseAddScreen = ({navigation}:any) => {
         res.replace(/\n|\r|\s*/g, '');
         getIngredient(res);
       })
-      .catch((err) => {
-        console.log('error : ', err);
-      });
+      .catch(err => console.log('error : ', err));
   };
 
   useEffect(()=>{
