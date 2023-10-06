@@ -28,7 +28,7 @@ const HouseAddDate = ({textList, ingredients, setNow, now, onChange}: props) => 
       _selected[i.lastDate] = {dots: [cool]};
     });
     setSelected(_selected);
-    console.log(ingredients);
+    // console.log(ingredients);
   }, [ingredients])
 
   return (

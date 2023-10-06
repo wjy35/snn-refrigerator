@@ -46,7 +46,7 @@ const SettingDetail = ({name, goto, houseCode, memberId, closeFunc}: props) => {
   }
 
   return (
-    <View style={{margin: 5, paddingHorizontal: 25, borderWidth: 1, borderRadius: 16, flex: 1}}>
+    <View style={{margin: 5, paddingHorizontal: 25, borderWidth: 1, borderRadius: 16}}>
       <TouchableWithoutFeedback onPress={test}>
         <View>
           <View style={{justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', height: 60}}>

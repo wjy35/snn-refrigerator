@@ -13,7 +13,7 @@ import MyPageLayout from "./MyPageLayout";
 import {myPageStyles} from "@/styles/myPageStyles";
 import SettingContainer from "@/components/SettingContainer";
 import memberApi from "@/apis/memberApi";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {styles} from "@/styles/styles";
 import {appendIcon, locationIcon, micIcon, settingIcon} from "@/assets/icons/icons";
 import {SvgXml} from "react-native-svg";
@@ -21,6 +21,7 @@ import CameraImageModal from '@/components/modal/CameraImageModal';
 import { launchImageLibrary, launchCamera } from "react-native-image-picker";
 import BasicBadge from "@/components/BasicBadge";
 import {ALERT_COLOR, MAIN_COLOR, TEXT_DEACTIVATED_COLOR, WARN_COLOR} from "@/assets/colors/colors";
+import {setHatesAction, setLocationsAction} from "@/actions/userAction";
 
 const imagePickerOption = {
   mediaType: 'photo',
@@ -29,7 +30,7 @@ const imagePickerOption = {
 
 const MyPageScreen = ({navigation}:any) => {
   const settings = [
-    {name: '계정 설정', goto: 'AccountSetting'},{name: '알림 설정', goto: 'AlarmSetting'},{name: '내 나눔 내역', goto: 'MyShare'},{name: '즐겨찾기 레시피', goto: 'MyFavorite'}, {name:'임시 회원가입용', goto: 'SignUp'}, {name: '유저페이지', goto: 'User'}
+    {name: '계정 설정', goto: 'AccountSetting'},{name: '즐겨찾기 레시피', goto: 'MyFavorite'}
   ];
   const memberId = useSelector((state) => state.userReducer.memberId);
   const [user, setUser] = useState<any>();
@@ -37,6 +38,7 @@ const MyPageScreen = ({navigation}:any) => {
   const [nickname, setNickname] = useState('');
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [nickEditing, setNickEditing] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
 
   function goto(t: string){
@@ -48,7 +50,7 @@ const MyPageScreen = ({navigation}:any) => {
   });
 
   useEffect(() => {
-    console.log(user);
+    // console.log(user);
   }, [user]);
 
   async function getUserDetail(){
@@ -56,7 +58,8 @@ const MyPageScreen = ({navigation}:any) => {
     try {
       const res = await memberApi.memberDetail(memberId);
       if (res.status === 200) {
-        // console.log(res.data.data.memberInfo);
+        dispatch(setLocationsAction(res.data.data.memberInfo.placeList));
+        dispatch(setHatesAction(res.data.data.memberInfo.hateIngredientList));
         setUser(res.data.data.memberInfo);
         setNickname(res.data.data.memberInfo.nickname);
       }
@@ -157,16 +160,6 @@ const MyPageScreen = ({navigation}:any) => {
                   </Text>
                 </View>
             }
-
-            <View style={[{flexDirection: 'row'}]}>
-              <SvgXml
-                xml={locationIcon}
-                width={20}
-                height={20}
-              />
-              <Text style={[styles.font, {color: 'grey', fontSize: 20}]}>서울 역삼동</Text>
-            </View>
-
             <View style={[{alignSelf:'center', flexDirection:'row', justifyContent:'center'}]}>
               {nickEditing&&
                 <BasicBadge color={ALERT_COLOR} fill={false} name={' 취소 '} onPress={()=>{setNickEditing(false)}}/>

@@ -70,7 +70,7 @@ const RecipeListScreen = ({navigation}:any) => {
         setNowPage(nowPage+1);
         setMaxPage(res.data.data.totalPage);
       } else {
-        console.log(res.data.data.recipe);
+        // console.log(res.data.data.recipe);
       }
     } catch (err) {
       console.log(err);
@@ -137,7 +137,7 @@ const RecipeListScreen = ({navigation}:any) => {
   };
 
   function onSelectIngredient(item: any){
-    console.log(item)
+    // console.log(item)
     if (checkDuplicateIngredient(item)){
       setRemove([...remove, {...item}]);
     }

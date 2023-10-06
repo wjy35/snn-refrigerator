@@ -53,9 +53,10 @@ const LogInScreen = ({navigation}: any) => {
     try {
       const res = await memberApi.memberDetail(info.id);
       if (res.status === 200) {
-        dispatch(setLocationsAction(res.data.data.placeList));
+        dispatch(setLocationsAction(res.data.data.memberInfo.placeList));
+        // console.log(res.data.data.placeList);
         dispatch(setHouseCodeAction(res.data.data.memberInfo.houseCode));
-        dispatch(setHatesAction(res.data.data.hateIngredientList));
+        dispatch(setHatesAction(res.data.data.memberInfo.hateIngredientList));
         navigation.replace('Home'); //회원 정보 다 저장한 후엔 홈 화면으로.
       }
     } catch (err) {
@@ -111,7 +112,7 @@ const LogInScreen = ({navigation}: any) => {
               resizeMode={'contain'}
             />
           </TouchableWithoutFeedback>
-          <Button title='홈으로(test)' onPress={()=>navigation.replace('Home')}/>
+          {/*<Button title='홈으로(test)' onPress={()=>navigation.replace('Home')}/>*/}
         </View>
       </ImageBackground>
     </View>

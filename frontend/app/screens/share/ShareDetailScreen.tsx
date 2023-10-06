@@ -20,15 +20,26 @@ const ShareDetailScreen = ({navigation}:any) => {
   const userProfileImageUrl = route?.params?.userProfileImageUrl;
   const { memberId } = useSelector((state:RootState) => state.userReducer);
   let [receiverMemberId,setReceiverMemberId] = useState<number>();
+  const [shareUserId, setShareUserId] = useState(0);
 
   async function getDetail(){
     if (!route?.params?.sharePostId) return
     try {
       const res = await shareApi.getShareDetail({sharePostId: route.params.sharePostId});
       if (res.status === 200) {
-        // console.log(res.data.data);
         setShareDetail(res.data.data.response);
+        await getUserId(res.data.data.response.nickname);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
+  async function getUserId(nickname: string){
+    try {
+      const res = await memberApi.getMemberIdFromNick(nickname);
+      if (res.status === 200) {
+        setShareUserId(res.data.data.memberId);
       }
     } catch (err) {
       console.log(err);
@@ -71,7 +82,11 @@ const ShareDetailScreen = ({navigation}:any) => {
   }, [])
 
   return (
-    <ShareLayout title="나눔">
+    <ShareLayout
+      title="나눔"
+      optionTitle={shareUserId === memberId ? '삭제' : ''}
+      optionFunction={shareUserId === memberId ? () => {deletePost()} : ()=>{}}
+    >
       <View style={{flex: 1}}>
         <ScrollView>
           <View style={[{width: '100%', padding: 15}]}>
