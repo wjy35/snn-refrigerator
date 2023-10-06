@@ -1,5 +1,6 @@
 package com.ssafy.recipe.service;
 
+import com.ssafy.recipe.api.request.RecipeSearchMemberRequest;
 import com.ssafy.recipe.api.request.RecipeSearchRequest;
 import com.ssafy.recipe.api.response.HouseIngredientResponse;
 import com.ssafy.recipe.api.response.MemberResponse;
@@ -14,6 +15,8 @@ import java.util.List;
 public interface RecipeSearchService {
 
     Response getSearchRecipe(RecipeSearchRequest request);
+
+    Response getMemberRecipe(RecipeSearchMemberRequest recipeSearchMemberRequest);
 
     void getRecipeSearchResponse(long memberId);
     public int getNeededIngredientsCnt(Recipe recipe);
