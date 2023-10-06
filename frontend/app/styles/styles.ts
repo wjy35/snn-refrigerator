@@ -49,8 +49,12 @@ export const styles = StyleSheet.create({
     color: '#3093EF'
   },
   font: {
-    fontFamily: 'BM-HANNA',
-    color: '#000000'
+    // fontFamily: 'Dahang',
+    // fontFamily: 'Dovemayo_wild',
+    fontFamily: 'Dovemayo_gothic',
+    // fontFamily: 'Amsterdam',
+    // fontFamily: 'BM-HANNA',
+    color: '#000000',
   },
   headerFont: {
     fontSize : 30,

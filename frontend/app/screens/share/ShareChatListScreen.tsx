@@ -28,7 +28,8 @@ const ShareChatListScreen = ({navigation}: any) => {
         try {
             let res = await chatRoomApi.chatRoomList(memberId);
             if(res.status === 200){
-                setchatRoomList(res.data.data.chatRoomList);
+              console.log(res.data.data.chatRoomList);
+              setchatRoomList(res.data.data.chatRoomList);
             }
         } catch (e) {
             console.log(e);
@@ -83,7 +84,7 @@ const ShareChatListScreen = ({navigation}: any) => {
   return (
     <ShareLayout title="나눔 채팅">
       <View>
-        <ScrllView>
+        <ScrollView>
           <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
             {
               chatRoomList.map((item, index) => {
@@ -105,7 +106,7 @@ const ShareChatListScreen = ({navigation}: any) => {
               })
             }
           </View>
-        </ScrllView>
+        </ScrollView>
       </View>
     </ShareLayout>
   )

@@ -160,7 +160,7 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
   }
 
   return (
-    <View style={[tw`w-[48%] my-[1%] mx-[1%] bg-white`,{aspectRatio:"11/5"}]}>
+    <View style={[tw`w-[44%] my-[1%] mx-[3%] bg-white`,{aspectRatio:"11/5"}]}>
       {/*모달 시작*/}
       <Modal isVisible={isModalVisible} coverScreen={true} onBackdropPress={()=> {
         if (isModifying) {

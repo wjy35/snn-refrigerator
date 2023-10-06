@@ -4,15 +4,15 @@ import {styles} from "@/styles/styles";
 import MyIngredientList from "@/components/MyIngredientList";
 import BasicBadge from "@/components/BasicBadge";
 import {
-    cold,
-    coldWhite,
-    cool,
-    coolWhite,
-    eyeIcon,
-    eyeSlashColdIcon, eyeSlashCoolIcon,
-    eyeSlashWarmIcon,
-    warm,
-    warmWhite
+  cold,
+  coldWhite,
+  cool,
+  coolWhite,
+  eyeIcon,
+  eyeSlashColdIcon, eyeSlashCoolIcon,
+  eyeSlashWarmIcon, plusIcon,
+  warm,
+  warmWhite
 } from "@/assets/icons/icons";
 import FridgeLayout from "@/screens/fridge/FridgeLayout";
 import {COLD_COLOR, COOL_COLOR, TEXT_COLOR, WARM_COLOR} from "@/assets/colors/colors";
@@ -121,8 +121,13 @@ const FridgeScreen = ({navigation}:any) => {
         >
         <View style={[{position: 'absolute', bottom: 80, alignSelf:'flex-end', flexDirection:'row', justifyContent:'center', paddingRight:20, paddingBottom:20}]}>
 
-            <Shadow distance={4} offset={[2,2]} style={[{backgroundColor:'#3093EF', height:70,width:70,borderRadius:99, justifyContent:'center'}]}>
-                <Text style={[styles.font, {color: '#FFFFFF', fontSize:25, textAlign:'center'}]}>추가</Text>
+            <Shadow distance={4} offset={[2,2]} style={[{backgroundColor:'#3093EF', height:70,width:70,borderRadius:99, justifyContent:'center', alignItems: 'center'}]}>
+                {/*<Text style={[styles.font, {color: '#FFFFFF', fontSize:25, textAlign:'center'}]}>추가</Text>*/}
+              <SvgXml
+                xml={plusIcon}
+                width={35}
+                height={35}
+                style={{marginHorizontal: 5}}/>
             </Shadow>
         </View>
     </TouchableWithoutFeedback>
