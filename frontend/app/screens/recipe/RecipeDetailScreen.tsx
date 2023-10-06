@@ -177,7 +177,6 @@ const RecipeDetailScreen = () => {
 
         <View style={recipeStyles.recipeDetailBodyContainer}>
           <View style={recipeStyles.recipeDetailTabContainer}>
-
             <TouchableWithoutFeedback
                 onPress={()=>{setActivatedTab(0)}}
             >

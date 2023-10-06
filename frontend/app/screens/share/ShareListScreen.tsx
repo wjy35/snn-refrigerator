@@ -37,6 +37,7 @@ const ShareListScreen = ({navigation}:any) => {
     try {
       const res = await shareApi.getShareList({ locationId: nowLocation.locationId, items: items, pageNum: page, keyword: shareText.text});
       if (res.status === 200){
+        console.log(res);
         setShareList(res.data.data.response.sharePostResponses);
       }
     } catch (err) {
@@ -49,15 +50,16 @@ const ShareListScreen = ({navigation}:any) => {
   }, [nowLocation]);
 
   useEffect(()=>{
-    console.log(memberId);
-    console.log(locations);
-    if (!locations) return;
     setNowLocation(locations[0]);
   }, [locations])
 
   function locationItem(location: any){
+    const shortName = location.locationName.split(' ')
     return (
-      <TouchableWithoutFeedback onPress={()=>{setNowLocation(location)}}>
+      <TouchableWithoutFeedback onPress={()=>{
+        setIsVisible(true);
+        setNowLocation(location)}
+      }>
         <View style={{}}>
           <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 5}}>
             <View style={{marginRight: 5}}>
@@ -69,7 +71,7 @@ const ShareListScreen = ({navigation}:any) => {
               />
             </View>
             <View>
-              <Text style={[styles.font, {fontSize: 22}]}>{location.locationName}</Text>
+              <Text style={[styles.font, {fontSize: 22}]}>{shortName[shortName.length-1]}</Text>
             </View>
           </View>
         </View>
@@ -101,6 +103,13 @@ const ShareListScreen = ({navigation}:any) => {
     )
   }
 
+  function nowShortName(){
+    const shortName = nowLocation.locationName.split(' ');
+    return (
+      <Text style={[styles.font, {fontSize: 25}]}>{shortName[shortName.length-1]}</Text>
+    )
+  }
+
   return (
     <ShareLayout title="나눔" optionTitle={nowLocation ? '등록' : ''} optionFunction={nowLocation?goShareCreate:()=>{}}>
       {
@@ -122,7 +131,7 @@ const ShareListScreen = ({navigation}:any) => {
                             />
                           </View>
                           <View>
-                            <Text style={[styles.font, {fontSize: 25}]}>{nowLocation.locationName}</Text>
+                            {nowShortName()}
                           </View>
                           <TouchableWithoutFeedback onPress={()=>setIsVisible(false)}>
                             <View>
@@ -150,7 +159,7 @@ const ShareListScreen = ({navigation}:any) => {
                                 />
                               </View>
                               <View>
-                                <Text style={[styles.font, {fontSize: 25}]}>역삼동</Text>
+                                {nowShortName()}
                               </View>
                               <TouchableWithoutFeedback onPress={()=>setIsVisible(true)}>
                                 <View>
