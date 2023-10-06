@@ -2,80 +2,42 @@ import React, {useEffect, useState} from 'react';
 import {View} from "react-native";
 import SingleIngredient from "@/components/SingleIngredient";
 import tw from 'twrnc';
-import houseApi from "@/apis/houseApi";
-import {useSelector} from "react-redux";
-import {RootState} from "@/reducers/reducers";
+import {useDispatch, useSelector} from "react-redux";
+import {setChangedAction, setHouseIngredientsAction} from "@/actions/houseAction";
 
-const MyIngredientList = ({types,maxDate}:any) => {
-  const [ingredients, setIngredients] = useState<
-      Array<{
-        houseIngredientId : number,
-        ingredientInfoId : number,
-        ingredientName : string,
-        storageType : number,
-        lastDate : string,
-        storageDate : string,
-      }>
-  >([]);
-    const [changed, setChanged] = useState(false);
+interface props {
+  types: any,
+  maxDate: any,
+  houseIngredients: any,
+  optionalFunc?: Function,
+}
 
-    const { houseCode } = useSelector((state:RootState) => state.houseReducer)
+const MyIngredientList = ({types,maxDate,houseIngredients, optionalFunc}:props) => {
+  const dispatch = useDispatch();
+  const filteredList = houseIngredients.filter((i)=>{
+    // @ts-ignore
+    if (1+ Math.floor((new Date(i.lastDate).getTime() - new Date()) / (1000 * 60 * 60 * 24))<maxDate&&
+      types.includes(i.storageType)){
+      return i
+    }
+  })
 
+  function setChanged(bool: boolean){
+    dispatch(setChangedAction(bool))
+  }
 
-    // useEffect(() => {
-    //     const getIngredients = async() => {
-    //         try{
-    //             let res = await houseApi.houseIngredientList(houseCode);
-    //             // console.log(res);
-    //             if(res.status===200){
-    //                 // console.log(res.data.data.ingredients);
-    //                 res.data.data.ingredients.sort((a: { lastDate: string | number | Date; }, b: { lastDate: string | number | Date; })=>{
-    //                     // @ts-ignore
-    //                     return new Date(a.lastDate) - new Date(b.lastDate)
-    //                 })
-    //                 setIngredients(res.data.data.ingredients);
-    //             }else{
-    //                 console.log(res.data.message);
-    //             }
-    //         }catch (e){
-    //             // console.log(e);
-    //         }
-    //     }
-    //     getIngredients();
-    //
-    // }, []);
-
-    useEffect(() => {
-        setChanged(false);
-        const getIngredients = async() => {
-            try{
-                let res = await houseApi.houseIngredientList(houseCode);
-                // console.log(res);
-                if(res.status===200){
-                    // console.log(res.data.data.ingredients);
-                    res.data.data.ingredients.sort((a: { lastDate: string | number | Date; }, b: { lastDate: string | number | Date; })=>{
-                        // @ts-ignore
-                        return new Date(a.lastDate) - new Date(b.lastDate)
-                    })
-                    setIngredients(res.data.data.ingredients);
-                }else{
-                    console.log(res.data.message);
-                }
-            }catch (e){
-                // console.log(e);
-            }
-        }
-        getIngredients();
-    }, [changed]);
-
+  useEffect(()=>{
+    if (filteredList.length === 0) {
+      optionalFunc&&optionalFunc(1);
+    } else {
+      optionalFunc&&optionalFunc(0);
+    }
+  }, [filteredList])
 
   return (
     <View style={tw`w-full flex flex-wrap flex-row`}>
-      {ingredients.map((i) => {
+      {filteredList.map((i) => {
         return (
-            // @ts-ignore
-            1+ Math.floor((new Date(i.lastDate).getTime() - new Date()) / (1000 * 60 * 60 * 24))<maxDate&&
-            types.includes(i.storageType)&&
           <React.Fragment key={`ingredient ${i.houseIngredientId}`}>
             <SingleIngredient
               houseIngredientId={i.houseIngredientId}

@@ -22,8 +22,8 @@ interface props {
   address?: string;
   memberId?: string;
   ingredientId?: string;
-  followerId?: string;
-  followeeId?: string;
+  followerId?: number;
+  followeeId?: number;
   hateIngredientList?: string[];
   placeInfoList?: string[];
   email?: string;
@@ -53,6 +53,8 @@ const memberApi = {
     return res;
   },
   signup: async ({memberId, nickname, hateIngredientList, placeInfoList, birthday, email}: props) => {
+    // console.log('여기여기');
+    // console.log(memberId, nickname);
     const res = await PublicMemberApi.post(
       'signup',
       {
@@ -128,7 +130,7 @@ const memberApi = {
     );
     return res;
   },
-  toggleFollow: async ({followerId, followeeId}: props) => {
+  toggleFollow: async (followerId: number, followeeId: number) => {
     const res = await PrivateMemberApi.post(
       `${followerId}/follow/${followeeId}`
     );
@@ -155,11 +157,11 @@ const memberApi = {
     return res;
   },
 
-  postLocation: async(memberId: number, locationId: number)=> {
+  postLocation: async (memberId: number, locationId: number) => {
     const res = await PrivateMemberApi.post(
       `${memberId}/location`,
       {
-        location:locationId
+        locationId:locationId,
       }
     );
     return res;
@@ -171,6 +173,13 @@ const memberApi = {
     );
     return res;
   },
+
+  getMemberIdFromNick: async(nickname: string) => {
+    const res = await PrivateMemberApi.get(
+      `nickname/${nickname}`
+    );
+    return res;
+  }
 }
 
 export default memberApi;

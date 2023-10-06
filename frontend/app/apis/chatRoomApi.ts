@@ -23,6 +23,24 @@ const chatRoomApi = {
             `/${memberId}`,
         );
         return res;
+    },
+    addChatRoom:async (sharePostId:number,senderMemberId:number,receiverMemberId:number)=>{
+        const res = await PrivateChatRoomApi.post(
+            `/`,
+            {
+                sharePostId:sharePostId,
+                senderMemberId:senderMemberId,
+                receiverMemberId:receiverMemberId
+            }
+        );
+        return res;
+    },
+    checkChatRoom:async (sharePostId:number,memberId:number)=>{
+        const res = await PrivateChatRoomApi.get(
+            `/search/${sharePostId}/${memberId}`
+        );
+
+        return res;
     }
 }
 

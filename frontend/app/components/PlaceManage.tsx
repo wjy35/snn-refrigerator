@@ -15,8 +15,14 @@ const PlaceManage = ({memberId}) =>{
 
   useEffect(() => {
     const init = async () => {
-      const res = await memberApi.getLocation(memberId);
-      setLocations(res.data.data.location);
+      try {
+        const res = await memberApi.getLocation(memberId);
+        if (res.status === 200){
+          setLocations(res.data.data.location);
+        }
+      } catch (err) {
+        console.log(err)
+      }
     };
     init();
   }, []);
@@ -34,7 +40,6 @@ const PlaceManage = ({memberId}) =>{
 
   const location = useInput({
     placeholder: '검색',
-    title: '우리 동네 등록',
     nowNum: 1,
     onChange: checkLocation,
   });
@@ -50,42 +55,46 @@ const PlaceManage = ({memberId}) =>{
   }
 
   async function removeLocation(idx: number) {
-    const res = await memberApi.postLocation(memberId, idx);
-    if(res.data.data.status){
-      const _locations = [...locations];
-      _locations.splice(idx, 1);
-      setLocationList(_locations);
+    try {
+      const res = await memberApi.deleteLocation(memberId, idx);
+      console.log(res);
+      if (res?.data?.data?.status){
+        const _locations = [...locations];
+        _locations.splice(idx, 1);
+        setLocationList(_locations);
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 
-  function onPressIn(nowNum: number){
-    setNow(nowNum);
-  }
-
-  function onBlurLocation(){
-    location.reset();
-    setLocationList([]);
-  }
 
   //TODO: ingredient와 동일하게 location 등록이 되지 않음.
   async function onSelectLocation(item: any) {
     if (checkDuplicateLocation(item)){
-      const res = await memberApi.postLocation(memberId, item.locationId);
-      if(res.status === 200) setLocations([...locations, {...item}]);
+      try {
+        console.log(item.locationId, memberId);
+        const res = await memberApi.postLocation(memberId, item.locationId);
+        if(res.status === 200) setLocations([...locations, {...item}]);
+      } catch (err) {
+        console.log(err);
+      }
     }
-
   }
 
   return (
-    <View style={{width: '90%'}}>
-      <AutoCompleteInput {...location} textList={locationList} onPressIn={onPressIn} onBlur={onBlurLocation} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
+    <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{height: 310}}>
+        <AutoCompleteInput {...location} textList={locationList} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
+      </View>
       <View>
         <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
           {
             locations.map((i, idx) => {
+              const name: string[] = i.locationName.split(' ');
               return (
                 <React.Fragment key={`${i.locationName}${idx}`}>
-                  <BasicBadge color='#3093EF' name={i.locationName} icon={closeIcon} onPress={()=>{removeLocation(idx)}}/>
+                  <BasicBadge color='#3093EF' name={name[name.length-1]} icon={closeIcon} onPress={()=>{removeLocation(idx)}}/>
                 </React.Fragment>
               )
             })

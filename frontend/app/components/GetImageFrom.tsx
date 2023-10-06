@@ -9,8 +9,10 @@ import {closeBlackIcon} from "@/assets/icons/icons";
 interface props {
   getImage: Function;
   setIsVisible: Function;
+  Base64?: boolean;
+  selectionLimit?: number;
 }
-const GetImageFrom = ({getImage, setIsVisible}: props) => {
+const GetImageFrom = ({getImage, setIsVisible, Base64=false, selectionLimit=1}: props) => {
   const [image, setImage] = useState<any>();
 
   const closeModal = () =>{
@@ -21,8 +23,8 @@ const GetImageFrom = ({getImage, setIsVisible}: props) => {
     launchImageLibrary(
       {
         mediaType: 'photo',
-        selectionLimit: 1,
-        includeBase64: true,
+        selectionLimit: selectionLimit,
+        includeBase64: Base64,
       },
       (res) => {
         if (res.didCancel) return;
@@ -49,7 +51,7 @@ const GetImageFrom = ({getImage, setIsVisible}: props) => {
         launchCamera(
           {
             mediaType: 'photo',
-            includeBase64: true,
+            includeBase64: Base64,
           },
           (res) => {
             if (res.didCancel) return;

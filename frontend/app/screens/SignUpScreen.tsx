@@ -21,7 +21,8 @@ import {closeIcon} from "@/assets/icons/icons";
 import memberApi from "@/apis/memberApi";
 import {useDispatch} from "react-redux";
 import {setHouseCodeAction} from "@/actions/houseAction";
-import {setMemberIdAction} from "@/actions/userAction";
+import {setHatesAction, setLocationsAction, setMemberIdAction} from "@/actions/userAction";
+import {MAIN_COLOR} from "@/assets/colors/colors";
 // import Toast from "@/components/Toast";
 
 
@@ -87,31 +88,28 @@ const SignUpScreen = ({navigation}:any) => {
     );
   }
 
-  function onPressIn(nowNum: number){
+  function onPressInLocation(nowNum: number){
     setNow(nowNum);
-  }
-
-  function onBlurIngredient(){
     excludeIngredient.reset();
     setExcludeIngredientList([]);
+  }
+
+  function onPressInIngredient(nowNum: number){
+    setNow(nowNum);
+    location.reset();
+    setLocationList([]);
   }
 
   function onSelectLocation(item: any) {
     if (checkDuplicateLocation(item)){
       setLocations([...locations, {...item}]);
     }
-
   }
 
   function onSelectIngredient(item: any){
     if (checkDuplicateIngredient(item)){
       setIngredients([...ingredients, {...item}]);
     }
-  }
-
-  function onBlurLocation(){
-    location.reset();
-    setLocationList([]);
   }
 
   function removeIngredient(idx: number){
@@ -123,7 +121,7 @@ const SignUpScreen = ({navigation}:any) => {
   function removeLocation(idx: number) {
     const _locations = [...locations];
     _locations.splice(idx, 1);
-    setLocationList(_locations);
+    setLocations(_locations);
   }
 
   async function checkDuplicateNickname(nickname: string){
@@ -139,12 +137,10 @@ const SignUpScreen = ({navigation}:any) => {
     }
   }
 
-  async function checkHouseExistance(houseCode: string){
+  async function checkHouseExistence(houseCode: string){
     try{
       const res = await memberApi.checkHouse(houseCode);
-      console.log(res);
       if(res.status === 200){
-        console.log(res.data.data.existance);
         res.data.data.existance?setHouseStatus(2):setHouseStatus(1);
       }
     } catch (err) {
@@ -162,7 +158,7 @@ const SignUpScreen = ({navigation}:any) => {
     placeholder:'(선택) 집 공유 코드 입력',
     title: '이미 좋냉신나를 사용하고 있는 가족이 있나요?',
     nowNum: 1,
-    onChange: checkHouseExistance,
+    onChange: checkHouseExistence,
   });
   const location = useInput({
     placeholder: '검색',
@@ -190,12 +186,15 @@ const SignUpScreen = ({navigation}:any) => {
         email: route.params.email,
       }
     if (houseCode === 2){
-      inputData[houseCode] = houseCode.text
+      inputData['houseCode'] = houseCode.text
     }
     try {
       const res = await memberApi.signup(inputData);
       if (res.status === 200) {
         dispatch(setHouseCodeAction(res.data.data.houseCode));
+        dispatch(setLocationsAction(locations));
+        dispatch(setHatesAction(ingredients));
+        navigation.replace('Home');
       }
     } catch (err) {
       console.log('여기서 에러나는거임signup');
@@ -205,12 +204,10 @@ const SignUpScreen = ({navigation}:any) => {
 
   function trySignup(){
     if (nickNameStatus === 0) {
-      // TODO: toast로 변경 필요
       onToast('닉네임을 입력해주세요');
       return
     }
     if (nickNameStatus === 1) {
-      // TODO: toast로 변경 필요
       onToast('중복된 닉네임은 사용할 수 없습니다');
       return
     }
@@ -218,8 +215,8 @@ const SignUpScreen = ({navigation}:any) => {
       onToast('존재하지 않는 집 코드 입니다');
       return
     }
-    signup().then(navigation.replace('Home'));
-    
+    signup();
+
   }
 
   return (
@@ -250,14 +247,15 @@ const SignUpScreen = ({navigation}:any) => {
                 }
               </View>
               <View style={{width: '90%'}}>
-                <AutoCompleteInput {...location} textList={locationList} onPressIn={onPressIn} onBlur={onBlurLocation} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
+                <AutoCompleteInput {...location} textList={locationList} onPressIn={onPressInLocation} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
                 <View>
                   <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
                     {
                       locations.map((i, idx) => {
+                        const name = i.locationName.split(' ');
                         return (
                           <React.Fragment key={`${i.locationName}${idx}`}>
-                            <BasicBadge color='#3093EF' name={i.locationName} icon={closeIcon} onPress={()=>{removeLocation(idx)}}/>
+                            <BasicBadge color='#3093EF' name={name[name.length-1]} icon={closeIcon} onPress={()=>{removeLocation(idx)}}/>
                           </React.Fragment>
                         )
                       })
@@ -266,14 +264,14 @@ const SignUpScreen = ({navigation}:any) => {
                 </View>
               </View>
               <View style={{width: '90%'}}>
-                <AutoCompleteInput {...excludeIngredient} textList={excludeIngredientList} onPressIn={onPressIn} onBlur={onBlurIngredient} keyValue='ingredientInfoId' name='ingredientName' onSelect={onSelectIngredient}/>
+                <AutoCompleteInput {...excludeIngredient} textList={excludeIngredientList} onPressIn={onPressInIngredient} keyValue='ingredientInfoId' name='ingredientName' onSelect={onSelectIngredient}/>
                 <View>
                   <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
                     {
                       ingredients.map((i, idx) => {
                         return (
                           <React.Fragment key={`${i.ingredientName}${idx}`}>
-                            <BasicBadge color='#3093EF' name={i.ingredientName} icon={closeIcon} onPress={()=>{removeIngredient(idx)}}/>
+                            <BasicBadge color='red' name={i.ingredientName} icon={closeIcon} onPress={()=>{removeIngredient(idx)}}/>
                           </React.Fragment>
                         )
                       })
@@ -299,12 +297,12 @@ const SignUpScreen = ({navigation}:any) => {
         </View>
         <View style={[{width: '100%', justifyContent: 'center', alignItems: 'center', height: '10%'}]}>
           <View style={[{width: '70%'}]}>
-            <Button title='회원가입' onPress={trySignup}></Button>
+            <BasicBadge color={MAIN_COLOR} fill={false} name='회원가입' onPress={trySignup}/>
           </View>
         </View>
       </ImageBackground>
     </View>
-  )
-}
+  );
+};
 
 export default SignUpScreen;
