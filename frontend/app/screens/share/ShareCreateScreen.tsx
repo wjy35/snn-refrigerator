@@ -26,6 +26,7 @@ import GetImageFrom from "@/components/GetImageFrom";
 import {useSelector} from "react-redux";
 import {RootState} from "@/reducers/reducers";
 import shareApi from "@/apis/shareApi";
+import ContentInput from "@/components/ContentInput";
 
 const ShareCreateScreen = ({navigation}:any) => {
   const profileImageUrl = '';
@@ -37,6 +38,7 @@ const ShareCreateScreen = ({navigation}:any) => {
   const [images, setImages] = useState<any[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const {memberId} = useSelector((state:RootState)=>state.userReducer);
+  const [sharePostId, setSharePostId] = useState(0);
 
   const checkLocation = async (keyword: string) => {
     try {
@@ -141,14 +143,29 @@ const ShareCreateScreen = ({navigation}:any) => {
     )
   }
 
-  async function getImageUrl(){
+  async function getImageUrl(postId: number){
+    const formData = new FormData();
     images.forEach((image)=>{
       try {
-        // TODO: imageUrl 받는 코드
+        const imageForm = {
+          name: image.fileName,
+          type: image.type,
+          uri: image.uri,
+        };
+        console.log(imageForm);
+        formData.append('imageFiles', imageForm);
       } catch (err) {
         console.log(err)
       }
     })
+
+    try{
+      const res = await shareApi.postShareImage(postId, formData);
+      console.log('res', res);
+      return res.data.data;
+    } catch (err) {
+      console.log(err);
+    }
 
   }
 
@@ -192,18 +209,24 @@ const ShareCreateScreen = ({navigation}:any) => {
     }
 
     try {
-      const res = await shareApi.createShare(inputData);
+      const res = await shareApi.createShareWrite(inputData);
       if (res.status === 200){
-        console.log(res)
-        // TODO: 나눔글 등록 후 navigate
+        console.log(res.data.data.sharePost);
+        const postId = res.data.data.sharePost.sharePostId;
+        const imageRes = await getImageUrl(postId);
+        console.log('imageUrl', imageRes);
+        navigation.navigate('ShareList');
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   }
 
   return (
-    <ShareLayout title="나눔글 쓰기" optionTitle="등록">
+    <ShareLayout
+      title="나눔글 쓰기"
+      optionTitle="등록"
+      optionFunction={tryShare}>
       <View style={{flex: 1}}>
         <ScrollView>
           <View style={[{width: '100%', padding: 15}]}>
@@ -241,6 +264,7 @@ const ShareCreateScreen = ({navigation}:any) => {
                   value={content}
                   placeholder={`역삼동에 올릴 게시글 내용을 작성해주세요.\n\n나눔 금지 물품은 제한될 수 있습니다.`}
                   multiline={true}
+                  onChangeText={(newText: string)=>{setContent(newText)}}
                   textAlignVertical='top'
                   style={[styles.font, {width: '100%', minHeight: 300, borderWidth: 1, padding: 20, borderRadius: 16, fontSize: 20}]}
                 />

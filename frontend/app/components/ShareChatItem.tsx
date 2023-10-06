@@ -3,6 +3,7 @@ import {ImageBackground, Text, TouchableWithoutFeedback, View} from "react-nativ
 import {useNavigation} from "@react-navigation/native";
 import {styles} from "@/styles/styles";
 import {TEXT_SUB_COLOR} from "@/assets/colors/colors";
+import timestampToString from "@/utils/timestampToString";
 
 
 interface props {
@@ -16,9 +17,11 @@ interface props {
   receiveMemberId: number,
 }
 
+
 const ShareChatItem = ({chatRoomId,profileImageUrl,locationName,thumbnailImageUrl,nickname,content,timestamp,receiveMemberId}: props) => {
   const navigation = useNavigation();
   const shortLocationName = locationName.split(' ');
+  const timestampString = timestampToString(timestamp);
 
   return (
     <View style={[{width: '90%', borderWidth: 1, marginBottom: 10, borderRadius: 18, borderColor: '#B2CFFF'}]}>
@@ -40,8 +43,7 @@ const ShareChatItem = ({chatRoomId,profileImageUrl,locationName,thumbnailImageUr
                 <Text style={[styles.font, {color: TEXT_SUB_COLOR}]}>{shortLocationName[shortLocationName.length-1]}</Text>
               </View>
               <View style={[{}]}>
-                <Text style={[styles.font, {color: TEXT_SUB_COLOR}]}>3시간 전</Text>
-                {/*<Text style={[styles.font, {}]}>{timestamp}</Text>*/}
+                <Text style={[styles.font, {color: TEXT_SUB_COLOR}]}>{timestampString}</Text>
               </View>
             </View>
             <View style={[{flex: 1}]}>
