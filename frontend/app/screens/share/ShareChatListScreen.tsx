@@ -22,22 +22,21 @@ const ShareChatListScreen = ({navigation}: any) => {
     }>
   >([]);
 
-  // const { memberId } = useSelector((state:RootState) => state.userReducer);
-  const memberId = 3029548333
+  const { memberId } = useSelector((state:RootState) => state.userReducer);
+
+    const getChatRoomList = async () => {
+        try {
+            let res = await chatRoomApi.chatRoomList(memberId);
+            if(res.status === 200){
+                setchatRoomList(res.data.data.chatRoomList);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
   useEffect(() => {
-    const getChatRoomList = async () => {
-      try {
-        let res = await chatRoomApi.chatRoomList(memberId);
-        if(res.status === 200){
-            setchatRoomList(res.data.data.chatRoomList);
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    }
     getChatRoomList();
-
   }, []);
 
   function onToggle(currentChat){
@@ -55,7 +54,8 @@ const ShareChatListScreen = ({navigation}: any) => {
 
   useFocusEffect(
     useCallback(() => {
-      const client = Stomp.client("ws://a502.store/chat/endpoint");
+        getChatRoomList();
+        const client = Stomp.client("ws://a502.store/chat/endpoint");
       client.isBinary=true;
       client.connect(
         {
