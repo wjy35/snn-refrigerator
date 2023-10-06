@@ -1,5 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, Button, ScrollView, ImageBackground, Image, TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  ScrollView,
+  ImageBackground,
+  Image,
+  TouchableWithoutFeedback,
+  TouchableOpacity
+} from 'react-native';
 import RecipeLayout from '@/screens/recipe/RecipeLayout';
 import {useFocusEffect, useNavigation, useRoute} from "@react-navigation/native";
 import {recipeStyles} from "@/styles/recipeStyles";
@@ -10,12 +19,9 @@ import {useSelector} from "react-redux";
 import {RootState} from "@/reducers/reducers";
 import {MAIN_COLOR, TEXT_COLOR, TEXT_DEACTIVATED_COLOR, TEXT_SUB_COLOR} from "@/assets/colors/colors";
 import {SvgXml} from "react-native-svg";
-import {dish, followIcon, time, user} from "@/assets/icons/icons";
+import {dish, filledfollowIcon, followIcon, time, user} from "@/assets/icons/icons";
 import ShowYoutube from "@/components/ShowYoutube";
-
-
-interface props {
-}
+import memberApi from "@/apis/memberApi";
 
 const RecipeDetailScreen = () => {
   const navigation = useNavigation();
@@ -35,62 +41,98 @@ const RecipeDetailScreen = () => {
     contentResponseList:[],
     foodName:"로딩중",
     cookingTime:"로딩중",
-    serving:2
+    serving:'로딩중'
   });
+  const [youtubeUrl, setYoutubeUrl] = useState('')
+  const [like, setLike] = useState(false);
+  const [chefId, setChefId] = useState(0);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
     const recipeId = route?.params?.recipeId;
     const getRecipeDetail = async() => {
       try{
         let res = await recipeApi.detail({memberId, recipeId});
-        console.log(res.data.data.recipeInfo);
         if(res.status===200){
-          setRecipeDetail(res.data.data.recipeInfo);
-        }else{
-          console.log(res.data.message);
+          if (res.data.data.recipeInfo.youtubeUrl) {
+            const splitUrl = res.data.data.recipeInfo.youtubeUrl.split('/',);
+            const targetUrl = splitUrl[3]?.split('?v=');
+            const target = targetUrl?.pop();
+            setYoutubeUrl(target?target.slice(0, 11):'');
+          }
+          setRecipeDetail({
+            ...res.data.data.recipeInfo,
+          });
+
+          let nickname = res.data.data.recipeInfo.nickname;
+
+          const memberIdres = await memberApi.getMemberIdFromNick(nickname);
+          setChefId(memberIdres.data.data.memberId);
+          const followRes = await memberApi.toggleFollow( memberId, memberIdres.data.data.memberId);
+          setLike(!followRes.data.data.flag);
+          await memberApi.toggleFollow( memberId, memberIdres.data.data.memberId);
         }
       }catch (e){
         console.log(e);
       }
-
-      console.log("got info")
     }
     getRecipeDetail();
-  },[])
+  },[route?.params?.recipeId]);
+
+  const pressAfter = async () => {
+    setIsDisabled(pre => true);
+    const followRes = await memberApi.toggleFollow( memberId, chefId );
+    setLike(followRes.data.data.flag);
+    setIsDisabled(pre => false);
+  }
+
+  const moveToUserPage = async () => {
+    navigation.navigate('User', {
+      id: chefId
+    });
+  }
 
   return (
-    <RecipeLayout title="레시피" optionTitle="수정">
+    <RecipeLayout
+      title="레시피"
+      optionTitle={memberId === chefId ? '수정' : ''}
+      optionFunction={memberId === chefId ? ()=>navigation.navigate('RecipeUpdate', {...recipeDetail, recipeId: route?.params?.recipeId}) : ()=>{}}>
       <ScrollView style={{width: '100%'}}>
         <View style={recipeStyles.recipeDetailImage}>
-          <ImageBackground source={{uri: recipeDetail.imageUrl}}
-                           resizeMode={'cover'}
-                           style={{width:'100%', height:'100%'}}
-          />
+          {
+            recipeDetail?.imageUrl && <ImageBackground source={{uri: recipeDetail.imageUrl}} resizeMode={'cover'} style={{width:'100%', height:'100%'}}/>
+          }
+
         </View>
-
-
         <View>
           <Text style={[styles.font, recipeStyles.recipeDetailTitleText]}>{recipeDetail.title}</Text>
         </View>
-
         <View style={recipeStyles.recipeDetailInfoContainer}>
-
-
           <View style={recipeStyles.recipeDetailInfo}>
             <View style={recipeStyles.recipeDetailUserContainer}>
-              <View style={recipeStyles.recipeDetailUserImage}>
-                <Image source={{uri: recipeDetail.profileImageUrl}}
-                                 style={{height:70,width:70,borderRadius:99, borderWidth:1, borderColor:TEXT_COLOR ,marginRight:10}}
-                />
-              </View>
+              <TouchableOpacity onPress={moveToUserPage}>
+                <View style={recipeStyles.recipeDetailUserImage}>
+                  {recipeDetail.profileImageUrl&&<Image source={{uri: recipeDetail.profileImageUrl}}
+                                   style={{height:70,width:70,borderRadius:99, borderWidth:1, borderColor:TEXT_COLOR ,marginRight:10}}
+                  />}
+                </View>
+              </TouchableOpacity>
               <View style={[recipeStyles.recipeDetailUserInfo]}>
-                <Text style={[styles.font,{fontSize:20, color:TEXT_SUB_COLOR, marginVertical:3}]}>{recipeDetail.nickname}</Text>
+                <TouchableOpacity onPress={moveToUserPage}>
+                  <Text style={[styles.font,{fontSize:20, color:TEXT_SUB_COLOR, marginVertical:3}]}>{recipeDetail.nickname}</Text>
+                </TouchableOpacity>
                 <View style={{ flexDirection:'row', justifyContent:'center', marginVertical:3}}>
-                  <SvgXml
+                  <TouchableOpacity onPress={pressAfter} disabled={isDisabled}>
+                    {like ? <SvgXml
+                      xml={filledfollowIcon}
+                      width={20}
+                      height={20}
+                    />:<SvgXml
                       xml={followIcon}
                       width={20}
                       height={20}
-                  />
+                    />}
+                  </TouchableOpacity>
                   <Text style={[styles.font,{fontSize:20, color:TEXT_SUB_COLOR}]}>{recipeDetail.favoriteCount}</Text>
                 </View>
               </View>
@@ -135,7 +177,6 @@ const RecipeDetailScreen = () => {
 
         <View style={recipeStyles.recipeDetailBodyContainer}>
           <View style={recipeStyles.recipeDetailTabContainer}>
-
             <TouchableWithoutFeedback
                 onPress={()=>{setActivatedTab(0)}}
             >
@@ -176,7 +217,7 @@ const RecipeDetailScreen = () => {
                             marginHorizontal:10,
                             marginVertical:3,
                           }}>
-                            <Text style={[styles.font,{color:ingredient.lastDate?MAIN_COLOR:TEXT_COLOR, fontSize:20, width:'60%'}]}>{`${ingredient.name} ${ingredient.amount}`}</Text>
+                            <Text style={[styles.font,{color:ingredient.lastDate?MAIN_COLOR:TEXT_COLOR, fontSize:20, width:'60%'}]}>{`${ingredient.name} ${ingredient.amount&&`(${ingredient.amount})`}`}</Text>
                             <Text style={[styles.font,{color:ingredient.lastDate?MAIN_COLOR:TEXT_COLOR, fontSize:20, width:'40%'}]}>{ingredient.lastDate?ingredient.lastDate:'          -'}</Text>
                           </View>
                       ))}
@@ -189,14 +230,14 @@ const RecipeDetailScreen = () => {
             {activatedTab===1&&
                 (recipeDetail.contentResponseList ? (
                     <>
-                      { recipeDetail.youtubeUrl && (
+                      { youtubeUrl && (
                           <View style={{
                             justifyContent: 'flex-start',
                             alignItems: 'center',
                             width: '100%',
                             flexDirection: 'row',
                             margin:10,}}>
-                            <ShowYoutube youtubeId={recipeDetail.youtubeUrl} />
+                            <ShowYoutube youtubeId={youtubeUrl} />
                           </View>
                       )
                       }
@@ -230,7 +271,6 @@ const RecipeDetailScreen = () => {
             }
           </View>
         </View>
-
       </ScrollView>
     </RecipeLayout>
   )

@@ -26,9 +26,13 @@ const PlainInput = ({title, placeholder, onChangeText, onPressIn, text, now, onS
 
   return (
     <View>
-      <View style={[{width: '100%'}]}>
-        <Text style={[styles.font, {fontSize: 20}]}>{title}</Text>
-      </View>
+      {
+        title && (
+          <View style={[{width: '100%'}]}>
+            <Text style={[styles.font, {fontSize: 20}]}>{title}</Text>
+          </View>
+        )
+      }
       <View style={[{width: '100%'}]}>
         <TextInput
           style={[styles.input, styles.font]}

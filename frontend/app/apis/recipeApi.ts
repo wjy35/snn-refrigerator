@@ -50,9 +50,9 @@ const recipeApi = {
     );
     return res;
   },
-  memberFavorite: async ({memberId}: props) => {
+  memberFavorite: async (memberId: number, page: number, size: number) => {
     const res = await PrivateRecipeApi.get(
-      `favorite/${memberId}`
+      `favorite/${memberId}?page=${page}&size=${size}`
     );
     return res;
   },
@@ -122,38 +122,42 @@ const recipeApi = {
     return res;
   },
   createRecipe: async (formdata: any) => {
-    console.log(formdata);
     const res = await PrivateRecipeApi.post(
-      '',
+      '/',
       formdata,
       {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
           },
-        // transformRequest: (data, headers) => {
-        //   return data;
-        //   },
       },
     );
     return res;
   },
   createImageUrl: async (formdata: any) => {
-      console.log("이미지생성 api 진입")
-      console.log(formdata);
       const res = await PrivateRecipeApi.post(
-          '',
+          `image/${formdata.memberId}`,
           formdata,
           {
               headers: {
                   'Content-Type': 'multipart/form-data',
               },
-              // transformRequest: (data, headers) => {
-              //   return data;
-              //   },
           },
       );
       return res;
-  }
+  },
+  getOthersRecipe : async(searchId : number, myId: number, page: number, size: number) => {
+    const data = {
+      searchId: searchId,
+      myId: myId,
+      page: page,
+      size: size,
+    }
+    const res = await PrivateRecipeApi.post(
+      `search/member`,
+        data
+    );
+    return res;
+  },
 
 
 }

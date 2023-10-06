@@ -1,18 +1,33 @@
-import {setMemberId} from '@/actions/userAction';
+import {setLocations, setMemberId, setHates} from '@/actions/userAction';
 
 const userState = {
-  memberId: '',
+  memberId: 3029548333,
   nickname: '',
   email: '',
+  locations: [],
+  hates: [],
 };
 
 const userReducer = (state=userState, action: any) => {
   switch (action.type) {
-    case setMemberId:
+    case setMemberId: {
       return {
-        state,
+        ...state,
         memberId: action.payload,
       };
+    }
+    case setLocations: {
+      return {
+        ...state,
+        locations: [...action.payload],
+      };
+    }
+    case setHates: {
+      return {
+        ...state,
+        hates: [...action.payload],
+      };
+    }
     default:
       return state;
   }
