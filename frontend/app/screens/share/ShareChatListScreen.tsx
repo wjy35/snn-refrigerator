@@ -83,7 +83,7 @@ const ShareChatListScreen = ({navigation}: any) => {
   return (
     <ShareLayout title="나눔 채팅">
       <View>
-        <ScrllView>
+        <ScrollView>
           <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 20}}>
             {
               chatRoomList.map((item, index) => {
@@ -105,7 +105,7 @@ const ShareChatListScreen = ({navigation}: any) => {
               })
             }
           </View>
-        </ScrllView>
+        </ScrollView>
       </View>
     </ShareLayout>
   )

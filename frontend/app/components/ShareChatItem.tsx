@@ -25,7 +25,7 @@ const ShareChatItem = ({chatRoomId,profileImageUrl,locationName,thumbnailImageUr
 
   return (
     <View style={[{width: '90%', borderWidth: 1, marginBottom: 10, borderRadius: 18, borderColor: '#B2CFFF'}]}>
-      <TouchableWithoutFeedback onPress={() => navigation.navigate('SingleShareChat',{chatRoomId:chatRoomId,receiveMemberId:receiveMemberId})}>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate('SingleShareChat',{chatRoomId:chatRoomId,receiveMemberId:receiveMemberId,nickname:nickname})}>
         <View style={[{flex: 1, flexDirection: 'row'}]}>
           <View style={[{width: 80, height: 80, justifyContent: 'center', alignItems: 'center'}]}>
             <ImageBackground source={{uri: profileImageUrl}}
