@@ -144,7 +144,6 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
         return hashSet.size();
     }
 
-
     public List<IngredientResponse> getHouseIngredientResponse(String houseCode){
         String st = houseIngredientFeign.getHouseIngredient(houseCode);
 
