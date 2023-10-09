@@ -144,7 +144,7 @@ const MyPageScreen = ({navigation}:any) => {
                 </>
             }
           </View>
-          <View style={[myPageStyles.profileInfo, {alignItems: 'center', marginTop: 10}]}>
+          <View style={[{alignItems: 'center', marginTop: 10}]}>
               {nickEditing ?
                 <View style={{flexDirection:'row', justifyContent:'center'}}>
                   <TextInput
@@ -155,7 +155,7 @@ const MyPageScreen = ({navigation}:any) => {
                   />
                 </View>
               : <View style={{margin:14}}>
-                  <Text style={[styles.font, {fontSize: 45}]}>
+                  <Text style={[styles.font, {fontSize: 36}]}>
                     {nickname}
                   </Text>
                 </View>
@@ -167,7 +167,7 @@ const MyPageScreen = ({navigation}:any) => {
               <BasicBadge color={MAIN_COLOR} fill={false} name={nickEditing?' 완료 ':' 수정 '} onPress={nickEditing?saveNickname:changeNickname}/>
             </View>
           </View>
-          <View style={[myPageStyles.profileRowContainer, {height: 100}]}>
+          <View style={[myPageStyles.profileRowContainer, {height: 80}]}>
 
           </View>
         </View>
