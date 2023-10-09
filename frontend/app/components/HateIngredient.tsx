@@ -84,32 +84,28 @@ function HateIngredient({memberId}) {
   }
   return (
     <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-      <View style={{}}>
-        <AutoCompleteInput
-          {...excludeIngredient}
-          textList={excludeIngredientList}
-          keyValue="ingredientInfoId"
-          name="ingredientName"
-          onSelect={onSelectIngredient}
-        />
-        <View>
-          <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
-            {ingredients.map((i, idx) => {
-              return (
-                <React.Fragment key={`${i.ingredientName}${idx}`}>
-                  <BasicBadge
-                    color='red'
-                    name={i.ingredientName}
-                    icon={closeIcon}
-                    onPress={() => {
-                      removeIngredient(idx);
-                    }}
-                  />
-                </React.Fragment>
-              );
-            })}
-          </View>
-        </View>
+      <AutoCompleteInput
+        {...excludeIngredient}
+        textList={excludeIngredientList}
+        keyValue="ingredientInfoId"
+        name="ingredientName"
+        onSelect={onSelectIngredient}
+      />
+      <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
+        {ingredients.map((i, idx) => {
+          return (
+            <React.Fragment key={`${i.ingredientName}${idx}`}>
+              <BasicBadge
+                color='red'
+                name={i.ingredientName}
+                icon={closeIcon}
+                onPress={() => {
+                  removeIngredient(idx);
+                }}
+              />
+            </React.Fragment>
+          );
+        })}
       </View>
     </View>
   );

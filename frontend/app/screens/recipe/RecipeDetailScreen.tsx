@@ -95,7 +95,10 @@ const RecipeDetailScreen = () => {
     <RecipeLayout
       title="레시피"
       optionTitle={memberId === chefId ? '수정' : ''}
-      optionFunction={memberId === chefId ? ()=>navigation.navigate('RecipeUpdate', {...recipeDetail, recipeId: route?.params?.recipeId}) : ()=>{}}>
+      // optionTitle={'수정'}
+      optionFunction={memberId === chefId ? ()=>navigation.navigate('RecipeUpdate', {...recipeDetail, recipeId: route?.params?.recipeId}) : ()=>{}}
+      // optionFunction={()=>navigation.navigate('RecipeUpdate', {...recipeDetail, recipeId: route?.params?.recipeId})}
+    >
       <ScrollView style={{width: '100%'}}>
         <View style={recipeStyles.recipeDetailImage}>
           {
@@ -253,7 +256,6 @@ const RecipeDetailScreen = () => {
                       <View key={index} style={{
                         justifyContent: 'flex-start',
                         alignItems: 'center',
-                        width: '100%',
                         flexDirection: 'row',
                         marginHorizontal:10,
                         marginVertical:3,

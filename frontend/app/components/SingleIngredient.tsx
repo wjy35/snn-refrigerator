@@ -173,8 +173,8 @@ const SingleIngredient = ({ingredientName, storageType, storageDate, lastDate, i
       {!isModifying&&
         <View style={[{width:'95%', minHeight:200, aspectRatio:'7/4', backgroundColor:'#FFFFFF', alignSelf:'center', padding:20, borderRadius:20}]}>
           <View style={[ingredientStyles.singleTop,{flex:1}]}>
-            <View style={[ingredientStyles.nameContainer,{flex:3, alignSelf:'center'}]}>
-              <Text style={[styles.font, text, tw`text-5xl`, ]} numberOfLines={1} ellipsizeMode={"tail"} >{ingredientName}</Text>
+            <View style={[ingredientStyles.nameContainer,{alignSelf:'center'}]}>
+              <Text style={[styles.font, text, tw`text-5xl`, {padding: 5}]} numberOfLines={1} ellipsizeMode={"tail"} >{ingredientName}</Text>
             </View>
             <View style={[ingredientStyles.dDayContainer, {alignSelf:'center'}]}>
               <Text style={[styles.font, text, tw`text-right text-2xl mx-1`]}>{getDDay()}</Text>

@@ -57,11 +57,10 @@ const PlaceManage = ({memberId}) =>{
   async function removeLocation(idx: number) {
     try {
       const res = await memberApi.deleteLocation(memberId, idx);
-      console.log(res);
       if (res?.data?.data?.status){
         const _locations = [...locations];
         _locations.splice(idx, 1);
-        setLocationList(_locations);
+        setLocations(_locations);
       }
     } catch (err) {
       console.log(err)
@@ -73,7 +72,6 @@ const PlaceManage = ({memberId}) =>{
   async function onSelectLocation(item: any) {
     if (checkDuplicateLocation(item)){
       try {
-        console.log(item.locationId, memberId);
         const res = await memberApi.postLocation(memberId, item.locationId);
         if(res.status === 200) setLocations([...locations, {...item}]);
       } catch (err) {
@@ -84,10 +82,7 @@ const PlaceManage = ({memberId}) =>{
 
   return (
     <View style={{width: '100%', justifyContent: 'center', alignItems: 'center'}}>
-      <View style={{height: 310}}>
         <AutoCompleteInput {...location} textList={locationList} keyValue='locationId' name='locationName' onSelect={onSelectLocation}/>
-      </View>
-      <View>
         <View style={{flexWrap: 'wrap', flexDirection: 'row'}}>
           {
             locations.map((i, idx) => {
@@ -100,7 +95,6 @@ const PlaceManage = ({memberId}) =>{
             })
           }
         </View>
-      </View>
     </View>
   );
 }

@@ -27,14 +27,14 @@ const SettingDetail = ({name, goto, houseCode, memberId, closeFunc}: props) => {
     }
     else if (goto === '2'){
       return (
-        <View style={{height: 400}}>
+        <View style={{}}>
           <HateIngredient memberId={memberId} />
         </View>
       );
     }
     else if (goto === '1'){
       return (
-        <View style={{height: 400}}>
+        <View style={{}}>
           <PlaceManage memberId={memberId} />
         </View>
       )

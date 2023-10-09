@@ -1,5 +1,14 @@
-import React, { useRef, useState} from 'react';
-import {View, Text, TextInput, FlatList, Dimensions, TouchableWithoutFeedback, ScrollView} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  Dimensions,
+  TouchableWithoutFeedback,
+  ScrollView,
+  Keyboard
+} from 'react-native';
 import AutoCompleteItem from "@/components/AutoCompleteItem";
 import {useFocusEffect} from "@react-navigation/native";
 import {styles} from "@/styles/styles";
