@@ -1,5 +1,6 @@
 package com.ssafy.chat.api.controller;
 
+import com.ssafy.chat.api.request.ChatNotificationRequest;
 import com.ssafy.chat.api.request.ChatPayload;
 import com.ssafy.chat.api.request.ChatPublish;
 import com.ssafy.chat.db.entity.ChatEntity;
@@ -7,6 +8,7 @@ import com.ssafy.chat.service.ChatSaveService;
 import com.ssafy.chat.service.ChatSendService;
 import com.ssafy.chat.service.ChatServerManageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -21,6 +23,7 @@ public class ChatSocketController {
     private final ChatSaveService chatSaveService;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ChatSendService chatSendService;
+    private final RabbitTemplate rabbitTemplate;
 
     // ToDo Refactoring + save Fail Exception 처리
     @MessageMapping("/")
@@ -52,7 +55,18 @@ public class ChatSocketController {
                     );
                }
                 ,()->{
-                    // TODO RabbitMQ 를 통해 Chat Alert Server 로 전송
+                    if(!chatPayload.getContent().equals("")){
+                        rabbitTemplate.convertAndSend(
+                                "chat-exchange",
+                                "chat-id.*",
+                                ChatNotificationRequest
+                                        .builder()
+                                        .receiveMemberId(chatPayload.getReceiveMemberId())
+                                        .content(chatPayload.getContent())
+                                        .sendMemberId(chatPayload.getSendMemberId())
+                                        .build()
+                        );
+                    }
                 });
     }
 
