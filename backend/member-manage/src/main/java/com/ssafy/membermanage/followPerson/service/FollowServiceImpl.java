@@ -24,6 +24,10 @@ public class FollowServiceImpl {
     @Autowired
     private S3helper s3helper;
 
+    public boolean wheterFollow(Member follower, Member followee){
+        return followMemberRepository.existsByFollowerAndFollowee(follower, followee);
+    }
+
     public boolean followOrUnfollow(Member follower, Member followee){
 
         Integer followCount = followee.getFollowCount();

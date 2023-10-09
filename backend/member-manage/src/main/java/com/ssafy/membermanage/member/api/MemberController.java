@@ -241,6 +241,27 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }//OK
 
+    @GetMapping("{followerId}/follow/{followeeId}")
+    @JsonView(ResponseViews.NoRequest.class)
+    public ResponseEntity<Response> WhetherFollow(@PathVariable Long followerId, @PathVariable Long followeeId){
+
+        Member follower = memberService.findByMemberId(followerId)
+                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
+
+        Member followee = memberService.findByMemberId(followeeId)
+                .orElseThrow(() -> new CustomException(ErrorCode.No_Such_Member));
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("flag", followService.wheterFollow(follower, followee));
+
+        Response response = Response
+                .builder()
+                .message("OK")
+                .data(data)
+                .build();
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("{followerId}/follow/{followeeId}")
     @JsonView(ResponseViews.NoRequest.class)
     public ResponseEntity<Response> ResponseFollowOrUnfollow(@PathVariable Long followerId, @PathVariable Long followeeId){
