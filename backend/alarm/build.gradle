@@ -39,6 +39,9 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.amqp:spring-rabbit-test'
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+
 
 	// Mapstruct
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
