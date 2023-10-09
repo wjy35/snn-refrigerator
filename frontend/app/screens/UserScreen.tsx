@@ -60,9 +60,8 @@ const UserScreen = ({title = '김석주', optionTitle, optionFunction}: props) =
       setNickname(response.data.memberInfo.nickname);
       setProfileUrl(response.data.memberInfo.profileImageUrl);
 
-      const followRes = await memberApi.toggleFollow( memberId, route.params.id);
-      setLike(!followRes.data.data.flag);
-      await memberApi.toggleFollow( memberId, route.params.id);
+      const followRes = await memberApi.checkFollow( memberId, route.params.id);
+      setLike(followRes.data.data.flag);
     }
     setMemberId();
   }, []);

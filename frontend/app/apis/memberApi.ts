@@ -136,6 +136,12 @@ const memberApi = {
     );
     return res;
   },
+  checkFollow: async (followerId: number, followeeId: number) => {
+    const res = await PrivateMemberApi.get(
+      `${followerId}/follow/${followeeId}`
+    );
+    return res;
+  },
   changeProfile: async(memberId: number, formData: any) => {
     console.log(memberId, formData)
     const res = await PrivateMemberApi.put(

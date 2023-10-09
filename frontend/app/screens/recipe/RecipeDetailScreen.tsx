@@ -68,9 +68,8 @@ const RecipeDetailScreen = () => {
 
           const memberIdres = await memberApi.getMemberIdFromNick(nickname);
           setChefId(memberIdres.data.data.memberId);
-          const followRes = await memberApi.toggleFollow( memberId, memberIdres.data.data.memberId);
-          setLike(!followRes.data.data.flag);
-          await memberApi.toggleFollow( memberId, memberIdres.data.data.memberId);
+          const followRes = await memberApi.checkFollow( memberId, memberIdres.data.data.memberId);
+          setLike(followRes.data.data.flag);
         }
       }catch (e){
         console.log(e);
