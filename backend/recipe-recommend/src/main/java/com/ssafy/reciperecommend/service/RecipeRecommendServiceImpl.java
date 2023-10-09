@@ -100,7 +100,26 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
             result.add(recipeSearchResponse);
         }
 
-        Collections.shuffle(result);
+        result.sort(new Comparator<RecipeRecommendResponse>() {
+            @Override
+            public int compare(RecipeRecommendResponse o1, RecipeRecommendResponse o2) {
+                double num1 = (double) o1.getMyIngredients() / o1.getNeededIngredients();
+                double num2 = (double) o2.getMyIngredients() / o2.getNeededIngredients();
+
+                if (num1 < num2) {
+                    return 1;
+                } else if (num1 > num2) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
+        if(result.get(0).getMyIngredients() == 0){
+            Collections.shuffle(result);
+        }
+
         result = result.subList(0,7);
         return result;
     }
@@ -193,5 +212,7 @@ public class RecipeRecommendServiceImpl implements RecipeRecommendService{
 
         return true;
     }
+
+
 
 }
