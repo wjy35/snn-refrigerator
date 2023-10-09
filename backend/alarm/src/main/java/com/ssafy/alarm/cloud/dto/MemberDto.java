@@ -12,11 +12,13 @@ public class MemberDto {
     private Long memberId;
     private String nickname;
     private String profileImageUrl;
+    private String houseCode;
 
     @Builder
-    public MemberDto(Long memberId, String nickname, String profileImageUrl) {
+    public MemberDto(Long memberId, String nickname, String profileImageUrl, String houseCode) {
         this.memberId = memberId;
         this.nickname = nickname;
         this.profileImageUrl = profileImageUrl;
+        this.houseCode = houseCode;
     }
 }
