@@ -28,7 +28,7 @@ public class HouseIngredientNotification {
     private final ObjectMapper objectMapper;
     private final FirebaseMessaging firebaseMessaging;
 
-    @Scheduled(cron = "0 0 20 * * ?")
+    @Scheduled(cron = "0 30 0 * * ?")
     public void alert() {
 
         for(MemberFcmTokenEntity memberFcmTokenEntity: memberFcmTokenRepository.findAll()){
