@@ -64,12 +64,12 @@ const ShareDetailScreen = ({navigation}:any) => {
 
       if(checkRes.status == 200){
         const chatRoomId = checkRes.data.data.chatRoom.chatRoomId;
-        navigation.navigate('SingleShareChat', {chatRoomId:chatRoomId});
+        navigation.navigate('SingleShareChat', {chatRoomId:chatRoomId,nickname: shareDetail.nickname, receiveMemberId:memberIdRes.data.data.memberId});
       }else if(checkRes.status == 202){
         const res = await chatRoomApi.addChatRoom(route.params.sharePostId,memberId,memberIdRes.data.data.memberId);
         if(res.status==201){
           const chatRoomId = res.data.data.chatRoomId;
-          navigation.navigate('SingleShareChat', {chatRoomId:chatRoomId});
+          navigation.navigate('SingleShareChat', {chatRoomId:chatRoomId, nickname: shareDetail.nickname, receiveMemberId:memberIdRes.data.data.memberId});
         }
       }
     }catch (err){
