@@ -35,10 +35,11 @@ public class HouseIngredientNotification {
             MemberDto memberDto = objectMapper.convertValue(
                     memberOpenFeign.getMemberDto(memberFcmTokenEntity.getMemberId()).getData().get("memberInfo"),
                     MemberDto.class);
-
             List<HouseIngredientEntity> houseIngredientEntityList = houseIngredientRepository.findAllByHouseCode(memberDto.getHouseCode());
+
             for(HouseIngredientEntity houseIngredientEntity: houseIngredientEntityList){
-                long lastDay = Duration.between(LocalDate.now(),houseIngredientEntity.getLastDate()).getSeconds()/86400;
+                if(houseIngredientEntity.getLastDate()==null) continue;
+                long lastDay = Duration.between(LocalDate.now().atStartOfDay(),houseIngredientEntity.getLastDate().atStartOfDay()).toDays();
                 if(lastDay<2){
                     Notification notification = Notification
                             .builder()
@@ -57,6 +58,8 @@ public class HouseIngredientNotification {
                     } catch (FirebaseMessagingException e) {
                         throw new RuntimeException(e);
                     }
+
+                    break;
                 }
             }
         }
